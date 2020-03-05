@@ -3,7 +3,7 @@
 
 * `docker-compose up` で起動中のコンテナにログインするとき
 ```
-docker exec -it application_1 /bin/bash --login
+docker exec -it rakuraku_komagumi_application_1 /bin/bash --login
 ```
 
 * 新たにコンテナを立ち上げるとき
