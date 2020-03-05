@@ -1,10 +1,8 @@
 class SubjectController < ApplicationController
-  include RoomStore
-  before_action :check_logined
-  helper_method :room
+  before_action :check_login
 
   def index
-    @subjects = room.exist_subjects.rank(:row_order)
+    @subjects = @room.exist_subjects
   end
 
   def new
@@ -48,9 +46,8 @@ class SubjectController < ApplicationController
   def subject_params
     params.require(:subject).permit(
       :name,
-      :classtype,
       :room_id,
-      :row_order,
+      :order,
     )
   end
 end

@@ -1,11 +1,9 @@
 class StudentController < ApplicationController
-  include RoomStore
-  before_action :check_logined
-  helper_method :room
+  before_action :check_login
 
   def index
-    @student = room.exist_students
-    @subject = room.exist_subjects
+    @students = @room.exist_students
+    @subjects = @room.exist_subjects
   end
 
   def new
@@ -15,7 +13,7 @@ class StudentController < ApplicationController
   def create
     @student = Student.new(student_params)
     if @student.save
-      @subject = room.exist_subjects
+      @subject = @room.exist_subjects
       @status = 'success'
     else
       @status = 'fail'
@@ -28,11 +26,7 @@ class StudentController < ApplicationController
 
   def update
     @student = Student.find(params[:id])
-    @status = if @student.update(student_params)
-                'success'
-              else
-                'fail'
-              end
+    @status = @student.update(student_params)
   end
 
   def destroy
@@ -46,17 +40,15 @@ class StudentController < ApplicationController
   def student_params
     params.require(:student).permit(
       :room_id,
-      :firstname,
-      :lastname,
-      :firstname_kana,
-      :lastname_kana,
+      :name,
+      :name_kana,
       :gender,
-      :grade,
+      :birth_year,
       :school,
+      :email,
+      :tel,
       :zip,
       :address,
-      :mail,
-      :tel,
     )
   end
 end

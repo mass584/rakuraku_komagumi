@@ -5,24 +5,25 @@
     thead
       tr
         th.name 氏名
-        - @subject.each do |s|
-          th.subject = s.name
+        - @subjects.each do |subject|
+          th.subject = subject.name
         th.del 削除
     tbody
-      - @student.each do |st|
+      - @students.each do |student|
         tr
-          th.name[id="student_#{st.id}"] = link_to "#{st.grade} #{st.fullname}", edit_student_path(st), remote: true
-          - @subject.each do |su|
+          th.name[id="student_#{student.id}"]
+            = link_to "#{student.grade_at()} #{student.fullname}", edit_student_path(student), remote: true
+          - @subjects.each do |subject|
             td.subject
-              - if st.student_subject_mappings.find_by(student_id: st.id, subject_id: su.id)
-                div[data-student_id="#{st.id}" data-subject_id="#{su.id}"]
+              - if student.student_subject_mappings.find_by(student_id: student.id, subject_id: subject.id)
+                div[data-student_id="#{student.id}" data-subject_id="#{subject.id}"]
                   = image_tag('maru.png', size: '32x32', id: 'button_maru')
                   = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
               - else
-                div[data-student_id="#{st.id}" data-subject_id="#{su.id}"]
+                div[data-student_id="#{student.id}" data-subject_id="#{subject.id}"]
                   = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
                   = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
-          td.del = link_to "削除", student_path(st), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
+          td.del = link_to "削除", student_path(student), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
   div.new = link_to '新しい生徒の追加', new_student_path, method: :get, remote: true
 
 #modal-student.modal.fade tabindex="-1" role="dialog" aria-hidden="true"

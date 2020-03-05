@@ -1,12 +1,12 @@
 == render 'header'
 .content
   .action-index
-    h1#roomname = "#{room.roomname}教室"
+    h1#roomname = "#{room.name}教室"
     table.table.table-bordered.table-hover
       tbody
         - @schedulemasters.each do |s|
           tr
-            td.select onclick='window.location="#{schedulemaster_path(s)}"' role="link" = "［#{s.schedule_type}］#{s.schedule_name} （#{s.begindate} 〜 #{s.enddate}）"
+            td.select onclick='window.location="#{schedulemaster_path(s)}"' role="link" = "［#{s.schedule_type}］#{s.schedule_name} （#{s.begin_at} 〜 #{s.end_at}）"
             td.delete = link_to '×', s, method: :delete, data: {confirm: "本当に削除してよろしいですか"}
     div.new = link_to '新しいスケジュールの作成', new_schedulemaster_path(@schedulemasters), remote: true
     div#modal-newschedule.modal.fade tabindex="-1" role="dialog" aria-hidden="true"

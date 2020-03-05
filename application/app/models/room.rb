@@ -17,7 +17,7 @@ class Room < ApplicationRecord
             format: { with: /\A[a-zA-Z0-9]{8,16}+\z/i }
 
   def exist_students
-    students.where(is_deleted: false)
+    students.where(is_deleted: false).order(birth_year: 'ASC')
   end
 
   def exist_teachers
@@ -25,6 +25,6 @@ class Room < ApplicationRecord
   end
 
   def exist_subjects
-    subjects.where(is_deleted: false)
+    subjects.where(is_deleted: false).order(order: 'ASC')
   end
 end

@@ -1,20 +1,17 @@
 class StudentrequestController < ApplicationController
-  include RoomStore
-  include SchedulemasterStore
-  before_action :check_logined
+  before_action :check_login
   before_action :check_schedulemaster
-  helper_method :room
-  helper_method :schedulemaster
+  before_action :check_schedulemaster_batch_status
 
   def index
-    @studentrequestmaster = Studentrequestmaster.get_studentrequestmasters(schedulemaster)
+    @studentrequestmaster = Studentrequestmaster.get_studentrequestmasters(@schedulemaster)
     if params[:student_id].nil?
-      gon.students = schedulemaster.students.map { |student| { id: student.id } }
+      gon.students = @schedulemaster.students.map { |student| { id: student.id } }
       render('studentrequest/index_student_list') && return
     else
       student_id = params[:student_id].to_i
       @student = Student.find(student_id)
-      @studentrequest = Studentrequest.get_studentrequests(student_id, schedulemaster)
+      @studentrequest = Studentrequest.get_studentrequests(student_id, @schedulemaster)
       case @studentrequestmaster[student_id].status
       when 0 then
         render('studentrequest/index_status_not_ready') && return
@@ -27,13 +24,12 @@ class StudentrequestController < ApplicationController
   end
 
   def create
-    schedulemaster = Schedulemaster.find(session[:schedulemaster_id])
-    timetable = schedulemaster.timetables.find_by(
+    timetable = @schedulemaster.timetables.find_by(
       scheduledate: params[:scheduledate],
       classnumber: params[:classnumber],
     )
     Studentrequest.create(
-      schedulemaster_id: schedulemaster.id,
+      schedulemaster_id: @schedulemaster.id,
       student_id: params[:student_id],
       timetable_id: timetable.id,
     )
@@ -41,28 +37,27 @@ class StudentrequestController < ApplicationController
   end
 
   def bulk_create
-    schedulemaster = Schedulemaster.find(session[:schedulemaster_id])
     if params[:scheduledate]
-      schedulemaster.class_array.each do |c|
-        timetable = schedulemaster.timetables.find_by(
+      @schedulemaster.class_array.each do |c|
+        timetable = @schedulemaster.timetables.find_by(
           scheduledate: params[:scheduledate],
           classnumber: c,
         )
         Studentrequest.create(
-          schedulemaster_id: schedulemaster.id,
+          schedulemaster_id: @schedulemaster.id,
           student_id: params[:student_id],
           timetable_id: timetable.id,
         )
       end
     else
-      schedulemaster.date_array.each do |d|
-        schedulemaster.class_array.each do |c|
-          timetable = schedulemaster.timetables.find_by(
+      @schedulemaster.date_array.each do |d|
+        @schedulemaster.class_array.each do |c|
+          timetable = @schedulemaster.timetables.find_by(
             scheduledate: d,
             classnumber: c,
           )
           Studentrequest.create(
-            schedulemaster_id: schedulemaster.id,
+            schedulemaster_id: @schedulemaster.id,
             student_id: params[:student_id],
             timetable_id: timetable.id,
           )
@@ -73,12 +68,11 @@ class StudentrequestController < ApplicationController
   end
 
   def delete
-    schedulemaster = Schedulemaster.find(session[:schedulemaster_id])
-    timetable = schedulemaster.timetables.find_by(
+    timetable = @schedulemaster.timetables.find_by(
       classnumber: params[:classnumber],
       scheduledate: params[:scheduledate],
     )
-    child_record_count = schedulemaster.schedules.where(
+    child_record_count = @schedulemaster.schedules.where(
       student_id: params[:student_id],
       timetable_id: timetable.id,
     ).count
@@ -86,7 +80,7 @@ class StudentrequestController < ApplicationController
     if child_record_count.positive?
       render(json: { message: '既に授業が割り当てられているため削除できません。' }, status: :bad_request) && return
     end
-    schedulemaster.studentrequests.joins(:timetable).where(
+    @schedulemaster.studentrequests.joins(:timetable).where(
       student_id: params[:student_id],
       'timetables.scheduledate': params[:scheduledate],
       'timetables.classnumber': params[:classnumber],
@@ -95,21 +89,20 @@ class StudentrequestController < ApplicationController
   end
 
   def bulk_delete
-    schedulemaster = Schedulemaster.find(session[:schedulemaster_id])
     fail_list = []
     if params[:scheduledate]
-      schedulemaster.class_array.each do |c|
-        timetable = schedulemaster.timetables.find_by(
+      @schedulemaster.class_array.each do |c|
+        timetable = @schedulemaster.timetables.find_by(
           scheduledate: params[:scheduledate],
           classnumber: c,
         )
-        child_record_count = schedulemaster.schedules.where(
+        child_record_count = @schedulemaster.schedules.where(
           student_id: params[:student_id],
           timetable_id: timetable.id,
         ).count
         # TODO : This validation check had better add to model.
         if child_record_count.zero?
-          schedulemaster.studentrequests.joins(:timetable).where(
+          @schedulemaster.studentrequests.joins(:timetable).where(
             student_id: params[:student_id],
             'timetables.scheduledate': params[:scheduledate],
             'timetables.classnumber': c,
@@ -122,19 +115,19 @@ class StudentrequestController < ApplicationController
         end
       end
     else
-      schedulemaster.date_array.each do |d|
-        schedulemaster.class_array.each do |c|
-          timetable = schedulemaster.timetables.find_by(
+      @schedulemaster.date_array.each do |d|
+        @schedulemaster.class_array.each do |c|
+          timetable = @schedulemaster.timetables.find_by(
             scheduledate: d,
             classnumber: c,
           )
-          child_record_count = schedulemaster.schedules.where(
+          child_record_count = @schedulemaster.schedules.where(
             student_id: params[:student_id],
             timetable_id: timetable.id,
           ).count
           # TODO : This validation check had better add to model.
           if child_record_count.zero?
-            schedulemaster.studentrequests.joins(:timetable).where(
+            @schedulemaster.studentrequests.joins(:timetable).where(
               student_id: params[:student_id],
               'timetables.scheduledate': d,
               'timetables.classnumber': c,
@@ -163,11 +156,10 @@ class StudentrequestController < ApplicationController
   end
 
   def occupation_and_matching
-    schedulemaster = Schedulemaster.find(session[:schedulemaster_id])
     student_id = params[:student_id]
-    required_number = get_required_number(student_id, schedulemaster)
-    occupation_rate = get_occupation_rate(student_id, schedulemaster)
-    bad_matching_list = get_bad_matching_list(student_id, schedulemaster)
+    required_number = get_required_number(student_id, @schedulemaster)
+    occupation_rate = get_occupation_rate(student_id, @schedulemaster)
+    bad_matching_list = get_bad_matching_list(student_id, @schedulemaster)
     render(json: {
       student_id: student_id,
       required: required_number,
@@ -181,16 +173,12 @@ class StudentrequestController < ApplicationController
   def get_required_number(student_id, schedulemaster)
     schedulemaster.classnumbers.joins(:subject).where(
       student_id: student_id,
-    ).where.not(
-      'subjects.classtype': '集団授業',
     ).sum(:number)
   end
 
   def get_occupation_rate(student_id, schedulemaster)
     required = schedulemaster.classnumbers.joins(:subject).where(
       student_id: student_id,
-    ).where.not(
-      'subjects.classtype': '集団授業',
     ).sum(:number)
     available = schedulemaster.studentrequests.joins(:timetable).where(
       student_id: student_id,

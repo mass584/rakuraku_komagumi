@@ -1,12 +1,11 @@
 class RoomController < ApplicationController
-  include RoomStore
   before_action :check_login, only: [:edit, :update]
 
   def edit
   end
 
   def update
-    @status = room.update(update_params)
+    @status = @room.update(update_params)
   end
 
   def login

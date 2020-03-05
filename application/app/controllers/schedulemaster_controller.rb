@@ -2,13 +2,13 @@ class SchedulemasterController < ApplicationController
   include RoomStore
   include SchedulemasterStore
   require 'open3'
-  require './app/pdf/pdf_overlook_schedule'
-  before_action :check_logined
+  require './app/pdfs/pdf_overlook_schedule'
+  before_action :check_login
   helper_method :room
   helper_method :schedulemaster
 
   def index
-    @schedulemasters = room.schedulemasters.order(begindate: 'DESC')
+    @schedulemasters = room.schedulemasters.order(begin_at: 'DESC')
   end
 
   def new
