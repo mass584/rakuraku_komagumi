@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     working_dir: /root/developer
-    command: /bin/bash --login -c "bundle install && bin/delayed_job start -n 1 && bundle exec rails s -b 0.0.0.0 -p 8000"
+    command: /bin/bash --login -c "bundle install && rm -f tmp/pids/server.pid && bin/delayed_job start -n 1 && bundle exec rails s -b 0.0.0.0 -p 8000"
     volumes:
       - ./application:/root/developer
       - bundle:/root/developer/vendor/bundle
@@ -31,14 +31,14 @@ services:
       - DATABASE_NAME=development
     depends_on:
       - db
-  optimization:
+  batch:
     build:
       context: ./batch
       dockerfile: ./Dockerfile
     working_dir: /root/batch
     tty: true
     volumes:
-      - ./optimization:/root/developer
+      - ./batch:/root/developer
     environment:
       - DATABASE_HOST=db
       - DATABASE_USERNAME=developer
