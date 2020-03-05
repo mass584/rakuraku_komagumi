@@ -10,5 +10,7 @@ class CreateStudentSchedulemasterMappings < ActiveRecord::Migration[5.2]
               [:schedulemaster_id, :student_id],
               name: 'index_student_schedulemaster_mapping',
               unique: true
+    add_foreign_key :student_schedulemaster_mappings, :schedulemasters, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :student_schedulemaster_mappings, :students, on_update: :cascade, on_delete: :restrict
   end
 end

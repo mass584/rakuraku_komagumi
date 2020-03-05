@@ -7,7 +7,7 @@ class CreateTeacherrequests < ActiveRecord::Migration[5.2]
       t.timestamps
     end
     add_foreign_key :teacherrequests, :schedulemasters, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :teacherrequests, :teachers, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :teacherrequests, :teachers, on_update: :cascade, on_delete: :restrict
     add_foreign_key :teacherrequests, :timetables, on_update: :cascade, on_delete: :cascade
     add_index :teacherrequests, [:schedulemaster_id, :teacher_id, :timetable_id], unique: true, name: 'index_teacherrequests'
   end

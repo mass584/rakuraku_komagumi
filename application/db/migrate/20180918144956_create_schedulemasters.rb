@@ -2,15 +2,16 @@ class CreateSchedulemasters < ActiveRecord::Migration[5.2]
   def change
     create_table :schedulemasters do |t|
       t.string :name, null: false
-      t.string :type, null: false
-      t.date :begindate, null: false
-      t.date :enddate, null: false
-      t.integer :totalclassnumber, null: false
-      t.integer :seatnumber, null: false
-      t.integer :calculation_status, null: false
-      t.string :calculation_name
-      t.datetime :calculation_begin
-      t.datetime :calculation_end
+      t.integer :type, null: false
+      t.date :begin_at, null: false
+      t.date :end_at, null: false
+      t.integer :max_period, null: false
+      t.integer :max_seat, null: false
+      t.integer :batch_status, null: false
+      t.datetime :batch_begin_at
+      t.datetime :batch_end_at
+      t.text :batch_result
+      t.integer :batch_progress
       t.integer :room_id, null: false
       t.timestamps
     end

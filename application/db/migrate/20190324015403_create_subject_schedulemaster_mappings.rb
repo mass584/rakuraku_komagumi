@@ -9,5 +9,7 @@ class CreateSubjectSchedulemasterMappings < ActiveRecord::Migration[5.2]
               [:schedulemaster_id, :subject_id],
               name: 'index_subject_schedulemaster_mapping',
               unique: true
+    add_foreign_key :subject_schedulemaster_mappings, :schedulemasters, on_update: :cascade, on_delete: :cascade
+    add_foreign_key :subject_schedulemaster_mappings, :subjects, on_update: :cascade, on_delete: :restrict
   end
 end
