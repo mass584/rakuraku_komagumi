@@ -16,15 +16,8 @@ class Room < ApplicationRecord
             length: { maximum: 16, minimum: 8 },
             format: { with: /\A[a-zA-Z0-9]{8,16}+\z/i }
 
-def exist_students
-    grade_index = %w[小6 中1 中2 中3]
-    students.where(is_deleted: false).sort do |a, b|
-      a.firstname_kana <=> b.firstname_kana
-    end.sort do |a, b|
-      a.lastname_kana <=> b.lastname_kana
-    end.sort do |a, b|
-      grade_index.find_index(a.grade) <=> grade_index.find_index(b.grade)
-    end
+  def exist_students
+    students.where(is_deleted: false)
   end
 
   def exist_teachers
@@ -32,6 +25,6 @@ def exist_students
   end
 
   def exist_subjects
-    subjects.where(is_deleted: false).order(:row_order)
+    subjects.where(is_deleted: false)
   end
 end

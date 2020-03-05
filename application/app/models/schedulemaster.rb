@@ -1,6 +1,5 @@
 class Schedulemaster < ApplicationRecord
   belongs_to :room
-  has_many :calculation_rules, dependent: :destroy
   has_many :subject_schedulemaster_mappings, dependent: :destroy
   has_many :subjects, through: :subject_schedulemaster_mappings
   has_many :teacher_schedulemaster_mappings, dependent: :destroy
@@ -15,113 +14,76 @@ class Schedulemaster < ApplicationRecord
   has_many :schedules, dependent: :destroy
   has_many :studentrequestmasters, dependent: :destroy
   has_many :teacherrequestmasters, dependent: :destroy
-  validates :schedule_name,
+  validates :name,
             presence: true
-  validates :schedule_type,
+  validates :type,
             presence: true
-  validates :max_count,
+  validates :begin_at,
             presence: true
-  validates :max_time_sec,
+  validates :end_at,
             presence: true
-  validates :begindate,
+  validates :max_period,
             presence: true
-  validates :enddate,
+  validates :max_seat,
             presence: true
-  validates :seatnumber,
-            presence: true
-  validates :totalclassnumber,
+  validates :batch_status,
             presence: true
   validates :room_id,
             presence: true
-  validate :begin_end_check
-  serialize :begintime
-  serialize :endtime
+  validate :verify_begin_end
+  enum type: { one_week: 0, free_range: 1 }
+  self.inheritance_column = :_type_disabled
 
-  def begin_end_check
-    return if begindate.nil? || enddate.nil?
+  def verify_context
+    return if begin_at.nil? || end_at.nil?
 
-    if schedule_type == '講習時期' && (enddate - begindate).negative?
-      errors.add(:enddate, 'の日付を正しく入力してください。')
-    elsif schedule_type == '通常時期' && enddate - begindate < 6
-      errors.add(:enddate, 'の日付を正しく入力してください。通常時期の場合、期間は一週間以上である必要があります。')
+    if free_range? && (end_at - begin_at).negative?
+      errors[:base] << '開始日、終了日を正しく設定してください。'
+    else free_range? && (end_at - begin_at) >= 50
+      errors[:base] << '期間は50日以内に設定してください。'
     end
   end
 
-  def class_array
-    1..totalclassnumber
+  def period_array
+    1..max_period
   end
 
   def date_array
-    case schedule_type
-    when '講習時期' then
-      begindate..enddate
-    when '通常時期' then
+    if one_week?
       ('2001-01-01'.to_date)..('2001-01-07'.to_date)
+    elsif free_range?
+      begin_at..end_at
     end
-  end
-
-  def date_array_one_week(week_number)
-    if week_number < 1
-      week_number = 1
-    end
-    if week_number > max_week
-      week_number = max_week
-    end
-    begindate = self.begindate + (7 * week_number) - 7
-    enddate = self.begindate + (7 * week_number) - 1
-    if enddate > self.enddate
-      enddate = self.enddate
-    end
-    case schedule_type
-    when '講習時期' then
-      begindate..enddate
-    when '通常時期' then
-      ('2001-01-01'.to_date)..('2001-01-07'.to_date)
-    end
-  end
-
-  def date_count
-    (enddate - begindate + 1).to_i
   end
 
   def max_week
-    (enddate - begindate + 7).to_i / 7
+    (end_at - begin_at + 7).to_i / 7
   end
 
-  def ordered_students
-    grade_index = %w[小6 中1 中2 中3]
-    students.sort do |a, b|
-      a.firstname_kana <=> b.firstname_kana
-    end.sort do |a, b|
-      a.lastname_kana <=> b.lastname_kana
-    end.sort do |a, b|
-      grade_index.find_index(a.grade) <=> grade_index.find_index(b.grade)
+  def date_array_one_week(week_number)
+    if one_week?
+      ('2001-01-01'.to_date)..('2001-01-07'.to_date)
+    elsif free_range?
+      week_number = 1 if week_number < 1
+      week_number = max_week if week_number > max_week
+      begindate = begin_at + (7 * week_number) - 7
+      enddate = begin_at + (7 * week_number) - 1
+      enddate = self.end_at if enddate > self.end_at
+      begindate..enddate
     end
   end
 
-  def ordered_subjects
-    subjects.order(:row_order)
-  end
-
-  def ready_teachers
+  def readied_teachers
     teachers.joins(:teacherrequestmasters).where(
       'teacherrequestmasters.schedulemaster_id': id,
       'teacherrequestmasters.status': 1,
     )
   end
 
-  def ready_students
+  def readied_students
     students.joins(:studentrequestmasters).where(
       'studentrequestmasters.schedulemaster_id': id,
       'studentrequestmasters.status': 1,
     )
-  end
-
-  def individual_subjects
-    subjects.where(classtype: '個別授業').order(:row_order)
-  end
-
-  def group_subjects
-    subjects.where(classtype: '集団授業').order(:row_order)
   end
 end

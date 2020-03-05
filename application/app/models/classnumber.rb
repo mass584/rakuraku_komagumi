@@ -28,13 +28,13 @@ class Classnumber < ApplicationRecord
     end
   end
 
-  def self.bulk_create_each_student(student, schedulemaster)
+  def self.bulk_create_for_student(student, schedulemaster)
     schedulemaster.subjects.each do |su|
       create_with_schedule(student, su, schedulemaster)
     end
   end
 
-  def self.bulk_create_each_subject(subject, schedulemaster)
+  def self.bulk_create_for_subject(subject, schedulemaster)
     schedulemaster.students.each do |st|
       create_with_schedule(st, subject, schedulemaster)
     end
@@ -46,17 +46,16 @@ class Classnumber < ApplicationRecord
       schedulemaster_id: schedulemaster.id,
       student_id: student.id,
       subject_id: subject.id,
-      teacher_id: 0,
+      teacher_id: nil,
       number: number,
     )
     return if number.zero?
-
     Schedule.create(
       schedulemaster_id: schedulemaster.id,
       student_id: student.id,
       subject_id: subject.id,
-      teacher_id: 0,
-      timetable_id: 0,
+      teacher_id: nil,
+      timetable_id: nil,
       status: 0,
     )
   end

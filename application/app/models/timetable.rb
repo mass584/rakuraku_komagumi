@@ -5,12 +5,12 @@ class Timetable < ApplicationRecord
 
   def self.get_timetables(schedulemaster)
     timetables = Hash.new { |h, k| h[k] = {} }
-    schedulemaster.date_array.each do |d|
-      schedulemaster.class_array.each do |c|
-        timetables[d][c] = find_by(
+    schedulemaster.date_array.each do |date|
+      schedulemaster.period_array.each do |period|
+        timetables[date][period] = find_by(
           schedulemaster_id: schedulemaster.id,
-          scheduledate: d,
-          classnumber: c,
+          date: date,
+          period: period,
         )
       end
     end
@@ -18,12 +18,12 @@ class Timetable < ApplicationRecord
   end
 
   def self.bulk_create(schedulemaster)
-    schedulemaster.date_array.each do |d|
-      schedulemaster.class_array.each do |c|
+    schedulemaster.date_array.each do |date|
+      schedulemaster.period_array.each do |period|
         create(
           schedulemaster_id: schedulemaster.id,
-          scheduledate: d,
-          classnumber: c,
+          date: date,
+          period: period,
           status: 0,
         )
       end

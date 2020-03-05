@@ -5,22 +5,22 @@ class Timetablemaster < ApplicationRecord
 
   def self.get_timetablemasters(schedulemaster)
     timetablemasters = Hash.new{}
-    schedulemaster.class_array.each do |c|
-      timetablemasters[c] = find_by(
+    schedulemaster.period_array.each do |period|
+      timetablemasters[period] = find_by(
         schedulemaster_id: schedulemaster.id,
-        classnumber: c,
+        period: period,
       )
     end
     timetablemasters
   end
 
   def self.bulk_create(schedulemaster)
-    schedulemaster.class_array.each do |c|
+    schedulemaster.period_array.each do |period|
       Timetablemaster.create(
         schedulemaster_id: schedulemaster.id,
-        classnumber: c,
-        begintime: '2000-01-01 00:00:00',
-        endtime: '2000-01-01 00:00:00',
+        period: period,
+        begin_at: '00:00:00',
+        end_at: '00:00:00',
       )
     end
   end
