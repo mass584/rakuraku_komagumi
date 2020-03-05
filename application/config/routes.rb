@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
   resources :room, only: [:edit, :update]
+  get 'room/login', to: 'room#login'
+  post 'room/logout', to: 'room#logout'
+  post 'room/auth', to: 'room#auth'
+
   resources :subject, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :teacher, only: [:index, :new, :create, :edit, :update, :destroy]
   resources :student, only: [:index, :new, :create, :edit, :update, :destroy]
@@ -45,10 +49,6 @@ Rails.application.routes.draw do
 
   resources :teacherschedule, only: [:index]
   resources :studentschedule, only: [:index]
-
-  post 'login/logout'
-  post 'login/auth'
-  resources :login, only: [:index]
 
   root 'schedulemaster#index'
 end

@@ -1,5 +1,5 @@
-- if @status == 'success'
-  | $('#roomname').html("#{escape_javascript(room.roomname + '教室')}");
+- if @status
+  | $('#roomname').html("#{escape_javascript(@room.name + '教室')}");
   | $('#modal-room-edit').modal('hide');
-- elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(room.errors.full_messages))}");
+- else
+  | $('.error-message').html("#{escape_javascript(error_msg(@room.errors.full_messages))}");

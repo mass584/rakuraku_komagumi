@@ -2,16 +2,16 @@
   .modal-content
     .modal-header
       h2 教室情報の編集
-    = form_for(room, remote: true) do |f|
+    = form_for(@room, remote: true) do |f|
       .modal-body
         table
           tbody
             tr
               td.req 必須
               td.labels
-                = f.label :roomname
+                = f.label :name
               td.field
-                = f.text_field :roomname, size: 12
+                = f.text_field :name, size: 12
             tr
               td.opt 任意
               td.labels
