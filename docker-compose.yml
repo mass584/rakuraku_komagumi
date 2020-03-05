@@ -1,0 +1,47 @@
+version: '2'
+volumes:
+  bundle:
+services:
+  db:
+    image: postgres:10.6
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./application/db/postgres:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=developer
+      - POSTGRES_PASSWORD=password
+  application:
+    build:
+      context: ./application
+      dockerfile: ./Dockerfile
+    ports:
+      - "8000:8000"
+    working_dir: /root/developer
+    command: /bin/bash --login -c "bundle install && bin/delayed_job start -n 1 && bundle exec rails s -b 0.0.0.0 -p 8000"
+    volumes:
+      - ./application:/root/developer
+    environment:
+      - RAILS_ENV=development
+      - BUNDLE_APP_CONFIG=/root/developer/.bundle
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=developer
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=development
+    depends_on:
+      - db
+  optimization:
+    build:
+      context: ./batch
+      dockerfile: ./Dockerfile
+    working_dir: /root/batch
+    tty: true
+    volumes:
+      - ./optimization:/root/developer
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_USERNAME=developer
+      - DATABASE_PASSWORD=password
+      - DATABASE_NAME=development
+    depends_on:
+      - db
