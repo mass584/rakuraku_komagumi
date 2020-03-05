@@ -18,6 +18,8 @@ class Schedulemaster < ApplicationRecord
             presence: true
   validates :type,
             presence: true
+  validates :year,
+            presence: true
   validates :begin_at,
             presence: true
   validates :end_at,
@@ -26,11 +28,13 @@ class Schedulemaster < ApplicationRecord
             presence: true
   validates :max_seat,
             presence: true
+  validates :class_per_teacher,
+            presence: true
   validates :batch_status,
             presence: true
   validates :room_id,
             presence: true
-  validate :verify_begin_end
+  validate :verify_context
   enum type: { one_week: 0, free_range: 1 }
   self.inheritance_column = :_type_disabled
 

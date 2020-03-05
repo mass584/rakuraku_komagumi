@@ -2,7 +2,10 @@ class Studentrequestmaster < ApplicationRecord
   belongs_to :schedulemaster
   belongs_to :student
   validates :schedulemaster_id,
+            presence: true,
             uniqueness: { scope: [:student_id] }
+  validates :student_id,
+            presence: true
   validates :status,
             presence: true
 

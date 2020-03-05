@@ -9,4 +9,10 @@ class Subject < ApplicationRecord
   has_many :schedules, dependent: :restrict_with_exception
   validates :name,
             presence: true
+  validates :order,
+            presence: true
+  validates :is_deleted,
+            presence: true
+  validates :room_id,
+            presence: true
 end

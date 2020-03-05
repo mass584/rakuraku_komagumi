@@ -3,8 +3,15 @@ class Classnumber < ApplicationRecord
   belongs_to :student
   belongs_to :teacher, optional: true
   belongs_to :subject
+  validates :schedulemaster_id,
+            presence: true
   validates :student_id,
+            presence: true,
             uniqueness: { scope: [:subject_id, :schedulemaster_id] }
+  validates :subject_id,
+            presence: true
+  validates :number,
+            presence: true
 
   def self.get_classnumbers(schedulemaster)
     classnumbers = Hash.new { |h, k| h[k] = {} }

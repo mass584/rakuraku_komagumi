@@ -13,12 +13,15 @@ class Teacher < ApplicationRecord
   validates :name_kana,
             presence: true,
             format: { with: /\A[\p{Hiragana}ー]+\z/ }
+  validates :email,
+            allow_blank: true,
+            format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
   validates :tel,
-            length: { maximum: 16 },
-            format: { with: /\A0[0-9]{1,3}-[0-9]{1,4}-[0-9]{1,4}\z/, allow_blank: true }
+            allow_blank: true,
+            format: { with: /\A0[0-9]{1,3}-[0-9]{1,4}-[0-9]{1,4}\z/ }
   validates :zip,
-            length: { is: 8, allow_blank: true },
-            format: { with: /\A[0-9]{3}-[0-9]{4}\z/, allow_blank: true }
+            allow_blank: true,
+            format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
   validates :is_deleted,
             presence: true
   validates :room_id,

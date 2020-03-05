@@ -4,20 +4,26 @@ class Schedule < ApplicationRecord
   belongs_to :teacher, optional: true
   belongs_to :subject
   belongs_to :timetable, optional: true
-  validate :check_teacher_occupation_on_create, on: :create
-  validate :check_student_occupation_on_create, on: :create
-  validate :check_teacher_occupation_on_update, on: :update
-  validate :check_student_occupation_on_update, on: :update
-  TEACHER_OCCUPATION_ERROR_MSG = '一人の講師に対し３コマ以上の授業を割り当てることはできません'.freeze
-  STUDENT_OCCUPATION_ERROR_MSG = '一人の生徒に対し２コマ以上の授業を割り当てることはできません'.freeze
+  validates :schedulemaster_id,
+            presence: true
+  validates :student_id,
+            presence: true
+  validates :subject_id,
+            presence: true
+  validates :status,
+            presence: true
+  validate :verify_teacher_occupation_on_create, on: :create
+  validate :verify_student_occupation_on_create, on: :create
+  validate :verify_teacher_occupation_on_update, on: :update
+  validate :verify_student_occupation_on_update, on: :update
 
   def self.get_student_schedules(student_id, schedulemaster)
     schedules = Hash.new { |h, k| h[k] = {} }
-    schedulemaster.timetables.order(:scheduledate, :classnumber).each do |ti|
-      schedules[ti.scheduledate][ti.classnumber] =
+    schedulemaster.timetables.order(:date, :period).each do |timetable|
+      schedules[timetable.date][timetable.period] =
         joins(:subject, :teacher).where(
           schedulemaster_id: schedulemaster.id,
-          timetable_id: ti.id,
+          timetable_id: timetable.id,
           student_id: student_id,
         )
     end
@@ -26,11 +32,11 @@ class Schedule < ApplicationRecord
 
   def self.get_teacher_schedules(teacher_id, schedulemaster)
     schedules = Hash.new { |h, k| h[k] = {} }
-    schedulemaster.timetables.order(:scheduledate, :classnumber).each do |ti|
-      schedules[ti.scheduledate][ti.classnumber] =
+    schedulemaster.timetables.order(:date, :period).each do |timetable|
+      schedules[timetable.date][timetable.period] =
         joins(:subject, :student).where(
           schedulemaster_id: schedulemaster.id,
-          timetable_id: ti.id,
+          timetable_id: timetable.id,
           teacher_id: teacher_id,
         )
     end
@@ -39,8 +45,8 @@ class Schedule < ApplicationRecord
 
   def self.get_all_schedules(schedulemaster)
     schedules = Hash.new { |h, k| h[k] = {} }
-    schedulemaster.timetables.order(:scheduledate, :classnumber).each do |timetable|
-      schedules[timetable.scheduledate][timetable.classnumber] = []
+    schedulemaster.timetables.order(:date, :period).each do |timetable|
+      schedules[timetable.date][timetable.period] = []
       schedulemaster.teachers.each do |teacher|
         komas_per_seat =
           schedulemaster.schedules.joins(:subject, :student, :teacher).where(timetable_id: timetable.id, teacher_id: teacher.id)
@@ -52,21 +58,23 @@ class Schedule < ApplicationRecord
     schedules
   end
 
-  def check_teacher_occupation_on_create
-    return if teacher_id.zero? || timetable_id.zero?
+  private
+
+  def verify_teacher_occupation_on_create
+    return if teacher_id.nil? || timetable_id.nil?
 
     teacher_occupation_count = self.class.where(
       schedulemaster_id: schedulemaster_id,
       teacher_id: teacher_id,
       timetable_id: timetable_id,
     ).count
-    if teacher_occupation_count >= 2
-      errors.add(:timetable_id, TEACHER_OCCUPATION_ERROR_MSG)
+    if teacher_occupation_count >= schedulemaster.class_per_teacher
+      errors[:base] << '講師のオーバーブッキングがあります'
     end
   end
 
-  def check_student_occupation_on_create
-    return if timetable_id.zero?
+  def verify_student_occupation_on_create
+    return if timetable_id.nil?
 
     student_occupation_count = self.class.where(
       schedulemaster_id: schedulemaster_id,
@@ -74,37 +82,35 @@ class Schedule < ApplicationRecord
       timetable_id: timetable_id,
     ).count
     if student_occupation_count >= 1
-      errors.add(:timetable_id, STUDENT_OCCUPATION_ERROR_MSG)
+      errors[:base] << '生徒のダブルブッキングがあります'
     end
   end
 
-  def check_teacher_occupation_on_update
-    return if teacher_id.zero? || timetable_id.zero?
+  def verify_teacher_occupation_on_update
+    return if teacher_id.nil? || timetable_id.nil?
 
-    schedule_before = self.class.find(id)
-    schedule_changed = (schedule_before.timetable_id != timetable_id) || (schedule_before.teacher_id != teacher_id)
+    schedule_changed = timetable_id.changed? || teacher_id.changed?
     teacher_occupation_count = self.class.where(
       schedulemaster_id: schedulemaster_id,
       teacher_id: teacher_id,
       timetable_id: timetable_id,
     ).count
-    if schedule_changed && (teacher_occupation_count >= 2)
-      errors.add(:timetable_id, TEACHER_OCCUPATION_ERROR_MSG)
+    if schedule_changed && (teacher_occupation_count >= schedulemaster.class_per_teacher)
+      errors[:base] << '講師のオーバーブッキングがあります'
     end
   end
 
-  def check_student_occupation_on_update
+  def verify_student_occupation_on_update
     return if timetable_id.zero?
 
-    schedule_before = self.class.find(id)
-    schedule_changed = (schedule_before.timetable_id != timetable_id)
+    schedule_changed = timetable_id.changed?
     student_occupation_count = self.class.where(
       schedulemaster_id: schedulemaster_id,
       student_id: student_id,
       timetable_id: timetable_id,
     ).count
     if schedule_changed && (student_occupation_count >= 1)
-      errors.add(:timetable_id, STUDENT_OCCUPATION_ERROR_MSG)
+      errors[:base] << '生徒のダブルブッキングがあります'
     end
   end
 end

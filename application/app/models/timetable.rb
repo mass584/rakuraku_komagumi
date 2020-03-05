@@ -1,7 +1,14 @@
 class Timetable < ApplicationRecord
   belongs_to :schedulemaster
   validates :schedulemaster_id,
-            uniqueness: { scope: [:scheduledate, :classnumber] }
+            presence: true,
+            uniqueness: { scope: [:date, :period] }
+  validate :date,
+            presence: true
+  validate :period,
+            presence: true
+  validate :status,
+            presence: true
 
   def self.get_timetables(schedulemaster)
     timetables = Hash.new { |h, k| h[k] = {} }

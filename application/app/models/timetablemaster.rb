@@ -1,7 +1,10 @@
 class Timetablemaster < ApplicationRecord
   belongs_to :schedulemaster
   validates :schedulemaster_id,
-            uniqueness: { scope: [:classnumber] }
+            presence: true,
+            uniqueness: { scope: [:period] }
+  validates :period,
+            presence: true
 
   def self.get_timetablemasters(schedulemaster)
     timetablemasters = Hash.new{}
@@ -19,8 +22,8 @@ class Timetablemaster < ApplicationRecord
       Timetablemaster.create(
         schedulemaster_id: schedulemaster.id,
         period: period,
-        begin_at: '00:00:00',
-        end_at: '00:00:00',
+        begin_at: '18:00:00',
+        end_at: '18:00:00',
       )
     end
   end

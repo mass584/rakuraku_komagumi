@@ -12,17 +12,20 @@ class Student < ApplicationRecord
             presence: true
   validates :name_kana,
             presence: true,
-            format: { with: /\A[\p{Hiragana}ー]+\z/, allow_blank: true }
+            format: { with: /\A[\p{Hiragana}ー]+\z/ }
   validates :gender,
             presence: true
   validates :birth_year,
             presence: true
+  validates :email,
+            allow_blank: true,
+            format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
   validates :tel,
-            length: { maximum: 16 },
-            format: { with: /\A0[0-9]{1,3}-[0-9]{1,4}-[0-9]{1,4}\z/, allow_blank: true }
+            allow_blank: true,
+            format: { with: /\A0[0-9]{1,3}-[0-9]{1,4}-[0-9]{1,4}\z/ }
   validates :zip,
-            length: { is: 8, allow_blank: true },
-            format: { with: /\A[0-9]{3}-[0-9]{4}\z/, allow_blank: true }
+            allow_blank: true,
+            format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
   validates :is_deleted,
             presence: true
   validates :room_id,
@@ -31,37 +34,39 @@ class Student < ApplicationRecord
 
   def grade_at(year)
     full_age = year - birth_year
-    case full_age
-    when 7
+    case
+    when full_age =< 6
+      '未'
+    when full_age == 7
       '小1'
-    when 8
+    when full_age == 8
       '小2'
-    when 9
+    when full_age == 9
       '小3'
-    when 10
+    when full_age == 10
       '小4'
-    when 11
+    when full_age == 11
       '小5'
-    when 12
+    when full_age == 12
       '小6'
-    when 13
+    when full_age == 13
       '中1'
-    when 14
+    when full_age == 14
       '中2'
-    when 15
+    when full_age == 15
       '中3'
-    when 16
+    when full_age == 16
       '高1'
-    when 17
+    when full_age == 17
       '高2'
-    when 18
+    when full_age == 18
       '高3'
     else
-      ''
+      '満'
     end
   end
 
-  def name_with_grade(schedulemaster)
-    "#{grade_when(schedulemaster)} #{fullname}"
+  def name_with_grade(year)
+    "#{grade_at(year)} #{name}"
   end
 end
