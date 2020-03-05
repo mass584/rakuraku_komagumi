@@ -1,0 +1,3 @@
+- if @status == 'success'
+  | $("#modal-add-subject").modal("hide");
+  | $("#subject_count").html("紐付け済み#{schedulemaster.subjects.count}人 / 在籍#{room.exist_subjects.count}人");

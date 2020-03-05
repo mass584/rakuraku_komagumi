@@ -1,0 +1,32 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h2 新しい科目の追加
+    = form_for @subject, :url => {:controller => :subject, :action => :create}, remote: true do |f|
+      .modal-body
+        table
+          tbody
+            tr
+              td.req 必須
+              td.labels
+                = f.label :name
+              td.field
+                = f.text_field :name, :size=>"8"
+            tr
+              td.req 必須
+              td.labels
+                = f.label :classtype
+              td.field 
+                = f.select :classtype, ['個別授業', '集団授業'], { include_blank: '選択して下さい' }
+            tr
+              td.req 必須
+              td.labels
+                = f.label :row_order
+              td.field
+                = f.number_field :row_order, min: 1
+            tr
+              td.error-message colspan="3"
+        = f.hidden_field :room_id, :value => room["id"]
+      .modal-footer
+        = f.submit '追加', {"class" => "btn btn-primary"}
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}

@@ -1,0 +1,28 @@
+== render 'application/header'
+== render 'application/subheader'
+.content
+  table
+    thead
+      tr
+        th.date = "時刻"
+        - schedulemaster.class_array.each do |c|
+          th.class
+            p = p_class(c)
+            div[data-id="#{timetablemasters[c].id}"]
+              = "開始 "
+              = time_field_timetable(timetablemasters[c], "begintime")
+              br
+              = "終了 "
+              = time_field_timetable(timetablemasters[c], "endtime")
+    tbody
+      - schedulemaster.date_array.each do |d|
+        tr
+          td.date = p_date(d, schedulemaster.schedule_type)
+          - schedulemaster.class_array.each do |c|
+            td.class[class="#{get_select_class(timetables[d][c].status)}"]
+              = timetable_status(schedulemaster, timetables[d][c])
+
+== render 'application/footer'
+== javascript_include_tag "common.js"
+== javascript_include_tag "scroll.js"
+== javascript_include_tag "timetable.js"

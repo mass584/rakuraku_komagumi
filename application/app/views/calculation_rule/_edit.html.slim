@@ -1,0 +1,45 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      - if @calculation_rule.eval_target == "teacher"
+        h2 コスト値の設定（講師）
+      - elsif @calculation_rule.eval_target == "student"
+        h2 コスト値の設定（生徒）
+      - elsif @calculation_rule.eval_target == "student3g"
+        h2 コスト値の設定（中３生徒）
+    = form_for @calculation_rule, :url => {:controller => :calculation_rule, :action => :update}, remote: true do |f|
+      .modal-body
+        table
+          tbody
+            - if @calculation_rule.eval_target == "teacher"
+              tr
+                td.labels = f.label :single_cost
+                td.field = f.number_field :single_cost, min: 0
+              tr
+                td.labels = f.label :different_pair_cost
+                td.field = f.number_field :different_pair_cost, min: 0
+            tr
+              td.labels = f.label :blank_class_max
+              td.field = f.number_field :blank_class_max, min: 0, readonly: @readonly
+            tr
+              td.labels = f.label :blank_class_cost
+              td.field = f.text_field :blank_class_cost
+            tr
+              td.labels = f.label :total_class_max
+              td.field = f.number_field :total_class_max, min: 0, readonly: @readonly
+            tr
+              td.labels = f.label :total_class_cost
+              td.field = f.text_field :total_class_cost
+            - if @calculation_rule.eval_target == "student" || @calculation_rule.eval_target == "student3g"
+              tr
+                td.labels = f.label :interval_cost
+                td.field = f.text_field :interval_cost
+            tr
+              td.error-message colspan="2"
+            tr
+              td.note colspan="2" = "※スケジュールを配置した状態で「空きコマの最大数」「1日最大授業数」を変更することはできません。"
+            tr
+              td.note colspan="2" = "※コストは1,000,000以下を入力してください。"
+      .modal-footer
+        = f.submit '保存', {"class" => "btn btn-primary"}
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}

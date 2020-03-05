@@ -1,0 +1,3 @@
+tr
+  td.select onclick='window.location="#{schedulemaster_path(schedulemaster)}"' role="link" = "［#{schedulemaster.schedule_type}］#{schedulemaster.schedule_name}（#{schedulemaster.begindate} 〜 #{schedulemaster.enddate}）"
+  td.delete = link_to '×', schedulemaster, method: :delete, data: {confirm: "本当に削除してよろしいですか"}

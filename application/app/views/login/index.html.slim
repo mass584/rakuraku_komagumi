@@ -1,0 +1,11 @@
+.wrapper
+  h1 FOCUSWSS
+  = form_tag '/login/auth', :class => "form-signin" do
+    h3.form-signin-heading ログインしてください
+    = text_field_tag :login_id, flash[:login_id], placeholder: "ログインID", class: "form-control"
+    = password_field_tag :password, '', placeholder: "パスワード", class: "form-control"
+    = hidden_field_tag :referer, flash[:referer]
+    br
+    = submit_tag 'ログイン', class: "btn btn-lg btn-primary btn-block"
+    .form-error
+      = flash[:error]

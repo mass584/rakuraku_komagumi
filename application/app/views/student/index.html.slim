@@ -1,0 +1,32 @@
+== render 'application/header'
+.content
+  h1 生徒名簿
+  table.table.table-bordered
+    thead
+      tr
+        th.name 氏名
+        - @subject.each do |s|
+          th.subject = s.name
+        th.del 削除
+    tbody
+      - @student.each do |st|
+        tr
+          th.name[id="student_#{st.id}"] = link_to "#{st.grade} #{st.fullname}", edit_student_path(st), remote: true
+          - @subject.each do |su|
+            td.subject
+              - if st.student_subject_mappings.find_by(student_id: st.id, subject_id: su.id)
+                div[data-student_id="#{st.id}" data-subject_id="#{su.id}"]
+                  = image_tag('maru.png', size: '32x32', id: 'button_maru')
+                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
+              - else
+                div[data-student_id="#{st.id}" data-subject_id="#{su.id}"]
+                  = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
+                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
+          td.del = link_to "削除", student_path(st), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
+  div.new = link_to '新しい生徒の追加', new_student_path, method: :get, remote: true
+
+#modal-student.modal.fade tabindex="-1" role="dialog" aria-hidden="true"
+
+== render 'application/footer'
+== javascript_include_tag 'common.js'
+== javascript_include_tag 'student.js'

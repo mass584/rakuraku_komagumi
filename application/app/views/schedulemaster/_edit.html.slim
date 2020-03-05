@@ -1,0 +1,21 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h2 自動計算の上限設定
+    = form_for schedulemaster, :url => {:controller => :schedulemaster, :action => :update}, remote: true do |f|
+      .modal-body
+        table
+          tbody
+            tr
+              td.labels = f.label :max_count
+              td.field = f.number_field :max_count, min: 0
+            tr
+              td.labels = f.label :max_time_sec
+              td.field = f.number_field :max_time_sec, min: 0
+            tr
+              td.error-message colspan="2"
+            tr
+              td.note colspan="2" = "※上限を設けない場合は0を入力してください"
+      .modal-footer
+        = f.submit '保存', {"class" => "btn btn-primary"}
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}

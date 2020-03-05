@@ -1,0 +1,8 @@
+tr
+  th.teacher[id="teacher_#{@teacher.id}"] = link_to @teacher.fullname, edit_teacher_path(@teacher), remote: true
+  - @subject.each do |s|
+    td.subject
+      div[data-teacher_id="#{@teacher.id}" data-subject_id="#{s.id}"]
+        = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
+        = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
+  td.del = link_to "削除", teacher_path(@teacher), method: :delete, data: {confirm: '本当に削除してよろしいですか'}

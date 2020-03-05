@@ -1,0 +1,10 @@
+- if @status == 'success'
+  | $('#modal-student').modal('hide');
+  | $('#modal-student').html('');
+  | $('tbody').append("#{escape_javascript(render 'student/tr')}");
+  | $('[id=button_maru]').off('click');
+  | $('[id=button_batsu]').off('click');
+  | $('[id=button_maru]').on('click', cb_maru_click);
+  | $('[id=button_batsu]').on('click', cb_batsu_click);
+- elsif @status == 'fail'
+  | $('.error-message').html("#{escape_javascript(error_msg(@student.errors.full_messages))}");

@@ -1,0 +1,14 @@
+- if @status == 'success'
+  | $('#modal-subject').modal('hide');
+  | $('#modal-subject').html('');
+  | $("#order_#{@subject.id}").html("#{@subject.row_order}");
+  | $('#name_#{@subject.id}').html("#{escape_javascript(link_to @subject.name, edit_subject_path(@subject), remote: true)}");
+  | $('tbody').children('tr').sort((a, b) => {
+  |   if (Number($(a).find('[id^=order_]').text()) > Number($(b).find('[id^=order_]').text())) {
+  |     return 1;
+  |   } else {
+  |     return -1;
+  |   }
+  | }).appendTo('tbody');
+- elsif @status == 'fail'
+  | $('.error-message').html("#{escape_javascript(error_msg(@subject.errors.full_messages))}");

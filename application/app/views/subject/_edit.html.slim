@@ -1,0 +1,25 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h2 科目情報の編集
+    = form_for(@subject, remote: true) do |f|
+      .modal-body
+        table
+          tbody
+            tr
+              td.req 必須
+              td.labels
+                = f.label :name
+              td.field
+                = f.text_field :name, :size=>"8"
+            tr
+              td.req 必須
+              td.labels
+                = f.label :row_order
+              td.field
+                = f.number_field :row_order, min: 1
+            tr
+              td.error-message colspan="3"
+      .modal-footer
+        = f.submit '保存', {"class" => "btn btn-primary"}
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}

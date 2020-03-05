@@ -1,0 +1,32 @@
+.modal-dialog
+  .modal-content
+    .modal-header
+      h2 新しいスケジュールの作成
+    = form_for schedulemaster, :url => { :controller => :schedulemaster, :action => :create }, remote: true do |f|
+      .modal-body
+        table
+          tbody
+            tr
+              td.labels = f.label :schedule_name
+              td.field = f.text_field :schedule_name, size: 20
+            tr
+              td.labels = f.label :schedule_type
+              td.field = f.select :schedule_type, ['講習時期', '通常時期'], { include_blank: '選択して下さい' }
+            tr
+              td.labels = f.label :begindate
+              td.field = f.date_field :begindate
+            tr
+              td.labels = f.label :enddate
+              td.field = f.date_field :enddate
+            tr
+              td.labels = f.label :totalclassnumber
+              td.field = f.number_field :totalclassnumber, min: 1, size: 2
+            tr
+              td.labels = f.label :seatnumber
+              td.field = f.number_field :seatnumber, min: 1, size: 2
+            tr
+              td.error-message colspan="2"
+        = f.hidden_field :room_id, :value => room["id"]
+      .modal-footer
+        = f.submit '作成', {"class" => "btn btn-primary"}
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}

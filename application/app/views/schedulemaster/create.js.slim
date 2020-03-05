@@ -1,0 +1,6 @@
+- if @status == 'success'
+  | $("#modal-newschedule").modal('hide');
+  | $('#modal-newschedule').html('');
+  | $("tbody").prepend("#{escape_javascript(render('schedulemaster/tr', schedulemaster: schedulemaster))}");
+- elsif @status == 'fail'
+  | $('.error-message').html("#{escape_javascript(error_msg(schedulemaster.errors.full_messages))}");

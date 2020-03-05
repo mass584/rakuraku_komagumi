@@ -1,0 +1,31 @@
+== render 'application/header'
+== render 'application/subheader'
+.content
+  .domain
+    h3 生徒選択
+    table.table.table-bordered
+      thead
+        tr
+          th.name 氏名
+          th.unscheduled 予定入力
+          th.unscheduled 未決定コマ数
+          th.unscheduled 選択
+      tbody
+        - schedulemaster.ordered_students.each do |s|
+          tr
+            th.name = "#{s.grade_when(schedulemaster)} #{s.fullname}"
+            = td_studentrequest_status(s.id)
+            = td_blank_studentschedule_count(s.id)
+            td.print = check_box_tag s.id, true, false
+    div.links
+      = button_tag '全て選択',
+        {class: 'btn btn-default', id: 'button_select_all'}
+      = " "
+      = button_tag '全て解除',
+        {class: 'btn btn-default', id: 'button_unselect_all'}
+      = " "
+      = button_tag 'PDF出力',
+        {class: 'btn btn-primary', id: 'button_output_pdf'}
+== render 'application/footer'
+== javascript_include_tag "common.js"
+== javascript_include_tag "studentschedule.js"

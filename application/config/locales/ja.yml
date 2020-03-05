@@ -1,0 +1,73 @@
+ja:
+  activerecord:
+    models:
+      room: 教室
+      student: 生徒
+      teacher: 講師
+      subject: 科目
+      schedulemaster: 予定表
+    attributes:
+      room:
+        roomname: 教室名
+        zip: 郵便番号
+        address: 住所
+        mail: メールアドレス
+        tel: 電話番号
+        fax: FAX番号
+        login_id: ログインID
+        password_digest: パスワード
+      student:
+        lastname: 姓
+        firstname: 名
+        fullname: 氏名
+        lastname_kana: 姓(かな)
+        firstname_kana: 名(かな)
+        fullname_kana: 氏名(かな) 
+        grade: 学年
+        gender: 性別
+        school: 学校
+        zip: 郵便番号
+        address: 住所
+        mail: メールアドレス
+        tel: 電話番号
+      teacher:
+        lastname: 姓
+        firstname: 名
+        fullname: 氏名
+        lastname_kana: 姓(かな)
+        firstname_kana: 名(かな)
+        fullname_kana: 氏名(かな) 
+        zip: 郵便番号
+        address: 住所
+        mail: メールアドレス
+        tel: 電話番号
+      subject:
+        name: 科目名
+        classtype: 科目タイプ
+        row_order: 表示順
+      schedulemaster:
+        schedule_name: スケジュール名
+        schedule_type: スケジュールタイプ
+        max_count: 改善回数の上限
+        max_time_sec: 改善時間の上限(分)
+        begindate: 開始日
+        enddate: 終了日
+        seatnumber: 座席数
+        totalclassnumber: 一日の時限数
+      student_schedulemaster_mapping:
+        student_id: 生徒
+      teacher_schedulemaster_mapping:
+        teacher_id: 講師
+      subject_schedulemaster_mapping:
+        subject_id: 科目
+      calculation_rule:
+        single_cost: 1対1授業のコスト
+        different_pair_cost: 違う科目のコスト
+        blank_class_cost: 空きコマのコスト
+        blank_class_max: 空きコマの最大数
+        total_class_cost: 1日授業数のコスト
+        total_class_max: 1日最大授業数
+        interval_cost: 授業間隔のコスト
+      timetable:
+        begintime: 開始時刻
+        endtime: 終了時刻

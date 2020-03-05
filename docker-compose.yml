@@ -21,6 +21,7 @@ services:
     command: /bin/bash --login -c "bundle install && bin/delayed_job start -n 1 && bundle exec rails s -b 0.0.0.0 -p 8000"
     volumes:
       - ./application:/root/developer
+      - bundle:/root/developer/vendor/bundle
     environment:
       - RAILS_ENV=development
       - BUNDLE_APP_CONFIG=/root/developer/.bundle

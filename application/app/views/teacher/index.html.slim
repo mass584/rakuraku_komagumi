@@ -1,0 +1,32 @@
+== render 'application/header'
+.content
+  h1 講師名簿
+  table.table.table-bordered
+    thead
+      tr
+        th.teacher 氏名
+        - @subject.each do |s|
+          th.subject = s.name
+        th.del 削除
+    tbody
+      - @teacher.each do |t|
+        tr
+          th.teacher[id="teacher_#{t.id}"] = link_to t.fullname, edit_teacher_path(t), remote: true
+          - @subject.each do |s|
+            td.subject
+              - if t.teacher_subject_mappings.find_by(teacher_id: t.id, subject_id: s.id)
+                div[data-teacher_id="#{t.id}" data-subject_id="#{s.id}"]
+                  = image_tag('maru.png', size: '32x32', id: 'button_maru')
+                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
+              - else
+                div[data-teacher_id="#{t.id}" data-subject_id="#{s.id}"]
+                  = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
+                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
+          td.del = link_to "削除", teacher_path(t), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
+  div.new = link_to '新しい講師の追加', {controller: :teacher, action: :new}, method: :get, remote: true
+
+#modal-teacher.modal.fade tabindex="-1" role="dialog" aria-hidden="true"
+
+== render 'application/footer'
+== javascript_include_tag 'common.js'
+== javascript_include_tag 'teacher.js'

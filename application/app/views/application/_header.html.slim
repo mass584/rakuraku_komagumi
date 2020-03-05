@@ -1,0 +1,14 @@
+.header
+  .row
+    .col-sm-3.col-xs-3.home
+      = link_to image_tag('home.png', :size => "30x30", :class => :button), {controller: :schedulemaster, action: :index}, method: :get
+      = link_to image_tag('teacher.png', :size => "30x30", :class => :button), {controller: :teacher, action: :index}, method: :get
+      = link_to image_tag('student.png', :size => "30x30", :class => :button), {controller: :student, action: :index}, method: :get
+    .col-sm-6.col-xs-6.title
+      = image_tag('logo.png', :size => "89x30", :class => :logo)
+    .col-sm-3.col-xs-3.logout
+      = link_to image_tag('subject.png', :size => "30x30", :class => :button), {controller: :subject, action: :index}, method: :get
+      = link_to image_tag('setting.png', :size => "30x30", :class => :button), edit_room_path(room), remote: true
+      = link_to image_tag('logout.png', :size => "30x30", :class => :button), {controller: :login, action: :logout}, method: :post
+
+  #modal-room-edit.modal.modal-room.fade[tabindex="-1" role="dialog" aria-hidden="true"]

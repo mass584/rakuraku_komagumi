@@ -1,0 +1,118 @@
+// Place all the styles related to the teacherrequest controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+.teacherrequest {
+  .domain0 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    table {
+      background-color: white;
+      border-color: black;
+      font-size: 16px;
+      width: auto;
+      margin: auto;
+    }
+    thead,tbody {
+      display: block;
+    }
+    tbody {
+      overflow-y: scroll;
+      max-height: 430px;
+    }
+    th.name, td.name {
+      border-color: black;
+      height: 32px;
+      width: 160px;
+      min-width: 80px;
+      text-align: center;
+    }
+    th.required, td.required {
+      border-color: black;
+      height: 50px;
+      width: 100px;
+      min-width: 60px;
+      text-align: center;
+    }
+    th.occupation, td.occupation {
+      border-color: black;
+      height: 50px;
+      width: 180px;
+      min-width: 60px;
+      text-align: center;
+    }
+    th.matching, td.matching {
+      border-color: black;
+      height: 50px;
+      width: 280px;
+      min-width: 240px;
+      text-align: center;
+    }
+    td.matching {
+      font-size: 12px;
+      text-align: left;
+    }
+    th.entered, td.entered {
+      border-color: black;
+      height: 50px;
+      width: 80px;
+      min-width: 60px;
+      text-align: center;
+    }
+    .alert {
+      background-color: #FFF10F;
+    }
+    .error {
+      background-color: #F92500;
+    }
+  }
+  .domain1 {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font-size: 24px;
+    .under-table {
+      margin-bottom: 10px;
+    }
+    .links {
+      margin-top: 10px;
+      font-size: 16px;
+    }
+    table {
+      background-color: white;
+      border-color: black;
+      font-size: 16px;
+      width: auto;
+      margin: auto;
+    }
+    thead,tbody {
+      display: block;
+    }
+    tbody {
+      overflow-y: scroll;
+      max-height: 430px;
+    }
+    th.date, td.date {
+      border-color: black;
+      height: 50px;
+      width: 80px;
+      min-width: 80px;
+      text-align: center;
+    }
+    th.class, td.class {
+      border-color: black;
+      height: 50px;
+      width: 60px;
+      min-width: 60px;
+      text-align: center;
+    }
+    th.button, td.button {
+      border-color: black;
+      height: 50px;
+      width: 60px;
+      min-width: 60px;
+      text-align: center;
+    }
+  }
+}

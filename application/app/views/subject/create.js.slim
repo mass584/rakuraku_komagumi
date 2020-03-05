@@ -1,0 +1,6 @@
+- if @status == 'success'
+  | $('#modal-subject').modal('hide');
+  | $('#modal-subject').html('');
+  | $('tbody').append("#{escape_javascript(render 'subject/tr')}");
+- elsif @status == 'fail'
+  | $('.error-message').html("#{escape_javascript(error_msg(@subject.errors.full_messages))}");

@@ -1,0 +1,8 @@
+- if @status == 'success'
+  | $('#modal-teacher').modal('hide');
+  | $('#modal-teacher').html('');
+  | $("#teacher_#{@teacher.id}").html(
+  |   "#{escape_javascript(link_to @teacher.fullname, edit_teacher_path(@teacher), remote: true)}"
+  | );
+- elsif @status == 'fail'
+  | $('.error-message').html("#{escape_javascript(error_msg(@teacher.errors.full_messages))}");

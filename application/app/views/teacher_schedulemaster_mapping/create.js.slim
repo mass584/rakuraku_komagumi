@@ -1,0 +1,3 @@
+- if @status == 'success'
+  | $("#modal-add-teacher").modal("hide");
+  | $("#teacher_count").html("紐付け済み #{schedulemaster.teachers.count}人 / 在籍#{room.exist_teachers.count}人");

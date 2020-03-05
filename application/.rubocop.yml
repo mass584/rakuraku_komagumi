@@ -1,0 +1,77 @@
+AllCops:
+  TargetRubyVersion: ~
+  TargetRailsVersion: 5.2.1
+
+Metrics/AbcSize:
+  Max: 66
+
+Metrics/BlockLength:
+  Max: 237
+
+Metrics/ClassLength:
+  Max: 346
+
+Metrics/CyclomaticComplexity:
+  Max: 16
+
+Metrics/LineLength:
+  Max: 237
+
+Metrics/MethodLength:
+  Max: 53
+
+Metrics/ModuleLength:
+  Max: 101
+
+Metrics/PerceivedComplexity:
+  Max: 15
+
+Layout/IndentFirstHashElement:
+  EnforcedStyle: consistent
+
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyleForEmptyBraces: no_space
+
+Style/Documentation:
+  Enabled: false
+
+Style/EmptyMethod:
+  EnforcedStyle: expanded
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/GuardClause:
+  MinBodyLength: 5
+
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/MixinUsage:
+  Exclude:
+    - 'bin/setup'
+    - 'bin/update'
+
+Style/MultilineBlockChain:
+  Enabled: false
+
+Style/MultilineTernaryOperator:
+  Enabled: false
+
+Style/NegatedIf:
+  Enabled: false
+
+Style/NumericLiterals:
+  Enabled: false
+
+Style/SymbolArray:
+  EnforcedStyle: brackets
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
+
+Style/TrailingCommaInHashLiteral:
+  EnforcedStyleForMultiline: comma
+
+Style/WordArray:
+  EnforcedStyle: percent

@@ -1,0 +1,24 @@
+- if schedulemaster.calculation_status == 0
+  .subheader
+    ul.nav.nav-tabs
+      li.nav-item[id="schedulemasterTab"]
+        = link_to '全体管理画面', schedulemaster_path(schedulemaster), :class => "nav-link"
+      li.nav-item[id="timetableTab"]
+        = link_to '時間割入力',   {controller: :timetable,       action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="classnumberTab"]
+        = link_to '受講科目入力', {controller: :classnumber,     action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="teacherrequestTab"]
+        = link_to '講師予定入力', {controller: :teacherrequest,  action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="studentrequestTab"]
+        = link_to '生徒予定入力', {controller: :studentrequest,  action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="scheduleTab"]
+        = link_to '全体予定編集', {controller: :schedule,        action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="teacherscheduleTab"]
+        = link_to '講師予定出力', {controller: :teacherschedule, action: :index}, method: :get, :class => "nav-link"
+      li.nav-item[id="studentscheduleTab"]
+        = link_to '生徒予定出力', {controller: :studentschedule, action: :index}, method: :get, :class => "nav-link"
+javascript:
+  $(document).ready(() => {
+    const id = "##{controller.controller_name}Tab";
+    $(id).addClass('active');
+  });

@@ -1,0 +1,29 @@
+== render 'application/header'
+== render 'application/subheader'
+.content
+  .container
+    .domain1
+      h3 = "#{@student.fullname}"
+      table.table.table-bordered
+        thead
+          tr
+            th.date 日付
+            - schedulemaster.class_array.each do |c|
+              th.class = p_class(c)
+        tbody
+          - schedulemaster.date_array.each do |d|
+            tr
+              th.date = p_date(d, schedulemaster.schedule_type)
+              - schedulemaster.class_array.each do |c|
+                td.class
+                  - if @studentrequest[d][c]
+                    = image_tag('maru.png', size: '32x32')
+                  - else
+                    = image_tag('batsu.png', size: '32x32')
+      div.links
+        = link_to '生徒一覧へ',
+          studentrequest_index_path,
+          {class: 'btn btn-default', method: :get}
+
+== render 'application/footer'
+== javascript_include_tag 'common.js'
