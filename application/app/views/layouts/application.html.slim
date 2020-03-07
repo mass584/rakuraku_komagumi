@@ -1,13 +1,11 @@
 doctype html
 html
   head
-    title FOCUSWSS
+    title らくらくコマ組み
     = csrf_meta_tags
     = csp_meta_tag
-
     = include_gon
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
-
-  body class='#{controller.controller_name}'
+  body
     == yield

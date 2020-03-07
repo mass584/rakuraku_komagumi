@@ -1,0 +1,26 @@
+nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
+  = link_to 'らくらくコマ組み',
+    {controller: :schedulemaster, action: :index},
+    {method: :get, class: 'navbar-brand'}
+  .collapse.navbar-collapse#navbarSupportedContent
+    ul.navbar-nav
+      li class="#{active == 'schedulemaster' ? 'nav-item active' : 'nav-item'}"
+        = link_to 'スケジュール一覧',
+          {controller: :schedulemaster, action: :index},
+          {method: :get, class: 'nav-link'}
+      li class="#{active == 'teacher' ? 'nav-item active' : 'nav-item'}"
+        = link_to '講師一覧',
+          {controller: :teacher, action: :index},
+          {method: :get, class: 'nav-link'}
+      li class="#{active == 'student' ? 'nav-item active' : 'nav-item'}"
+        = link_to '生徒一覧',
+          {controller: :student, action: :index},
+          {method: :get, class: 'nav-link'}
+      li class="#{active == 'subject' ? 'nav-item active' : 'nav-item'}"
+        = link_to '科目一覧',
+          {controller: :subject, action: :index},
+          {method: :get, class: 'nav-link'}
+      li.nav-item
+        = link_to 'ログアウト',
+          {controller: :room, action: :logout},
+          {method: :post, class: 'nav-link'}
