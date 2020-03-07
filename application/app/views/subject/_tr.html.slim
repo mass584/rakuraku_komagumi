@@ -1,5 +1,9 @@
-tr
-  th.order[id="order_#{@subject.id}"] = @subject.row_order
-  th.subject[id="name_#{@subject.id}"] = link_to @subject.name, edit_subject_path(@subject), remote: true
-  td.classtype = @subject.classtype
-  td.del = link_to "削除", subject_path(@subject), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
+tr id="subject_#{subject.id}"
+  th.align-middle = subject.order
+  td.align-middle = subject.name
+  td.align-middle
+    button.btn.btn-secondary data-toggle="modal" data-target="#subject_edit_#{subject.id}" = '編集'
+    == render partial: 'subject/edit', locals: { subject: subject }
+  td.align-middle
+    button.btn.btn-danger data-toggle="modal" data-target="#subject_destroy_#{subject.id}" = '削除'
+    == render partial: 'subject/destroy', locals: { subject: subject }

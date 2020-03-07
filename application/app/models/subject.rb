@@ -11,8 +11,6 @@ class Subject < ApplicationRecord
             presence: true
   validates :order,
             presence: true
-  validates :is_deleted,
-            presence: true
   validates :room_id,
             presence: true
 end

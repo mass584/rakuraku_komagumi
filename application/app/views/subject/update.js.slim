@@ -1,14 +1,13 @@
 - if @status == 'success'
-  | $('#modal-subject').modal('hide');
-  | $('#modal-subject').html('');
-  | $("#order_#{@subject.id}").html("#{@subject.row_order}");
-  | $('#name_#{@subject.id}').html("#{escape_javascript(link_to @subject.name, edit_subject_path(@subject), remote: true)}");
+  | $('body').removeClass('modal-open');
+  | $('.modal-backdrop').remove();
+  | $("#subject_edit_#{@subject.id}").modal('hide');
+  | $("#subject_#{@subject.id}").replaceWith("#{escape_javascript(render partial: 'subject/tr', locals: { subject: @subject })}");
   | $('tbody').children('tr').sort((a, b) => {
-  |   if (Number($(a).find('[id^=order_]').text()) > Number($(b).find('[id^=order_]').text())) {
-  |     return 1;
-  |   } else {
-  |     return -1;
-  |   }
+  |   const aN = Number($(a).find('[id^=order_]').text());
+  |   const bN = Number($(b).find('[id^=order_]').text());
+  |   if (aN > bN) return 1;
+  |   return -1;
   | }).appendTo('tbody');
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@subject.errors.full_messages))}");
+  | $("#subject_edit_alert_#{@subject.id}").html("#{escape_javascript(render partial: 'subject/error', locals: { subject: @subject })}");

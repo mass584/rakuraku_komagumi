@@ -1,23 +1,21 @@
-== render 'application/header'
-.content
-  h1 科目一覧
-  table.table.table-bordered
-    thead
-      tr
-        th.order 表示順
-        th.subject 科目名
-        th.classtype 科目タイプ
-        th.del 削除
-    tbody
-      - @subjects.each do |s|
-        tr
-          th.order[id="order_#{s.id}"] = s.row_order
-          th.subject[id="name_#{s.id}"] = link_to s.name, edit_subject_path(s), remote: true
-          td.classtype = s.classtype
-          td.del = link_to "削除", subject_path(s), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
-  div.new = link_to '新しい科目の追加', {controller: :subject, action: :new}, method: :get, remote: true
-
-#modal-subject.modal.fade tabindex="-1" role="dialog" aria-hidden="true"
-
-== render 'application/footer'
-== javascript_include_tag 'common.js'
+== render partial: 'navbar', locals: { active: 'subject' }
+.container-fluid
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      p.h3 科目一覧 
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      table.table
+        thead
+          tr
+            th 表示順
+            th 科目名
+            th 編集
+            th 削除
+        tbody
+          - @subjects.each do |s|
+            == render partial: 'subject/tr', locals: { subject: s }
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      button.btn.btn-primary data-toggle="modal" data-target="#subject_create" = '新規'
+      == render 'subject/new'

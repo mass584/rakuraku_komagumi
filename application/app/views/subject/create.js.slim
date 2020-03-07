@@ -1,6 +1,12 @@
 - if @status == 'success'
-  | $('#modal-subject').modal('hide');
-  | $('#modal-subject').html('');
-  | $('tbody').append("#{escape_javascript(render 'subject/tr')}");
+  | $('#subject_create').modal('hide');
+  | $('#subject_create_alert').html("");
+  | $('tbody').append("#{escape_javascript(render partial: 'subject/tr', locals: { subject: @subject })}");
+  | $('tbody').children('tr').sort((a, b) => {
+  |   const aN = Number($(a).find('[id^=order_]').text());
+  |   const bN = Number($(b).find('[id^=order_]').text());
+  |   if (aN > bN) return 1;
+  |   return -1;
+  | }).appendTo('tbody');
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@subject.errors.full_messages))}");
+  | $('#subject_create_alert').html("#{escape_javascript(render partial: 'subject/error', locals: { subject: @subject })}");

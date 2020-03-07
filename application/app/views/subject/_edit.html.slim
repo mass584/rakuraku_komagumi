@@ -1,25 +1,17 @@
-.modal-dialog
-  .modal-content
-    .modal-header
-      h2 科目情報の編集
-    = form_for(@subject, remote: true) do |f|
-      .modal-body
-        table
-          tbody
-            tr
-              td.req 必須
-              td.labels
-                = f.label :name
-              td.field
-                = f.text_field :name, :size=>"8"
-            tr
-              td.req 必須
-              td.labels
-                = f.label :row_order
-              td.field
-                = f.number_field :row_order, min: 1
-            tr
-              td.error-message colspan="3"
-      .modal-footer
-        = f.submit '保存', {"class" => "btn btn-primary"}
-        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}
+.modal.fade id="subject_edit_#{subject.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for subject, remote: true do |f|
+        .modal-header
+          h4.modal-title 科目の編集
+        .modal-body
+          .form-group
+            = f.label :order
+            = f.number_field :order, { min: 1, class: 'form-control' }
+          .form-group
+            = f.label :name
+            = f.text_field :name, { class: 'form-control' }
+          div id="subject_edit_alert_#{subject.id}"
+        .modal-footer
+          = f.submit '保存', { "class" => "btn btn-primary" }
+          = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

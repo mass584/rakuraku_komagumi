@@ -3,14 +3,11 @@ class SubjectController < ApplicationController
 
   def index
     @subjects = @room.exist_subjects
-  end
-
-  def new
     @subject = Subject.new
   end
 
   def create
-    @subject = Subject.new(subject_params)
+    @subject = Subject.new(subject_create_params)
     respond_to do |format|
       if @subject.save
         format.js { @status = 'success' }
@@ -20,14 +17,10 @@ class SubjectController < ApplicationController
     end
   end
 
-  def edit
-    @subject = Subject.find(params[:id])
-  end
-
   def update
     @subject = Subject.find(params[:id])
     respond_to do |format|
-      if @subject.update(subject_params)
+      if @subject.update(subject_update_params)
         format.js { @status = 'success' }
       else
         format.js { @status = 'fail' }
@@ -37,17 +30,31 @@ class SubjectController < ApplicationController
 
   def destroy
     @subject = Subject.find(params[:id])
-    @subject.update(is_deleted: true)
-    redirect_to action: :index
+    respond_to do |format|
+      if @subject.update(is_deleted: true)
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
+    end
   end
 
   private
 
-  def subject_params
+  def subject_create_params
     params.require(:subject).permit(
       :name,
       :room_id,
-      :order,
+      :order
+    ).merge(
+      is_deleted: false
+    )
+  end
+
+  def subject_update_params
+    params.require(:subject).permit(
+      :name,
+      :order
     )
   end
 end
