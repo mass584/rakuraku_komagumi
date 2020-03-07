@@ -1,4 +1,0 @@
-- if @status == 'success'
-  | $('#modal-calculation-edit').modal('hide');
-- elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@calculation_rule.errors.full_messages))}");
