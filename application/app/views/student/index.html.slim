@@ -1,33 +1,22 @@
-== render 'application/header'
-.content
-  h1 生徒名簿
-  table.table.table-bordered
-    thead
-      tr
-        th.name 氏名
-        - @subjects.each do |subject|
-          th.subject = subject.name
-        th.del 削除
-    tbody
-      - @students.each do |student|
-        tr
-          th.name[id="student_#{student.id}"]
-            = link_to "#{student.grade_at()} #{student.fullname}", edit_student_path(student), remote: true
-          - @subjects.each do |subject|
-            td.subject
-              - if student.student_subject_mappings.find_by(student_id: student.id, subject_id: subject.id)
-                div[data-student_id="#{student.id}" data-subject_id="#{subject.id}"]
-                  = image_tag('maru.png', size: '32x32', id: 'button_maru')
-                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
-              - else
-                div[data-student_id="#{student.id}" data-subject_id="#{subject.id}"]
-                  = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
-                  = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
-          td.del = link_to "削除", student_path(student), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
-  div.new = link_to '新しい生徒の追加', new_student_path, method: :get, remote: true
-
-#modal-student.modal.fade tabindex="-1" role="dialog" aria-hidden="true"
-
-== render 'application/footer'
-== javascript_include_tag 'common.js'
-== javascript_include_tag 'student.js'
+== render partial: 'navbar', locals: { active: 'student' }
+.container-fluid
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      p.h3 生徒一覧 
+  .row.justify-content-md-center
+    .col-md-auto 
+      table.table
+        thead
+          tr
+            th 氏名
+            - @room.exist_subjects.each do |su|
+              th = su.name
+            th 編集
+            th 削除
+        tbody
+          - @students.each do |st|
+            == render partial: 'student/tr', locals: { student: st }
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      button.btn.btn-primary data-toggle="modal" data-target="#student_create" = '新規'
+      == render 'student/new'

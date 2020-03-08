@@ -1,80 +1,50 @@
-.modal-dialog
-  .modal-content
-    .modal-header
-      h2 生徒情報の編集
-    = form_for(@student, remote: true) do |f|
-      .modal-body
-        table
-          tbody
-            tr
-              td.req 必須
-              td.labels
-                = f.label :lastname, '氏名'
-              td.field
-                = f.text_field :lastname, size:8
-                = f.text_field :firstname, size: 8
-            tr
-              td.req 必須
-              td.labels
-                = f.label :lastname_kana, '氏名(かな)'
-              td.field
-                = f.text_field :lastname_kana, size: 8
-                = f.text_field :firstname_kana, size: 8
-            tr
-              td.req 必須
-              td.labels
-                = f.label :grade, '学年'
-              td.field
-                = f.radio_button :grade, '小6', class: :rd
-                label 小6
-                = f.radio_button :grade, '中1', class: :rd
-                label 中1
-                = f.radio_button :grade, '中2', class: :rd
-                label 中2
-                = f.radio_button :grade, '中3', class: :rd
-                label 中3
-            tr
-              td.req 必須
-              td.labels
+.modal.fade id="student_edit_#{student.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for student, remote: true do |f|
+        .modal-header
+          h4.modal-title 生徒情報の編集
+        .modal-body
+          .form-group
+            .form-row
+              .col
+                = f.label :name, '氏名'
+                = f.text_field :name, { class: 'form-control' }
+              .col
+                = f.label :name_kana, '氏名(かな)'
+                = f.text_field :name_kana, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col-xs-2
                 = f.label :gender, '性別'
-              td.field
-                = f.radio_button :gender, '男', class: :rd
-                label 男
-                = f.radio_button :gender, '女', class: :rd
-                label 女
-            tr
-              td.opt 任意
-              td.labels
+                = f.select :gender, { '男': 'male', '女': 'female' }, { include_blank: '選択して下さい' }, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
                 = f.label :school
-              td.field
-                = f.text_field :school
-            tr
-              td.opt 任意
-              td.labels
-                = f.label :zip
-              td.field
-                = f.text_field :zip
-            tr
-              td.opt 任意
-              td.labels
-                = f.label :address
-              td.field
-                = f.text_field :address, size: 40
-            tr
-              td.opt 任意
-              td.labels
+                = f.text_field :school, { class: 'form-control' }
+              .col
+                = f.label :birth_year
+                = f.select :birth_year, student.birth_year_select, { include_blank: '選択して下さい' }, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :email
+                = f.text_field :email, { class: 'form-control' }
+              .col
                 = f.label :tel
-              td.field
-                = f.text_field :tel
-            tr
-              td.opt 任意
-              td.labels
-                = f.label :mail
-              td.field
-                = f.text_field :mail
-            tr
-              td.error-message colspan="5"
-        = f.hidden_field :room_id, :value => room["id"]
-      .modal-footer
-        = f.submit '保存', {"class" => "btn btn-primary"}
-        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}
+                = f.text_field :tel, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col-xs-2
+                = f.label :zip
+                = f.text_field :zip, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :address
+                = f.text_field :address, { class: 'form-control' }
+          div id="student_edit_alert_#{student.id}"
+        .modal-footer
+          = f.submit '保存', {"class" => "btn btn-primary"}
+          = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

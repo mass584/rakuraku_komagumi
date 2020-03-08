@@ -3,43 +3,63 @@ class StudentController < ApplicationController
 
   def index
     @students = @room.exist_students
-    @subjects = @room.exist_subjects
-  end
-
-  def new
     @student = Student.new
   end
 
   def create
-    @student = Student.new(student_params)
-    if @student.save
-      @subject = @room.exist_subjects
-      @status = 'success'
-    else
-      @status = 'fail'
+    @student = Student.new(student_create_params)
+    respond_to do |format|
+      if @student.save
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
     end
-  end
-
-  def edit
-    @student = Student.find(params[:id])
   end
 
   def update
     @student = Student.find(params[:id])
-    @status = @student.update(student_params)
+    respond_to do |format|
+      if @student.update(student_update_params)
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
+    end
   end
 
   def destroy
     @student = Student.find(params[:id])
-    @student.update(is_deleted: true)
-    redirect_to action: :index
+    respond_to do |format|
+      if @student.update(is_deleted: true)
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
+    end
   end
 
   private
 
-  def student_params
+  def student_create_params
     params.require(:student).permit(
       :room_id,
+      :name,
+      :name_kana,
+      :gender,
+      :birth_year,
+      :school,
+      :email,
+      :tel,
+      :zip,
+      :address,
+    ).merge(
+      is_deleted: false
+    )
+  end
+
+  def student_update_params
+    params.require(:student).permit(
       :name,
       :name_kana,
       :gender,

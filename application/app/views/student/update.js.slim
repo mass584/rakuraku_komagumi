@@ -1,8 +1,7 @@
 - if @status == 'success'
-  | $('#modal-student').modal('hide');
-  | $('#modal-student').html('');
-  | $("#student_#{@student.id}").html(
-  |   "#{escape_javascript(link_to @student.grade + ' ' + @student.fullname, edit_student_path(@student), remote: true)}"
-  | );
+  | $('body').removeClass('modal-open');
+  | $('.modal-backdrop').remove();
+  | $("#student_edit_#{@student.id}").modal('hide');
+  | $("#student_#{@student.id}").replaceWith("#{escape_javascript(render partial: 'student/tr', locals: { student: @student })}");
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@student.errors.full_messages))}");
+  | $("#student_edit_alert_#{@student.id}").html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

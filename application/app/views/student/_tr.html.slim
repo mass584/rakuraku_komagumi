@@ -1,8 +1,17 @@
-tr
-  th.name[id="student_#{@student.id}"] = link_to "#{@student.grade} #{@student.fullname}", edit_student_path(@student), remote: true
-  - @subject.each do |s|
-    td.subject
-      div[data-student_id="#{@student.id}" data-subject_id="#{s.id}"]
-        = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
-        = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
-  td.del = link_to "削除", student_path(@student), method: :delete, data: {confirm: '本当に削除してよろしいですか'}
+tr id="student_#{student.id}"
+  th.align-middle = student.name
+  - @room.exist_subjects.each do |subject|
+    td.align_middle
+      div data-student_id="#{student.id}" data-subject_id="#{subject.id}"
+        - if student.student_subject_mappings.find_by(student_id: student.id, subject_id: subject.id)
+          = image_tag('maru.png', size: '32x32', id: 'button_maru')
+          = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
+        - else
+          = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
+          = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
+  td.align-middle
+    button.btn.btn-secondary data-toggle="modal" data-target="#student_edit_#{student.id}" = '編集'
+    == render partial: 'student/edit', locals: { student: student }
+  td.align-middle
+    button.btn.btn-danger data-toggle="modal" data-target="#student_destroy_#{student.id}" = '削除'
+    == render partial: 'student/destroy', locals: { student: student }

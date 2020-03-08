@@ -1,10 +1,6 @@
 - if @status == 'success'
-  | $('#modal-student').modal('hide');
-  | $('#modal-student').html('');
-  | $('tbody').append("#{escape_javascript(render 'student/tr')}");
-  | $('[id=button_maru]').off('click');
-  | $('[id=button_batsu]').off('click');
-  | $('[id=button_maru]').on('click', cb_maru_click);
-  | $('[id=button_batsu]').on('click', cb_batsu_click);
+  | $('#student_create').modal('hide');
+  | $('#student_create_alert').html("");
+  | $('tbody').append("#{escape_javascript(render partial: 'student/tr', locals: { student: @student })}");
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@student.errors.full_messages))}");
+  | $('#student_create_alert').html("#{escape_javascript(render partial: 'student/error', locals: { subject: @student })}");
