@@ -24,7 +24,7 @@ class StudentSchedulemasterMapping < ApplicationRecord
       schedulemaster_id: schedulemaster.id,
       student_id: student.id,
       status: 0,
-    ).save && Classnumber.bulk_create_each_student(
+    ).save && Classnumber.bulk_create_for_student(
       student,
       schedulemaster
     )

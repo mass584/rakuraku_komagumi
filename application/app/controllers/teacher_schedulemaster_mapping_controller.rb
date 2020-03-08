@@ -1,5 +1,5 @@
 class TeacherSchedulemasterMappingController < ApplicationController
-  before_action :check_logined
+  before_action :check_login
   before_action :check_schedulemaster
 
   def create

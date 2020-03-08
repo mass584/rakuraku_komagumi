@@ -18,9 +18,9 @@ class SubjectSchedulemasterMapping < ApplicationRecord
 
   def self.additional_create(subject, schedulemaster)
     new(
-      subject_id: subject.id
+      subject_id: subject.id,
       schedulemaster_id: schedulemaster.id
-    ).save && Classnumber.bulk_create_each_subject(
+    ).save && Classnumber.bulk_create_for_subject(
       subject,
       schedulemaster
     )

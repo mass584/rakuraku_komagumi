@@ -1,6 +1,5 @@
 class StudentSchedulemasterMappingController < ApplicationController
-  include Mapping
-  before_action :check_logined
+  before_action :check_login
   before_action :check_schedulemaster
 
   def create

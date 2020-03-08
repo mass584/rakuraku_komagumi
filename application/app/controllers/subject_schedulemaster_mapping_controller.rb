@@ -1,5 +1,4 @@
 class SubjectSchedulemasterMappingController < ApplicationController
-  include Mapping
   before_action :check_login
   before_action :check_schedulemaster
 

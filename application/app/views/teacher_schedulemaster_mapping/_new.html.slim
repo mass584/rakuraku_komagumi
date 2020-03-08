@@ -8,7 +8,7 @@
           .form-group
             = f.label :teacher_id
             - teachers = @schedulemaster.room.exist_teachers - @schedulemaster.teachers
-            - list = options_from_collection_for_select(teachers, :id, :fullname)
+            - list = options_from_collection_for_select(teachers, :id, :name)
             = f.select :teacher_id, list, { include_blank: '選択してください' }, { class: 'form-control' }
         .modal-footer
           = f.submit '追加', {"class" => "btn btn-primary"}
