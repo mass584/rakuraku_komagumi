@@ -4,9 +4,9 @@ Rails.application.routes.draw do
   post 'room/logout', to: 'room#logout'
   post 'room/auth', to: 'room#auth'
 
-  resources :subject, only: [:index, :new, :create, :edit, :update, :destroy]
-  resources :teacher, only: [:index, :new, :create, :edit, :update, :destroy]
-  resources :student, only: [:index, :new, :create, :edit, :update, :destroy]
+  resources :subject, only: [:index, :create, :update, :destroy]
+  resources :student, only: [:index, :create, :update, :destroy]
+  resources :teacher, only: [:index, :create, :update, :destroy]
 
   resources :teacher_subject_mapping, only: [:create]
   delete 'teacher_subject_mapping/delete'

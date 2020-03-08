@@ -35,6 +35,7 @@ ja:
       schedulemaster:
         name: スケジュール名
         type: 種別
+        year: 年度
         begin_at: 開始日
         end_at: 終了日
         max_seat: 座席数

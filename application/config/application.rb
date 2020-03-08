@@ -23,5 +23,8 @@ module Focuswss
     # ActiveJob
     config.active_job.queue_adapter = :delayed_job
     config.active_job.queue_name_prefix = Rails.env
+
+    # Set timezone to Japan/Tokyo
+    config.time_zone = 'Tokyo'
   end
 end
