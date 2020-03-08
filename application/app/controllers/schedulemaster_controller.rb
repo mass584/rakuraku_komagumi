@@ -21,6 +21,9 @@ class SchedulemasterController < ApplicationController
   def show
     session[:schedulemaster_id] = params[:id]
     @schedulemaster = Schedulemaster.find(params[:id])
+    @subject_schedulemaster_mapping = SubjectSchedulemasterMapping.new
+    @student_schedulemaster_mapping = StudentSchedulemasterMapping.new
+    @teacher_schedulemaster_mapping = TeacherSchedulemasterMapping.new
     if @schedulemaster.idle?
       render('schedulemaster/show_idle') && return
     else

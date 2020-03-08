@@ -1,9 +1,9 @@
 tr id="schedulemaster_#{schedulemaster.id}"
   td.align-middle = schedulemaster.name
-  td.align-middle = schedulemaster.type
-  td.align-middle = "#{schedulemaster.begin_at} 〜 #{schedulemaster.end_at}"
+  td.align-middle = schedulemaster.show_type
+  td.align-middle = "#{schedulemaster.begin_at.strftime("%Y/%m/%d")} 〜 #{schedulemaster.end_at.strftime("%Y/%m/%d")}"
   td.align-middle
-    = button_to '編集', schedulemaster_edit(schedulemaster), { class: 'btn btn-secondary' }
+    = button_to '編集', schedulemaster_path(schedulemaster), { method: :get, class: 'btn btn-secondary' }
   td.align-middle
     button.btn.btn-danger data-toggle="modal" data-target="#schedulemaster_destroy_#{schedulemaster.id}" = '削除'
     == render partial: 'schedulemaster/destroy', locals: { schedulemaster: schedulemaster }

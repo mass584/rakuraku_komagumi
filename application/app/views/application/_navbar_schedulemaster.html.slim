@@ -16,3 +16,5 @@ nav.navbar-schedulemaster
       = link_to '講師予定出力', {controller: :teacherschedule, action: :index}, method: :get, :class => "nav-link"
     li class="#{active == 'studentschedule' ? 'nav-item active' : 'nav-item'}"
       = link_to '生徒予定出力', {controller: :studentschedule, action: :index}, method: :get, :class => "nav-link"
+    li.nav-item 
+      .nav-link.disabled = "#{@schedulemaster.name}（#{@schedulemaster.begin_at.strftime("%Y/%m/%d")} 〜 #{@schedulemaster.end_at.strftime("%Y/%m/%d")}）"

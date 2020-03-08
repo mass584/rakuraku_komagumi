@@ -7,12 +7,26 @@ class StudentSchedulemasterMapping < ApplicationRecord
   validates :schedulemaster_id,
             presence: true
 
-  def self.bulk_create(room, schedulemaster)
-    room.exist_students.each do |student|
+  def self.bulk_create(schedulemaster)
+    schedulemaster.room.exist_students.each do |student|
       create(
         schedulemaster_id: schedulemaster.id,
         student_id: student.id
       )
     end
+  end
+
+  def self.additional_create(student, schedulemaster)
+    new(
+      schedulemaster_id: schedulemaster.id,
+      student_id: student.id,
+    ).save && Studentrequestmaster.new(
+      schedulemaster_id: schedulemaster.id,
+      student_id: student.id,
+      status: 0,
+    ).save && Classnumber.bulk_create_each_student(
+      student,
+      schedulemaster
+    )
   end
 end

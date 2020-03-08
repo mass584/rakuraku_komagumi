@@ -1,29 +1,21 @@
 class TeacherSchedulemasterMappingController < ApplicationController
-  include RoomStore
-  include SchedulemasterStore
-  include Mapping
   before_action :check_logined
   before_action :check_schedulemaster
-  helper_method :room
-  helper_method :schedulemaster
-
-  def new
-    @teacher_schedulemaster_mapping = TeacherSchedulemasterMapping.new
-  end
 
   def create
-    teacher_id = params[:teacher_schedulemaster_mapping][:teacher_id]
+    teacher = Teacher.find_by(id: create_params[:teacher_id])
     respond_to do |format|
-      if associate_teacher_to_schedulemaster(teacher_id, schedulemaster.id)
-        Teacherrequestmaster.create(
-          teacher_id: teacher_id,
-          schedulemaster_id: schedulemaster.id,
-          status: 0,
-        )
+      if TeacherSchedulemasterMapping.additional_create(teacher, @schedulemaster)
         format.js { @status = 'success' }
       else
         format.js { @status = 'fail' }
       end
     end
+  end
+
+  private
+
+  def create_params
+    params.require(:teacher_schedulemaster_mapping).permit(:teacher_id)
   end
 end
