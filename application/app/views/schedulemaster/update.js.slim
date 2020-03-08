@@ -1,5 +1,0 @@
-- if @status == 'success'
-  | $("#modal-schedulemaster-edit").modal('hide');
-  | $("#modal-schedulemaster-edit").html('');
-- elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(schedulemaster.errors.full_messages))}");

@@ -1,15 +1,22 @@
-== render 'header'
-.content
-  .action-index
-    h1#roomname = "#{room.name}教室"
-    table.table.table-bordered.table-hover
-      tbody
-        - @schedulemasters.each do |s|
+== render partial: 'navbar', locals: { active: 'schedulemaster' }
+.container-fluid
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto 
+      p.h3 スケジュール一覧 
+  .row.justify-content-md-center
+    .col-md-auto 
+      table.table
+        thead
           tr
-            td.select onclick='window.location="#{schedulemaster_path(s)}"' role="link" = "［#{s.schedule_type}］#{s.schedule_name} （#{s.begin_at} 〜 #{s.end_at}）"
-            td.delete = link_to '×', s, method: :delete, data: {confirm: "本当に削除してよろしいですか"}
-    div.new = link_to '新しいスケジュールの作成', new_schedulemaster_path(@schedulemasters), remote: true
-    div#modal-newschedule.modal.fade tabindex="-1" role="dialog" aria-hidden="true"
-
-== render 'footer'
-== javascript_include_tag "common.js"
+            th スケジュール名
+            th 種別
+            th 期間
+            th 編集
+            th 削除
+        tbody
+          - @schedulemasters.each do |sc|
+            == render partial: 'schedulemaster/tr', locals: { schedulemaster: sc }
+  .row.justify-content-md-center.mt-3.mb-3
+    .col-md-auto
+      button.btn.btn-primary data-toggle="modal" data-target="#schedulemaster_create" = '新規'
+      == render 'schedulemaster/new'

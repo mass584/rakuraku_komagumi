@@ -1,32 +1,42 @@
-.modal-dialog
-  .modal-content
-    .modal-header
-      h2 新しいスケジュールの作成
-    = form_for schedulemaster, :url => { :controller => :schedulemaster, :action => :create }, remote: true do |f|
-      .modal-body
-        table
-          tbody
-            tr
-              td.labels = f.label :schedule_name
-              td.field = f.text_field :schedule_name, size: 20
-            tr
-              td.labels = f.label :schedule_type
-              td.field = f.select :schedule_type, ['講習時期', '通常時期'], { include_blank: '選択して下さい' }
-            tr
-              td.labels = f.label :begindate
-              td.field = f.date_field :begindate
-            tr
-              td.labels = f.label :enddate
-              td.field = f.date_field :enddate
-            tr
-              td.labels = f.label :totalclassnumber
-              td.field = f.number_field :totalclassnumber, min: 1, size: 2
-            tr
-              td.labels = f.label :seatnumber
-              td.field = f.number_field :seatnumber, min: 1, size: 2
-            tr
-              td.error-message colspan="2"
-        = f.hidden_field :room_id, :value => room["id"]
-      .modal-footer
-        = f.submit '作成', {"class" => "btn btn-primary"}
-        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-default"}
+.modal.fade id="schedulemaster_create" role="dialog" area-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      = form_for @schedulemaster, :url => { :controller => :schedulemaster, :action => :create }, remote: true do |f|
+        .modal-header
+          h4.modal-title スケジュールの作成
+        .modal-body
+          .form-group
+            = f.label :name
+            = f.text_field :name, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :year
+                = f.number_field :year, { min: 2020, max: 2100, class: 'form-control' }
+              .col
+                = f.label :type
+                = f.select :type, { '１週間モード': 'one_week', '任意期間モード': 'variable' }, { include_blank: '選択して下さい' }, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :begin_at
+                = f.date_field :begin_at, { class: 'form-control' }
+              .col
+                = f.label :end_at
+                = f.date_field :end_at, { class: 'form-control' }
+          .form-group
+            = f.label :class_per_teacher
+            = f.select :class_per_teacher, { '１対１': 1, '１対２': 2, '１対３': 3 }, { include_blank: '選択して下さい' }, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :max_period
+                = f.number_field :max_period, { min: 1, class: 'form-control' }
+              .col
+                = f.label :max_seat
+                = f.number_field :max_seat, { min: 1, class: 'form-control' }
+          = f.hidden_field :room_id, :value => @room.id
+          div id="schedulemaster_create_alert"
+        .modal-footer
+          = f.submit '作成', { "class" => "btn btn-primary" }
+          = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

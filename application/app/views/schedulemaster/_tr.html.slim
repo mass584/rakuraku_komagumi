@@ -1,3 +1,9 @@
-tr
-  td.select onclick='window.location="#{schedulemaster_path(schedulemaster)}"' role="link" = "［#{schedulemaster.schedule_type}］#{schedulemaster.schedule_name}（#{schedulemaster.begindate} 〜 #{schedulemaster.enddate}）"
-  td.delete = link_to '×', schedulemaster, method: :delete, data: {confirm: "本当に削除してよろしいですか"}
+tr id="schedulemaster_#{schedulemaster.id}"
+  td.align-middle = schedulemaster.name
+  td.align-middle = schedulemaster.type
+  td.align-middle = "#{schedulemaster.begin_at} 〜 #{schedulemaster.end_at}"
+  td.align-middle
+    = button_to '編集', schedulemaster_edit(schedulemaster), { class: 'btn btn-secondary' }
+  td.align-middle
+    button.btn.btn-danger data-toggle="modal" data-target="#schedulemaster_destroy_#{schedulemaster.id}" = '削除'
+    == render partial: 'schedulemaster/destroy', locals: { schedulemaster: schedulemaster }
