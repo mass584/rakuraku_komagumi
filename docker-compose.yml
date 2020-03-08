@@ -31,14 +31,14 @@ services:
       - DATABASE_NAME=development
     depends_on:
       - db
-  batch:
+  optimization:
     build:
-      context: ./batch
+      context: ./optimization
       dockerfile: ./Dockerfile
-    working_dir: /root/batch
+    working_dir: /root/optimization
     tty: true
     volumes:
-      - ./batch:/root/developer
+      - ./optimization:/root/developer
     environment:
       - DATABASE_HOST=db
       - DATABASE_USERNAME=developer
