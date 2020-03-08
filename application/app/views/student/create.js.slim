@@ -3,4 +3,4 @@
   | $('#student_create_alert').html("");
   | $('tbody').append("#{escape_javascript(render partial: 'student/tr', locals: { student: @student })}");
 - elsif @status == 'fail'
-  | $('#student_create_alert').html("#{escape_javascript(render partial: 'student/error', locals: { subject: @student })}");
+  | $('#student_create_alert').html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");
