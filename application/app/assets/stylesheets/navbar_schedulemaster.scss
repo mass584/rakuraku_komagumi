@@ -1,0 +1,39 @@
+.navbar-schedulemaster {
+  height: 40px;
+  background-color: #eee;
+  font-size: 12px;
+  .nav-tabs {
+    padding: 0 8px;
+    border-bottom: 1px solid #aaa !important;
+  }
+  .nav-link {
+    color: black;
+    margin: 5px 1px 0px 1px;
+    height: 35px;
+    border: 1px solid #aaa !important;
+    background-color: #eee;
+  }
+  .nav-link:hover {
+    color: black;
+    margin: 3px 1px 0px 1px;
+    height: 37px;
+    border: 1px solid #aaa !important;
+    background-color: #eee;
+  }
+  .active {
+    .nav-link {
+      color: black;
+      margin: 5px 1px 0px 1px;
+      height: 35px;
+      border-bottom-width: 0px !important;
+      background-color: #fff;
+    }
+    .nav-link:hover {
+      color: black;
+      margin: 3px 1px 0px 1px;
+      height: 37px;
+      border-bottom-width: 0px !important;
+      background-color: #fff;
+    }
+  }
+}
