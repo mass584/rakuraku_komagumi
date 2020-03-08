@@ -1,8 +1,7 @@
 - if @status == 'success'
-  | $('#modal-teacher').modal('hide');
-  | $('#modal-teacher').html('');
-  | $("#teacher_#{@teacher.id}").html(
-  |   "#{escape_javascript(link_to @teacher.fullname, edit_teacher_path(@teacher), remote: true)}"
-  | );
+  | $('body').removeClass('modal-open');
+  | $('.modal-backdrop').remove();
+  | $("#teacher_edit_#{@teacher.id}").modal('hide');
+  | $("#teacher_#{@teacher.id}").replaceWith("#{escape_javascript(render partial: 'teacher/tr', locals: { teacher: @teacher })}");
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@teacher.errors.full_messages))}");
+  | $("#teacher_edit_alert_#{@teacher.id}").html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

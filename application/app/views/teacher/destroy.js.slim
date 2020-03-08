@@ -1,0 +1,7 @@
+- if @status == 'success'
+  | $('body').removeClass('modal-open');
+  | $('.modal-backdrop').remove();
+  | $("#teacher_destroy_#{@teacher.id}").modal('hide');
+  | $('#teacher_#{@teacher.id}').remove();
+- elsif @status == 'fail'
+  | $("#teacher_destroy_alert_#{@teacher.id}").html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

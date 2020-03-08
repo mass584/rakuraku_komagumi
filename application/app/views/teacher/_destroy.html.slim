@@ -1,0 +1,11 @@
+.modal.fade id="teacher_destroy_#{teacher.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title 講師の削除
+      .modal-body
+        p 削除しても既存のスケジュールには表示されます。削除してもよろしいですか。
+        div id="teacher_destroy_alert_#{teacher.id}"
+      .modal-footer
+        = button_to '削除', teacher_path(teacher), { method: 'delete', class: 'btn btn-danger', remote: true }
+        = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

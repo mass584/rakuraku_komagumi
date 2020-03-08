@@ -2,44 +2,61 @@ class TeacherController < ApplicationController
   before_action :check_login
 
   def index
-    @subject = @room.exist_subjects
-    @teacher = @room.exist_teachers
-  end
-
-  def new
+    @teachers = @room.exist_teachers
     @teacher = Teacher.new
   end
 
   def create
-    @teacher = Teacher.new(teacher_params)
-    if @teacher.save
-      @subject = @room.exist_subjects
-      @status = 'success'
-    else
-      @status = 'fail'
+    @teacher = Teacher.new(teacher_create_params)
+    respond_to do |format|
+      if @teacher.save
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
     end
-  end
-
-  def edit
-    @teacher = Teacher.find(params[:id])
   end
 
   def update
     @teacher = Teacher.find(params[:id])
-    @status = @teacher.update(teacher_params)
+    respond_to do |format|
+      if @teacher.update(teacher_update_params)
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
+    end
   end
 
   def destroy
     @teacher = Teacher.find(params[:id])
-    @teacher.update(is_deleted: true)
-    redirect_to action: :index
+    respond_to do |format|
+      if @teacher.update(is_deleted: true)
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
+    end
   end
 
   private
 
-  def teacher_params
+  def teacher_create_params
     params.require(:teacher).permit(
       :room_id,
+      :name,
+      :name_kana,
+      :email,
+      :tel,
+      :zip,
+      :address,
+    ).merge(
+      is_deleted: false
+    )
+  end
+
+  def teacher_update_params
+    params.require(:teacher).permit(
       :name,
       :name_kana,
       :email,

@@ -1,10 +1,6 @@
 - if @status == 'success'
-  | $('#modal-teacher').modal('hide');
-  | $('#modal-teacher').html('');
-  | $('tbody').append("#{escape_javascript(render 'teacher/tr')}");
-  | $('[id=button_maru]').off('click');
-  | $('[id=button_batsu]').off('click');
-  | $('[id=button_maru]').on('click', cb_maru_click);
-  | $('[id=button_batsu]').on('click', cb_batsu_click);
+  | $('#teacher_create').modal('hide');
+  | $('#teacher_create_alert').html("");
+  | $('tbody').append("#{escape_javascript(render partial: 'teacher/tr', locals: { teacher: @teacher})}");
 - elsif @status == 'fail'
-  | $('.error-message').html("#{escape_javascript(error_msg(@teacher.errors.full_messages))}");
+  | $('#teacher_create_alert').html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

@@ -22,8 +22,6 @@ class Teacher < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
-  validates :is_deleted,
-            presence: true
   validates :room_id,
             presence: true
 end
