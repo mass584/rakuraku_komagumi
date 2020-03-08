@@ -26,43 +26,88 @@ class Student < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
-  validates :is_deleted,
-            presence: true
   validates :room_id,
             presence: true
   enum gender: { male: 0, female: 1 }
 
+  def birth_year_select
+    this_year = (Time.zone.now.to_date << 3).year
+    {
+      '小1': birth_year_for(this_year, 'e1'),
+      '小2': birth_year_for(this_year, 'e2'),
+      '小3': birth_year_for(this_year, 'e3'),
+      '小4': birth_year_for(this_year, 'e4'),
+      '小5': birth_year_for(this_year, 'e5'),
+      '小6': birth_year_for(this_year, 'e6'),
+      '中1': birth_year_for(this_year, 'j1'),
+      '中2': birth_year_for(this_year, 'j2'),
+      '中3': birth_year_for(this_year, 'j3'),
+      '高1': birth_year_for(this_year, 'h1'),
+      '高2': birth_year_for(this_year, 'h2'),
+      '高3': birth_year_for(this_year, 'h3'),
+    }
+  end
+
+  def birth_year_for(year, grade)
+    if grade == 'e1'
+      year - 7
+    elsif grade == 'e2'
+      year - 8
+    elsif grade == 'e3'
+      year - 9
+    elsif grade == 'e4'
+      year - 10 
+    elsif grade == 'e5'
+      year - 11
+    elsif grade == 'e6'
+      year - 12
+    elsif grade == 'j1'
+      year - 13
+    elsif grade == 'j2'
+      year - 14
+    elsif grade == 'j3'
+      year - 15
+    elsif grade == 'h1'
+      year - 16
+    elsif grade == 'h2'
+      year - 17
+    elsif grade == 'h3'
+      year - 18
+    else
+      year - 19
+    end
+  end
+
   def grade_at(year)
     full_age = year - birth_year
-    case
-    when full_age =< 6
-      '未'
-    when full_age == 7
+    if full_age <= 6
+      '未就'
+    elsif full_age == 7
       '小1'
-    when full_age == 8
+    elsif full_age == 8
       '小2'
-    when full_age == 9
+    elsif full_age == 9
       '小3'
-    when full_age == 10
+    elsif full_age == 10
       '小4'
-    when full_age == 11
+    elsif full_age == 11
       '小5'
-    when full_age == 12
+    elsif full_age == 12
       '小6'
-    when full_age == 13
+    elsif full_age == 13
       '中1'
-    when full_age == 14
+    elsif full_age == 14
       '中2'
-    when full_age == 15
+    elsif full_age == 15
       '中3'
-    when full_age == 16
+    elsif full_age == 16
       '高1'
-    when full_age == 17
+    elsif full_age == 17
       '高2'
-    when full_age == 18
+    elsif full_age == 18
       '高3'
     else
-      '満'
+      '高卒'
     end
   end
 
