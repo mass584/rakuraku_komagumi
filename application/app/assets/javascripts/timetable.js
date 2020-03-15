@@ -43,7 +43,7 @@ const cb_select_status = (event) => {
   }).done(() => {
     div.data('status', select.val());
     td.attr('class', _get_class(select.val()));
-  }).fail((xhr) => {
+  }).fail(() => {
     alert('操作に失敗しました。');
   });
 }
@@ -51,8 +51,8 @@ const cb_select_status = (event) => {
 const _get_class = (status) => {
   switch(status) {
     case '0':
-      return 'selectbox-normal';
+      return '';
     case '-1':
-      return 'selectbox-blank';
+      return 'bg-inactive';
   }
 }

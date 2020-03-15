@@ -15,3 +15,12 @@
 
 // for Bootstrap 4
 @import "bootstrap";
+
+tbody td {
+  &.bg-inactive {
+    background-color: #bbb;
+  }
+  &.bg-active {
+    background-color: #f0ad4e;
+  }
+}

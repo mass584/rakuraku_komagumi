@@ -1,29 +1,16 @@
-== render 'application/header'
-== render 'application/subheader'
-.content
-  table
+== render partial: 'navbar', locals: { active: 'schedulemaster' }
+== render partial: 'navbar_schedulemaster', locals: { active: 'classnumber' }
+.container-fluid
+  table.table
     thead
       tr
-        th.student 氏名
-        - schedulemaster.individual_subjects.each do |su|
-          th.subject
-            = su.name
-        - schedulemaster.group_subjects.each do |su|
-          th.subject
-            = select_tag_group_lesson_teacher(schedulemaster, su.id)
+        th.align-middle 氏名
+        - @schedulemaster.ordered_subjects.each do |su|
+          th.align-middle = su.name
     tbody
-      - schedulemaster.ordered_students.each do |st|
+      - @schedulemaster.ordered_students.each do |st|
         tr
-          td.student
-            = "#{st.fullname_with_grade(schedulemaster)}"
-          - schedulemaster.individual_subjects.each do |su|
-            - lesson_exist = classnumbers[st.id][su.id].teacher_id != 0 || classnumbers[st.id][su.id].number != 0
-            td.subject[class=(lesson_exist ? 'enable' : 'disable')]
-              = individual_lesson_updator(schedulemaster, classnumbers[st.id][su.id])
-          - schedulemaster.group_subjects.each do |su|
-            td.group
-              = group_lesson_updator(classnumbers[st.id][su.id])
-== render 'application/footer'
-== javascript_include_tag "common.js"
-== javascript_include_tag "scroll.js"
+          td.align-middle = "#{st.name_with_grade(@schedulemaster.year)}"
+          - @schedulemaster.ordered_subjects.each do |su|
+            = classnumber_updator(@classnumbers[st.id.to_s][su.id.to_s])
 == javascript_include_tag 'classnumber.js'

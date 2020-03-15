@@ -19,12 +19,12 @@ module ApplicationHelper
     "#{class_number}限"
   end
 
-  def p_date(date_number, schedule_type)
-    case schedule_type
-    when '通常時期' then
-      youbi(date_number.wday).to_s
-    when '講習時期' then
-      "#{date_number.strftime('%m/%d')} #{youbi(date_number.wday)}"
+  def p_date(day, type)
+    case type
+    when 'one_week' then
+      youbi(day.wday).to_s
+    when 'variable' then
+      "#{day.strftime('%m/%d')} #{youbi(day.wday)}"
     end
   end
 

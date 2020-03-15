@@ -31,5 +31,4 @@ Schedulemasterのaction修== render partial: 'navbar', locals: { active: 'schedu
                 = select_tag :status,
                   options_for_select([['開講', 0], ['休講', -1]], @timetables[day][period].status),
                   { id: 'select_status', class: 'form-control' }
-
-== javascript_include_tag "timetable.js"
+== javascript_include_tag 'timetable.js'
