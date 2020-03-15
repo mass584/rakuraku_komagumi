@@ -11,17 +11,19 @@ class Teacherrequest < ApplicationRecord
             presence: true
 
  def self.get_teacherrequests(teacher_id, schedulemaster)
-    teacherrequests = Hash.new { |h, k| h[k] = {} }
-    schedulemaster.date_array.each do |date|
-      schedulemaster.period_array.each do |period|
-        teacherrequests[date][period] = joins(:timetable).find_by(
-          schedulemaster_id: schedulemaster.id,
-          teacher_id: teacher_id,
-          'timetables.date': date,
-          'timetables.period': period,
-        )
-      end
+    schedulemaster.date_array.reduce({}) do |accu_d, date|
+      accu_d.merge({
+        "#{date}" => schedulemaster.period_array.reduce({}) do |accu_p, period|
+          accu_p.merge({
+            "#{period}" => joins(:timetable).find_by(
+              schedulemaster_id: schedulemaster.id,
+              teacher_id: teacher_id,
+              'timetables.date': date,
+              'timetables.period': period,
+            )
+          })
+        end
+      })
     end
-    teacherrequests
   end
 end

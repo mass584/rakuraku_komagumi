@@ -1,16 +1,12 @@
 class TeacherscheduleController < ApplicationController
-  include RoomStore
-  include SchedulemasterStore
   require './app/pdf/pdf_teacher_schedule'
   before_action :check_logined
   before_action :check_schedulemaster
-  helper_method :room
-  helper_method :schedulemaster
 
   def teacherrequestmasters
     return @teacherrequestmasters if defined? @teacherrequestmasters
 
-    @teacherrequestmasters = Teacherrequestmaster.get_teacherrequestmasters(schedulemaster)
+    @teacherrequestmasters = Teacherrequestmaster.get_teacherrequestmasters(@schedulemaster)
   end
   helper_method :teacherrequestmasters
 
@@ -33,7 +29,7 @@ class TeacherscheduleController < ApplicationController
       end
       format.pdf do
         teacher_ids = params[:teacher_id].gsub(/[\"|\[|\]]/, '').split(',')
-        pdf = PdfTeacherSchedule.new(schedulemaster.id, teacher_ids).render
+        pdf = PdfTeacherSchedule.new(@schedulemaster.id, teacher_ids).render
         send_data pdf,
                   filename: 'TeacherSchedule.pdf',
                   type: 'application/pdf',

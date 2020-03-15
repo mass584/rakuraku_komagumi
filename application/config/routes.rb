@@ -31,11 +31,9 @@ Rails.application.routes.draw do
 
   resources :classnumber, only: [:index, :update, :destroy]
 
-  resources :teacherrequest, only: [:index, :create]
-  get 'teacherrequest/occupation_and_matching'
+  resources :teacherrequest, only: [:index, :create, :destroy]
+  put 'teacherrequestmaster/:id', to: 'teacherrequest#update_master'
   post 'teacherrequest/bulk_create'
-  put 'teacherrequest/update_master'
-  delete 'teacherrequest/delete'
   delete 'teacherrequest/bulk_delete'
 
   resources :studentrequest, only: [:index, :create]

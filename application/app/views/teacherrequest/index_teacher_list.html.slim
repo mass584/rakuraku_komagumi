@@ -1,27 +1,16 @@
-== render 'application/header'
-== render 'application/subheader'
-.content
-  .container
-    .domain0
-      h3 講師選択
-      table.table.table-bordered
-        thead
-          tr
-            th.name 氏名
-            th.required 個別担当数
-            th.occupation 個別授業の埋まり率
-            th.matching マッチングの少ない生徒
-            th.entered 入力済
-        tbody
-          - schedulemaster.teachers.each do |t|
-            tr
-              th.name = link_to t.fullname, controller: :teacherrequest, action: :index, teacher_id: t.id
-              td.required[id="required-#{t.id}"] = image_tag('loading.gif')
-              td.occupation[id="occupation-#{t.id}"] = image_tag('loading.gif')
-              td.matching[id="matching-#{t.id}"] = image_tag('loading.gif')
-              td.entered
-                div[data-id="#{@teacherrequestmaster[t.id].id}" data-status="#{@teacherrequestmaster[t.id].status}"]
-                  = check_box_tag :status, 1, @teacherrequestmaster[t.id].status == 1, id: 'checkbox_status'
-== render 'application/footer'
-== javascript_include_tag 'common.js'
+== render partial: 'navbar', locals: { active: 'schedulemaster' }
+== render partial: 'navbar_schedulemaster', locals: { active: 'teacherrequest' }
+.container
+  table.table
+    thead
+      tr
+        th.align-middle 氏名
+        th.align-middle 入力済
+    tbody
+      - @schedulemaster.teachers.each do |t|
+        tr
+          th.align-middle = link_to t.name, controller: :teacherrequest, action: :index, teacher_id: t.id
+          td.align-middle
+            div[data-id="#{@teacherrequestmaster[t.id.to_s].id}" data-status="#{@teacherrequestmaster[t.id.to_s].status}"]
+              = check_box_tag :status, 1, @teacherrequestmaster[t.id.to_s].status == 1, id: 'checkbox_status'
 == javascript_include_tag 'teacherrequest-list.js'

@@ -10,14 +10,14 @@ class Teacherrequestmaster < ApplicationRecord
             presence: true
 
   def self.get_teacherrequestmasters(schedulemaster)
-    teacherrequestmasters = {}
-    schedulemaster.teachers.each do |t|
-      teacherrequestmasters[t.id] = find_by(
-        schedulemaster_id: schedulemaster.id,
-        teacher_id: t.id,
-      )
+    schedulemaster.teachers.reduce({}) do |accu, t|
+      accu.merge({
+        "#{t.id}" => find_by(
+          schedulemaster_id: schedulemaster.id,
+          teacher_id: t.id
+        )
+      })
     end
-    teacherrequestmasters
   end
 
   def self.bulk_create(schedulemaster)
