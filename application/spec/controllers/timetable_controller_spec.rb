@@ -33,14 +33,14 @@ RSpec.describe TimetableController, type: :controller do
 
   describe 'timetable#update_master' do
     context 'when timetablemaster is exist,' do
-      it 'should success to change the begintime and endtime.' do
+      it 'should success to change the begin_at and endtime.' do
         put :update_master,
-            params: { id: 1, begintime: '12:00:00', endtime: '13:00:00' },
+            params: { id: 1, begin_at: '12:00', end_at: '13:00' },
             session: { schedulemaster_id: 1 },
             format: :json
         expect(response.status).to eq(204)
-        expect(Timetablemaster.find(@timetablemaster.id).begintime).to eq('2000-01-01 12:00:00.000000000 +0000')
-        expect(Timetablemaster.find(@timetablemaster.id).endtime).to eq('2000-01-01 13:00:00.000000000 +0000')
+        expect(Timetablemaster.find(@timetablemaster.id).begin_at).to eq('12:00')
+        expect(Timetablemaster.find(@timetablemaster.id).end_at).to eq('13:00')
       end
     end
   end

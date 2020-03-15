@@ -25,8 +25,10 @@ Rails.application.routes.draw do
   resources :subject_schedulemaster_mapping, only: [:new, :create]
   put 'subject_schedulemaster_mapping', to: 'subject_schedulemaster_mapping#update'
 
-  resources :timetable, only: [:index, :update]
-  post 'timetable/update_master'
+  resources :timetable, only: [:index]
+  put 'timetablemaster/:id', to: 'timetable#update_timetablemaster'
+  put 'timetable/:id', to: 'timetable#update_timetable'
+
   resources :classnumber, only: [:index, :update, :destroy]
 
   resources :teacherrequest, only: [:index, :create]

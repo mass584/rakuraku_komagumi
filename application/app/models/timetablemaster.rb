@@ -7,14 +7,14 @@ class Timetablemaster < ApplicationRecord
             presence: true
 
   def self.get_timetablemasters(schedulemaster)
-    timetablemasters = Hash.new{}
-    schedulemaster.period_array.each do |period|
-      timetablemasters[period] = find_by(
-        schedulemaster_id: schedulemaster.id,
-        period: period,
-      )
+    schedulemaster.period_array.reduce({}) do |accu, period|
+      accu.merge({
+        "#{period}" => find_by(
+          schedulemaster_id: schedulemaster.id,
+          period: period,
+        )
+      })
     end
-    timetablemasters
   end
 
   def self.bulk_create(schedulemaster)
@@ -22,8 +22,8 @@ class Timetablemaster < ApplicationRecord
       Timetablemaster.create(
         schedulemaster_id: schedulemaster.id,
         period: period,
-        begin_at: '18:00:00',
-        end_at: '18:00:00',
+        begin_at: '18:00',
+        end_at: '18:00',
       )
     end
   end

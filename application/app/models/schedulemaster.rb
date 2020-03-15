@@ -43,14 +43,14 @@ class Schedulemaster < ApplicationRecord
   self.inheritance_column = :_type_disabled
 
   def period_array
-    1..max_period
+    (1..max_period).map(&:to_s)
   end
 
   def date_array
     if one_week?
-      ('2001-01-01'.to_date)..('2001-01-07'.to_date)
+      (('2001-01-01'.to_date)..('2001-01-07'.to_date)).map(&:to_s)
     elsif variable?
-      begin_at..end_at
+      (begin_at..end_at).map(&:to_s)
     end
   end
 
@@ -91,6 +91,18 @@ class Schedulemaster < ApplicationRecord
     elsif variable?
       '任意期間モード'
     end
+  end
+
+  def ordered_students
+    students.order(birth_year: 'ASC')
+  end
+
+  def ordered_teachers
+    teachers.order(name: 'DESC')
+  end
+
+  def ordered_subjects
+    subjects.order(order: 'ASC')
   end
 
   private

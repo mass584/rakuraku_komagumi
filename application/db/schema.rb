@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_05_175930) do
+ActiveRecord::Schema.define(version: 2020_03_15_075623) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -197,10 +197,10 @@ ActiveRecord::Schema.define(version: 2020_03_05_175930) do
   create_table "timetablemasters", force: :cascade do |t|
     t.integer "schedulemaster_id", null: false
     t.integer "period", null: false
-    t.time "begin_at"
-    t.time "end_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "begin_at", null: false
+    t.string "end_at", null: false
     t.index ["schedulemaster_id", "period"], name: "index_timetablemasters_on_schedulemaster_id_and_period", unique: true
   end
 

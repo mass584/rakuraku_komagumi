@@ -1,44 +1,12 @@
 // Place all the styles related to the timetable controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.timetable {
-  .content {
-    table {
-      background-color: white;
-    }
-    thead th {
-      padding: 5px;
-      height: 120px;
-      background-color: white;
-      border: 0.5px solid black;
-      text-align: center;
-    }
-    tbody td {
-      padding: 5px;
-      height: 40px;
-      background-color: white;
-      border: 0.5px solid black;
-      text-align: center;
-      &.selectbox-normal {
-        background-color: white;
-      }
-      &.selectbox-blank {
-        background-color: gray;
-      }
-      &.selectbox-group {
-        background-color: #ffa500;
-      }
-    }
-    th.class, td.class {
-      width: 150px;
-      min-width: 150px;
-    }
-    th.date, td.date {
-      width: 80px;
-      min-width: 80px;
-    }
-    .fTHLC-outer-wrapper {
-      border: 2px solid black;
-    }
+
+tbody td {
+  &.selectbox-normal {
+    background-color: #fff;
+  }
+  &.selectbox-blank {
+    background-color: #eee;
   }
 }
