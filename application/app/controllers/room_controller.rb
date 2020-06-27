@@ -20,7 +20,7 @@ class RoomController < ApplicationController
     else
       flash[:email] = params[:email]
       flash[:referer] = params[:referer]
-      flash[:error] = 'IDが存在しないか、パスワードが間違えています'
+      flash[:error] = 'ログイン情報が誤っています。'
       redirect_to controller: :room, action: :login
     end
   end

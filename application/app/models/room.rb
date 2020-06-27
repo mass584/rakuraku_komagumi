@@ -17,11 +17,11 @@ class Room < ApplicationRecord
             format: { with: /\A[a-zA-Z0-9]{8,16}+\z/i }
 
   def exist_students
-    students.where(is_deleted: false).order(birth_year: 'ASC')
+    students.where(is_deleted: false).order(birth_year: 'ASC', name: 'ASC')
   end
 
   def exist_teachers
-    teachers.where(is_deleted: false)
+    teachers.where(is_deleted: false).order(name: 'ASC')
   end
 
   def exist_subjects

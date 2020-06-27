@@ -1,9 +1,9 @@
 == render partial: 'navbar', locals: { active: 'subject' }
-.container-fluid
-  .row.justify-content-md-center.mt-3.mb-3
+.container
+  .row.justify-content-md-center.pt-5.pb-2
     .col-md-auto
       p.h3 科目一覧 
-  .row.justify-content-md-center.mt-3.mb-3
+  .row.justify-content-md-center.pt-2.pb-2
     .col-md-auto
       table.table
         thead
@@ -15,7 +15,7 @@
         tbody
           - @subjects.each do |s|
             == render partial: 'subject/tr', locals: { subject: s }
-  .row.justify-content-md-center.mt-3.mb-3
+  .row.justify-content-md-center.pt-2.pb-5
     .col-md-auto
       button.btn.btn-primary data-toggle="modal" data-target="#subject_create" = '新規'
       == render 'subject/new'

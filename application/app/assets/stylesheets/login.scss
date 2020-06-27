@@ -2,34 +2,15 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 
-.wrapper {
-  margin-top: 80px;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-.form-signin-heading {
-  text-align: center;
-  margin-bottom: 30px;
+.form {
+  margin: 150px 0;
+  width: 320px;
 }
 
 .form-control {
-  position: relative;
-  font-size: 16px;
-  height: auto;
-  padding: 10px;
+  margin: 1rem 0;
 }
 
-.form-signin {
-  max-width: 420px;
-  padding: 30px 38px 38px;
-  margin: 0 auto;
-  background-color: #eee;
-  border: 3px dotted rgba(0,0,0,0.1);
-}
-
-.form-error {
-  text-align: center;
-  color: red;
-  margin-top: 30px;
+.form-submit {
+  margin: 1rem 0;
 }

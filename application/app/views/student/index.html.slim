@@ -1,9 +1,9 @@
 == render partial: 'navbar', locals: { active: 'student' }
-.container-fluid
-  .row.justify-content-md-center.mt-3.mb-3
+.container
+  .row.justify-content-md-center.pt-5.pb-2
     .col-md-auto
       p.h3 生徒一覧 
-  .row.justify-content-md-center
+  .row.justify-content-md-center.pt-2.pb-2
     .col-md-auto 
       table.table
         thead
@@ -16,7 +16,7 @@
         tbody
           - @students.each do |st|
             == render partial: 'student/tr', locals: { student: st }
-  .row.justify-content-md-center.mt-3.mb-3
+  .row.justify-content-md-center.pt-2.pb-5
     .col-md-auto
       button.btn.btn-primary data-toggle="modal" data-target="#student_create" = '新規'
       == render 'student/new'

@@ -42,16 +42,24 @@ class Schedulemaster < ApplicationRecord
   enum batch_status: { idle: 0, submitted: 1, running: 2, error: 9 }
   self.inheritance_column = :_type_disabled
 
-  def period_array
-    (1..max_period).map(&:to_s)
-  end
-
   def date_array
     if one_week?
       (('2001-01-01'.to_date)..('2001-01-07'.to_date)).map(&:to_s)
     elsif variable?
       (begin_at..end_at).map(&:to_s)
     end
+  end
+
+  def period_array
+    (1..max_period).map(&:to_s)
+  end
+
+  def seat_array
+    (1..max_seat).map(&:to_s)
+  end
+
+  def seat_per_teacher_array
+    (1..class_per_teacher).map(&:to_s)
   end
 
   def max_week
@@ -103,6 +111,13 @@ class Schedulemaster < ApplicationRecord
 
   def ordered_subjects
     subjects.order(order: 'ASC')
+  end
+
+  def schedules_per_teacher(date, period)
+    timetable_id = Timetable.find_by(date: date, period: period).id
+    schedules.where(timetable_id: timetable_id).reduce({}) do |accu, schedule|
+      (accu[schedule.teacher_id.to_s] ||= []).push(schedule)
+    end
   end
 
   private

@@ -1,11 +1,10 @@
-.wrapper
-  h1 らくらくコマ組み
-  = form_tag '/room/auth', :class => "form-signin" do
-    h3.form-signin-heading ログイン画面
-    = text_field_tag :email, flash[:email], placeholder: "メールアドレス", class: "form-control"
-    = password_field_tag :password, '', placeholder: "パスワード", class: "form-control"
-    = hidden_field_tag :referer, flash[:referer]
-    br
-    = submit_tag 'ログイン', class: "btn btn-lg btn-primary btn-block"
-    .form-error
-      = flash[:error]
+.container
+  .row.justify-content-md-center.mt-5
+    = form_tag '/room/auth', 'class' => 'form' do
+      p.h3 Login
+      = text_field_tag :email, flash[:email], placeholder: "Email", class: "form-control"
+      = password_field_tag :password, '', placeholder: "Password", class: "form-control"
+      = hidden_field_tag :referer, flash[:referer]
+      = submit_tag 'Login', class: "btn btn-lg btn-primary btn-block form-submit"
+      - if flash[:error] 
+        .alert.alert-danger = flash[:error]
