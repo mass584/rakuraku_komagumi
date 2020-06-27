@@ -36,11 +36,9 @@ Rails.application.routes.draw do
   post 'teacherrequest/bulk_create'
   delete 'teacherrequest/bulk_delete'
 
-  resources :studentrequest, only: [:index, :create]
-  get 'studentrequest/occupation_and_matching'
+  resources :studentrequest, only: [:index, :create, :destroy]
+  put 'studentrequestmaster/:id', to: 'studentrequest#update_master'
   post 'studentrequest/bulk_create'
-  put 'studentrequest/update_master'
-  delete 'studentrequest/delete'
   delete 'studentrequest/bulk_delete'
 
   put 'schedule/bulk_update', to: 'schedule#bulk_update'

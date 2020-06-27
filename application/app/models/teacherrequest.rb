@@ -10,7 +10,7 @@ class Teacherrequest < ApplicationRecord
   validates :timetable_id,
             presence: true
 
- def self.get_teacherrequests(teacher_id, schedulemaster)
+  def self.get_teacherrequests(teacher_id, schedulemaster)
     schedulemaster.date_array.reduce({}) do |accu_d, date|
       accu_d.merge({
         "#{date}" => schedulemaster.period_array.reduce({}) do |accu_p, period|

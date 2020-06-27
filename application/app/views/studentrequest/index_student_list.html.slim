@@ -1,27 +1,16 @@
-== render 'application/header'
-== render 'application/subheader'
-.content
-  .container
-    .domain0
-      h3 生徒選択
-      table.table.table-bordered
-        thead
-          tr
-            th.name 氏名
-            th.required 個別受講数
-            th.occupation 個別授業の埋まり率
-            th.matching マッチングの少ない講師
-            th.entered 入力済
-        tbody
-          - schedulemaster.ordered_students.each do |s|
-            tr
-              th.name = link_to "#{s.grade_when(schedulemaster)} #{s.fullname}", controller: :studentrequest, action: :index, student_id: s.id
-              td.required[id="required-#{s.id}"] = image_tag('loading.gif')
-              td.occupation[id="occupation-#{s.id}"] = image_tag('loading.gif')
-              td.matching[id="matching-#{s.id}"] = image_tag('loading.gif')
-              td.entered
-                div[data-id="#{@studentrequestmaster[s.id].id}" data-status="#{@studentrequestmaster[s.id].status}"]
-                  = check_box_tag :status, 1, @studentrequestmaster[s.id].status == 1, id: 'checkbox_status'
-== render 'application/footer'
-== javascript_include_tag 'common.js'
+== render partial: 'navbar', locals: { active: 'schedulemaster' }
+== render partial: 'navbar_schedulemaster', locals: { active: 'studentrequest' }
+.container
+  table.table
+    thead
+      tr
+        th.align-middle 氏名
+        th.align-middle 入力済
+    tbody
+      - @schedulemaster.students.each do |s|
+        tr
+          th.align-middle = link_to s.name, controller: :studentrequest, action: :index, student_id: s.id
+          td.align-middle
+            div[data-id="#{@studentrequestmaster[s.id.to_s].id}" data-status="#{@studentrequestmaster[s.id.to_s].status}"]
+              = check_box_tag :status, 1, @studentrequestmaster[s.id.to_s].status == 1, id: 'checkbox_status'
 == javascript_include_tag 'studentrequest-list.js'
