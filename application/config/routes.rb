@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :rooms
   resources :room, only: [:edit, :update]
   get 'room/login', to: 'room#login'
   post 'room/logout', to: 'room#logout'
