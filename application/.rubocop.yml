@@ -1,6 +1,5 @@
 AllCops:
   TargetRubyVersion: ~
-  TargetRailsVersion: 5.2.1
 
 Metrics/AbcSize:
   Max: 66
@@ -23,7 +22,7 @@ Metrics/ModuleLength:
 Metrics/PerceivedComplexity:
   Max: 15
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/SpaceBeforeBlockBraces:
