@@ -10,20 +10,30 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_28_171431) do
+ActiveRecord::Schema.define(version: 2019_03_30_014027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
-  create_table "classnumbers", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
+  create_table "begin_end_times", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "period", null: false
+    t.string "begin_at", null: false
+    t.string "end_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["term_id", "period"], name: "index_begin_end_times_on_term_id_and_period", unique: true
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.integer "term_id", null: false
     t.integer "student_id", null: false
     t.integer "teacher_id"
     t.integer "subject_id", null: false
-    t.integer "number", null: false
+    t.integer "count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "student_id", "subject_id"], name: "index_classnumbers", unique: true
+    t.index ["term_id", "student_id", "subject_id"], name: "index_contracts_on_term_id_and_student_id_and_subject_id", unique: true
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -41,13 +51,21 @@ ActiveRecord::Schema.define(version: 2020_06_28_171431) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "pieces", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "student_id", null: false
+    t.integer "teacher_id"
+    t.integer "subject_id", null: false
+    t.integer "timetable_id"
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "rooms", force: :cascade do |t|
     t.string "name", null: false
     t.string "email", null: false
-    t.string "password_digest", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.string "encrypted_password", default: "", null: false
+    t.string "encrypted_password", null: false
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -65,68 +83,30 @@ ActiveRecord::Schema.define(version: 2020_06_28_171431) do
     t.index ["reset_password_token"], name: "index_rooms_on_reset_password_token", unique: true
   end
 
-  create_table "schedulemasters", force: :cascade do |t|
-    t.string "name", null: false
-    t.integer "type", null: false
-    t.date "begin_at", null: false
-    t.date "end_at", null: false
-    t.integer "max_period", null: false
-    t.integer "max_seat", null: false
-    t.integer "batch_status", null: false
-    t.datetime "batch_begin_at"
-    t.datetime "batch_end_at"
-    t.text "batch_result"
-    t.integer "batch_progress"
-    t.integer "room_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.integer "year", null: false
-    t.integer "class_per_teacher", null: false
-  end
-
-  create_table "schedules", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
-    t.integer "student_id", null: false
-    t.integer "teacher_id"
-    t.integer "subject_id", null: false
-    t.integer "timetable_id"
-    t.integer "status", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-  end
-
-  create_table "student_schedulemaster_mappings", force: :cascade do |t|
-    t.integer "student_id", null: false
-    t.integer "schedulemaster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "student_id"], name: "index_student_schedulemaster_mapping", unique: true
-  end
-
-  create_table "student_subject_mappings", force: :cascade do |t|
-    t.integer "student_id", null: false
-    t.integer "subject_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["student_id", "subject_id"], name: "index_student_subject_mapping", unique: true
-  end
-
-  create_table "studentrequestmasters", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
-    t.integer "student_id", null: false
-    t.integer "status", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "student_id"], name: "index_studentrequestmasters", unique: true
-  end
-
-  create_table "studentrequests", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
+  create_table "student_requests", force: :cascade do |t|
+    t.integer "term_id", null: false
     t.integer "student_id", null: false
     t.integer "timetable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "student_id", "timetable_id"], name: "index_studentrequests", unique: true
+    t.index ["term_id", "student_id", "timetable_id"], name: "student_request_index", unique: true
+  end
+
+  create_table "student_subjects", force: :cascade do |t|
+    t.integer "student_id", null: false
+    t.integer "subject_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["student_id", "subject_id"], name: "index_student_subjects_on_student_id_and_subject_id", unique: true
+  end
+
+  create_table "student_terms", force: :cascade do |t|
+    t.integer "student_id", null: false
+    t.integer "term_id", null: false
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["term_id", "student_id"], name: "index_student_terms_on_term_id_and_student_id", unique: true
   end
 
   create_table "students", force: :cascade do |t|
@@ -134,131 +114,123 @@ ActiveRecord::Schema.define(version: 2020_06_28_171431) do
     t.string "name_kana", null: false
     t.integer "gender", null: false
     t.integer "birth_year", null: false
-    t.string "school"
-    t.string "email"
-    t.string "tel"
-    t.string "zip"
-    t.string "address"
+    t.string "school_name", null: false
+    t.string "email", null: false
+    t.string "tel", null: false
+    t.string "zip", null: false
+    t.string "address", null: false
     t.boolean "is_deleted", null: false
     t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "subject_schedulemaster_mappings", force: :cascade do |t|
+  create_table "subject_terms", force: :cascade do |t|
     t.integer "subject_id", null: false
-    t.integer "schedulemaster_id", null: false
+    t.integer "term_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "subject_id"], name: "index_subject_schedulemaster_mapping", unique: true
+    t.index ["term_id", "subject_id"], name: "index_subject_terms_on_term_id_and_subject_id", unique: true
   end
 
   create_table "subjects", force: :cascade do |t|
     t.string "name", null: false
+    t.integer "order", null: false
     t.boolean "is_deleted", null: false
     t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "order", null: false
   end
 
-  create_table "teacher_schedulemaster_mappings", force: :cascade do |t|
-    t.integer "teacher_id", null: false
-    t.integer "schedulemaster_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "teacher_id"], name: "index_teacher_schedulemaster_mapping", unique: true
-  end
-
-  create_table "teacher_subject_mappings", force: :cascade do |t|
-    t.integer "subject_id", null: false
-    t.integer "teacher_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["subject_id", "teacher_id"], name: "index_teacher_subject_mappings_on_subject_id_and_teacher_id", unique: true
-  end
-
-  create_table "teacherrequestmasters", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
-    t.integer "teacher_id", null: false
-    t.integer "status", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "teacher_id"], name: "index_teacherrequestmasters", unique: true
-  end
-
-  create_table "teacherrequests", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
+  create_table "teacher_requests", force: :cascade do |t|
+    t.integer "term_id", null: false
     t.integer "teacher_id", null: false
     t.integer "timetable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "teacher_id", "timetable_id"], name: "index_teacherrequests", unique: true
+    t.index ["term_id", "teacher_id", "timetable_id"], name: "teacher_request_index", unique: true
+  end
+
+  create_table "teacher_subjects", force: :cascade do |t|
+    t.integer "teacher_id", null: false
+    t.integer "subject_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["teacher_id", "subject_id"], name: "index_teacher_subjects_on_teacher_id_and_subject_id", unique: true
+  end
+
+  create_table "teacher_terms", force: :cascade do |t|
+    t.integer "teacher_id", null: false
+    t.integer "term_id", null: false
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["term_id", "teacher_id"], name: "index_teacher_terms_on_term_id_and_teacher_id", unique: true
   end
 
   create_table "teachers", force: :cascade do |t|
     t.string "name", null: false
     t.string "name_kana", null: false
-    t.string "email"
-    t.string "tel"
-    t.string "zip"
-    t.string "address"
+    t.string "email", null: false
+    t.string "tel", null: false
+    t.string "zip", null: false
+    t.string "address", null: false
     t.boolean "is_deleted", null: false
     t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "timetablemasters", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
-    t.integer "period", null: false
+  create_table "terms", force: :cascade do |t|
+    t.string "name", null: false
+    t.integer "type", null: false
+    t.integer "year", null: false
+    t.date "begin_at", null: false
+    t.date "end_at", null: false
+    t.integer "max_period", null: false
+    t.integer "max_seat", null: false
+    t.integer "max_piece", null: false
+    t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "begin_at", null: false
-    t.string "end_at", null: false
-    t.index ["schedulemaster_id", "period"], name: "index_timetablemasters_on_schedulemaster_id_and_period", unique: true
   end
 
   create_table "timetables", force: :cascade do |t|
-    t.integer "schedulemaster_id", null: false
+    t.integer "term_id", null: false
     t.date "date", null: false
     t.integer "period", null: false
     t.integer "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["schedulemaster_id", "date", "period"], name: "index_timetables", unique: true
+    t.index ["term_id", "date", "period"], name: "index_timetables_on_term_id_and_date_and_period", unique: true
   end
 
-  add_foreign_key "classnumbers", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "classnumbers", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "classnumbers", "subjects", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "schedulemasters", "rooms", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "schedules", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "schedules", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "schedules", "subjects", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "student_schedulemaster_mappings", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "student_schedulemaster_mappings", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "student_subject_mappings", "students", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "student_subject_mappings", "subjects", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "studentrequestmasters", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "studentrequestmasters", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "studentrequests", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "studentrequests", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "studentrequests", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "begin_end_times", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "contracts", "students", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "contracts", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "contracts", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "pieces", "students", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "pieces", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "pieces", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_requests", "students", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "student_requests", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_requests", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_subjects", "students", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_subjects", "subjects", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_terms", "students", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "student_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "students", "rooms", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "subject_schedulemaster_mappings", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "subject_schedulemaster_mappings", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "subject_terms", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "subject_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "subjects", "rooms", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "teacher_schedulemaster_mappings", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacher_schedulemaster_mappings", "teachers", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "teacher_subject_mappings", "subjects", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacher_subject_mappings", "teachers", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacherrequestmasters", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacherrequestmasters", "teachers", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "teacherrequests", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacherrequests", "teachers", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "teacherrequests", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "teacher_requests", "teachers", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "teacher_requests", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "teacher_requests", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "teacher_subjects", "subjects", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "teacher_subjects", "teachers", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "teacher_terms", "teachers", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "teacher_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teachers", "rooms", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "timetablemasters", "schedulemasters", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "timetables", "schedulemasters", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "terms", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "timetables", "terms", on_update: :cascade, on_delete: :cascade
 end

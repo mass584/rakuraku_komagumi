@@ -5,11 +5,11 @@ class CreateStudents < ActiveRecord::Migration[5.2]
       t.string :name_kana, null: false
       t.integer :gender, null: false
       t.integer :birth_year, null: false
-      t.string :school
-      t.string :email
-      t.string :tel
-      t.string :zip
-      t.string :address
+      t.string :school_name, null: false
+      t.string :email, null: false
+      t.string :tel, null: false
+      t.string :zip, null: false
+      t.string :address, null: false
       t.boolean :is_deleted, null: false
       t.integer :room_id, null: false
       t.timestamps

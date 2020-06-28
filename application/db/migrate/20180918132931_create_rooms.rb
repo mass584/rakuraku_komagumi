@@ -1,10 +1,12 @@
-# frozen_string_literal: true
+class CreateRooms < ActiveRecord::Migration[5.2]
+  def change
+    create_table :rooms do |t|
+      ## User Added
+      t.string :name, null: false
 
-class AddDeviseToRooms < ActiveRecord::Migration[5.2]
-  def self.up
-    change_table :rooms do |t|
       ## Database authenticatable
-      t.string :encrypted_password, null: false, default: ""
+      t.string :email,              null: false
+      t.string :encrypted_password, null: false
 
       ## Recoverable
       t.string   :reset_password_token
@@ -35,14 +37,9 @@ class AddDeviseToRooms < ActiveRecord::Migration[5.2]
       # t.timestamps null: false
     end
 
+    add_index :rooms, :email,                unique: true
     add_index :rooms, :reset_password_token, unique: true
     add_index :rooms, :confirmation_token,   unique: true
     # add_index :rooms, :unlock_token,         unique: true
-  end
-
-  def self.down
-    # By default, we don't want to make any assumption about how to roll back a migration when your
-    # model already existed. Please edit below which fields you would like to remove in this migration.
-    raise ActiveRecord::IrreversibleMigration
   end
 end
