@@ -1,22 +1,14 @@
 class Student < ApplicationRecord
   belongs_to :room
-  has_many :student_subject_mappings, dependent: :destroy
-  has_many :subjects, through: :student_subject_mappings
-  has_many :student_schedulemaster_mappings, dependent: :restrict_with_exception
-  has_many :schedulemasters, through: :student_schedulemaster_mappings
-  has_many :studentrequests, dependent: :restrict_with_exception
-  has_many :studentrequestmasters, dependent: :restrict_with_exception
-  has_many :classnumbers, dependent: :restrict_with_exception
-  has_many :schedules, dependent: :restrict_with_exception
-  validates :name,
-            presence: true
+  has_many :student_subjects, dependent: :destroy
+  has_many :subjects, through: :student_subjects
+  has_many :student_terms, dependent: :restrict_with_exception
+  has_many :terms, through: :student_terms
+  has_many :student_requests, dependent: :restrict_with_exception
+  has_many :contracts, dependent: :restrict_with_exception
+  has_many :pieces, dependent: :restrict_with_exception
   validates :name_kana,
-            presence: true,
             format: { with: /\A[\p{Hiragana}ー]+\z/ }
-  validates :gender,
-            presence: true
-  validates :birth_year,
-            presence: true
   validates :email,
             allow_blank: true,
             format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
@@ -26,8 +18,6 @@ class Student < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
-  validates :room_id,
-            presence: true
   enum gender: { male: 0, female: 1 }
 
   def birth_year_select

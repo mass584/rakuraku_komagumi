@@ -8,7 +8,7 @@ class Room < ApplicationRecord
          :validatable,
          :confirmable,
          :trackable
-  has_many :schedulemasters, dependent: :restrict_with_exception
+  has_many :terms, dependent: :restrict_with_exception
   has_many :teachers, dependent: :restrict_with_exception
   has_many :students, dependent: :restrict_with_exception
   has_many :subjects, dependent: :restrict_with_exception
