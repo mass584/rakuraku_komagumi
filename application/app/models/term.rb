@@ -33,8 +33,8 @@ class Term < ApplicationRecord
     (1..max_seat).map(&:to_s)
   end
 
-  def seat_per_teacher_array
-    (1..class_per_teacher).map(&:to_s)
+  def piece_array
+    (1..max_piece).map(&:to_s)
   end
 
   def max_week
@@ -49,23 +49,17 @@ class Term < ApplicationRecord
       week_number = max_week if week_number > max_week
       begindate = begin_at + (7 * week_number) - 7
       enddate = begin_at + (7 * week_number) - 1
-      enddate = self.end_at if enddate > self.end_at
+      enddate = end_at if enddate > end_at
       begindate..enddate
     end
   end
 
   def readied_teachers
-    teachers.joins(:teacher_terms).where(
-      'teacher_terms.term_id': id,
-      'teacher_terms.status': 1,
-    )
+    teachers.joins(:teacher_terms).where('teacher_terms.status': 1)
   end
 
   def readied_students
-    students.joins(:student_terms).where(
-      'student_terms.term_id': id,
-      'student_terms.status': 1,
-    )
+    students.joins(:student_terms).where('student_terms.status': 1)
   end
 
   def show_type
@@ -86,13 +80,6 @@ class Term < ApplicationRecord
 
   def ordered_subjects
     subjects.order(order: 'ASC')
-  end
-
-  def terms_per_teacher(date, period)
-    timetable_id = Timetable.find_by(date: date, period: period).id
-    terms.where(timetable_id: timetable_id).reduce({}) do |accu, term|
-      (accu[term.teacher_id.to_s] ||= []).push(term)
-    end
   end
 
   private

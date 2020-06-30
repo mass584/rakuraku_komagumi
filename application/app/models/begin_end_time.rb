@@ -2,13 +2,8 @@ class BeginEndTime < ApplicationRecord
   belongs_to :term
 
   def self.get_begin_end_times(term)
-    term.period_array.reduce({}) do |accu, period|
-      accu.merge({
-        period.to_s => find_by(
-          term_id: term.id,
-          period: period,
-        ),
-      })
+    where(term_id: term.id).reduce({}) do |accu, item|
+      accu.merge({ item.period => item })
     end
   end
 

@@ -9,58 +9,60 @@ class Piece < ApplicationRecord
   validate :verify_teacher_occupation_on_update, on: :update
   validate :verify_student_occupation_on_update, on: :update
 
-  def self.get_student_pieces(student_id, term)
-    schedules = Hash.new { |h, k| h[k] = {} }
-    term.timetables.order(:date, :period).each do |timetable|
-      schedules[timetable.date][timetable.period] =
-        joins(:subject, :teacher).where(
-          term_id: term.id,
-          timetable_id: timetable.id,
-          student_id: student_id,
-        )
-    end
-    schedules
+  def self.get_pieces_for_student(student_id, term_id)
+    to_hash(
+      pieces.where(
+        term_id: term_id,
+        student_id: student_id,
+      ).where.not(
+        timetable_id: nil,
+      )
+    )
   end
 
-  def self.get_teacher_pieces(teacher_id, term)
-    schedules = Hash.new { |h, k| h[k] = {} }
-    term.timetables.order(:date, :period).each do |timetable|
-      schedules[timetable.date][timetable.period] =
-        joins(:subject, :student).where(
-          term_id: term.id,
-          timetable_id: timetable.id,
-          teacher_id: teacher_id,
-        )
-    end
-    schedules
+  def self.get_pieces_for_teacher(teacher_id, term_id)
+    to_hash(
+      pieces.where(
+        term_id: term_id,
+        teacher_id: teacher_id,
+      ).where.not(
+        timetable_id: nil,
+      ),
+    )
   end
 
-  def self.get_all_pieces(term)
-    schedules = Hash.new { |h, k| h[k] = {} }
-    term.timetables.order(:date, :period).each do |timetable|
-      schedules[timetable.date][timetable.period] = []
-      term.teachers.each do |teacher|
-        pieces_per_seat =
-          term.pieces.joins(:subject, :student, :teacher).where(timetable_id: timetable.id, teacher_id: teacher.id)
-        if komas_per_seat.present?
-          schedules[timetable.date][timetable.period].push(pieces_per_seat)
-        end
-      end
-    end
-    schedules
+  def self.get_all_pieces(term_id)
+    to_hash(
+      pieces.where(
+        term_id: term_id,
+      ).where.not(
+        timetable_id: nil,
+      ),
+    )
   end
 
   private
 
+  def to_hash(items)
+    items.reduce({}) do |accu, item|
+      arr = accu.dig(item.timetable.date, item.timetable.period).to_a
+      accu.deep_merge({
+        item.timetable.date => {
+          item.timetable.period => arr + [item],
+        },
+      })
+    end
+  end
+
   def verify_teacher_occupation_on_create
     return if teacher_id.nil? || timetable_id.nil?
 
-    teacher_occupation_count = self.class.where(
-      term_id: term_id,
+    teacher_occupation_count = where(
+      term_id: term.id,
       teacher_id: teacher_id,
       timetable_id: timetable_id,
     ).count
-    if teacher_occupation_count >= term.class_per_teacher
+    if teacher_occupation_count >= term.max_piece
       errors[:base] << '講師のオーバーブッキングがあります'
     end
   end
@@ -68,8 +70,8 @@ class Piece < ApplicationRecord
   def verify_student_occupation_on_create
     return if timetable_id.nil?
 
-    student_occupation_count = self.class.where(
-      term_id: term_id,
+    student_occupation_count = where(
+      term_id: term.id,
       student_id: student_id,
       timetable_id: timetable_id,
     ).count
@@ -82,12 +84,12 @@ class Piece < ApplicationRecord
     return if teacher_id.nil? || timetable_id.nil?
 
     schedule_changed = timetable_id.changed? || teacher_id.changed?
-    teacher_occupation_count = self.class.where(
-      term_id: term_id,
+    teacher_occupation_count = where(
+      term_id: term.id,
       teacher_id: teacher_id,
       timetable_id: timetable_id,
     ).count
-    if schedule_changed && (teacher_occupation_count >= term.class_per_teacher)
+    if schedule_changed && (teacher_occupation_count >= term.max_piece)
       errors[:base] << '講師のオーバーブッキングがあります'
     end
   end
@@ -96,8 +98,8 @@ class Piece < ApplicationRecord
     return if timetable_id.zero?
 
     schedule_changed = timetable_id.changed?
-    student_occupation_count = self.class.where(
-      term_id: term_id,
+    student_occupation_count = where(
+      term_id: term.id,
       student_id: student_id,
       timetable_id: timetable_id,
     ).count

@@ -1,19 +1,14 @@
 class Timetable < ApplicationRecord
   belongs_to :term
   validate :can_update_status?, on: :update, if: :status_changed?
+  enum status: { opened: 0, closed: 1 }
 
-  def self.get_timetables(term)
-    term.date_array.reduce({}) do |accu_d, date|
-      accu_d.merge({
-        date.to_s => term.period_array.reduce({}) do |accu_p, period|
-          accu_p.merge({
-            period.to_s => find_by(
-              term_id: term.id,
-              date: date,
-              period: period,
-            ),
-          })
-        end,
+  def self.get_timetables(term_id)
+    where(term_id: term_id).reduce({}) do |accu, item|
+      accu.deep_merge({
+        item.date => {
+          item.period => item,
+        },
       })
     end
   end

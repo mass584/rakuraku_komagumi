@@ -3,19 +3,15 @@ class StudentRequest < ApplicationRecord
   belongs_to :student
   belongs_to :timetable
 
-  def self.get_student_requests(student_id, term)
-    term.date_array.reduce({}) do |accu_d, date|
-      accu_d.merge({
-        date.to_s => term.period_array.reduce({}) do |accu_p, period|
-          accu_p.merge({
-            period.to_s => joins(:timetable).find_by(
-              term_id: term.id,
-              student_id: student_id,
-              'timetables.date': date,
-              'timetables.period': period,
-            ),
-          })
-        end,
+  def self.get_student_requests(student_id, term_id)
+    student_requests = where(term_id: term_id, student_id: student_id)
+    term.timetables.reduce({}) do |accu, item|
+      accu.deep_merge({
+        item.date => {
+          item.period => student_requests.include? do |student_request|
+            item.id == student_request.timetable_id
+          end,
+        },
       })
     end
   end
