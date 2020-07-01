@@ -23,11 +23,6 @@ class TermController < ApplicationController
     @subject_term = SubjectTerm.new
     @student_term = StudentTerm.new
     @teacher_term = TeacherTerm.new
-    if @term.idle?
-      render 'schedulemaster/show_idle'
-    else
-      render 'schedulemaster/show_busy'
-    end
   end
 
   def update
