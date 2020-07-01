@@ -1,4 +1,4 @@
-== render partial: 'navbar', locals: { active: 'schedulemaster' }
+== render partial: 'navbar', locals: { active: 'term' }
 .container-fluid
   .row.justify-content-md-center.mt-3.mb-3
     .col-md-auto 
@@ -14,9 +14,9 @@
             th 編集
             th 削除
         tbody
-          - @schedulemasters.each do |sc|
-            == render partial: 'schedulemaster/tr', locals: { schedulemaster: sc }
+          - @terms.each do |sc|
+            == render partial: 'term/tr', locals: { term: sc }
   .row.justify-content-md-center.mt-3.mb-3
     .col-md-auto
-      button.btn.btn-primary data-toggle="modal" data-target="#schedulemaster_create" = '新規'
-      == render 'schedulemaster/new'
+      button.btn.btn-primary data-toggle="modal" data-target="#term_create" = '新規'
+      == render 'term/new'

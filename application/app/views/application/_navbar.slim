@@ -1,12 +1,12 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
   = link_to 'らくらくコマ組み',
-    {controller: :schedulemaster, action: :index},
+    {controller: :term, action: :index},
     {method: :get, class: 'navbar-brand'}
   .collapse.navbar-collapse#navbarSupportedContent
     ul.navbar-nav
-      li class="#{active == 'schedulemaster' ? 'nav-item active' : 'nav-item'}"
+      li class="#{active == 'term' ? 'nav-item active' : 'nav-item'}"
         = link_to 'スケジュール一覧',
-          {controller: :schedulemaster, action: :index},
+          {controller: :term, action: :index},
           {method: :get, class: 'nav-link'}
       li class="#{active == 'teacher' ? 'nav-item active' : 'nav-item'}"
         = link_to '講師一覧',
@@ -22,5 +22,5 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
           {method: :get, class: 'nav-link'}
       li.nav-item
         = link_to 'ログアウト',
-          {controller: :room, action: :logout},
-          {method: :post, class: 'nav-link'}
+          destroy_room_session_path,
+          {method: :delete, class: 'nav-link'}

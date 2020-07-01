@@ -1,0 +1,44 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'top' }
+.container-fluid
+  .row.mt-3.mb-3
+    .col-md-3.col-lg-3
+      .card.bg-light.mt-1.mb-1
+        .card-header 生徒数
+        .card-body
+          p.card-text
+            #student_count = "紐付け済み : #{@term.students.count} 人"
+            br
+            = "在籍者総数 : #{@room.exist_students.count} 人"
+            br
+            = "予定入力済 : #{@term.readied_students.count} 人"
+          button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#student_term_create" = '新しい生徒の紐付け'
+      .card.bg-light.mt-1.mb-1
+        .card-header 講師数
+        .card-body
+          p.card-text 
+            #teacher_count = "紐付け済み : #{@term.teachers.count} 人"
+            br
+            = "在籍者総数 : #{@room.exist_teachers.count} 人"
+            br
+            = "予定入力済 : #{@term.readied_teachers.count} 人"
+          button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#teacher_term_create" = '新しい講師の紐付け'
+      .card.bg-light.mt-1.mb-1
+        .card-header 科目数
+        .card-body
+          p.card-text 
+            #subject_count = "紐付け済み : #{@term.subjects.count} 科目"
+            br
+            = "登録科目数 : #{@room.exist_subjects.count} 科目"
+          button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#subject_term_create" = '新しい科目の紐付け'
+    .col-md-6.col-lg-6
+      = pie_chart chart_data(@term), legend: "bottom", colors: ["#d9534f","#ffa500","#ffe2b2"], height: "350px"
+      = button_to '座席表PDFの出力',
+        {controller: :piece, action: :index},
+        {class: 'btn btn-sm btn-primary', method: :get}
+      = button_to 'らくらくコマ組み',
+        {controller: :term, action: :update},
+        {class: 'btn btn-sm btn-danger', method: :put}
+== render 'student_term/new'
+== render 'subject_term/new'
+== render 'teacher_term/new'

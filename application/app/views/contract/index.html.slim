@@ -1,0 +1,16 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'contract' }
+.container-fluid
+  table.table
+    thead
+      tr
+        th.align-middle 氏名
+        - @term.ordered_subjects.each do |su|
+          th.align-middle = su.name
+    tbody
+      - @term.ordered_students.each do |st|
+        tr
+          td.align-middle = "#{st.name_with_grade(@term.year)}"
+          - @term.ordered_subjects.each do |su|
+            = contract_updator(@contracts[st.id.to_s][su.id.to_s])
+== javascript_include_tag 'contract.js'

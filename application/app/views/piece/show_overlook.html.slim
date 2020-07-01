@@ -1,23 +1,22 @@
-== render 'application/header'
-== render 'application/subheader'
-.content
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'piece' }
+.container-fluid
   h3
-    - if schedulemaster.schedule_type == '講習時期'
+    - if term.variable?
       = week_before('', week, 'schedule')
       = ' '
       = p_week(week)
       = ' '
-      = week_after('', week, schedulemaster.max_week, 'schedule')
+      = week_after('', week, term.max_week, 'schedule')
     - else
       = '全体予定'
-  .domain1
-    table
+  table
       thead
         tr
           th.date 日付
           th.class 時限
           th.seat 残席
-          - schedulemaster.teachers.each do |te|
+          - term.teachers.each do |te|
             th.koma.koma-left-head = te.fullname
             th.koma.koma-right-head
               div[data-teacher_id="#{te.id}"]
@@ -28,12 +27,12 @@
       tbody
         - timetables.each do |ti|
           tr
-            = get_date_td(schedulemaster, ti)
-            = get_class_td(schedulemaster, ti)
-            = get_seat_td(schedulemaster, ti)
-            - schedulemaster.teachers.each do |te|
-              = get_koma_td(schedulemaster, ti, te, 0)
-              = get_koma_td(schedulemaster, ti, te, 1)
+            = get_date_td(term, ti)
+            = get_class_td(term, ti)
+            = get_seat_td(term, ti)
+            - term.teachers.each do |te|
+              = get_koma_td(term, ti, te, 0)
+              = get_koma_td(term, ti, te, 1)
   .button
     button[id='button_all_lock' class='btn btn-default btn-lock'] 全てロック（決定済）
     button[id='button_all_unlock' class='btn btn-default btn-unlock'] 全てアンロック（仮決定）
@@ -43,7 +42,7 @@
   - schedules.each do |sc|
     .dragbox.ui-widget-content[id="dragbox_#{sc.id}" data-schedule_id="#{sc.id}" data-student_id="#{sc.student_id}" data-subject_id="#{sc.subject_id}" data-teacher_id="#{sc.teacher_id}" data-timetable_id="#{sc.timetable_id}" data-status="#{sc.status}"]
       div.leftside
-        = "#{sc.student.fullname_with_grade(schedulemaster)}  #{sc.subject.name[0]}"
+        = "#{sc.student.fullname_with_grade(term)}  #{sc.subject.name[0]}"
       div.rightside
         = image_tag('key.png', size: '11x11', id: 'button_koma_fix')
         = ' '

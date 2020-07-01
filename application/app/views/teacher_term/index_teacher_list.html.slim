@@ -1,0 +1,16 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'teacher_request' }
+.container
+  table.table
+    thead
+      tr
+        th.align-middle 氏名
+        th.align-middle 入力済
+    tbody
+      - @term.ordered_teachers.each do |t|
+        tr
+          th.align-middle = link_to t.name, controller: :teacher_request, action: :index, teacher_id: t.id
+          td.align-middle
+            div[data-id="#{@teacher_term[t.id].id}" data-status="#{@teacher_term[t.id].status}"]
+              = check_box_tag :status, 1, @teacher_term[t.id].ready?, id: 'checkbox_status'
+== javascript_include_tag 'teacher_request/index_teacher_list.js'
