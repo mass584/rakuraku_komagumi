@@ -5,13 +5,8 @@ ja:
       student: 生徒
       teacher: 講師
       subject: 科目
-      schedulemaster: 予定表
+      term: 予定
     attributes:
-      room:
-        name: 教室名
-        email: メールアドレス
-        password: パスワード
-        password_digest: パスワード
       student:
         name: 氏名
         name_kana: 氏名(かな)
@@ -40,12 +35,12 @@ ja:
         end_at: 終了日
         max_seat: 座席数
         max_period: 時限数
-        class_per_teacher: 講師1人当たりの生徒数
-      student_schedulemaster_mapping:
+        max_piece: 講師1人当たりの生徒数
+      student_term:
         student_id: 生徒
-      teacher_schedulemaster_mapping:
+      teacher_term:
         teacher_id: 講師
-      subject_schedulemaster_mapping:
+      subject_term:
         subject_id: 科目
       timetable:
         begin_at: 開始時刻
