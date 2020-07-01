@@ -1,5 +1,5 @@
 class SubjectController < ApplicationController
-  before_action :check_login
+  before_action :room_signed_in?
 
   def index
     @subjects = @room.exist_subjects
@@ -7,7 +7,7 @@ class SubjectController < ApplicationController
   end
 
   def create
-    @subject = Subject.new(subject_create_params)
+    @subject = Subject.new(create_params)
     respond_to do |format|
       if @subject.save
         format.js { @status = 'success' }
@@ -20,7 +20,7 @@ class SubjectController < ApplicationController
   def update
     @subject = Subject.find(params[:id])
     respond_to do |format|
-      if @subject.update(subject_update_params)
+      if @subject.update(update_params)
         format.js { @status = 'success' }
       else
         format.js { @status = 'fail' }
@@ -41,20 +41,20 @@ class SubjectController < ApplicationController
 
   private
 
-  def subject_create_params
+  def create_params
     params.require(:subject).permit(
       :name,
       :room_id,
-      :order
+      :order,
     ).merge(
-      is_deleted: false
+      is_deleted: false,
     )
   end
 
-  def subject_update_params
+  def update_params
     params.require(:subject).permit(
       :name,
-      :order
+      :order,
     )
   end
 end

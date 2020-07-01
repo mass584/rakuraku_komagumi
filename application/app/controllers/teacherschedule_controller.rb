@@ -1,5 +1,4 @@
 class TeacherscheduleController < ApplicationController
-  require './app/pdf/pdf_teacher_schedule'
   before_action :check_logined
   before_action :check_schedulemaster
 
@@ -21,20 +20,4 @@ class TeacherscheduleController < ApplicationController
     @blank_schedule_counts
   end
   helper_method :blank_schedule_counts
-
-  def index
-    respond_to do |format|
-      format.html do
-        render 'teacherschedule/index_list'
-      end
-      format.pdf do
-        teacher_ids = params[:teacher_id].gsub(/[\"|\[|\]]/, '').split(',')
-        pdf = PdfTeacherSchedule.new(@schedulemaster.id, teacher_ids).render
-        send_data pdf,
-                  filename: 'TeacherSchedule.pdf',
-                  type: 'application/pdf',
-                  disposition: 'inline'
-      end
-    end
-  end
 end

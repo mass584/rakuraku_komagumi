@@ -1,11 +1,6 @@
 class StudentscheduleController < ApplicationController
-  include RoomStore
-  include SchedulemasterStore
-  require './app/pdf/pdf_student_schedule'
   before_action :check_logined
   before_action :check_schedulemaster
-  helper_method :room
-  helper_method :schedulemaster
 
   def studentrequestmasters
     return @studentrequestmasters if defined? @studentrequestmasters
@@ -25,20 +20,4 @@ class StudentscheduleController < ApplicationController
     @blank_schedule_counts
   end
   helper_method :blank_schedule_counts
-
-  def index
-    respond_to do |format|
-      format.html do
-        render 'studentschedule/index_list'
-      end
-      format.pdf do
-        student_ids = params[:student_id].gsub(/[\"|\[|\]]/, '').split(',')
-        pdf = PdfStudentSchedule.new(schedulemaster.id, student_ids).render
-        send_data pdf,
-                  filename: 'StudentSchedule.pdf',
-                  type: 'application/pdf',
-                  disposition: 'inline'
-      end
-    end
-  end
 end

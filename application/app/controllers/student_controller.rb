@@ -1,5 +1,5 @@
 class StudentController < ApplicationController
-  before_action :check_login
+  before_action :room_signed_in?
 
   def index
     @students = @room.exist_students
@@ -7,7 +7,7 @@ class StudentController < ApplicationController
   end
 
   def create
-    @student = Student.new(student_create_params)
+    @student = Student.new(create_params)
     respond_to do |format|
       if @student.save
         format.js { @status = 'success' }
@@ -20,7 +20,7 @@ class StudentController < ApplicationController
   def update
     @student = Student.find(params[:id])
     respond_to do |format|
-      if @student.update(student_update_params)
+      if @student.update(update_params)
         format.js { @status = 'success' }
       else
         format.js { @status = 'fail' }
@@ -41,7 +41,7 @@ class StudentController < ApplicationController
 
   private
 
-  def student_create_params
+  def create_params
     params.require(:student).permit(
       :room_id,
       :name,
@@ -54,11 +54,11 @@ class StudentController < ApplicationController
       :zip,
       :address,
     ).merge(
-      is_deleted: false
+      is_deleted: false,
     )
   end
 
-  def student_update_params
+  def update_params
     params.require(:student).permit(
       :name,
       :name_kana,
