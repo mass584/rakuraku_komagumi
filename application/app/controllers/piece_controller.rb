@@ -36,23 +36,17 @@ class PieceController < ApplicationController
     respond_to do |format|
       format.html do
         case params[:show_type]
-        when 'overlook'
-          gon(@term)
-          render 'show_overlook'
         when 'per_teacher'
           render 'show_per_teacher'
         when 'per_student'
           render 'show_per_student'
+        else
+          gon(@term)
+          render 'show_overlook'
         end
       end
       format.pdf do
         case params[:show_type]
-        when 'overlook'
-          pdf = OverlookSchedule.new(@term.id).render
-          send_data pdf,
-                    filename: "全体予定表_#{@term.id}.pdf",
-                    type: 'application/pdf',
-                    disposition: 'inline'
         when 'per_teacher'
           teacher_ids = params[:teacher_ids].gsub(/[\"|\[|\]]/, '').split(',')
           pdf = TeacherSchedule.new(@term.id, teacher_ids).render
@@ -65,6 +59,12 @@ class PieceController < ApplicationController
           pdf = StudentSchedule.new(@term.id, student_ids).render
           send_data pdf,
                     filename: "生徒予定表_#{@term.id}.pdf",
+                    type: 'application/pdf',
+                    disposition: 'inline'
+        else
+          pdf = OverlookSchedule.new(@term.id).render
+          send_data pdf,
+                    filename: "全体予定表_#{@term.id}.pdf",
                     type: 'application/pdf',
                     disposition: 'inline'
         end

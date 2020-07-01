@@ -6,15 +6,15 @@ class StudentTermController < ApplicationController
     student_id = params[:student_id]
     @student_terms = StudentTerm.get_student_terms(@term)
     if student_id.nil?
-      render 'student_request/index_student_list'
+      render 'student_term/index_student_list'
     elsif @student_terms[student_id].not_ready?
       @timetables = Timetable.get_timetables(@term)
       @student_requests = StudentRequest.get_student_requests(student_id, @term)
-      render 'student_request/index_status_not_ready'
+      render 'student_term/index_status_not_ready'
     elsif @student_terms[student_id].ready?
       @timetables = Timetable.get_timetables(@term)
       @student_requests = StudentRequest.get_student_requests(student_id, @term)
-      render 'student_request/index_status_ready'
+      render 'student_term/index_status_ready'
     end
   end
 

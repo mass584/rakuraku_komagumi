@@ -6,15 +6,15 @@ class TeacherTermController < ApplicationController
     teacher_id = params[:teacher_id]
     @teacher_terms = TeacherTerm.get_teacher_terms(@term)
     if teacher_id.nil?
-      render 'teacher_request/index_teacher_list'
+      render 'teacher_term/index_teacher_list'
     elsif @teacher_terms[teacher_id].not_ready?
       @timetables = Timetable.get_timetables(@term)
       @teacher_requests = TeacherRequest.get_teacher_requests(teacher_id, @term)
-      render 'teacher_request/index_status_not_ready'
+      render 'teacher_term/index_status_not_ready'
     elsif @teacher_terms[teacher_id].ready?
       @timetables = Timetable.get_timetables(@term)
       @teacher_requests = TeacherRequest.get_teacher_requests(teacher_id, @term)
-      render 'teacher_request/index_status_ready'
+      render 'teacher_term/index_status_ready'
     end
   end
 
