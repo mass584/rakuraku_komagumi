@@ -3,11 +3,7 @@
 .container-fluid
   h3
     - if term.variable?
-      = week_before('', week, 'schedule')
-      = ' '
-      = p_week(week)
-      = ' '
-      = week_after('', week, term.max_week, 'schedule')
+      = print_week(week)
     - else
       = '全体予定'
   table
