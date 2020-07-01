@@ -3,8 +3,8 @@ class Timetable < ApplicationRecord
   validate :can_update_status?, on: :update, if: :status_changed?
   enum status: { opened: 0, closed: 1 }
 
-  def self.get_timetables(term_id)
-    where(term_id: term_id).reduce({}) do |accu, item|
+  def self.get_timetables(term)
+    where(term_id: term.id).reduce({}) do |accu, item|
       accu.deep_merge({
         item.date => {
           item.period => item,
