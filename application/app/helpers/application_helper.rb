@@ -19,12 +19,12 @@ module ApplicationHelper
     "#{period}限"
   end
 
-  def print_date(day, type)
+  def print_date(date, type)
     case type
     when 'one_week'
       youbi(day.wday)
     when 'variable'
-      "#{day.strftime('%m/%d')} #{youbi(day.wday)}"
+      "#{date} #{youbi(date.wday)}"
     end
   end
 

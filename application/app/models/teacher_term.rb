@@ -8,21 +8,14 @@ class TeacherTerm < ApplicationRecord
       create(
         term_id: term.id,
         teacher_id: teacher.id,
+        status: 0,
       )
     end
   end
 
-  def self.additional_create(teacher, term)
-    new(
-      term_id: term.id,
-      teacher_id: teacher.id,
-      status: 0,
-    ).save
-  end
-
   def self.get_teacher_terms(term)
     where(term_id: term.id).reduce({}) do |accu, item|
-      accu.merge({ item.id => item })
+      accu.merge({ item.teacher_id => item })
     end
   end
 end

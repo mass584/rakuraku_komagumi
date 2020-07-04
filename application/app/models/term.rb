@@ -19,22 +19,22 @@ class Term < ApplicationRecord
 
   def date_array
     if one_week?
-      (('2001-01-01'.to_date)..('2001-01-07'.to_date)).map(&:to_s)
+      (('2001-01-01'.to_date)..('2001-01-07'.to_date))
     elsif variable?
-      (begin_at..end_at).map(&:to_s)
+      (begin_at..end_at)
     end
   end
 
   def period_array
-    (1..max_period).map(&:to_s)
+    (1..max_period)
   end
 
   def seat_array
-    (1..max_seat).map(&:to_s)
+    (1..max_seat)
   end
 
   def piece_array
-    (1..max_piece).map(&:to_s)
+    (1..max_piece)
   end
 
   def max_week

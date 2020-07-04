@@ -1,7 +1,7 @@
-.modal.fade id="schedulemaster_create" role="dialog" area-hidden="true"
+.modal.fade id="term_create" role="dialog" area-hidden="true"
   .modal-dialog role="document"
     .modal-content
-      = form_for @schedulemaster, :url => { :controller => :schedulemaster, :action => :create }, remote: true do |f|
+      = form_for @term, :url => { :controller => :term, :action => :create }, remote: true do |f|
         .modal-header
           h4.modal-title スケジュールの作成
         .modal-body
@@ -35,8 +35,8 @@
               .col
                 = f.label :max_seat
                 = f.number_field :max_seat, { min: 1, class: 'form-control' }
-          = f.hidden_field :room_id, :value => @room.id
-          div id="schedulemaster_create_alert"
+          = f.hidden_field :room_id, :value => current_room.id
+          div id="term_create_alert"
         .modal-footer
           = f.submit '作成', { "class" => "btn btn-primary" }
           = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

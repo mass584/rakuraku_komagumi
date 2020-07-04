@@ -8,24 +8,19 @@ class StudentTerm < ApplicationRecord
       create(
         term_id: term.id,
         student_id: student.id,
+        status: 0,
       )
     end
   end
 
-  def self.additional_create(student, term)
-    new(
-      term_id: term.id,
-      student_id: student.id,
-      status: 0,
-    ).save && Contract.bulk_create_for_student(
-      student,
-      term,
-    )
-  end
-
   def self.get_student_terms(term)
     where(term_id: term.id).reduce({}) do |accu, item|
-      accu.merge({ item.id => item })
+      accu.merge({ item.student_id => item })
     end
+  end
+
+  def save_with_contract
+    Contract.bulk_create_for_student(student, term)
+    save
   end
 end

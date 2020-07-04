@@ -1,14 +1,9 @@
 tr id="student_#{student.id}"
   th.align-middle = student.name
-  - @room.exist_subjects.each do |subject|
+  - current_room.exist_subjects.each do |subject|
     td.align_middle
-      div data-student_id="#{student.id}" data-subject_id="#{subject.id}"
-        - if student.student_subject_mappings.find_by(student_id: student.id, subject_id: subject.id)
-          = image_tag('maru.png', size: '32x32', id: 'button_maru')
-          = image_tag('batsu.png', size: '32x32', id: 'button_batsu', style: 'display: none')
-        - else
-          = image_tag('maru.png', size: '32x32', id: 'button_maru', style: 'display: none')
-          = image_tag('batsu.png', size: '32x32', id: 'button_batsu')
+      - student_subject = student.student_subjects.find_by(subject_id: subject.id)
+      = student_subject_button(student_subject, student, subject)
   td.align-middle
     button.btn.btn-secondary data-toggle="modal" data-target="#student_edit_#{student.id}" = '編集'
     == render partial: 'student/edit', locals: { student: student }

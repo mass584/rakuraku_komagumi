@@ -1,13 +1,13 @@
-.modal.fade id="teacher_schedulemaster_mapping_create" role="dialog" area-hidden="true"
+.modal.fade id="teacher_term_create" role="dialog" area-hidden="true"
   .modal-dialog
     .modal-content
-      = form_for @teacher_schedulemaster_mapping, :url => {:controller => :teacher_schedulemaster_mapping, :action => :create}, remote: true do |f|
+      = form_for @teacher_term, :url => {:controller => :teacher_term, :action => :create}, remote: true do |f|
         .modal-header
           h4.modal-title 講師をこのスケジュールに追加する
         .modal-body
           .form-group
             = f.label :teacher_id
-            - teachers = @schedulemaster.room.exist_teachers - @schedulemaster.teachers
+            - teachers = @term.room.exist_teachers - @term.teachers
             - list = options_from_collection_for_select(teachers, :id, :name)
             = f.select :teacher_id, list, { include_blank: '選択してください' }, { class: 'form-control' }
         .modal-footer

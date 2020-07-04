@@ -1,41 +1,44 @@
-$(document).ready(() => {
-  $('[id=button_maru]').on('click', cb_maru_click);
-  $('[id=button_batsu]').on('click', cb_batsu_click);
-});
-
-cb_maru_click = (event) => {
+const cb_button = (event) => {
+  const button = $(event.target);
   const div = $(event.target).parent();
-  const button_maru = div.children('#button_maru');
-  const button_batsu = div.children('#button_batsu');
-  const data = {
-    teacher_id: div.data('teacher_id'),
-    subject_id: div.data('subject_id'),
-  };
+  if (div.data('id')) {
+    delete_teacher_subject(div, button);
+  } else {
+    create_teacher_subject(div, button);
+  }
+}
+
+const create_teacher_subject = (div, button) => {
   $.ajax({
-    url: '/teacher_subject_mapping/delete',
-    type: 'delete',
-    data: data,
-  }).done(() => {
-    button_maru.css('display', 'none');
-    button_batsu.css('display', 'inline');
-    alert("指導可能科目を削除しても、すでに担任に設定されている授業については、担任は変更されません。");
+    url: '/teacher_subject',
+    type: 'post',
+    data: {
+      teacher_subject: {
+        teacher_id: div.data('teacher_id'),
+        subject_id: div.data('subject_id'),
+      },
+    },
+  }).done((response) => {
+    div.data('id', response.id);
+    button.text('可');
+    button.addClass('btn-primary');
+    button.removeClass('btn-danger');
+  }).fail(() => {
+    alert('操作に失敗しました。');
   });
 }
 
-cb_batsu_click = (event) => {
-  const div = $(event.target).parent();
-  const button_maru = div.children('#button_maru');
-  const button_batsu = div.children('#button_batsu');
-  const data = {
-    teacher_id: div.data('teacher_id'),
-    subject_id: div.data('subject_id'),
-  };
+const delete_teacher_subject = (div, button) => {
   $.ajax({
-    url: '/teacher_subject_mapping',
-    type: 'post',
-    data: data,
+    url: `/teacher_subject/${div.data('id')}`,
+    type: 'delete',
   }).done(() => {
-    button_maru.css('display', 'inline');
-    button_batsu.css('display', 'none');
+    div.data('id', null);
+    button.text('不');
+    button.addClass('btn-danger');
+    button.removeClass('btn-primary');
+    alert("指導可能科目を削除しても、すでに担任に設定されている授業については、担任は変更されません。");
+  }).fail(() => {
+    alert('操作に失敗しました。');
   });
 }

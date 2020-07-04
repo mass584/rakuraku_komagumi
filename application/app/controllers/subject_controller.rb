@@ -2,7 +2,7 @@ class SubjectController < ApplicationController
   before_action :room_signed_in?
 
   def index
-    @subjects = @room.exist_subjects
+    @subjects = current_room.exist_subjects
     @subject = Subject.new
   end
 

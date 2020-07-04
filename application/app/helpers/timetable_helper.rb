@@ -1,9 +1,9 @@
 module TimetableHelper
-  def get_select_class(status)
+  def td_class(status)
     case status
-    when 0 then
+    when 'opened'
       ''
-    when -1 then
+    when 'closed'
       'bg-inactive'
     end
   end

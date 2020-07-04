@@ -31,7 +31,7 @@
               .col
                 = f.label :address
                 = f.text_field :address, { class: 'form-control' }
-          = f.hidden_field :room_id, :value => @room.id
+          = f.hidden_field :room_id, :value => current_room.id
           div id="teacher_create_alert"
         .modal-footer
           = f.submit '追加', { "class" => "btn btn-primary" }

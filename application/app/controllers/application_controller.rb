@@ -8,4 +8,8 @@ class ApplicationController < ActionController::Base
       @term = Term.find(session[:term_id])
     end
   end
+
+  def after_sign_in_path_for(_resource)
+    '/term'
+  end
 end

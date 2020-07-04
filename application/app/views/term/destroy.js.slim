@@ -1,7 +1,7 @@
 - if @status == 'success'
   | $('body').removeClass('modal-open');
   | $('.modal-backdrop').remove();
-  | $("#schedulemaster_destroy_#{@schedulemaster.id}").modal('hide');
-  | $('#schedulemaster_#{@schedulemaster.id}').remove();
+  | $("#term_destroy_#{@term.id}").modal('hide');
+  | $('#term_#{@term.id}').remove();
 - elsif @status == 'fail'
-  | $("#schedulemaster_destroy_alert_#{@schedulemaster.id}").html("#{escape_javascript(render partial: 'schedulemaster/error', locals: { schedulemaster: @schedulemaster })}");
+  | $("#term_destroy_alert_#{@term.id}").html("#{escape_javascript(render partial: 'term/error', locals: { term: @term })}");

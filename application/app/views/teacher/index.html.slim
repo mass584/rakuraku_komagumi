@@ -9,7 +9,7 @@
         thead
           tr
             th 氏名
-            - @room.exist_subjects.each do |su|
+            - current_room.exist_subjects.each do |su|
               th = su.name
             th 編集
             th 削除
@@ -20,3 +20,4 @@
     .col-md-auto
       button.btn.btn-primary data-toggle="modal" data-target="#teacher_create" = '新規'
       == render 'teacher/new'
+== javascript_include_tag 'teacher.js'

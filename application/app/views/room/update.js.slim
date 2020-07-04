@@ -1,5 +1,5 @@
 - if @status
-  | $('#roomname').html("#{escape_javascript(@room.name + '教室')}");
+  | $('#roomname').html("#{escape_javascript(current_room.name + '教室')}");
   | $('#modal-room-edit').modal('hide');
 - else
-  | $('.error-message').html("#{escape_javascript(error_msg(@room.errors.full_messages))}");
+  | $('.error-message').html("#{escape_javascript(error_msg(current_room.errors.full_messages))}");

@@ -5,16 +5,17 @@
     thead
       tr
         th.align-middle 日付
-        - @term.period_array.each do |c|
-          th.class = p_class(c)
+        - @term.period_array.each do |p|
+          th.class = print_period(p)
     tbody
       - @term.date_array.each do |d|
         tr
-          th.align-middle = p_date(d.to_date, @term.type)
+          th.align-middle = print_date(d, @term.type)
           - @term.period_array.each do |c|
             td.align-middle
-              = maru_batsu_button(@teacher_requests[d][c], @timetables[d][c])
+              = teacher_request_button(@teacher_requests[d][c], @timetables[d][c], @teacher_term)
   div.text-center
     = button_to '戻る',
-      teacher_request_index_path,
+      teacher_term_index_path,
       {class: 'btn btn-default', method: :get}
+== javascript_include_tag 'teacher_term/show.js'

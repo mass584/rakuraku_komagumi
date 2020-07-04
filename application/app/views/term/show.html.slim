@@ -9,7 +9,7 @@
           p.card-text
             #student_count = "紐付け済み : #{@term.students.count} 人"
             br
-            = "在籍者総数 : #{@room.exist_students.count} 人"
+            = "在籍者総数 : #{current_room.exist_students.count} 人"
             br
             = "予定入力済 : #{@term.readied_students.count} 人"
           button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#student_term_create" = '新しい生徒の紐付け'
@@ -19,7 +19,7 @@
           p.card-text 
             #teacher_count = "紐付け済み : #{@term.teachers.count} 人"
             br
-            = "在籍者総数 : #{@room.exist_teachers.count} 人"
+            = "在籍者総数 : #{current_room.exist_teachers.count} 人"
             br
             = "予定入力済 : #{@term.readied_teachers.count} 人"
           button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#teacher_term_create" = '新しい講師の紐付け'
@@ -29,7 +29,7 @@
           p.card-text 
             #subject_count = "紐付け済み : #{@term.subjects.count} 科目"
             br
-            = "登録科目数 : #{@room.exist_subjects.count} 科目"
+            = "登録科目数 : #{current_room.exist_subjects.count} 科目"
           button.btn.btn-sm.btn-primary data-toggle="modal" data-target="#subject_term_create" = '新しい科目の紐付け'
     .col-md-6.col-lg-6
       = pie_chart chart_data(@term), legend: "bottom", colors: ["#d9534f","#ffa500","#ffe2b2"], height: "350px"

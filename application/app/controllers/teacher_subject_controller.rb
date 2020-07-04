@@ -10,7 +10,7 @@ class TeacherSubjectController < ApplicationController
     end
   end
 
-  def delete
+  def destroy
     record = TeacherSubject.find_by(id: params[:id])
     if record.destroy
       render json: {}, status: :no_content

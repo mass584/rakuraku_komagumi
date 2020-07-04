@@ -1,0 +1,17 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'student_request' }
+.container
+  table.table
+    thead
+      tr
+        th.align-middle 氏名
+        th.align-middle 入力済
+    tbody
+      - @term.ordered_students.each do |s|
+        tr
+          th.align-middle
+            = link_to s.name, student_term_path(@student_terms[s.id])
+          td.align-middle
+            div[data-id="#{@student_terms[s.id].id}" data-status="#{@student_terms[s.id].status}"]
+              = check_box_tag :status, 1, @student_terms[s.id].ready?, id: "checkbox_#{@student_terms[s.id].status}", onchange: 'cb_checkbox(event);'
+== javascript_include_tag 'student_term/index.js'

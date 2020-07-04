@@ -1,8 +1,9 @@
 class TermController < ApplicationController
-  before_action :room_signed_in?
+  protect_from_forgery prepend: true
+  before_action :authenticate_room!
 
   def index
-    @terms = @room.terms.order(begin_at: 'DESC')
+    @terms = current_room.terms.order(begin_at: 'DESC')
     @term = Term.new
   end
 

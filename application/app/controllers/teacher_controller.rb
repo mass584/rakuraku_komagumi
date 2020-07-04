@@ -2,7 +2,7 @@ class TeacherController < ApplicationController
   before_action :room_signed_in?
 
   def index
-    @teachers = @room.exist_teachers
+    @teachers = current_room.exist_teachers
     @teacher = Teacher.new
   end
 

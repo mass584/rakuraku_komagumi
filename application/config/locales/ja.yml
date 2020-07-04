@@ -7,12 +7,18 @@ ja:
       subject: 科目
       term: 予定
     attributes:
+      room:
+        name: アカウント名
+        email: メールアドレス
+        password: パスワード
+        password_confirmation: パスワード(確認)
+        remember_me: ログイン情報を保存
       student:
         name: 氏名
         name_kana: 氏名(かな)
         birth_year: 学年
         gender: 性別
-        school: 学校
+        school_name: 学校名
         email: メールアドレス
         tel: 電話番号
         zip: 郵便番号
@@ -27,7 +33,7 @@ ja:
       subject:
         name: 科目名
         order: 表示順
-      schedulemaster:
+      term:
         name: スケジュール名
         type: 種別
         year: 年度

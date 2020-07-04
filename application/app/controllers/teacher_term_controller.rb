@@ -3,29 +3,19 @@ class TeacherTermController < ApplicationController
   before_action :term_selected?
 
   def index
-    teacher_id = params[:teacher_id]
     @teacher_terms = TeacherTerm.get_teacher_terms(@term)
-    if teacher_id.nil?
-      render 'teacher_term/index_teacher_list'
-    elsif @teacher_terms[teacher_id].not_ready?
-      @timetables = Timetable.get_timetables(@term)
-      @teacher_requests = TeacherRequest.get_teacher_requests(teacher_id, @term)
-      render 'teacher_term/index_status_not_ready'
-    elsif @teacher_terms[teacher_id].ready?
-      @timetables = Timetable.get_timetables(@term)
-      @teacher_requests = TeacherRequest.get_teacher_requests(teacher_id, @term)
-      render 'teacher_term/index_status_ready'
-    end
+  end
+
+  def show
+    @teacher_term = TeacherTerm.find(params[:id])
+    @timetables = Timetable.get_timetables(@term)
+    @teacher_requests = TeacherRequest.get_teacher_requests(@teacher_term, @term)
   end
 
   def create
-    teacher = Teacher.find_by(id: params[:teacher_id])
-    respond_to do |format|
-      if TeacherTerm.additional_create(teacher, @term)
-        format.js { @status = 'success' }
-      else
-        format.js { @status = 'fail' }
-      end
+    @teacher_term = TeacherTerm.new(create_params)
+    if @teacher_term.save
+      render 'teacher_term/create'
     end
   end
 
@@ -39,6 +29,15 @@ class TeacherTermController < ApplicationController
   end
 
   private
+
+  def create_params
+    params.require(:teacher_term).permit(
+      :teacher_id,
+    ).merge({
+      term_id: @term.id,
+      status: 0,
+    })
+  end
 
   def update_params
     params.require(:teacher_term).permit(:status)

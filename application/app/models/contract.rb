@@ -38,9 +38,7 @@ class Contract < ApplicationRecord
     end
   end
 
-  private
-
-  def create_with_piece(student, subject, term)
+  def self.create_with_piece(student, subject, term)
     is_subscribed = student.subjects.exists?(id: subject.id)
     if is_subscribed
       create(
@@ -68,6 +66,8 @@ class Contract < ApplicationRecord
       )
     end
   end
+
+  private
 
   def can_update_teacher_id
     assigned_pieces = term.pieces.where(

@@ -1,6 +1,6 @@
 - if @status == 'success'
-  | $('#schedulemaster_create').modal('hide');
-  | $('#schedulemaster_create_alert').html('');
-  | $('tbody').append("#{escape_javascript(render partial: 'schedulemaster/tr', locals: { schedulemaster: @schedulemaster })}");
+  | $('#term_create').modal('hide');
+  | $('#term_create_alert').html('');
+  | $('tbody').append("#{escape_javascript(render partial: 'term/tr', locals: { term: @term })}");
 - elsif @status == 'fail'
-  | $('#schedulemaster_create_alert').html("#{escape_javascript(render partial: 'schedulemaster/error', locals: { schedulemaster: @schedulemaster })}");
+  | $('#term_create_alert').html("#{escape_javascript(render partial: 'term/error', locals: { term: @term })}");

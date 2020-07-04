@@ -14,8 +14,8 @@
             th 編集
             th 削除
         tbody
-          - @terms.each do |sc|
-            == render partial: 'term/tr', locals: { term: sc }
+          - @terms.each do |term|
+            == render partial: 'term/tr', locals: { term: term }
   .row.justify-content-md-center.mt-3.mb-3
     .col-md-auto
       button.btn.btn-primary data-toggle="modal" data-target="#term_create" = '新規'

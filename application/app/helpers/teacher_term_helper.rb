@@ -1,13 +1,15 @@
-module TeacherRequestHelper
-  def maru_batsu_button(teacher_request, timetable, teacher)
+module TeacherTermHelper
+  def teacher_request_button(teacher_request, timetable, teacher_term)
     content_tag(:div,
                 'data-id' => teacher_request ? teacher_request.id : nil,
-                'data-teacher_id' => teacher.id,
+                'data-teacher_id' => teacher_term.teacher_id,
                 'data-timetable_id' => timetable.id) do
       button_tag(
         teacher_request ? 'OK' : 'NG',
         class: teacher_request ? 'btn btn-primary' : 'btn btn-danger',
-        id: 'btn_maru_batsu'
+        id: "btn_#{timetable.id}",
+        disabled: teacher_term.ready?,
+        onclick: teacher_term.ready? ? '' : 'cb_button(event)',
       )
     end
   end

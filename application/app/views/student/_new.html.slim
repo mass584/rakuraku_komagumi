@@ -21,8 +21,8 @@
           .form-group
             .form-row
               .col
-                = f.label :school
-                = f.text_field :school, { class: 'form-control' }
+                = f.label :school_name
+                = f.text_field :school_name, { class: 'form-control' }
               .col
                 = f.label :birth_year
                 = f.select :birth_year, @student.birth_year_select, { include_blank: '選択して下さい' }, { class: 'form-control' }
@@ -44,7 +44,7 @@
               .col
                 = f.label :address
                 = f.text_field :address, { class: 'form-control' }
-          = f.hidden_field :room_id, :value => @room.id
+          = f.hidden_field :room_id, :value => current_room.id
           div id="student_create_alert"
         .modal-footer
           = f.submit '追加', { "class" => "btn btn-primary" }

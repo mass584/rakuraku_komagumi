@@ -11,13 +11,8 @@ class SubjectTerm < ApplicationRecord
     end
   end
 
-  def self.additional_create(subject, term)
-    new(
-      subject_id: subject.id,
-      term_id: term.id,
-    ).save && Contract.bulk_create_for_subject(
-      subject,
-      term,
-    )
+  def save_with_contract
+    Contract.bulk_create_for_subject(subject, term)
+    save
   end
 end

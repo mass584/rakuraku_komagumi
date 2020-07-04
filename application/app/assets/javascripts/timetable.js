@@ -1,14 +1,14 @@
 $(document).ready(() => {
-  $('[id=select_status]').on('change', cb_select_status);
   $('[id=begin_at]').on('change', cb_textbox_time);
   $('[id=end_at]').on('change', cb_textbox_time);
+  $('[id=select_status]').on('change', cb_select_status);
 });
 
 const cb_textbox_time = (event) => {
   const textbox = $(event.target);
   const div = textbox.parent();
   const id = div.data('id');
-  const url = `/timetablemaster/${id}`;
+  const url = `/begin_end_time/${id}`;
   const data = {
     timetable: {
       [textbox.attr('id')]: textbox.val(),
@@ -32,7 +32,7 @@ const cb_select_status = (event) => {
   const url = `/timetable/${id}`;
   const data = {
     timetable: {
-      status: select.val(),
+      status: Number(select.val()),
     }
   };
   $.ajax({
@@ -42,17 +42,17 @@ const cb_select_status = (event) => {
     contentType: 'application/json',
   }).done(() => {
     div.data('status', select.val());
-    td.attr('class', _get_class(select.val()));
+    td.attr('class', td_class(select.val()));
   }).fail(() => {
     alert('操作に失敗しました。');
   });
 }
 
-const _get_class = (status) => {
+const td_class = (status) => {
   switch(status) {
     case '0':
       return '';
-    case '-1':
+    case '1':
       return 'bg-inactive';
   }
 }

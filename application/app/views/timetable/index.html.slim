@@ -1,6 +1,6 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'timetable' }
-.container-fluid
+.container
   table.table
     thead
       tr
@@ -24,11 +24,11 @@
     tbody
       - @term.date_array.each do |date|
         tr
-          td.align-middle = p_date(date, @term.type)
+          td.align-middle = print_date(date, @term.type)
           - @term.period_array.each do |period|
-            td.align-middle class="#{get_select_class(@timetables[date][period])}"
+            td.align-middle class="#{td_class(@timetables[date][period].status)}"
               div data-id="#{@timetables[date][period].id}"
                 = select_tag :status,
-                  options_for_select([['開講', 0], ['休講', -1]], @timetables[date][period]),
+                  options_for_select([['開講', 0], ['休講', 1]], @timetables[date][period]),
                   { id: 'select_status', class: 'form-control' }
 == javascript_include_tag 'timetable.js'

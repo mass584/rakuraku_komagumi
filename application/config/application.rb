@@ -6,7 +6,7 @@ require 'rails/all'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module Focuswss
+module RakurakuKomagumi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
@@ -23,6 +23,21 @@ module Focuswss
     # ActiveJob
     config.active_job.queue_adapter = :delayed_job
     config.active_job.queue_name_prefix = Rails.env
+
+    # ActionMailer
+    config.action_mailer.default_url_options = {
+      host: 'localhost',
+      port: 8000,
+    }
+    config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      address: Rails.application.credentials[:smtp][:address],
+      port: Rails.application.credentials[:smtp][:port],
+      user_name: Rails.application.credentials[:smtp][:username],
+      password: Rails.application.credentials[:smtp][:password],
+      authentication: :plain,
+      enable_starttls_auto: true,
+    }
 
     # Set timezone to Japan/Tokyo
     config.time_zone = 'Tokyo'

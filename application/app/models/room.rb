@@ -7,14 +7,13 @@ class Room < ApplicationRecord
          :rememberable,
          :validatable,
          :confirmable,
-         :trackable
+         :trackable,
+         password_length: 8..128
   has_many :terms, dependent: :restrict_with_exception
   has_many :teachers, dependent: :restrict_with_exception
   has_many :students, dependent: :restrict_with_exception
   has_many :subjects, dependent: :restrict_with_exception
-  validates :password,
-            length: { maximum: 16, minimum: 8 },
-            format: { with: /\A[a-zA-Z0-9]{8,16}+\z/i }
+  validates :name, presence: true
 
   def exist_students
     students.where(is_deleted: false).order(birth_year: 'ASC', name: 'ASC')

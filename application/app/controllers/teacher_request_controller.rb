@@ -1,4 +1,4 @@
-class TeacherrequestController < ApplicationController
+class TeacherRequestController < ApplicationController
   before_action :room_signed_in?
   before_action :term_selected?
 

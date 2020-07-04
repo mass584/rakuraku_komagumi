@@ -7,7 +7,7 @@ FactoryBot.define do
     firstname_kana  { 'しめい' }
     gender          { 'gender' }
     grade           { 'grade' }
-    school          { 'school' }
+    school_name     { 'school_name' }
     zip             { '123-4567' }
     address         { 'address' }
     mail            { 'sample@sample.com' }

@@ -1,8 +1,8 @@
 class StudentController < ApplicationController
-  before_action :room_signed_in?
+  before_action :authenticate_room!
 
   def index
-    @students = @room.exist_students
+    @students = current_room.exist_students
     @student = Student.new
   end
 
@@ -48,7 +48,7 @@ class StudentController < ApplicationController
       :name_kana,
       :gender,
       :birth_year,
-      :school,
+      :school_name,
       :email,
       :tel,
       :zip,
@@ -64,7 +64,7 @@ class StudentController < ApplicationController
       :name_kana,
       :gender,
       :birth_year,
-      :school,
+      :school_name,
       :email,
       :tel,
       :zip,

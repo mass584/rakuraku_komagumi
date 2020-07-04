@@ -2,7 +2,7 @@ class RoomController < ApplicationController
   before_action :room_signed_in?
 
   def update
-    @status = @room.update(update_params)
+    @status = current_room.update(update_params)
   end
 
   private
