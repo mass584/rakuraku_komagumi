@@ -1,14 +1,7 @@
 $(document).ready(() => {
-  $('[id=button_all_lock]').on('click', cbBulkUpdate);
-  $('[id=button_all_unlock]').on('click', cbBulkUpdate);
-  $('[id=button_all_reset]').on('click', cbBulkReset);
-  $('[id=button_koma_select]').on('click', cbButtonKomaSelect);
-  $('[id=button_koma_fix]').on('click', cbButtonKomaFix);
-  $('[id=button_koma_reset]').on('click', cbButtonKomaReset);
-  $('[id^=dragbox]').draggable({
-    create: cbDragboxCreate,
-    start: cbDragboxStart,
-    stop: cbDragboxStop,
+  $('[id^=draggable]').draggable({
+    start: cbDraggableStart,
+    stop: cbDraggableStop,
     containment: 'body',
     revert: 'invalid',
     scroll: 'false',
@@ -17,25 +10,61 @@ $(document).ready(() => {
     snapTolerance: '0',
     zIndex: 1000,
   });
-  $('[id^=dropbox_koma]').droppable({
-    drop: cbDropboxDrop,
-  });
-  $('[id^=dropbox_waiting]').droppable({
-    drop: cbDropboxDrop,
-  });
-  getOccupation();
-  const height = $(window).height() - 260;
-  const width = $(window).width() - 60;
-  $('table').fixedTblHdrLftCol({
-    scroll: {
-      height: height,
-      width: width,
-      leftCol: {
-        fixedSpan: 3,
-      },
-    },
+  $('[id^=droppable]').droppable({
+    drop: cbDroppableDrop,
   });
 });
+
+cbDraggableStart = (event) => {
+  const draggable = $(event.target);
+  $('[id^=droppable]').forEach((droppable) => {
+    const isEmpty = $(droppable).children().length === 0;
+    const studentRequestOk = $(droppable).data('students').find((studentId) => {
+      return studentId === dragbox.data('student_id');
+    });
+    const teacherRequestOk = $(droppable).data('teachers').find((teacherId) => {
+      return teacherId === dragbox.data('student_id');
+    });
+    const teacherIdOk = $(droppable).data('teacher_id') === draggable.data('teacher_id');
+    const doubleBookingOk = (() => {
+      const droppables_at_same_time = $(`[id^=droppable_${$(droppable).data('timetable_id')}]`);
+      return !droppables_at_same_time.some((droppable_at_same_time) => {
+        return $(droppable_at_same_time).children().data('student_id') === draggable.data('student_id');
+      });
+    })();
+    if ( isEmpty || teacherRequestOk || studentRequestOk || teacherIdOk || doubleBookingOk ) {
+      $(droppable).droppable('enable');
+    } else {
+      $(droppable).droppable('disable');
+    }
+  });
+}
+
+cbDraggableStop = (event) => {
+  $('[id^=droppable]').droppable('enable');
+  const draggable = $(event.target);
+  const droppable = $(event.target).parent();
+  const pieceId = draggable.data('piece_id');
+  const timetableId = droppable.data('timetable_id');
+  $.ajax({
+    url: `/piece/${pieceId}`,
+    type: 'put',
+    data: JSON.stringify({
+      timetable_id: timetableId,
+    }),
+    contentType: 'application/json',
+  }).fail((xhr) => {
+    alert(xhr.responseJSON.message);
+  });
+}
+
+cbDroppableDrop = (event, ui) => {
+  ui.draggable.appendTo($(event.target));
+  ui.draggable.offset($(event.target).offset());
+}
+
+
+
 
 cbBulkUpdate = (event) => {
   const id = $(event.target).attr('id');
@@ -181,130 +210,6 @@ cbButtonKomaReset = (event) => {
   return;
 }
 
-cbDragboxCreate = (event) => {
-  const dragbox = $(event.target);
-  moveDragboxToInitialPosition(dragbox);
-  switch ($(dragbox).data('status')) {
-    case 0:
-      dragbox.draggable('enable');
-      dragbox.addClass('unfixed');
-      break;
-    case 1:
-      dragbox.draggable('disable');
-      dragbox.addClass('fixed');
-      break;
-  }
-}
-
-cbDragboxStart = (event) => {
-  const dragbox = $(event.target);
-  const dropbox = $(event.target).parent();
-  const validationType = (() => {
-    const isDecided = $(dropbox).attr('id').slice(0, 12) === 'dropbox_koma';
-    const willViolate = !studentClassPatternCheck(dropbox, dragbox, 'delete') ||
-      !teacherClassPatternCheck(dropbox, dragbox, 'delete');
-    if (isDecided && willViolate) {
-      return 'addOnlySameDay';
-    } else {
-      return 'add';
-    }
-  })();
-  $('[id^=dropbox_koma]').each((index, item) => {
-    const dropboxIsEmpty = $(item).children().length === 0;
-    if ( !dropboxIsEmpty ) {
-      $(item).droppable('disable');
-      return;
-    }
-    const requestCheck = $(item).data('studentrequest').find((studentId) => {
-      return studentId === dragbox.data('student_id');
-    });
-    const tanninCheck = $(item).data('teacher_id') === dragbox.data('teacher_id');
-    if ( !requestCheck || !tanninCheck ) {
-      $(item).addClass('unputtable');
-      $(item).droppable('disable');
-      return;
-    }
-    const occupationCheck = (() => {
-      const seatId = `#seat_${$(item).data('timetable_id')}`;
-      const seatnumber = Number($(seatId).text());
-      if (seatnumber > 0) {
-        return true;
-      }
-      const dropboxes_sameseat = `[id^=dropbox_koma_${$(item).data('timetable_id')}_${$(item).data('teacher_id')}]`;
-      return $(dropboxes_sameseat).filter((index, item1) => {
-        return $(item1).children().length > 0;
-      }).length > 0;
-    })();
-    const doubleBookingCheck = (() => {
-      const dropboxes_sametime = `[id^=dropbox_koma_${$(item).data('timetable_id')}]`;
-      return $(dropboxes_sametime).filter((index, item1) => {
-        return $(item1).children().data('student_id') === dragbox.data('student_id');
-      }).length === 0;
-    })();
-    const teacherPatternCheck = teacherClassPatternCheck($(item), $(event.target), validationType);
-    const studentPatternCheck = studentClassPatternCheck($(item), $(event.target), validationType);
-    if ( !occupationCheck || !doubleBookingCheck || !teacherPatternCheck || !studentPatternCheck ) {
-      $(item).droppable('disable');
-    } else {
-      $(item).addClass('puttable');
-      $(item).droppable('enable');
-    }
-  });
-}
-
-cbDragboxStop = (event) => {
-  const dragbox = $(event.target);
-  const dropbox = $(event.target).parent();
-  const scheduleId = dragbox.data('schedule_id');
-  const timetableId = dropbox.data('timetable_id');
-  const url = `/schedule/${scheduleId}`;
-  const data = {
-    timetable_id: timetableId,
-  };
-  dragbox.data('timetable_id', timetableId);
-  $('[id^=dropbox_koma_]').removeClass('puttable');
-  $('[id^=dropbox_koma_]').removeClass('unputtable');
-  $('[id^=dropbox_koma_]').droppable('enable');
-  getOccupation();
-  $.ajax({
-    url: url,
-    type: 'put',
-    data: data,
-  }).fail((xhr) => {
-    alert(xhr.responseJSON.message);
-  });
-}
-
-cbDropboxDrop = (event, ui) => {
-  ui.draggable.appendTo($(event.target));
-  ui.draggable.offset($(event.target).offset());
-}
-
-getOccupation = () => {
-  let occupation = {};
-  for (let i in gon.timetables) {
-    const key1 = gon.timetables[i].id;
-    occupation[key1] = {};
-    for (let j in gon.teachers) {
-      const key2 = gon.teachers[j].id;
-      occupation[key1][key2] = 0;
-    }
-  }
-  $('[id^=dropbox_koma_]').each((index, item) => {
-    if ($(item).children().length > 0) {
-      occupation[$(item).data('timetable_id')][$(item).data('teacher_id')] = 1;
-    }
-  });
-  $('[id^=seat_]').each((index, item) => {
-    const occupationEachTimetable = occupation[$(item).data('id')];
-    const occupied = Object.keys(occupationEachTimetable).reduce((accu, key) => {
-      return accu + occupationEachTimetable[key];
-    }, 0);
-    const number = gon.seatnum - occupied;
-    $(item).text(number);
-  });
-}
-
 addOptionToSelect = (dragbox) => {
   const teacherId = dragbox.data('teacher_id');
   const studentId = dragbox.data('student_id');
@@ -334,7 +239,7 @@ removeOptionFromSelect = (dragbox) => {
   }
 }
 
-moveDragboxToInitialPosition = (dragbox) => {
+moveDraggableToInitialPosition = (dragbox) => {
   const teacherId = dragbox.data('teacher_id');
   const timetableId = dragbox.data('timetable_id');
   if (!teacherId || !timetableId) {

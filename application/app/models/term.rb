@@ -33,41 +33,24 @@ class Term < ApplicationRecord
     (1..max_seat)
   end
 
-  def piece_array
+  def pair_array
     (1..max_piece)
   end
 
-  def max_week
-    (end_at - begin_at + 7).to_i / 7
+  def pieces_for_student(student_id)
+    @pieces_for_student = pieces_per_timetable(
+      pieces.where(student_id: student_id),
+    )
   end
 
-  def date_array_one_week(week_number)
-    if one_week?
-      ('2001-01-01'.to_date)..('2001-01-07'.to_date)
-    elsif variable?
-      week_number = 1 if week_number < 1
-      week_number = max_week if week_number > max_week
-      begindate = begin_at + (7 * week_number) - 7
-      enddate = begin_at + (7 * week_number) - 1
-      enddate = end_at if enddate > end_at
-      begindate..enddate
-    end
+  def pieces_for_teacher(teacher_id)
+    @pieces_for_teacher ||= pieces_per_timetable(
+      pieces.where(teacher_id: teacher_id),
+    )
   end
 
-  def readied_teachers
-    teachers.joins(:teacher_terms).where('teacher_terms.status': 1)
-  end
-
-  def readied_students
-    students.joins(:student_terms).where('student_terms.status': 1)
-  end
-
-  def show_type
-    if one_week?
-      '１週間モード'
-    elsif variable?
-      '任意期間モード'
-    end
+  def all_pieces
+    @all_pieces ||= pieces_per_timetable(pieces)
   end
 
   def ordered_students
@@ -80,6 +63,14 @@ class Term < ApplicationRecord
 
   def ordered_subjects
     subjects.order(order: 'ASC')
+  end
+
+  def readied_students
+    students.joins(:student_terms).where('student_terms.status': 1)
+  end
+
+  def readied_teachers
+    teachers.joins(:teacher_terms).where('teacher_terms.status': 1)
   end
 
   private
@@ -101,5 +92,12 @@ class Term < ApplicationRecord
     BeginEndTime.bulk_create(self)
     Timetable.bulk_create(self)
     Contract.bulk_create(self)
+  end
+
+  def pieces_per_timetable(items)
+    items.where.not(timetable_id: nil).group_by_recursive(
+      proc { |item| item.timetable.date },
+      proc { |item| item.timetable.period },
+    )
   end
 end

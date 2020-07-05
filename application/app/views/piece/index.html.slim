@@ -1,0 +1,21 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'piece' }
+.container.piece_index
+  - @term.date_array.each do |date|
+    table
+      thead
+        tr
+          th 座席
+          - @term.period_array.each do |period|
+            th = print_period(period)
+      tbody
+        - @term.seat_array.each do |seat|
+          tr
+            th = print_seat(seat)
+            - @term.period_array.each do |period|
+              = td_seat(@term, @timetables[date][period], seat)
+  .button
+    button[id='button_all_lock' class='btn btn-default btn-lock'] 全てロック（決定済）
+    button[id='button_all_unlock' class='btn btn-default btn-unlock'] 全てアンロック（仮決定）
+    button[id='button_all_reset' class='btn btn-danger'] 全てリセット（未決定）
+== javascript_include_tag 'piece.js'

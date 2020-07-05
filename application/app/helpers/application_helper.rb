@@ -19,6 +19,10 @@ module ApplicationHelper
     "#{period}限"
   end
 
+  def print_seat(seat)
+    "#{seat}番"
+  end
+
   def print_date(date, type)
     case type
     when 'one_week'

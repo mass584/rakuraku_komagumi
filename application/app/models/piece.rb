@@ -8,51 +8,9 @@ class Piece < ApplicationRecord
   validate :verify_student_occupation_on_create, on: :create
   validate :verify_teacher_occupation_on_update, on: :update
   validate :verify_student_occupation_on_update, on: :update
-
-  def self.get_pieces_for_student(student_id, term_id)
-    to_hash(
-      pieces.where(
-        term_id: term_id,
-        student_id: student_id,
-      ).where.not(
-        timetable_id: nil,
-      )
-    )
-  end
-
-  def self.get_pieces_for_teacher(teacher_id, term_id)
-    to_hash(
-      pieces.where(
-        term_id: term_id,
-        teacher_id: teacher_id,
-      ).where.not(
-        timetable_id: nil,
-      ),
-    )
-  end
-
-  def self.get_all_pieces(term_id)
-    to_hash(
-      pieces.where(
-        term_id: term_id,
-      ).where.not(
-        timetable_id: nil,
-      ),
-    )
-  end
+  enum status: { unfixed: 0, fixed: 1 }
 
   private
-
-  def to_hash(items)
-    items.reduce({}) do |accu, item|
-      arr = accu.dig(item.timetable.date, item.timetable.period).to_a
-      accu.deep_merge({
-        item.timetable.date => {
-          item.timetable.period => arr + [item],
-        },
-      })
-    end
-  end
 
   def verify_teacher_occupation_on_create
     return if teacher_id.nil? || timetable_id.nil?
@@ -83,8 +41,8 @@ class Piece < ApplicationRecord
   def verify_teacher_occupation_on_update
     return if teacher_id.nil? || timetable_id.nil?
 
-    schedule_changed = timetable_id.changed? || teacher_id.changed?
-    teacher_occupation_count = where(
+    schedule_changed = timetable_id_changed? || teacher_id_changed?
+    teacher_occupation_count = Piece.where(
       term_id: term.id,
       teacher_id: teacher_id,
       timetable_id: timetable_id,
@@ -95,10 +53,10 @@ class Piece < ApplicationRecord
   end
 
   def verify_student_occupation_on_update
-    return if timetable_id.zero?
+    return if timetable_id.nil?
 
-    schedule_changed = timetable_id.changed?
-    student_occupation_count = where(
+    schedule_changed = timetable_id_changed?
+    student_occupation_count = Piece.where(
       term_id: term.id,
       student_id: student_id,
       timetable_id: timetable_id,

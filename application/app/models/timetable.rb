@@ -1,5 +1,7 @@
 class Timetable < ApplicationRecord
   belongs_to :term
+  has_many :student_requests, dependent: :destroy
+  has_many :teacher_requests, dependent: :destroy
   validate :can_update_status?, on: :update, if: :status_changed?
   enum status: { opened: 0, closed: 1 }
 

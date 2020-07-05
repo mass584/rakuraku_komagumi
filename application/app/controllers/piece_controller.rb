@@ -5,34 +5,8 @@ class PieceController < ApplicationController
   before_action :room_signed_in?
   before_action :term_selected?
 
-  def timetables
-    return @timetables if defined? @timetables
-
-    @timetables = @term.timetables.where(
-      date: @term.date_array_one_week(week),
-    ).order(:date, :period)
-    @timetables
-  end
-  helper_method :timetables
-
-  def pieces
-    return @pieces if defined? @pieces
-
-    @pieces = @term.schedules.where(
-      'timetable_id': timetables.pluck(:id).push(0),
-    )
-    @pieces
-  end
-  helper_method :pieces
-
-  def week
-    return @week if defined? @week
-
-    @week = params[:week].nil? ? 1 : params[:week].to_i
-  end
-  helper_method :week
-
   def index
+    @timetables = Timetable.get_timetables(@term)
     respond_to do |format|
       format.html do
         case params[:show_type]
@@ -41,8 +15,7 @@ class PieceController < ApplicationController
         when 'per_student'
           render 'show_per_student'
         else
-          gon(@term)
-          render 'show_overlook'
+          use_gon
         end
       end
       format.pdf do
@@ -106,34 +79,23 @@ class PieceController < ApplicationController
     )
   end
 
-  def gon(term)
-    gon.timetables = term.timetables.map do |timetable|
+  def use_gon
+    gon.teachers = @term.teachers.map do |teacher|
       {
-        id: timetable.id,
-        scheduledate: timetable.scheduledate,
-        classnumber: timetable.classnumber,
-        status: timetable.status,
+        id: teacher.id,
+        name: teacher.name,
       }
     end
-    gon.subjects = term.subjects.map do |subject|
+    gon.students = @term.students.map do |student|
+      {
+        id: student.id,
+        name: student.name,
+      }
+    end
+    gon.subjects = @term.subjects.map do |subject|
       {
         id: subject.id,
         name: subject.name,
-        classtype: subject.classtype,
-        row_order: subject.row_order,
-      }
-    end
-    gon.teachers = term.teachers.map do |teacher|
-      {
-        id: teacher.id,
-        fullname: teacher.fullname,
-      }
-    end
-    gon.students = term.students.map do |student|
-      {
-        id: student.id,
-        fullname: student.fullname,
-        grade: student.grade_when(term),
       }
     end
   end
