@@ -39,4 +39,9 @@ module ApplicationHelper
   def print_piece_for_student(piece)
     "[#{piece.subject.name}] #{piece.teacher.name}"
   end
+
+  def print_data_array(array)
+    str = array.map { |item| "\"#{item}\"" }.join(', ')
+    '[' + str + ']'
+  end
 end

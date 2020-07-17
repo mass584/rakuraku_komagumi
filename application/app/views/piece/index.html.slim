@@ -13,7 +13,7 @@
           tr
             th = print_seat(seat)
             - @term.period_array.each do |period|
-              = td_seat(@term, @timetables[date][period], seat)
+              td = div_seat(@term, @timetables[date][period], seat)
   .button
     button[id='button_all_lock' class='btn btn-default btn-lock'] 全てロック（決定済）
     button[id='button_all_unlock' class='btn btn-default btn-unlock'] 全てアンロック（仮決定）

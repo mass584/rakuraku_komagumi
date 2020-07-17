@@ -33,7 +33,7 @@ class Term < ApplicationRecord
     (1..max_seat)
   end
 
-  def pair_array
+  def frame_array
     (1..max_piece)
   end
 
