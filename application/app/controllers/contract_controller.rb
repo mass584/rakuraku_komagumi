@@ -18,9 +18,6 @@ class ContractController < ApplicationController
   private
 
   def update_params
-    params.require(:contract).permit(
-      :teacher_id,
-      :count,
-    )
+    params.require(:contract).permit(:teacher_term_id, :count)
   end
 end

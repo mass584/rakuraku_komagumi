@@ -3,8 +3,8 @@ const cb_select = (event) => {
   const div1 = $(event.target).parent().parent();
   const div2 = $(event.target).parent();
   const select_count = div2.children('[id^=select_count]');
-  const select_teacher_id = div2.children('[id^=select_teacher_id]');
-  const teacher_id = select_teacher_id.val() ? Number(select_teacher_id.val()) : null;
+  const select_teacher_term_id = div2.children('[id^=select_teacher_term_id]');
+  const teacher_term_id = select_teacher_term_id.val() ? Number(select_teacher_term_id.val()) : null;
   const count = Number(select_count.val())
   $.ajax({
     type: 'put',
@@ -12,21 +12,21 @@ const cb_select = (event) => {
     data: JSON.stringify({
       contract: {
         count,
-        teacher_id,
+        teacher_term_id,
       },
     }),
     contentType: 'application/json',
   }).done(() => {
     div1.data('count', count);
-    div1.data('teacher_id', teacher_id);
-    if ( count === 0 && teacher_id === null ) {
+    div1.data('teacher_term_id', teacher_term_id);
+    if ( count === 0 && teacher_term_id === null ) {
       td.removeClass('bg-active');
     } else {
       td.addClass('bg-active');
     }
   }).fail((xhr) => {
     select_count.val(div1.data('count'));
-    select_teacher_id.val(div1.data('teacher_id'));
+    select_teacher_term_id.val(div1.data('teacher_term_id'));
     alert(xhr.responseJSON.message);
   });
 }
@@ -36,22 +36,22 @@ const cb_button = (event) => {
   const td = $(event.target).parent().parent().parent();
   const div = $(event.target).parent().parent();
   const select_count = div.children(':first').children('[id^=select_count]');
-  const select_teacher_id = div.children(':first').children('[id^=select_teacher_id]');
+  const select_teacher_term_id = div.children(':first').children('[id^=select_teacher_term_id]');
   $.ajax({
     url: `/contract/${div.data('id')}`,
     type: 'put',
     data: JSON.stringify({
       contract: {
         count: 0,
-        teacher_id: null,
+        teacher_term_id: null,
       },
     }),
     contentType: 'application/json',
   }).done(() => {
     div.data('count', 0);
-    div.data('teacher_id', null);
+    div.data('teacher_term_id', null);
     select_count.val(0);
-    select_teacher_id.val(null);
+    select_teacher_term_id.val(null);
     td.removeClass('bg-active');
   }).fail((xhr) => {
     alert(xhr.responseJSON.message);

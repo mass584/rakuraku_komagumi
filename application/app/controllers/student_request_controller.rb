@@ -24,7 +24,7 @@ class StudentRequestController < ApplicationController
 
   def create_params
     params.require(:student_request).permit(
-      :student_id,
+      :student_term_id,
       :timetable_id,
     ).merge(
       term_id: @term.id,

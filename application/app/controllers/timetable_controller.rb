@@ -19,6 +19,6 @@ class TimetableController < ApplicationController
   private
 
   def update_params
-    params.require(:timetable).permit(:status)
+    params.require(:timetable).permit(:is_closed)
   end
 end

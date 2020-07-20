@@ -30,7 +30,7 @@ class Timetable < ApplicationRecord
   private
 
   def can_update_is_closed?
-    if seats.filter { |seat| seat.pieces.exists? }.positive?
+    if seats.filter { |seat| seat.pieces.exists? }.count.positive?
       errors[:base] << '座席が割り当てられているので、変更できません。'
     end
   end

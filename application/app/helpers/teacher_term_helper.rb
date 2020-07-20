@@ -2,7 +2,7 @@ module TeacherTermHelper
   def teacher_request_button(teacher_request, timetable, teacher_term)
     content_tag(:div,
                 'data-id' => teacher_request ? teacher_request.id : nil,
-                'data-teacher_id' => teacher_term.teacher_id,
+                'data-teacher_term_id' => teacher_term.id,
                 'data-timetable_id' => timetable.id) do
       button_tag(
         teacher_request ? 'OK' : 'NG',

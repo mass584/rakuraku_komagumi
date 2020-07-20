@@ -20,7 +20,7 @@ const cb_button = (event) => {
       url: '/teacher_request',
       data: JSON.stringify({
         timetable_id: div.data('timetable_id'),
-        teacher_id: div.data('teacher_id'),
+        teacher_term_id: div.data('teacher_term_id'),
       }),
       contentType: 'application/json',
     }).done((data) => {

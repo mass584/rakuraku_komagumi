@@ -26,7 +26,7 @@ module ApplicationHelper
   def print_date(date, type)
     case type
     when 'one_week'
-      youbi(day.wday)
+      youbi(date.wday)
     when 'variable'
       "#{date} #{youbi(date.wday)}"
     end

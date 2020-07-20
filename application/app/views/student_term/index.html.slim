@@ -10,8 +10,8 @@
       - @term.ordered_students.each do |s|
         tr
           th.align-middle
-            = link_to s.name, student_term_path(@student_terms[s.id])
+            = link_to s.student.name, student_term_path(@student_terms[s.student.id])
           td.align-middle
-            div[data-id="#{@student_terms[s.id].id}" data-status="#{@student_terms[s.id].status}"]
-              = check_box_tag :status, 1, @student_terms[s.id].ready?, id: "checkbox_#{@student_terms[s.id].status}", onchange: 'cb_checkbox(event);'
+            div[data-id="#{@student_terms[s.student.id].id}" data-status="#{@student_terms[s.student.id].status}"]
+              = check_box_tag :status, 1, @student_terms[s.student.id].ready?, id: "checkbox_#{@student_terms[s.student.id].status}", onchange: 'cb_checkbox(event);'
 == javascript_include_tag 'student_term/index.js'

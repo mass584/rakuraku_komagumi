@@ -1,7 +1,7 @@
 $(document).ready(() => {
   $('[id=begin_at]').on('change', cb_textbox_time);
   $('[id=end_at]').on('change', cb_textbox_time);
-  $('[id=select_status]').on('change', cb_select_status);
+  $('[id=select_is_closed]').on('change', cb_select_is_closed);
 });
 
 const cb_textbox_time = (event) => {
@@ -24,7 +24,7 @@ const cb_textbox_time = (event) => {
   });
 }
 
-const cb_select_status = (event) => {
+const cb_select_is_closed = (event) => {
   const select = $(event.target);
   const div = select.parent();
   const td = div.parent();
@@ -32,7 +32,7 @@ const cb_select_status = (event) => {
   const url = `/timetable/${id}`;
   const data = {
     timetable: {
-      status: Number(select.val()),
+      is_closed: select.val() === "true",
     }
   };
   $.ajax({
@@ -41,18 +41,9 @@ const cb_select_status = (event) => {
     data: JSON.stringify(data),
     contentType: 'application/json',
   }).done(() => {
-    div.data('status', select.val());
-    td.attr('class', td_class(select.val()));
+    div.data('is_closed', select.val());
+    td.attr('class', select.val() === "true" ? 'bg-inactive' : '');
   }).fail(() => {
     alert('操作に失敗しました。');
   });
-}
-
-const td_class = (status) => {
-  switch(status) {
-    case '0':
-      return '';
-    case '1':
-      return 'bg-inactive';
-  }
 }

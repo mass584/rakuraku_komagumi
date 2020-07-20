@@ -64,15 +64,15 @@ class Term < ApplicationRecord
   end
 
   def ordered_students
-    students.order(birth_year: 'ASC')
+    student_terms.joins(:student).order(birth_year: 'ASC')
   end
 
   def ordered_teachers
-    teachers.order(name: 'DESC')
+    teacher_terms.joins(:teacher).order(name: 'DESC')
   end
 
   def ordered_subjects
-    subjects.order(order: 'ASC')
+    subject_terms.joins(:subject).order(order: 'ASC')
   end
 
   def readied_students
@@ -101,6 +101,7 @@ class Term < ApplicationRecord
     TeacherTerm.bulk_create(self)
     BeginEndTime.bulk_create(self)
     Timetable.bulk_create(self)
+    Seat.bulk_create(self)
     Contract.bulk_create(self)
   end
 

@@ -26,9 +26,9 @@
         tr
           td.align-middle = print_date(date, @term.type)
           - @term.period_array.each do |period|
-            td.align-middle class="#{td_class(@timetables[date][period].status)}"
+            td.align-middle class="#{@timetables[date][period].is_closed && 'bg-inactive'}"
               div data-id="#{@timetables[date][period].id}"
-                = select_tag :status,
-                  options_for_select([['開講', 0], ['休講', 1]], @timetables[date][period]),
-                  { id: 'select_status', class: 'form-control' }
+                = select_tag :is_closed,
+                  options_for_select([['開講', false], ['休講', true]], @timetables[date][period]),
+                  { id: 'select_is_closed', class: 'form-control' }
 == javascript_include_tag 'timetable.js'
