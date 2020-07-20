@@ -1,164 +1,81 @@
 // Place all the styles related to the schedule controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-.piece_index {
-  table {
+.piece-index {
+  caption {
+    caption-side: top;
+    color: #212529;
+    text-align: center;
+  }
+  .table th, .table td {
     margin: 0;
-    background-color: white;
-    font-size: 16px;
-  }
-  th {
-    margin: auto;
-    padding: 0px;
-    height: 52px;
-    text-align: center;
-    border: 0;
-  }
-  td {
-    margin: auto;
-    padding: 0px;
-    height: 26px;
-    text-align: center;
-    border: 0;
-    background-color: white;
-  }
-  .date {
-    width: 80px;
-    min-width: 80px;
-  }
-  .class {
-    width: 50px;
-    min-width: 50px;
-  }
-  .seat {
-    width: 50px;
-    min-width: 50px;
-  }
-  .koma {
-    background-color: white;
+    padding: 0;
+    position: relative;
+    height: 60px;
     width: 150px;
     min-width: 150px;
   }
-  .koma-left-head {
-    border-left: 0.5px solid black;
+  .seat {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
   }
-  .koma-right-head {
-    border-right: 0.5px solid black;
-  }
-  .koma-top-head {
-    border-top: 0.5px solid black;
-    border-bottom: 0.25px dotted black;
-  }
-  .koma-center-head {
-    border-top: 0.25px dotted black;
-    border-bottom: 0.25px dotted black;
-  }
-  .koma-bottom-head {
-    border-top: 0.25px dotted black;
-    border-bottom: 0.5px solid black;
-  }
-  .koma-left {
-    border-left: 1px solid black;
-    border-right: 0.5px dotted black;
-  }
-  .koma-right {
-    border-right: 0.5px solid black;
-    border-right: 1px dotted black;
-  }
-  .koma-top {
-    border-top: 1px solid black;
-    border-bottom: 0.5px dotted black;
-  }
-  .koma-center {
-    border-top: 0.5px dotted black;
-    border-bottom: 0.5px dotted black;
-  }
-  .koma-bottom {
-    border-top: 0.5px dotted black;
-    border-bottom: 1px solid black;
-  }
-  td.koma-disable {
-    background-color: gray;
-  }
-  td.koma-group-enable {
-    background-color: #ffe2b2;
-  }
-  td.koma-group-disable {
-    background-color: gray;
-  }
-  select.candidate {
-    height: 23px;
-    width: 90px;
-    padding: 0;
-    margin: 0px 4px 0px 0px;
-    font-size: 10.5px;
-    vertical-align: middle;
-    background-color: #fff;
-  }
-  select.candidate-exist {
-    background-color: #ffa500;
-  }
-  button.candidate {
-    height: 18px;
-    width: 35px;
-    padding: 0;
-    margin: 0;
-    vertical-align: middle;
-    font-size: 10px;
-  }
-  .dragbox {
-    height: 24px;
-    width: 149px;
-    cursor: pointer;
-    font-size: 12px;
-    font-weight: normal;
-    text-align: center;
-    overflow: hidden;
-  }
-  .leftside {
-    width: 116px;
-    float: left;
-    text-align: center;
-    margin-top: 2px;
-  }
-  .rightside {
-    width: 30px;
-    float: right;
-    text-align: left;
-  }
-  .dropbox {
+  .frame {
     background-color: white;
-    border: 0;
-    height: 24px;
-    width: 149px;
-    font-size: 15px;
-    margin: auto;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    height: 50%;
   }
-  .fixed {
-    border: 1.5px groove #ffe2b2;
-    background-color: #ffe2b2;
+  .piece {
+    background-color: #f0ad4e;
+    border: 1px solid #444;
+    cursor: pointer;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
   }
-  .unfixed {
-    border: 1.5px ridge #ffe2b2;
-    background-color: #ffa500;
+  .ui-droppable-active {
+    background-color: red;
   }
-  .puttable {
-    background-color: lightblue;
-  }
-  .unputtable {
-    background-color: gray;
-  }
-  .button {
-    margin-top: 10px;
-    .btn-lock {
-      background-color: #ffe2b2;
+  .pool {
+    bottom: 0;
+    filter: drop-shadow(2px -1px 2px #888);
+    position: fixed;
+    right: 100px;
+    width: 300px;
+
+    .pool-head {
+      background-color: lemonchiffon;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      transform: translateY(1px);
+      text-align: center;
+      width: 40px;
     }
-    .btn-unlock {
-      background-color: #ffa500;
-    }
-    button {
-      margin-right: 10px;
-      margin-left: 10px;
+
+    .pool-body {
+      background-color: lemonchiffon;
+      border: 1px solid #ddd;
+      max-height: 500px;
+      padding: 20px;
+      transition: all 0.5s linear;
+
+      &.pool-body__closed {
+        max-height: 0;
+      }
+
+      .holding {
+        background-color: white;
+        border: 1px solid #ddd;
+        margin: 30px auto 10px;
+        height: 30px;
+        width: 150px;
+        min-width: 150px;
+      }
     }
   }
 }

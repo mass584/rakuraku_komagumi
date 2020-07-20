@@ -19,3 +19,4 @@
 //= require bootstrap-sprockets
 //= require Chart.bundle
 //= require chartkick
+//= require lodash

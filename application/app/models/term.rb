@@ -38,7 +38,7 @@ class Term < ApplicationRecord
   end
 
   def pieces_for_student(student_id)
-    @pieces_for_student = pieces_per_timetable(
+    @pieces_for_student ||= pieces_per_timetable(
       pieces.where(student_id: student_id),
     )
   end
@@ -51,6 +51,15 @@ class Term < ApplicationRecord
 
   def all_pieces
     @all_pieces ||= pieces_per_timetable(pieces)
+  end
+
+  def pending_pieces
+    @pending_pieces ||= pieces.joins(:student, :subject, :teacher).select(
+      "pieces.id AS id, student_id, students.name AS student_name, subject_id, subjects.name AS subject_name, teacher_id, teachers.name AS teacher_name, status"
+    ).where(timetable_id: nil).group_by_recursive(
+      proc { |item| item.student_id },
+      proc { |item| item.subject_id },
+    )
   end
 
   def ordered_students

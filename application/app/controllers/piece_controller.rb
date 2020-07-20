@@ -98,5 +98,6 @@ class PieceController < ApplicationController
         name: subject.name,
       }
     end
+    gon.pendings = @term.pending_pieces
   end
 end
