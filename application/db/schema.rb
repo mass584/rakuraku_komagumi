@@ -86,7 +86,6 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
     t.integer "timetable_id", null: false
     t.integer "number", null: false
     t.integer "teacher_term_id"
-    t.integer "status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["timetable_id", "number"], name: "index_seats_on_timetable_id_and_number", unique: true
