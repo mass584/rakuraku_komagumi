@@ -1,17 +1,18 @@
 class Term < ApplicationRecord
   belongs_to :room
-  has_many :begin_end_times, dependent: :destroy
-  has_many :contracts, dependent: :destroy
   has_many :student_terms, dependent: :destroy
   has_many :students, through: :student_terms
-  has_many :student_requests, dependent: :destroy
-  has_many :subject_terms, dependent: :destroy
-  has_many :subjects, through: :subject_terms
-  has_many :pieces, dependent: :destroy
   has_many :teacher_terms, dependent: :destroy
   has_many :teachers, through: :teacher_terms
-  has_many :teacher_requests, dependent: :destroy
+  has_many :subject_terms, dependent: :destroy
+  has_many :subjects, through: :subject_terms
+  has_many :begin_end_times, dependent: :destroy
   has_many :timetables, dependent: :destroy
+  has_many :contracts, dependent: :destroy
+  has_many :student_requests, dependent: :destroy
+  has_many :teacher_requests, dependent: :destroy
+  has_many :seats, dependent: :destroy
+  has_many :pieces, dependent: :destroy
   validate :verify_context
   after_create :create_associations
   enum type: { one_week: 0, variable: 1 }
@@ -37,15 +38,15 @@ class Term < ApplicationRecord
     (1..max_piece)
   end
 
-  def pieces_for_student(student_id)
+  def pieces_for_student(student_term_id)
     @pieces_for_student ||= pieces_per_timetable(
-      pieces.where(student_id: student_id),
+      pieces.where(student_term_id: student_term_id),
     )
   end
 
-  def pieces_for_teacher(teacher_id)
+  def pieces_for_teacher(teacher_term_id)
     @pieces_for_teacher ||= pieces_per_timetable(
-      pieces.where(teacher_id: teacher_id),
+      pieces.where(teacher_term_id: teacher_term_id),
     )
   end
 

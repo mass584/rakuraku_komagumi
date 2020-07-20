@@ -1,12 +1,12 @@
 class TeacherRequest < ApplicationRecord
   belongs_to :term
-  belongs_to :teacher
+  belongs_to :teacher_term
   belongs_to :timetable
 
   def self.get_teacher_requests(teacher_term, term)
     teacher_requests = where(
       term_id: term.id,
-      teacher_id: teacher_term.teacher_id,
+      teacher_term_id: teacher_term.teacher.id,
     )
     term.timetables.reduce({}) do |accu, item|
       accu.deep_merge({

@@ -1,12 +1,12 @@
 class StudentRequest < ApplicationRecord
   belongs_to :term
-  belongs_to :student
+  belongs_to :student_term
   belongs_to :timetable
 
   def self.get_student_requests(student_term, term)
     student_requests = where(
       term_id: term.id,
-      student_id: student_term.student_id,
+      student_term_id: student_term.student.id,
     )
     term.timetables.reduce({}) do |accu, item|
       accu.deep_merge({
