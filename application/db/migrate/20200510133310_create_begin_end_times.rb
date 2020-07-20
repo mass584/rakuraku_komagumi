@@ -7,7 +7,7 @@ class CreateBeginEndTimes < ActiveRecord::Migration[5.2]
       t.string :end_at, null: false
       t.timestamps
     end
-    add_foreign_key :begin_end_times, :terms, on_update: :cascade, on_delete: :cascade
     add_index :begin_end_times, [:term_id, :period], unique: true
+    add_foreign_key :begin_end_times, :terms, on_update: :cascade, on_delete: :cascade
   end
 end

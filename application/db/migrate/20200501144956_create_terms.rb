@@ -1,6 +1,7 @@
 class CreateTerms < ActiveRecord::Migration[5.2]
   def change
     create_table :terms do |t|
+      t.integer :room_id, null: false
       t.string :name, null: false
       t.integer :type, null: false
       t.integer :year, null: false
@@ -9,7 +10,6 @@ class CreateTerms < ActiveRecord::Migration[5.2]
       t.integer :max_period, null: false
       t.integer :max_seat, null: false
       t.integer :max_piece, null: false
-      t.integer :room_id, null: false
       t.timestamps
     end
     add_foreign_key :terms, :rooms, on_update: :cascade, on_delete: :restrict

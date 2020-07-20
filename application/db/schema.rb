@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_03_30_014027) do
+ActiveRecord::Schema.define(version: 2020_07_03_014027) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -27,13 +27,13 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
 
   create_table "contracts", force: :cascade do |t|
     t.integer "term_id", null: false
-    t.integer "student_id", null: false
-    t.integer "teacher_id"
-    t.integer "subject_id", null: false
+    t.integer "student_term_id", null: false
+    t.integer "subject_term_id", null: false
+    t.integer "teacher_term_id"
     t.integer "count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["term_id", "student_id", "subject_id"], name: "index_contracts_on_term_id_and_student_id_and_subject_id", unique: true
+    t.index ["student_term_id", "subject_term_id"], name: "index_contracts_on_student_term_id_and_subject_term_id", unique: true
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -53,11 +53,9 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
 
   create_table "pieces", force: :cascade do |t|
     t.integer "term_id", null: false
-    t.integer "student_id", null: false
-    t.integer "teacher_id"
-    t.integer "subject_id", null: false
-    t.integer "timetable_id"
-    t.integer "status", null: false
+    t.integer "contract_id", null: false
+    t.integer "seat_id"
+    t.boolean "is_fixed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -83,13 +81,24 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
     t.index ["reset_password_token"], name: "index_rooms_on_reset_password_token", unique: true
   end
 
+  create_table "seats", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "timetable_id", null: false
+    t.integer "number", null: false
+    t.integer "teacher_term_id"
+    t.integer "status", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["timetable_id", "number"], name: "index_seats_on_timetable_id_and_number", unique: true
+  end
+
   create_table "student_requests", force: :cascade do |t|
     t.integer "term_id", null: false
-    t.integer "student_id", null: false
+    t.integer "student_term_id", null: false
     t.integer "timetable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["term_id", "student_id", "timetable_id"], name: "student_request_index", unique: true
+    t.index ["term_id", "student_term_id", "timetable_id"], name: "student_request_index", unique: true
   end
 
   create_table "student_subjects", force: :cascade do |t|
@@ -110,6 +119,7 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
   end
 
   create_table "students", force: :cascade do |t|
+    t.integer "room_id", null: false
     t.string "name", null: false
     t.string "name_kana", null: false
     t.integer "gender", null: false
@@ -119,8 +129,7 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
     t.string "tel", null: false
     t.string "zip", null: false
     t.string "address", null: false
-    t.boolean "is_deleted", null: false
-    t.integer "room_id", null: false
+    t.boolean "is_deleted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -134,21 +143,21 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
   end
 
   create_table "subjects", force: :cascade do |t|
+    t.integer "room_id", null: false
     t.string "name", null: false
     t.integer "order", null: false
-    t.boolean "is_deleted", null: false
-    t.integer "room_id", null: false
+    t.boolean "is_deleted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "teacher_requests", force: :cascade do |t|
     t.integer "term_id", null: false
-    t.integer "teacher_id", null: false
+    t.integer "teacher_term_id", null: false
     t.integer "timetable_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["term_id", "teacher_id", "timetable_id"], name: "teacher_request_index", unique: true
+    t.index ["term_id", "teacher_term_id", "timetable_id"], name: "teacher_request_index", unique: true
   end
 
   create_table "teacher_subjects", force: :cascade do |t|
@@ -169,19 +178,20 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
   end
 
   create_table "teachers", force: :cascade do |t|
+    t.integer "room_id", null: false
     t.string "name", null: false
     t.string "name_kana", null: false
     t.string "email", null: false
     t.string "tel", null: false
     t.string "zip", null: false
     t.string "address", null: false
-    t.boolean "is_deleted", null: false
-    t.integer "room_id", null: false
+    t.boolean "is_deleted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
   create_table "terms", force: :cascade do |t|
+    t.integer "room_id", null: false
     t.string "name", null: false
     t.integer "type", null: false
     t.integer "year", null: false
@@ -190,7 +200,6 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
     t.integer "max_period", null: false
     t.integer "max_seat", null: false
     t.integer "max_piece", null: false
-    t.integer "room_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -199,20 +208,21 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
     t.integer "term_id", null: false
     t.date "date", null: false
     t.integer "period", null: false
-    t.integer "status", null: false
+    t.boolean "is_closed", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "date", "period"], name: "index_timetables_on_term_id_and_date_and_period", unique: true
   end
 
   add_foreign_key "begin_end_times", "terms", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "contracts", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "contracts", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "contracts", "student_terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "contracts", "subject_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "contracts", "terms", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "pieces", "students", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "pieces", "subjects", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "pieces", "contracts", on_update: :cascade, on_delete: :restrict
   add_foreign_key "pieces", "terms", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "student_requests", "students", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "seats", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "seats", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_requests", "student_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_requests", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_requests", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_subjects", "students", on_update: :cascade, on_delete: :cascade
@@ -223,7 +233,7 @@ ActiveRecord::Schema.define(version: 2019_03_30_014027) do
   add_foreign_key "subject_terms", "subjects", on_update: :cascade, on_delete: :restrict
   add_foreign_key "subject_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "subjects", "rooms", on_update: :cascade, on_delete: :restrict
-  add_foreign_key "teacher_requests", "teachers", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "teacher_requests", "teacher_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_requests", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_requests", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_subjects", "subjects", on_update: :cascade, on_delete: :cascade
