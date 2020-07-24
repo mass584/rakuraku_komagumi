@@ -1,5 +1,5 @@
 class StudentController < ApplicationController
-  before_action :room_signed_in?
+  before_action :authenticate_room!
 
   def index
     @students = current_room.exist_students

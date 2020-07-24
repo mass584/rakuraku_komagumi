@@ -1,5 +1,5 @@
 class SubjectController < ApplicationController
-  before_action :room_signed_in?
+  before_action :authenticate_room!
 
   def index
     @subjects = current_room.exist_subjects

@@ -1,5 +1,5 @@
 class TeacherSubjectController < ApplicationController
-  before_action :room_signed_in?
+  before_action :authenticate_room!
 
   def create
     record = TeacherSubject.new(create_params)

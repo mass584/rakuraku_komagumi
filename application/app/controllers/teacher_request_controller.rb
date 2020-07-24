@@ -1,5 +1,5 @@
 class TeacherRequestController < ApplicationController
-  before_action :room_signed_in?
+  before_action :authenticate_room!
   before_action :term_selected?
 
   def create

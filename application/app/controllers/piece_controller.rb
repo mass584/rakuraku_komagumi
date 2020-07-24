@@ -2,7 +2,7 @@ class PieceController < ApplicationController
   require './app/pdfs/overlook_schedule'
   require './app/pdfs/student_schedule'
   require './app/pdfs/teacher_schedule'
-  before_action :room_signed_in?
+  before_action :authenticate_room!
   before_action :term_selected?
 
   def index
