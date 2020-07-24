@@ -3,7 +3,7 @@ class CreateStudentTerms < ActiveRecord::Migration[5.2]
     create_table :student_terms do |t|
       t.integer :student_id, null: false
       t.integer :term_id, null: false
-      t.integer :status, null: false
+      t.boolean :is_decided, default: false, null: false
       t.timestamps
     end
     add_index :student_terms, [:term_id, :student_id], unique: true

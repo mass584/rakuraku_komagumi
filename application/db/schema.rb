@@ -111,7 +111,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
   create_table "student_terms", force: :cascade do |t|
     t.integer "student_id", null: false
     t.integer "term_id", null: false
-    t.integer "status", null: false
+    t.boolean "is_decided", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "student_id"], name: "index_student_terms_on_term_id_and_student_id", unique: true
@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
     t.string "name", null: false
     t.string "name_kana", null: false
     t.integer "gender", null: false
-    t.integer "birth_year", null: false
+    t.integer "school_year", null: false
     t.string "school_name", null: false
     t.string "email", null: false
     t.string "tel", null: false
@@ -170,7 +170,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
   create_table "teacher_terms", force: :cascade do |t|
     t.integer "teacher_id", null: false
     t.integer "term_id", null: false
-    t.integer "status", null: false
+    t.boolean "is_decided", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "teacher_id"], name: "index_teacher_terms_on_term_id_and_teacher_id", unique: true
@@ -198,7 +198,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
     t.date "end_at", null: false
     t.integer "max_period", null: false
     t.integer "max_seat", null: false
-    t.integer "max_piece", null: false
+    t.integer "max_frame", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

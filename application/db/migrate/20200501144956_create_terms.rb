@@ -9,7 +9,7 @@ class CreateTerms < ActiveRecord::Migration[5.2]
       t.date :end_at, null: false
       t.integer :max_period, null: false
       t.integer :max_seat, null: false
-      t.integer :max_piece, null: false
+      t.integer :max_frame, null: false
       t.timestamps
     end
     add_foreign_key :terms, :rooms, on_update: :cascade, on_delete: :restrict

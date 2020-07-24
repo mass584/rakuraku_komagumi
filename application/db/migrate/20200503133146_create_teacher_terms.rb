@@ -3,7 +3,7 @@ class CreateTeacherTerms < ActiveRecord::Migration[5.2]
     create_table :teacher_terms do |t|
       t.integer :teacher_id, null: false
       t.integer :term_id, null: false
-      t.integer :status, null: false
+      t.boolean :is_decided, default: false, null: false
       t.timestamps
     end
     add_index :teacher_terms, [:term_id, :teacher_id], unique: true
