@@ -1,21 +1,10 @@
 class TermController < ApplicationController
-  protect_from_forgery prepend: true
-  before_action :authenticate_room!
+  before_action :room_signed_in?
+  before_action :term_selected?, only: [:show]
 
   def index
     @terms = current_room.terms.order(begin_at: 'DESC')
     @term = Term.new
-  end
-
-  def create
-    @term = Term.new(create_params)
-    respond_to do |format|
-      if @term.save
-        format.js { @status = 'success' }
-      else
-        format.js { @status = 'fail' }
-      end
-    end
   end
 
   def show
@@ -26,10 +15,10 @@ class TermController < ApplicationController
     @teacher_term = TeacherTerm.new
   end
 
-  def update
-    record = Term.find(params[:id])
+  def create
+    @term = Term.new(create_params)
     respond_to do |format|
-      if record.update(update_params)
+      if @term.save
         format.js { @status = 'success' }
       else
         format.js { @status = 'fail' }
@@ -62,9 +51,5 @@ class TermController < ApplicationController
       :max_seat,
       :max_piece,
     )
-  end
-
-  def update_params
-    params.require(:term).permit(:name)
   end
 end

@@ -46,8 +46,6 @@ class SubjectController < ApplicationController
       :name,
       :room_id,
       :order,
-    ).merge(
-      is_deleted: false,
     )
   end
 

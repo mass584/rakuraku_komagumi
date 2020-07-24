@@ -5,7 +5,7 @@ class BeginEndTimeController < ApplicationController
   def update
     record = BeginEndTime.find(params[:id])
     if record.update(update_params)
-      render json: {}, status: :ok
+      render json: record.to_json, status: :ok
     else
       render json: { message: record.errors.full_messages }, status: :bad_request
     end

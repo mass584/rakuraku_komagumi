@@ -7,11 +7,11 @@ class ContractController < ApplicationController
   end
 
   def update
-    contract = Contract.find(params[:id])
+    record = Contract.find(params[:id])
     if contract.update(update_params)
-      render json: {}, status: :ok
+      render json: record.to_json, status: :ok
     else
-      render json: { message: contract.errors.full_messages }, status: :bad_request
+      render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 

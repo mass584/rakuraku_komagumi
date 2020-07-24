@@ -11,35 +11,12 @@ class PieceController < ApplicationController
       format.html do
         case params[:show_type]
         when 'per_teacher'
-          render 'show_per_teacher'
+          render 'piece/show_per_teacher'
         when 'per_student'
-          render 'show_per_student'
+          render 'piece/show_per_student'
         else
           use_gon
-        end
-      end
-      format.pdf do
-        case params[:show_type]
-        when 'per_teacher'
-          teacher_ids = params[:teacher_ids].gsub(/[\"|\[|\]]/, '').split(',')
-          pdf = TeacherSchedule.new(@term.id, teacher_ids).render
-          send_data pdf,
-                    filename: "講師予定表_#{@term.id}.pdf",
-                    type: 'application/pdf',
-                    disposition: 'inline'
-        when 'per_student'
-          student_ids = params[:student_ids].gsub(/[\"|\[|\]]/, '').split(',')
-          pdf = StudentSchedule.new(@term.id, student_ids).render
-          send_data pdf,
-                    filename: "生徒予定表_#{@term.id}.pdf",
-                    type: 'application/pdf',
-                    disposition: 'inline'
-        else
-          pdf = OverlookSchedule.new(@term.id).render
-          send_data pdf,
-                    filename: "全体予定表_#{@term.id}.pdf",
-                    type: 'application/pdf',
-                    disposition: 'inline'
+          render 'piece/show'
         end
       end
     end
@@ -48,16 +25,16 @@ class PieceController < ApplicationController
   def update
     record = Piece.find(params[:id])
     if record.update(update_params)
-      render json: {}, status: :ok
+      render json: record.to_json, status: :ok
     else
       render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 
   def bulk_update
-    records = @term.pieces.where.not(timetable_id: nil)
+    records = @term.pieces.where.not(seat_id: nil)
     if records.update_all(bulk_update_params)
-      render json: {}, status: :ok
+      render json: {}, status: :no_content
     else
       render json: { message: records.errors.full_messages }, status: :bad_request
     end
@@ -66,17 +43,11 @@ class PieceController < ApplicationController
   private
 
   def update_params
-    params.require(:piece).permit(
-      :teacher_id,
-      :timetable_id,
-      :status,
-    )
+    params.require(:piece).permit(:seat_id, :is_fixed)
   end
 
   def bulk_update_params
-    params.require(:piece).permit(
-      :status,
-    )
+    params.require(:piece).permit(:is_fixed)
   end
 
   def use_gon

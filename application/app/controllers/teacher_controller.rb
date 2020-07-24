@@ -50,8 +50,6 @@ class TeacherController < ApplicationController
       :tel,
       :zip,
       :address,
-    ).merge(
-      is_deleted: false,
     )
   end
 

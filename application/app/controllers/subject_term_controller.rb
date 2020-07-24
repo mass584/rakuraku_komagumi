@@ -4,18 +4,16 @@ class SubjectTermController < ApplicationController
 
   def create
     @subject_term = SubjectTerm.new(create_params)
-    if @subject_term.save_with_contract
-      render 'subject_term/create'
+    if @subject_term.save
+      format.js { @status = 'success' }
+    else
+      format.js { @status = 'fail' }
     end
   end
 
   private
 
   def create_params
-    params.require(:subject_term).permit(
-      :subject_id,
-    ).merge({
-      term_id: @term.id,
-    })
+    params.require(:subject_term).permit(:subject_id).merge({ term_id: @term.id })
   end
 end

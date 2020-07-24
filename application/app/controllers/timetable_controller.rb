@@ -8,11 +8,11 @@ class TimetableController < ApplicationController
   end
 
   def update
-    timetable = Timetable.find(params[:id])
-    if timetable.update(update_params)
-      render json: {}, status: :no_content
+    record = Timetable.find(params[:id])
+    if record.update(update_params)
+      render json: record.to_json, status: :ok
     else
-      render json: { message: timetable.errors.full_messages }, status: :bad_request
+      render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 

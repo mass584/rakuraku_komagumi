@@ -1,5 +1,5 @@
 class StudentController < ApplicationController
-  before_action :authenticate_room!
+  before_action :room_signed_in?
 
   def index
     @students = current_room.exist_students
@@ -53,8 +53,6 @@ class StudentController < ApplicationController
       :tel,
       :zip,
       :address,
-    ).merge(
-      is_deleted: false,
     )
   end
 

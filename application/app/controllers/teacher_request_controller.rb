@@ -7,7 +7,7 @@ class TeacherRequestController < ApplicationController
     if record.save
       render json: record.to_json, status: :created
     else
-      render json: record.errors.full_messages, status: :bad_request
+      render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 
@@ -16,7 +16,7 @@ class TeacherRequestController < ApplicationController
     if record.destroy
       render json: {}, status: :no_content
     else
-      render json: record.errors.full_messages, status: :bad_request
+      render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 
