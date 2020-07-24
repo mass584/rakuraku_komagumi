@@ -18,7 +18,7 @@ services:
     ports:
       - "8000:8000"
     working_dir: /root/developer
-    command: /bin/bash --login -c "bundle install && rm -f tmp/pids/server.pid && bin/delayed_job start -n 1 && bundle exec rails s -b 0.0.0.0 -p 8000"
+    command: /bin/bash --login -c "./startup.sh"
     volumes:
       - ./application:/root/developer
       - bundle:/root/developer/vendor/bundle
