@@ -4,9 +4,7 @@ class Student < ApplicationRecord
   has_many :subjects, through: :student_subjects
   has_many :student_terms, dependent: :restrict_with_exception
   has_many :terms, through: :student_terms
-  has_many :student_requests, dependent: :restrict_with_exception
-  has_many :contracts, dependent: :restrict_with_exception
-  has_many :pieces, dependent: :restrict_with_exception
+
   validates :name_kana,
             format: { with: /\A[\p{Hiragana}ー]+\z/ }
   validates :email,
@@ -18,25 +16,8 @@ class Student < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
+  validate :verify_maximum, on: :create
   enum gender: { male: 0, female: 1 }
-
-  def birth_year_select
-    this_year = (Time.zone.now.to_date << 3).year
-    {
-      '小1': birth_year_for(this_year, 'e1'),
-      '小2': birth_year_for(this_year, 'e2'),
-      '小3': birth_year_for(this_year, 'e3'),
-      '小4': birth_year_for(this_year, 'e4'),
-      '小5': birth_year_for(this_year, 'e5'),
-      '小6': birth_year_for(this_year, 'e6'),
-      '中1': birth_year_for(this_year, 'j1'),
-      '中2': birth_year_for(this_year, 'j2'),
-      '中3': birth_year_for(this_year, 'j3'),
-      '高1': birth_year_for(this_year, 'h1'),
-      '高2': birth_year_for(this_year, 'h2'),
-      '高3': birth_year_for(this_year, 'h3'),
-    }
-  end
 
   def birth_year_for(year, grade)
     if grade == 'e1'
@@ -103,5 +84,31 @@ class Student < ApplicationRecord
 
   def name_with_grade(year)
     "#{grade_at(year)} #{name}"
+  end
+
+  def birth_year_select
+    this_year = (Time.zone.now.to_date << 3).year
+    {
+      '小1': birth_year_for(this_year, 'e1'),
+      '小2': birth_year_for(this_year, 'e2'),
+      '小3': birth_year_for(this_year, 'e3'),
+      '小4': birth_year_for(this_year, 'e4'),
+      '小5': birth_year_for(this_year, 'e5'),
+      '小6': birth_year_for(this_year, 'e6'),
+      '中1': birth_year_for(this_year, 'j1'),
+      '中2': birth_year_for(this_year, 'j2'),
+      '中3': birth_year_for(this_year, 'j3'),
+      '高1': birth_year_for(this_year, 'h1'),
+      '高2': birth_year_for(this_year, 'h2'),
+      '高3': birth_year_for(this_year, 'h3'),
+    }
+  end
+
+  private
+
+  def verify_maximum
+    if Student.where(room_id: room.id, is_deleted: false).count >= 60
+      errors[:base] << '登録可能な上限数を超えています。'
+    end
   end
 end

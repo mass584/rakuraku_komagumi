@@ -13,9 +13,12 @@ class Term < ApplicationRecord
   has_many :teacher_requests, dependent: :destroy
   has_many :seats, dependent: :destroy
   has_many :pieces, dependent: :destroy
+
   validate :verify_context
-  after_create :create_associations
   enum type: { one_week: 0, variable: 1 }
+
+  after_create :create_associations
+
   self.inheritance_column = :_type_disabled
 
   def date_array
@@ -35,7 +38,7 @@ class Term < ApplicationRecord
   end
 
   def frame_array
-    (1..max_piece)
+    (1..max_frame)
   end
 
   def pieces_for_student(student_term_id)
@@ -76,11 +79,11 @@ class Term < ApplicationRecord
   end
 
   def readied_students
-    students.joins(:student_terms).where('student_terms.status': 1)
+    students.joins(:student_terms).where('student_terms.is_decided': true)
   end
 
   def readied_teachers
-    teachers.joins(:teacher_terms).where('teacher_terms.status': 1)
+    teachers.joins(:teacher_terms).where('teacher_terms.is_decided': true)
   end
 
   private
@@ -102,7 +105,6 @@ class Term < ApplicationRecord
     BeginEndTime.bulk_create(self)
     Timetable.bulk_create(self)
     Seat.bulk_create(self)
-    Contract.bulk_create(self)
   end
 
   def pieces_per_timetable(items)

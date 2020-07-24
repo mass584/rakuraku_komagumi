@@ -4,11 +4,8 @@ class Teacher < ApplicationRecord
   has_many :subjects, through: :teacher_subjects
   has_many :teacher_terms, dependent: :restrict_with_exception
   has_many :terms, through: :teacher_terms
-  has_many :teacher_requests, dependent: :restrict_with_exception
-  has_many :contracts, dependent: :restrict_with_exception
-  has_many :pieces, dependent: :restrict_with_exception
+
   validates :name_kana,
-            presence: true,
             format: { with: /\A[\p{Hiragana}ー]+\z/ }
   validates :email,
             allow_blank: true,
@@ -19,4 +16,13 @@ class Teacher < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
+  validate :verify_maximum, on: :create
+
+  private
+
+  def verify_maximum
+    if Teacher.where(room_id: room.id, is_deleted: false).count >= 60
+      errors[:base] << '登録可能な上限数を超えています。'
+    end
+  end
 end

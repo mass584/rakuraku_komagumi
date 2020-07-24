@@ -1,15 +1,12 @@
 class StudentTerm < ApplicationRecord
   belongs_to :student
   belongs_to :term
-  enum status: { not_ready: 0, ready: 1 }
+
+  after_create :create_contract
 
   def self.bulk_create(term)
     term.room.exist_students.each do |student|
-      create(
-        term_id: term.id,
-        student_id: student.id,
-        status: 0,
-      )
+      create(term_id: term.id, student_id: student.id)
     end
   end
 
@@ -19,8 +16,7 @@ class StudentTerm < ApplicationRecord
     end
   end
 
-  def save_with_contract
+  def create_contract
     Contract.bulk_create_for_student(student, term)
-    save
   end
 end

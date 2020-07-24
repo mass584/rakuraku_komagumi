@@ -1,8 +1,10 @@
 class Seat < ApplicationRecord
   belongs_to :term
   belongs_to :timetable
-  belongs_to :teacher_term_id, optional: true
+  belongs_to :teacher_term, optional: true
   has_many :pieces, dependent: :destroy
+
+  validates :number, presence: true
   validate :can_update_teacher_term_id?, on: :update, if: :will_save_change_to_teacher_term_id?
 
   def self.get_seats(term)
@@ -39,7 +41,7 @@ class Seat < ApplicationRecord
       timetable_id: timetable_id,
       teacher_term_id: teacher_term_id,
     ).exists?
-      errors[:base] << '講師が他の席に割り当てられているので、変更できません。'
+      errors[:base] << '講師が他の席に割り当てられています。'
     end
   end
 end

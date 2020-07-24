@@ -4,8 +4,11 @@ class Contract < ApplicationRecord
   belongs_to :subject_term
   belongs_to :teacher_term, optional: true
   has_many :pieces, dependent: :destroy
+
+  validates :count, presence: true
   validate :can_update_teacher_term_id, on: :update, if: :will_save_change_to_teacher_term_id?
   validate :can_update_count, on: :update, if: :will_save_change_to_count?
+
   after_save :create_or_destroy_pieces
 
   def self.get_contracts(term_id)
@@ -54,18 +57,16 @@ class Contract < ApplicationRecord
   private
 
   def can_update_teacher_term_id
-    assigned_pieces = pieces.where.not(seat_id: nil)
-    if assigned_pieces.exists?
+    if pieces.where.not(seat_id: nil).exists?
       errors[:base] << '予定が決定済の授業があるため、担任の先生を変更することが出来ません。
         変更したい場合は、この画面で該当する授業を削除し、再設定を行ってください。'
     end
   end
 
   def can_update_count
-    unassigned_pieces = pieces.where(seat_id: nil)
-    if (count_in_database - count) > unassigned_pieces.count
+    if (count_in_database - count) > pieces.where(seat_id: nil).count
       errors[:base] << '授業回数を、予定決定済の授業数よりも少なくすることは出来ません。
-        少なくしたい場合は、予定編集画面で決定済の授業を未決定に戻してください。'
+        減らしたい場合は、予定編集画面で決定済の授業を未決定に戻してください。'
     end
   end
 

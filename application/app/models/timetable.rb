@@ -18,11 +18,7 @@ class Timetable < ApplicationRecord
   def self.bulk_create(term)
     term.date_array.each do |date|
       term.period_array.each do |period|
-        create(
-          term_id: term.id,
-          date: date,
-          period: period,
-        )
+        create(term_id: term.id, date: date, period: period)
       end
     end
   end

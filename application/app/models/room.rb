@@ -13,6 +13,7 @@ class Room < ApplicationRecord
   has_many :teachers, dependent: :restrict_with_exception
   has_many :students, dependent: :restrict_with_exception
   has_many :subjects, dependent: :restrict_with_exception
+
   validates :name, presence: true
 
   def exist_students

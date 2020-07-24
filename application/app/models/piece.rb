@@ -2,6 +2,8 @@ class Piece < ApplicationRecord
   belongs_to :term
   belongs_to :contract
   belongs_to :seat, optional: true
+
+  validate :verify_tannin, on: :update, if: :will_save_change_to_seat_id?
   validate :verify_teacher_occupation, on: :update, if: :will_save_change_to_seat_id?
   validate :verify_student_occupation, on: :update, if: :will_save_change_to_seat_id?
 
@@ -14,9 +16,8 @@ class Piece < ApplicationRecord
   end
 
   def verify_teacher_occupation
-    teacher_occupation_count = where(seat_id: seat_id).count
-    if teacher_occupation_count >= term.max_piece
-      errors[:base] << '講師のオーバーブッキングがあります'
+    if where(seat_id: seat_id).count >= term.max_frame
+      errors[:base] << '座席の最大人数をオーバーしています'
     end
   end
 
