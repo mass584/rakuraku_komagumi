@@ -5,12 +5,15 @@
     thead
       tr
         th.align-middle 氏名
+        th.align-middle 予定編集
         th.align-middle 入力済
     tbody
       - @term.ordered_students.each do |s|
         tr
           th.align-middle
-            = link_to s.student.name, student_term_path(@student_terms[s.student.id])
+            = s.student.name
+          th.align-middle
+            = link_to "予定編集", student_term_path(@student_terms[s.student.id])
           td.align-middle
             div[data-id="#{@student_terms[s.student.id].id}" data-status="#{@student_terms[s.student.id].status}"]
               = check_box_tag :status, 1, @student_terms[s.student.id].ready?, id: "checkbox_#{@student_terms[s.student.id].status}", onchange: 'cb_checkbox(event);'
