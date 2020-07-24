@@ -122,7 +122,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
     t.string "name", null: false
     t.string "name_kana", null: false
     t.integer "gender", null: false
-    t.integer "school_year", null: false
+    t.integer "birth_year", null: false
     t.string "school_name", null: false
     t.string "email", null: false
     t.string "tel", null: false
