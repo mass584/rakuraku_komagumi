@@ -17,6 +17,6 @@ class StudentTerm < ApplicationRecord
   end
 
   def create_contract
-    Contract.bulk_create_for_student(student, term)
+    Contract.bulk_create_for_student(self, term)
   end
 end

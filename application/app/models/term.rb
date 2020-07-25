@@ -14,7 +14,10 @@ class Term < ApplicationRecord
   has_many :seats, dependent: :destroy
   has_many :pieces, dependent: :destroy
 
-  validate :verify_context
+  validates :begin_at, presence: true
+  validates :end_at, presence: true
+  validate :verify_context_for_one_week, if: :one_week?
+  validate :verify_context_for_variable, if: :variable?
   enum type: { one_week: 0, variable: 1 }
 
   after_create :create_associations
@@ -22,11 +25,7 @@ class Term < ApplicationRecord
   self.inheritance_column = :_type_disabled
 
   def date_array
-    if one_week?
-      (('2001-01-01'.to_date)..('2001-01-07'.to_date))
-    elsif variable?
-      (begin_at..end_at)
-    end
+    (begin_at..end_at)
   end
 
   def period_array
@@ -86,15 +85,35 @@ class Term < ApplicationRecord
     teachers.joins(:teacher_terms).where('teacher_terms.is_decided': true)
   end
 
+  def display_type
+    if one_week?
+      '一週間モード'
+    elsif variable?
+      '任意期間モード'
+    end
+  end
+
+  def display_begin_at
+    begin_at.strftime('%Y/%m/%d')
+  end
+
+  def display_end_at
+    end_at.strftime('%Y/%m/%d')
+  end
+
   private
 
-  def verify_context
-    return if begin_at.nil? || end_at.nil?
+  def verify_context_for_one_week
+    if (end_at - begin_at) != 6
+      errors[:base] << '期間は7日間に設定してください。'
+    end
+  end
 
-    if variable? && (end_at - begin_at).negative?
+  def verify_context_for_variable
+    if (end_at - begin_at).negative?
       errors[:base] << '開始日、終了日を正しく設定してください。'
-    elsif variable? && (end_at - begin_at) >= 50
-      errors[:base] << '期間は50日以内に設定してください。'
+    elsif (end_at - begin_at) >= 50
+      errors[:base] << '期間は50日間以内に設定してください。'
     end
   end
 

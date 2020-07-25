@@ -1,6 +1,5 @@
 class TermController < ApplicationController
   before_action :authenticate_room!
-  before_action :term_selected?, only: [:show]
 
   def index
     @terms = current_room.terms.order(begin_at: 'DESC')
@@ -49,7 +48,7 @@ class TermController < ApplicationController
       :end_at,
       :max_period,
       :max_seat,
-      :max_piece,
+      :max_frame,
     )
   end
 end

@@ -11,6 +11,6 @@ class SubjectTerm < ApplicationRecord
   end
 
   def create_contract
-    Contract.bulk_create_for_subject(subject, term)
+    Contract.bulk_create_for_subject(self, term)
   end
 end
