@@ -41,7 +41,7 @@ ja:
         end_at: 終了日
         max_seat: 座席数
         max_period: 時限数
-        max_piece: 講師1人当たりの生徒数
+        max_frame: 講師1人当たりの生徒数
       student_term:
         student_id: 生徒
       teacher_term:
