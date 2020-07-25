@@ -8,6 +8,6 @@ class CreatePieces < ActiveRecord::Migration[5.2]
       t.timestamps
     end
     add_foreign_key :pieces, :terms, on_update: :cascade, on_delete: :cascade
-    add_foreign_key :pieces, :contracts, on_update: :cascade, on_delete: :restrict
+    add_foreign_key :pieces, :contracts, on_update: :cascade, on_delete: :cascade
   end
 end

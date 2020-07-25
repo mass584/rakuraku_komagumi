@@ -217,7 +217,7 @@ ActiveRecord::Schema.define(version: 2020_07_03_014027) do
   add_foreign_key "contracts", "student_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "contracts", "subject_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "contracts", "terms", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "pieces", "contracts", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "pieces", "contracts", on_update: :cascade, on_delete: :cascade
   add_foreign_key "pieces", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "timetables", on_update: :cascade, on_delete: :cascade
