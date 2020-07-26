@@ -5,6 +5,7 @@ class TimetableController < ApplicationController
   def index
     @begin_end_times = BeginEndTime.get_begin_end_times(@term)
     @timetables = Timetable.get_timetables(@term)
+    @week = @term.week(params[:week].to_i)
   end
 
   def update

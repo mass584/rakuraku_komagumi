@@ -4,11 +4,12 @@ class ContractController < ApplicationController
 
   def index
     @contracts = Contract.get_contracts(@term.id)
+    @page = params[:page].to_i || 1
   end
 
   def update
     record = Contract.find(params[:id])
-    if contract.update(update_params)
+    if record.update(update_params)
       render json: record.to_json, status: :ok
     else
       render json: { message: record.errors.full_messages }, status: :bad_request

@@ -14,10 +14,12 @@ class StudentTermController < ApplicationController
 
   def create
     @student_term = StudentTerm.new(create_params)
-    if @student_term.save
-      format.js { @status = 'success' }
-    else
-      format.js { @status = 'fail' }
+    respond_to do |format|
+      if @student_term.save
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
     end
   end
 

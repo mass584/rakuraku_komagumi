@@ -4,10 +4,12 @@ class SubjectTermController < ApplicationController
 
   def create
     @subject_term = SubjectTerm.new(create_params)
-    if @subject_term.save
-      format.js { @status = 'success' }
-    else
-      format.js { @status = 'fail' }
+    respond_to do |format|
+      if @subject_term.save
+        format.js { @status = 'success' }
+      else
+        format.js { @status = 'fail' }
+      end
     end
   end
 
