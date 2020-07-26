@@ -1,7 +1,7 @@
 tr id="term_#{term.id}"
   td.align-middle = term.name
-  td.align-middle = term.type
-  td.align-middle = "#{term.begin_at.strftime("%Y/%m/%d")} 〜 #{term.end_at.strftime("%Y/%m/%d")}"
+  td.align-middle = term.display_type
+  td.align-middle = "#{term.display_begin_at} 〜 #{term.end_at}"
   td.align-middle
     = button_to '編集', term_path(term), { method: :get, class: 'btn btn-secondary' }
   td.align-middle

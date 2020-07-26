@@ -4,7 +4,7 @@
   .container.overflow-auto
     - @term.date_array.each do |date|
       table.table.table-bordered
-        caption = print_date(date, @term.type)
+        caption = print_date(date)
         thead
           tr
             th.align-middle 座席

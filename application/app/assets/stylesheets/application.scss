@@ -16,7 +16,16 @@
 // for Bootstrap 4
 @import "bootstrap";
 
-tbody td {
+th, td {
+  &.mw-50 {
+    min-width: 50px;
+  }
+  &.mw-100 {
+    min-width: 100px;
+  }
+  &.mw-200 {
+    min-width: 200px;
+  }
   &.bg-inactive {
     background-color: #bbb;
   }

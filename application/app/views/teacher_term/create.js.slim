@@ -1,3 +1,4 @@
-| $("#teacher_term_create").modal("hide");
-| $("#teacher_count").html("紐付け済み : #{@term.teachers.count} 人");
-| $("#teacher_term_teacher_id").children("option[value=#{@teacher_term.teacher.id}]").remove();;
+- if @status == 'success'
+  | $("#teacher_term_create").modal("hide");
+  | $("#teacher_count").html("紐付け済み : #{@term.teachers.count} 人");
+  | $("#teacher_term_teacher_id").children("option[value=#{@teacher_term.teacher.id}]").remove();;

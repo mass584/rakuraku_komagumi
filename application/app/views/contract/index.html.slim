@@ -1,16 +1,20 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'contract' }
-.container
-  table.table
-    thead
-      tr
-        th.align-middle 氏名
-        - @term.ordered_subjects.each do |su|
-          th.align-middle = su.subject.name
-    tbody
-      - @term.ordered_students.each do |st|
+.container.contract-index
+  = div_pager({ controller: :contract, action: :index }, @term.students.count, 8, @page)
+  .table-responsive.mt-3.mb-3
+    table.table.table-condensed
+      thead
         tr
-          td.align-middle = "#{st.student.name_with_grade(@term.year)}"
+          th.mw-50.align-middle
+          th.mw-100.align-middle 氏名
           - @term.ordered_subjects.each do |su|
-            = contract_updator(@contracts[st.id][su.id])
+            th.mw-200.align-middle = su.subject.name
+      tbody
+        - filtered_records(@term.ordered_students, 8, @page).each do |st|
+          tr
+            td.mw-50.align-middle = "#{st.student.grade_at(@term.year)}"
+            td.mw-100.align-middle = "#{st.student.name}"
+            - @term.ordered_subjects.each do |su|
+              = contract_updator(@contracts[st.id][su.id])
 == javascript_include_tag 'contract.js'

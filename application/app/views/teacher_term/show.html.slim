@@ -10,7 +10,7 @@
     tbody
       - @term.date_array.each do |d|
         tr
-          th.align-middle = print_date(d, @term.type)
+          th.align-middle = print_date(d)
           - @term.period_array.each do |c|
             td.align-middle
               = teacher_request_button(@teacher_requests[d][c], @timetables[d][c], @teacher_term)

@@ -1,34 +1,36 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'timetable' }
-.container.piece-index
-  table.table
-    thead
-      tr
-        th.align-middle 時限
-        - @term.period_array.each do |period|
-          th.align-middle #{period}限
-      tr
-        th.align-middle 開始時刻
-        - @term.period_array.each do |period|
-          th.align-middle
-            div[data-id="#{@begin_end_times[period].id}"]
-              = time_field 'begin_at', @begin_end_times[period].period,
-                { id: "begin_at", value: @begin_end_times[period].begin_at, class: 'form-control' }
-      tr
-        th.align-middle 終了時刻
-        - @term.period_array.each do |period|
-          th.align-middle
-            div[data-id="#{@begin_end_times[period].id}"]
-              = time_field 'end_at', @begin_end_times[period].period,
-                { id: "end_at", value: @begin_end_times[period].end_at, class: 'form-control' }
-    tbody
-      - @term.date_array.each do |date|
+.container.timetable-index
+  = div_week_selector(@term, @week)
+  .table-responsive.mt-3.mb-3
+    table.table.table-condensed
+      thead
         tr
-          td.align-middle = print_date(date, @term.type)
+          th.align-middle 時限
           - @term.period_array.each do |period|
-            td.align-middle class="#{@timetables[date][period].is_closed && 'bg-inactive'}"
-              div data-id="#{@timetables[date][period].id}"
-                = select_tag :is_closed,
-                  options_for_select([['開講', false], ['休講', true]], @timetables[date][period]),
-                  { id: 'select_is_closed', class: 'form-control' }
+            th.align-middle #{period}限
+        tr
+          th.align-middle 開始
+          - @term.period_array.each do |period|
+            th.align-middle
+              div data-id="#{@begin_end_times[period].id}"
+                = time_field 'begin_at', @begin_end_times[period].period,
+                  { id: "begin_at", value: @begin_end_times[period].begin_at, class: 'form-control' }
+        tr
+          th.align-middle 終了
+          - @term.period_array.each do |period|
+            th.align-middle
+              div data-id="#{@begin_end_times[period].id}"
+                = time_field 'end_at', @begin_end_times[period].period,
+                  { id: "end_at", value: @begin_end_times[period].end_at, class: 'form-control' }
+      tbody
+        - @term.date_array(@week).each do |date|
+          tr
+            td.align-middle = print_date(date)
+            - @term.period_array.each do |period|
+              td.align-middle class="#{@timetables[date][period].is_closed && 'bg-inactive'}"
+                div data-id="#{@timetables[date][period].id}"
+                  = select_tag :is_closed,
+                    options_for_select([['開講', false], ['休講', true]], @timetables[date][period]),
+                    { id: 'select_is_closed', class: 'form-control' }
 == javascript_include_tag 'timetable.js'
