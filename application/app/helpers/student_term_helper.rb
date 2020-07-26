@@ -8,8 +8,8 @@ module StudentTermHelper
         student_request ? 'OK' : 'NG',
         class: student_request ? 'btn btn-primary' : 'btn btn-danger',
         id: "btn_#{timetable.id}",
-        disabled: student_term.ready?,
-        onclick: student_term.ready? ? '' : 'cb_button(event)',
+        disabled: student_term.is_decided,
+        onclick: student_term.is_decided ? '' : 'cb_button(event)',
       )
     end
   end

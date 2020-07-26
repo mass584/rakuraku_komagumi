@@ -8,8 +8,8 @@ module TeacherTermHelper
         teacher_request ? 'OK' : 'NG',
         class: teacher_request ? 'btn btn-primary' : 'btn btn-danger',
         id: "btn_#{timetable.id}",
-        disabled: teacher_term.ready?,
-        onclick: teacher_term.ready? ? '' : 'cb_button(event)',
+        disabled: teacher_term.is_decided,
+        onclick: teacher_term.is_decided ? '' : 'cb_button(event)',
       )
     end
   end

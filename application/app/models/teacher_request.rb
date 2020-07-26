@@ -6,7 +6,7 @@ class TeacherRequest < ApplicationRecord
   def self.get_teacher_requests(teacher_term, term)
     teacher_requests = where(
       term_id: term.id,
-      teacher_term_id: teacher_term.teacher.id,
+      teacher_term_id: teacher_term.id,
     )
     term.timetables.reduce({}) do |accu, item|
       accu.deep_merge({

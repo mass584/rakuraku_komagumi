@@ -24,11 +24,11 @@ class Term < ApplicationRecord
 
   self.inheritance_column = :_type_disabled
 
-  def date_array(week)
-    if week.nil?
-      (begin_at..end_at)
+  def date_array(*week)
+    if week.present?
+      (begin_at..end_at).to_a.slice((week[0] - 1) * 7, 7)
     else
-      (begin_at..end_at).to_a.slice((week - 1) * 7, 7)
+      (begin_at..end_at)
     end
   end
 
@@ -61,11 +61,9 @@ class Term < ApplicationRecord
   end
 
   def pending_pieces
-    @pending_pieces ||= pieces.joins(:student, :subject, :teacher).select(
-      "pieces.id AS id, student_id, students.name AS student_name, subject_id, subjects.name AS subject_name, teacher_id, teachers.name AS teacher_name, status"
-    ).where(timetable_id: nil).group_by_recursive(
-      proc { |item| item.student_id },
-      proc { |item| item.subject_id },
+    @pending_pieces ||= pieces.where(seat_id: nil).group_by_recursive(
+      proc { |item| item.contract.student_term_id },
+      proc { |item| item.contract.subject_term_id },
     )
   end
 

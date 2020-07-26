@@ -1,20 +1,32 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'teacher_request' }
 .container
-  table.table
-    thead
-      tr
-        th.align-middle 氏名
-        th.align-middle 予定編集
-        th.align-middle 入力済
-    tbody
-      - @term.ordered_teachers.each do |t|
+  = div_pager({ controller: :teacher_term, action: :index }, @term.teachers.count, 8, @page)
+  .table-responsive.mt-3.mb-3
+    table.table.table-condensed
+      thead
         tr
-          th.align-middle
-            = t.teacher.name
-          th.align-middle
-            = link_to "予定編集", teacher_term_path(@teacher_terms[t.teacher.id])
-          td.align-middle
-            div[data-id="#{@teacher_terms[t.teacher.id].id}" data-status="#{@teacher_terms[t.teacher.id].status}"]
-              = check_box_tag :status, 1, @teacher_terms[t.teacher.id].ready?, id: "checkbox_#{@teacher_terms[t.teacher.id].status}", onchange: 'cb_checkbox(event);'
+          th.align-middle 氏名
+          th.align-middle マルバツ表の参照
+          th.align-middle マルバツ表入力済
+          th.align-middle 予定表の参照
+          th.align-middle 予定表の出力
+          th.align-middle 予定表の送信
+      tbody
+        - filtered_records(@term.ordered_teachers, 8, @page).each do |t|
+          tr
+            th.align-middle
+              = t.teacher.name
+            th.align-middle
+              = button_to '開く', teacher_term_path(@teacher_terms[t.teacher.id]), { method: :get, class: 'btn btn-secondary' }
+            td.align-middle
+              div.custom-control.custom-switch[data-id="#{@teacher_terms[t.teacher.id].id}" data-status="#{@teacher_terms[t.teacher.id].is_decided}"]
+                = check_box_tag :is_decided, true, @teacher_terms[t.teacher.id].is_decided, id: "checkbox_#{@teacher_terms[t.teacher.id].id}", class: 'custom-control-input'
+                = label_tag :is_decided, '', class: 'custom-control-label', onclick: 'cb_checkbox(event);'
+            th.align-middle
+              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+            th.align-middle
+              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+            th.align-middle
+              = button_to 'メール送信', teacher_term_path(@teacher_terms[t.teacher.id]), { method: :get, class: 'btn btn-danger' }
 == javascript_include_tag 'teacher_term/index.js'

@@ -6,15 +6,15 @@
     table.table.table-condensed
       thead
         tr
-          th.mw-50.align-middle
+          th.mw-60.align-middle
           th.mw-100.align-middle 氏名
           - @term.ordered_subjects.each do |su|
             th.mw-200.align-middle = su.subject.name
       tbody
         - filtered_records(@term.ordered_students, 8, @page).each do |st|
           tr
-            td.mw-50.align-middle = "#{st.student.grade_at(@term.year)}"
-            td.mw-100.align-middle = "#{st.student.name}"
+            th.mw-60.align-middle = "#{st.student.grade_at(@term.year)}"
+            th.mw-100.align-middle = "#{st.student.name}"
             - @term.ordered_subjects.each do |su|
               = contract_updator(@contracts[st.id][su.id])
 == javascript_include_tag 'contract.js'

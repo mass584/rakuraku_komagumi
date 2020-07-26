@@ -4,12 +4,14 @@ class StudentTermController < ApplicationController
 
   def index
     @student_terms = StudentTerm.get_student_terms(@term)
+    @page = params[:page].to_i || 1
   end
 
   def show
     @student_term = StudentTerm.find(params[:id])
     @timetables = Timetable.get_timetables(@term)
     @student_requests = StudentRequest.get_student_requests(@student_term, @term)
+    @week = @term.week(params[:week].to_i)
   end
 
   def create

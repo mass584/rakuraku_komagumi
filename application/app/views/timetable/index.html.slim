@@ -1,7 +1,7 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'timetable' }
 .container.timetable-index
-  = div_week_selector(@term, @week)
+  = div_week_selector({ controller: :timetable, action: :index }, @term, @week)
   .table-responsive.mt-3.mb-3
     table.table.table-condensed
       thead

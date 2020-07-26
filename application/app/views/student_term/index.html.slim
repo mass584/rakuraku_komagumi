@@ -1,20 +1,33 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'student_request' }
 .container
-  table.table
-    thead
-      tr
-        th.align-middle 氏名
-        th.align-middle 予定編集
-        th.align-middle 入力済
-    tbody
-      - @term.ordered_students.each do |s|
+  = div_pager({ controller: :student_term, action: :index }, @term.students.count, 8, @page)
+  .table-responsive.mt-3.mb-3
+    table.table.table-condensed
+      thead
         tr
-          th.align-middle
-            = s.student.name
-          th.align-middle
-            = link_to "予定編集", student_term_path(@student_terms[s.student.id])
-          td.align-middle
-            div[data-id="#{@student_terms[s.student.id].id}" data-status="#{@student_terms[s.student.id].status}"]
-              = check_box_tag :status, 1, @student_terms[s.student.id].ready?, id: "checkbox_#{@student_terms[s.student.id].status}", onchange: 'cb_checkbox(event);'
+          th.mw-60.align-middle
+          th.mw-100.align-middle 氏名
+          th.align-middle マルバツ表の参照
+          th.align-middle マルバツ表入力済
+          th.align-middle 予定表の参照
+          th.align-middle 予定表の出力
+          th.align-middle 予定表の送信
+      tbody
+        - filtered_records(@term.ordered_students, 8, @page).each do |s|
+          tr
+            th.mw-60.align-middle = "#{s.student.grade_at(@term.year)}"
+            th.mw-100.align-middle = s.student.name
+            th.align-middle
+              = button_to '開く', student_term_path(@student_terms[s.student.id]), { method: :get, class: 'btn btn-secondary' }
+            td.align-middle
+              div.custom-control.custom-switch[data-id="#{@student_terms[s.student.id].id}" data-status="#{@student_terms[s.student.id].is_decided}"]
+                = check_box_tag :is_decided, true, @student_terms[s.student.id].is_decided, id: "checkbox_#{@student_terms[s.student.id].id}", class: 'custom-control-input'
+                = label_tag :is_decided, '', class: 'custom-control-label', onclick: 'cb_checkbox(event);'
+            th.align-middle
+              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+            th.align-middle
+              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+            th.align-middle
+              = button_to 'メール送信', student_term_path(@student_terms[s.student.id]), { method: :get, class: 'btn btn-danger' }
 == javascript_include_tag 'student_term/index.js'

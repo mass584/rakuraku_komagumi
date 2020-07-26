@@ -11,12 +11,12 @@ class PieceController < ApplicationController
       format.html do
         case params[:show_type]
         when 'per_teacher'
-          render 'piece/show_per_teacher'
+          render 'piece/index_per_teacher'
         when 'per_student'
-          render 'piece/show_per_student'
+          render 'piece/index_per_student'
         else
           use_gon
-          render 'piece/show'
+          render 'piece/index'
         end
       end
     end
