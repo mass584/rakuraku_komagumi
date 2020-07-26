@@ -24,8 +24,12 @@ class Term < ApplicationRecord
 
   self.inheritance_column = :_type_disabled
 
-  def date_array
-    (begin_at..end_at)
+  def date_array(week)
+    if week.nil?
+      (begin_at..end_at)
+    else
+      (begin_at..end_at).to_a.slice((week - 1) * 7, 7)
+    end
   end
 
   def period_array
@@ -99,6 +103,24 @@ class Term < ApplicationRecord
 
   def display_end_at
     end_at.strftime('%Y/%m/%d')
+  end
+
+  def week(num_week)
+    if num_week < min_week
+      min_week
+    elsif num_week > max_week
+      max_week
+    else
+      num_week
+    end
+  end
+
+  def min_week
+    1
+  end
+
+  def max_week
+    (1 + (end_at - begin_at) / 7).to_i
   end
 
   private

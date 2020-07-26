@@ -48,7 +48,7 @@ class OverlookSchedule < Prawn::Document
     pieces.map do |date, date_item|
       table = term.seat_array.map do |seat|
         header1_cell = [{
-          content: print_date(date, term.type),
+          content: print_date(date),
           background_color: COLOR_HEADER,
           rowspan: term.max_seat,
         }]

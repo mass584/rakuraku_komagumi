@@ -54,7 +54,7 @@ class StudentSchedule < Prawn::Document
         background_color = is_opened ? COLOR_ENABLE : COLOR_DISABLE
         { content: content, background_color: background_color }
       end
-      [{ content: print_date(date, term.type), background_color: COLOR_HEADER }] + cells
+      [{ content: print_date(date), background_color: COLOR_HEADER }] + cells
     end
     [header(term)] + rows
   end
