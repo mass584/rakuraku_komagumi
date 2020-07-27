@@ -6,7 +6,8 @@ class PieceController < ApplicationController
   before_action :term_selected?
 
   def index
-    @timetables = Timetable.get_timetables(@term)
+    @seats = Seat.get_seats(@term)
+    @week = @term.week(params[:week].to_i)
     respond_to do |format|
       format.html do
         case params[:show_type]
@@ -51,24 +52,25 @@ class PieceController < ApplicationController
   end
 
   def use_gon
-    gon.teachers = @term.teachers.map do |teacher|
+    gon.teacher_terms = @term.teacher_terms.joins(:teacher).map do |teacher_term|
       {
-        id: teacher.id,
-        name: teacher.name,
+        id: teacher_term.id,
+        name: teacher_term.teacher.name,
       }
     end
-    gon.students = @term.students.map do |student|
+    gon.student_terms = @term.student_terms.joins(:student).map do |student_term|
       {
-        id: student.id,
-        name: student.name,
+        id: student_term.id,
+        name: student_term.student.name,
+        grade: student_term.student.grade_at(@term.year),
       }
     end
-    gon.subjects = @term.subjects.map do |subject|
+    gon.subject_terms = @term.subject_terms.joins(:subject).map do |subject_term|
       {
-        id: subject.id,
-        name: subject.name,
+        id: subject_term.id,
+        name: subject_term.subject.name,
       }
     end
-    gon.pendings = @term.pending_pieces
+    gon.pendings = @term.pendings
   end
 end

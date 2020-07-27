@@ -1,91 +1,87 @@
 module PieceHelper
-  def div_seat(term, timetable, seat)
-    content_tag(:div,
-                :class => %w[seat],
-                :id => "seat_#{timetable.id}_#{seat}",
-                'data-timetable_id' => timetable.id,
-                'data-students' =>
-                  print_data_array(timetable.student_requests.map(&:student_id)),
-                'data-teachers' =>
-                  print_data_array(timetable.teacher_requests.map(&:teacher_id)),
-                'data-seat' => seat) do
-                  term.frame_array.each do |frame|
-                    concat(div_frame(term, timetable, seat, frame))
-                  end
-                end
-  end
-
-  def div_frame(term, timetable, seat, frame)
-    content_tag(:div,
-                :class => %w[frame],
-                :id => "frame_#{timetable.id}_#{seat}_#{frame}",
-                'data-frame' => frame) do
-                  div_piece(term, timetable, seat, frame)
-                end
-  end
-
-  def div_piece(term, timetable, seat, frame)
-    piece = find_piece(term, timetable, seat, frame)
-    piece && content_tag(:div,
-                         "#{piece.student.name} #{piece.subject.name}",
-                         :class =>
-                           piece.fixed? ?
-                           %w[piece piece__fixed] :
-                           %w[piece],
-                         :id => "piece_#{piece.id}",
-                         'data-piece_id' => piece.id,
-                         'data-teacher_id' => piece.teacher_id,
-                         'data-student_id' => piece.student_id,
-                         'data-subject_id' => piece.subject_id)
-  end
-
-  def find_piece(term, timetable, seat, frame)
-    pieces = term.all_pieces.dig(timetable.date, timetable.period) || []
-    pieces_per_teacher = pieces.group_by(&:teacher_id)
-    teacher_id = pieces_per_teacher.keys[seat - 1]
-    pieces_for_teacher_id = pieces_per_teacher[teacher_id] || []
-    pieces_for_teacher_id[frame - 1]
-  end
-
-  def select_student_id(term)
-    options = content_tag(:option, '選択してください', 'value' => '') +
-              options_from_collection_for_select(term.students, :id, :name)
-    content_tag(:div, class: 'form-group') do
-      concat(label_tag('select_student_id', '生徒の選択'))
-      concat(select_tag(
-               :student_id,
-               options,
-               id: 'select_student_id',
-               class: 'form-control',
-               onchange: 'cb_select_student_id(event);',
-             ))
+  def div_seat(seat)
+    content_tag(
+      :div,
+      :class => %w[seat],
+      :id => "seat_#{seat.id}",
+      'data-students' =>
+        print_data_array(
+          seat.timetable.student_requests.map(&:student_term_id),
+        ),
+      'data-teachers' =>
+        print_data_array(
+          seat.timetable.teacher_requests.map(&:teacher_term_id),
+        ),
+      'data-seat_id' => seat.id,
+    ) do
+      concat(
+        content_tag(
+          :div,
+          seat.teacher_term&.teacher&.name,
+          :class => %w[seat-teacher],
+          :id => "seat-teacher_#{seat.id}",
+          'data-teacher_term_id' => seat.teacher_term_id,
+        ),
+      )
+      seat.term.frame_array.each do |frame|
+        concat(
+          content_tag(
+            :div,
+            :class => %w[frame],
+            :id => "frame_#{seat.id}_#{frame}",
+            'data-frame' => frame,
+          ) do
+            div_piece(seat, frame)
+          end,
+        )
+      end
     end
   end
 
-  def select_subject_id(term)
-    options = content_tag(:option, '選択してください', 'value' => '') +
-              options_from_collection_for_select(term.subjects, :id, :name)
-    content_tag(:div, class: 'form-group') do
-      concat(label_tag('select_subject_id', '科目の選択'))
-      concat(select_tag(
-               :subject_id,
-               options,
-               id: 'select_subject_id',
-               class: 'form-control',
-               onchange: 'cb_select_subject_id(event);',
-             ))
-    end
+  def div_piece(seat, frame)
+    piece = seat.pieces[frame - 1]
+    piece && content_tag(
+      :div,
+      "#{piece.contract.student_term.student.name}
+        #{piece.contract.subject_term.subject.name}",
+      :class =>
+        piece.is_fixed ?
+        %w[piece piece__fixed] :
+        %w[piece],
+      :id => "piece_#{piece.id}",
+      'data-piece_id' => piece.id,
+      'data-teacher_term_id' => piece.contract.teacher_term_id,
+      'data-teacher_name' => piece.contract.teacher_term&.teacher&.name,
+      'data-subject_term_id' => piece.contract.subject_term_id,
+      'data-subject_name' => piece.contract.subject_term&.subject&.name,
+      'data-student_term_id' => piece.contract.student_term_id,
+      'data-student_name' => piece.contract.student_term&.student&.name,
+    )
   end
 
-  def div_open_button
-    content_tag(:div,
-                '●',
-                class: %w[open-button],
-                id: 'open-button',
-                onclick: 'cb_open_button(event);')
+  def select_student_term_id(term)
+    select_tag(
+      :student_term_id,
+      options_for_select(term.student_terms.reduce({}) do |accu, item|
+        accu.merge({ item.student.name => item.id })
+      end),
+      include_blank: '生徒を選択',
+      id: 'select_student_term_id',
+      class: 'form-control',
+      onchange: 'cb_select_student_term_id(event);',
+    )
   end
 
-  def div_holding
-    content_tag(:div, '', class: %w[holding], id: 'holding')
+  def select_subject_term_id(term)
+    select_tag(
+      :subject_term_id,
+      options_for_select(term.subject_terms.reduce({}) do |accu, item|
+        accu.merge({ item.subject.name => item.id })
+      end),
+      include_blank: '科目を選択',
+      id: 'select_subject_term_id',
+      class: 'form-control',
+      onchange: 'cb_select_subject_term_id(event);',
+    )
   end
 end

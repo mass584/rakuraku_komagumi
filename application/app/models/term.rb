@@ -60,10 +60,21 @@ class Term < ApplicationRecord
     @all_pieces ||= pieces_per_timetable(pieces)
   end
 
-  def pending_pieces
-    @pending_pieces ||= pieces.where(seat_id: nil).group_by_recursive(
-      proc { |item| item.contract.student_term_id },
-      proc { |item| item.contract.subject_term_id },
+  def pendings
+    pieces.includes(:contract).where(seat_id: nil).map do |item|
+      {
+        id: item.id,
+        contract_id: item.contract_id,
+        student_term_id: item.contract.student_term_id,
+        student_name: item.contract.student_term.student.name,
+        subject_term_id: item.contract.subject_term_id,
+        subject_name: item.contract.subject_term.subject.name,
+        teacher_term_id: item.contract.teacher_term_id,
+        teacher_name: item.contract.teacher_term&.teacher&.name,
+      }
+    end.group_by_recursive(
+      proc { |item| item[:student_term_id] },
+      proc { |item| item[:subject_term_id] },
     )
   end
 

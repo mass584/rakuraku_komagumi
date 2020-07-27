@@ -1,31 +1,28 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'piece' }
-.piece-index
+.container.piece-index
+  = div_week_selector({ controller: :piece, action: :index }, @term, @week)
   .container.overflow-auto
-    - @term.date_array.each do |date|
-      table.table.table-bordered
+    - @term.date_array(@week).each do |date|
+      table.table.table-bordered.table-condensed
         caption = print_date(date)
         thead
           tr
             th.align-middle 座席
             - @term.period_array.each do |period|
-              th = print_period(period)
+              th.align-middle = print_period(period)
         tbody
           - @term.seat_array.each do |seat|
             tr
-              th = print_seat(seat)
+              th.align-middle = print_seat(seat)
               - @term.period_array.each do |period|
-                td = div_seat(@term, @timetables[date][period], seat)
-    .button
-      button[id='button_all_lock' class='btn btn-default btn-lock'] 全てロック（決定済）
-      button[id='button_all_unlock' class='btn btn-default btn-unlock'] 全てアンロック（仮決定）
-      button[id='button_all_reset' class='btn btn-danger'] 全てリセット（未決定）
+                td.align-middle = div_seat(@seats[date][period][seat])
   .pool
     .pool-head
-      = div_open_button
+      #open-button.open-button[onclick='cb_open_button(event);'] = '●'
     .pool-body.pool-body__closed
       p 新しいコマを配置する
-      = select_student_id(@term)
-      = select_subject_id(@term)
-      = div_holding
+      = select_student_term_id(@term)
+      = select_subject_term_id(@term)
+      #holding.holding
 == javascript_include_tag 'piece.js'

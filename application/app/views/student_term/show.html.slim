@@ -1,21 +1,23 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'student_request' }
 .container
-  table.table
-    thead
-      tr
-        th.align-middle 日付
-        - @term.period_array.each do |p|
-          th.class = print_period(p)
-    tbody
-      - @term.date_array.each do |d|
+  = div_week_selector(student_term_path(@student_term), @term, @week)
+  .table-responsive.mt-3.mb-3
+    table.table
+      thead
         tr
-          th.align-middle = print_date(d)
-          - @term.period_array.each do |c|
-            td.align-middle
-              = student_request_button(@student_requests[d][c], @timetables[d][c], @student_term)
+          th.align-middle 日付
+          - @term.period_array.each do |p|
+            th.class = print_period(p)
+      tbody
+        - @term.date_array(@week).each do |d|
+          tr
+            th.align-middle = print_date(d)
+            - @term.period_array.each do |c|
+              td.align-middle
+                = student_request_button(@student_requests[d][c], @timetables[d][c], @student_term)
   div.text-center
     = button_to '戻る',
       student_term_index_path,
-      {class: 'btn btn-default', method: :get}
+      {class: 'btn btn-dark', method: :get}
 == javascript_include_tag 'student_term/show.js'

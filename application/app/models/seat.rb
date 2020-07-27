@@ -5,11 +5,20 @@ class Seat < ApplicationRecord
   has_many :pieces, dependent: :destroy
 
   validates :number, presence: true
-  validate :can_update_teacher_term_id?, on: :update, if: :will_save_change_to_teacher_term_id?
+  validate :can_nullify_teacher_term_id?,
+           on: :update,
+           if: :will_save_change_to_teacher_term_id?
+  validate :verify_doublebooking,
+           on: :update,
+           if: :will_save_change_to_teacher_term_id?
 
   def self.get_seats(term)
-    where(term_id: term.id).reduce({}) do |accu, item|
-      accu.merge({
+    includes(
+      timetable: [:student_requests, :teacher_requests],
+      term: [],
+      pieces: [],
+    ).where(term_id: term.id).reduce({}) do |accu, item|
+      accu.deep_merge({
         item.timetable.date => {
           item.timetable.period => {
             item.number => item,
@@ -33,11 +42,14 @@ class Seat < ApplicationRecord
 
   private
 
-  def can_update_teacher_term_id?
+  def can_nullify_teacher_term_id?
     if pieces.exists?
       errors[:base] << '授業が割り当てられているので、変更できません。'
     end
-    if teacher_term_id && where(
+  end
+
+  def verify_doublebooking
+    if teacher_term_id.present? && Seat.where(
       timetable_id: timetable_id,
       teacher_term_id: teacher_term_id,
     ).exists?
