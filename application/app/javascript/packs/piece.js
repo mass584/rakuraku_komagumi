@@ -1,5 +1,10 @@
 import $ from 'jquery';
 
+$.ajaxSetup({
+  headers:
+  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+});
+
 $(document).ready(() => {
   $('[id^=piece_]').draggable({
     start: cbDragStart,

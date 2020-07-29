@@ -1,5 +1,10 @@
 import $ from 'jquery';
 
+$.ajaxSetup({
+  headers:
+  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+});
+
 export const cb_select = (event) => {
   const td = $(event.target).parent().parent().parent();
   const div1 = $(event.target).parent().parent();

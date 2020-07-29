@@ -1,5 +1,10 @@
 import $ from 'jquery';
 
+$.ajaxSetup({
+  headers:
+  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+});
+
 export const cb_checkbox = (event) => {
   const label = $(event.target);
   const div = label.parent();

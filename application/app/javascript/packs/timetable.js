@@ -1,5 +1,10 @@
 import $ from 'jquery';
 
+$.ajaxSetup({
+  headers:
+  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+});
+
 $(document).ready(() => {
   $('[id=begin_at]').on('change', cb_textbox_time);
   $('[id=end_at]').on('change', cb_textbox_time);
