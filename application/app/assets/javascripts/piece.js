@@ -1,5 +1,3 @@
-var srcSeat = null;
-
 $(document).ready(() => {
   $('[id^=piece_]').draggable({
     start: cbDragStart,
@@ -15,7 +13,7 @@ $(document).ready(() => {
 const cbDragStart = (event) => {
   const piece = $(event.target);
   const seat = $(event.target).parent().parent();
-  srcSeat = seat;
+  piece.data('src_seat_id', seat.data('seat_id'));
   $('[id^=frame_]').each((_idx, frame) => {
     const isEmpty = $(frame).children().length === 0;
     const studentOk = $(frame).parent().data('students').find((studentId) => {
@@ -35,28 +33,57 @@ const cbDragStart = (event) => {
 const cbDragStop = (event, ui) => {
   $('[id^=frame_]').droppable('disable');
   const piece = $(event.target);
-  const seat = $(event.target).parent().parent();
-  const seatTeacher = seat.children().first();
-  const seatTeacherSrc = srcSeat.children().first();
-  $.ajax({
-    url: `/piece/${piece.data('piece_id')}`,
-    type: 'put',
-    data: JSON.stringify({
-      piece: {
-        seat_id: seat.data('seat_id'),
-      },
-    }),
-    contentType: 'application/json',
+  const srcSeatId = piece.data("src_seat_id");
+  piece.data('src_seat_id', null);
+  const seatSrc = $(`[id=seat_${srcSeatId}]`);
+  const seatDest = piece.parent().parent();
+  const seatTeacherSrc = seatSrc.children().first();
+  const seatTeacherDest = seatDest.children().first();
+  const seatSrcHasPiece = seatSrc.children('[id^=frame_]').toArray().reduce(
+    (accu, item) => {
+      return ($(item).children().length > 0) ? accu + 1 : accu;
+    },
+    0,
+  ) > 0;
+
+  $.Deferred().resolve().then(() => {
+    return $.ajax({
+      contentType: 'application/json',
+      url: `/seat/${seatDest.data('seat_id')}`,
+      type: 'put',
+      data: JSON.stringify({
+        seat: { teacher_term_id: piece.data('teacher_term_id') },
+      }),
+    });
+  }).then((_res) => {
+    return $.ajax({
+      contentType: 'application/json',
+      url: `/piece/${piece.data('piece_id')}`,
+      type: 'put',
+      data: JSON.stringify({
+        piece: { seat_id: seatDest.data('seat_id') },
+      }),
+    });
+  }).then((_res) => {
+    if (!seatSrcHasPiece) {
+      return $.ajax({
+        contentType: 'application/json',
+        url: `/seat/${seatSrc.data('seat_id')}`,
+        type: 'put',
+        data: JSON.stringify({
+          seat: { teacher_term_id: null },
+        }),
+      });
+    } else {
+      return $.Deferred().resolve();
+    }
   }).done((_res) => {
-    seatTeacher.text(piece.data('teacher_name'));
-    seatTeacher.data('teacher_term_id', piece.data('teacher_term_id'));
-    const srcSeatHasPiece = srcSeat.children('[id^=frame_]').toArray().reduce((accu, item) => {
-      return $(item).children().length ? accu + 1 : accu;
-    }, 0) > 0;
-    if (!srcSeatHasPiece) {
+    if (!seatSrcHasPiece) {
       seatTeacherSrc.text('');
       seatTeacherSrc.data('teacher_term_id', '');
     }
+    seatTeacherDest.text(piece.data('teacher_name'));
+    seatTeacherDest.data('teacher_term_id', piece.data('teacher_term_id'));
   }).fail((xhr) => {
     alert(xhr);
   });
