@@ -17,4 +17,4 @@
             th.mw-100.align-middle = "#{st.student.name}"
             - @term.ordered_subjects.each do |su|
               = contract_updator(@contracts[st.id][su.id])
-== javascript_include_tag 'contract.js'
+== javascript_pack_tag 'contract.js'

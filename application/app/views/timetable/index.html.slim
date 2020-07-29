@@ -33,4 +33,4 @@
                   = select_tag :is_closed,
                     options_for_select([['開講', false], ['休講', true]], @timetables[date][period]),
                     { id: 'select_is_closed', class: 'form-control' }
-== javascript_include_tag 'timetable.js'
+== javascript_pack_tag 'timetable.js'

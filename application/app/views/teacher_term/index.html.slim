@@ -29,4 +29,4 @@
               = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
             th.align-middle
               = button_to 'メール送信', teacher_term_path(@teacher_terms[t.teacher.id]), { method: :get, class: 'btn btn-danger' }
-== javascript_include_tag 'teacher_term/index.js'
+== javascript_pack_tag 'teacher_term/index.js'
