@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 $(document).ready(() => {
   $('[id^=piece_]').draggable({
     start: cbDragStart,

@@ -26,9 +26,6 @@ gem 'aws-sdk-rails'
 
 # Frontend
 gem 'bootstrap', '~> 4.3.1'
-gem 'jquery-rails'
-gem 'jquery-ui-rails'
-gem 'lodash-rails'
 gem 'sass-rails', '~> 5.0'
 gem 'slim-rails'
 

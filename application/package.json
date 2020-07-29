@@ -2,7 +2,10 @@
   "name": "rakuraku_komagumi",
   "private": true,
   "dependencies": {
-    "@rails/webpacker": "5.1.1"
+    "@rails/webpacker": "5.1.1",
+    "jquery": "^3.5.1",
+    "jquery-ui": "^1.12.1",
+    "lodash": "^4.17.19"
   },
   "devDependencies": {
     "webpack-dev-server": "^3.11.0"

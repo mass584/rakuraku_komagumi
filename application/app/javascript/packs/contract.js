@@ -1,3 +1,5 @@
+import $ from 'jquery';
+
 const cb_select = (event) => {
   const td = $(event.target).parent().parent().parent();
   const div1 = $(event.target).parent().parent();
