@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-const cb_button = (event) => {
+export const cb_button = (event) => {
   const button = $(event.target);
   const div = $(event.target).parent();
   if (div.data('id')) {

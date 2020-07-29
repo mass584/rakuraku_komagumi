@@ -1,4 +1,6 @@
-const cb_checkbox = (event) => {
+import $ from 'jquery';
+
+export const cb_checkbox = (event) => {
   const label = $(event.target);
   const div = label.parent();
   const checkbox = div.children();

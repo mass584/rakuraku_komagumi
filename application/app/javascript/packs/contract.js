@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-const cb_select = (event) => {
+export const cb_select = (event) => {
   const td = $(event.target).parent().parent().parent();
   const div1 = $(event.target).parent().parent();
   const div2 = $(event.target).parent();
@@ -33,7 +33,7 @@ const cb_select = (event) => {
   });
 }
 
-const cb_button = (event) => {
+export const cb_button = (event) => {
   if (!window.confirm('削除してよろしいですか。')) return;
   const td = $(event.target).parent().parent().parent();
   const div = $(event.target).parent().parent();

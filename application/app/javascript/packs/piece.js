@@ -102,11 +102,11 @@ const cbDrop = (event, ui) => {
   });
 }
 
-const cb_open_button = (_event) => {
+export const cb_open_button = (_event) => {
   $(".pool-body").toggleClass("pool-body__closed");
 };
 
-const cb_select_student_term_id = (event) => {
+export const cb_select_student_term_id = (event) => {
   const studentTermId = event.target.value;
   const select = $("#select_subject_term_id");
   select.val('');
@@ -117,7 +117,7 @@ const cb_select_student_term_id = (event) => {
   });
 };
 
-const cb_select_subject_term_id = (event) => {
+export const cb_select_subject_term_id = (event) => {
   const subjectTermId = event.target.value;
   const selectStudentTermId = $("#select_student_term_id");
   const studentTermId = selectStudentTermId.val();

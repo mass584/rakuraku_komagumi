@@ -6,7 +6,7 @@ $(document).ready(() => {
   $('[id=select_is_closed]').on('change', cb_select_is_closed);
 });
 
-const cb_textbox_time = (event) => {
+export const cb_textbox_time = (event) => {
   const textbox = $(event.target);
   const div = textbox.parent();
   const id = div.data('id');
@@ -26,7 +26,7 @@ const cb_textbox_time = (event) => {
   });
 }
 
-const cb_select_is_closed = (event) => {
+export const cb_select_is_closed = (event) => {
   const select = $(event.target);
   const div = select.parent();
   const td = div.parent();

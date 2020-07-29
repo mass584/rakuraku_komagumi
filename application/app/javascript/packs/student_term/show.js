@@ -1,4 +1,6 @@
-const cb_button = (event) => {
+import $ from 'jquery';
+
+export const cb_button = (event) => {
   const button = $(event.target);
   const div = button.parent();
   const value = button.text();
