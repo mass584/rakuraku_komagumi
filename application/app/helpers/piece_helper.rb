@@ -13,14 +13,15 @@ module PieceHelper
           seat.timetable.teacher_requests.map(&:teacher_term_id),
         ),
       'data-seat_id' => seat.id,
+      'data-teacher_term_id' => seat.teacher_term_id,
+      'data-date' => seat.timetable.date,
+      'data-period' => seat.timetable.period,
     ) do
       concat(
         content_tag(
           :div,
           seat.teacher_term&.teacher&.name,
-          :class => %w[seat-teacher],
-          :id => "seat-teacher_#{seat.id}",
-          'data-teacher_term_id' => seat.teacher_term_id,
+          class: %w[seat-teacher],
         ),
       )
       seat.term.frame_array.each do |frame|
@@ -56,6 +57,7 @@ module PieceHelper
       'data-subject_name' => piece.contract.subject_term&.subject&.name,
       'data-student_term_id' => piece.contract.student_term_id,
       'data-student_name' => piece.contract.student_term&.student&.name,
+      'data-src_seat_id' => nil,
     )
   end
 

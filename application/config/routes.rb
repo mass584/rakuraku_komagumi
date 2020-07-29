@@ -7,6 +7,7 @@ Rails.application.routes.draw do
     registrations: 'rooms/registrations',
     sessions: 'rooms/sessions',
   }
+  resources :seat, only: [:update]
   resources :student, only: [:index, :create, :update, :destroy]
   resources :student_request, only: [:create, :destroy]
   resources :student_subject, only: [:create, :destroy]
