@@ -24,12 +24,12 @@
 # 技術スタック
 * フロントエンド
   - Slim
-  - Scss
+  - Sass
   - jQuery
   - Bootstrap4
 * バックエンド
   - Ruby 2.6.3
-  - Ruby on Rails
+  - Ruby on Rails 6.0.3
   - Python 3.7.3
 * サーバー
   - Nginx
