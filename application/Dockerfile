@@ -15,7 +15,7 @@ RUN git clone git://github.com/nodenv/nodenv.git ~/.nodenv && \
     git clone https://github.com/pine/nodenv-yarn-install.git ~/.nodenv/plugins/nodenv-yarn-install
 RUN echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.bash_profile && \
     echo 'eval "$(nodenv init -)"' >> ~/.bash_profile
-RUN nodenv install 8.11.4 && nodenv global 8.11.4
+RUN nodenv install 10.17.0 && nodenv global 10.17.0
 
 RUN gem install bundler
 
