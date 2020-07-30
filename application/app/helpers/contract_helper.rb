@@ -8,7 +8,6 @@ module ContractHelper
       options_for_select(select, selected: contract.count),
       id: "select_count_#{contract.id}",
       class: 'form-control form-control-sm',
-      onchange: 'cb_select(event);',
     )
   end
 
@@ -27,7 +26,6 @@ module ContractHelper
       include_blank: '担任を選択',
       id: "select_teacher_term_id_#{contract.id}",
       class: 'form-control form-control-sm',
-      onchange: 'cb_select(event);',
     )
   end
 
@@ -53,7 +51,6 @@ module ContractHelper
                 '消',
                 id: "button_delete_#{contract.id}",
                 class: %w[btn btn-sm btn-danger],
-                onclick: 'cb_button(event);',
               )
             end,
           )

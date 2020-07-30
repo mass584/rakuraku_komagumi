@@ -1,4 +1,7 @@
 import $ from 'jquery';
+import 'jquery-ui/ui/widgets/draggable.js';
+import 'jquery-ui/ui/widgets/droppable.js';
+import _ from 'lodash';
 
 $.ajaxSetup({
   headers:

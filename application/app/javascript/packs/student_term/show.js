@@ -5,7 +5,9 @@ $.ajaxSetup({
   { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-export const cb_button = (event) => {
+$(() => $('[id^=btn_]').on('click', (event) => cb_button(event)));
+
+function cb_button(event) {
   const button = $(event.target);
   const div = button.parent();
   const value = button.text();

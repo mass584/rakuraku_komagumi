@@ -5,7 +5,9 @@ $.ajaxSetup({
   { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-export const cb_checkbox = (event) => {
+$(() => $('.custom-control-label').on('click', (event) => cb_checkbox(event)));
+
+function cb_checkbox(event) {
   const label = $(event.target);
   const div = label.parent();
   const checkbox = div.children();

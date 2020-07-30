@@ -5,14 +5,18 @@ $.ajaxSetup({
   { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-export const cb_select = (event) => {
-  const td = $(event.target).parent().parent().parent();
-  const div1 = $(event.target).parent().parent();
-  const div2 = $(event.target).parent();
+$(() => $('[id^=select_teacher_term_id_]').on('click', (event) => cb_select(event)));
+$(() => $('[id^=select_count_]').on('click', (event) => cb_select(event)));
+$(() => $('[id^=button_delete_]').on('click', (event) => cb_button(event)));
+
+function cb_select(event) {
+  const td = $(event.target).parent().parent().parent().parent();
+  const div1 = $(event.target).parent().parent().parent();
+  const div2 = $(event.target).parent().parent();
   const select_count = div2.children('[id^=select_count]');
   const select_teacher_term_id = div2.children('[id^=select_teacher_term_id]');
   const teacher_term_id = select_teacher_term_id.val() ? Number(select_teacher_term_id.val()) : null;
-  const count = Number(select_count.val())
+  const count = Number(select_count.val());
   $.ajax({
     type: 'put',
     url: `/contract/${div1.data('id')}`,
@@ -38,7 +42,7 @@ export const cb_select = (event) => {
   });
 }
 
-export const cb_button = (event) => {
+function cb_button(event) {
   if (!window.confirm('削除してよろしいですか。')) return;
   const td = $(event.target).parent().parent().parent();
   const div = $(event.target).parent().parent();

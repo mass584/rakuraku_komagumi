@@ -8,7 +8,6 @@ module TeacherHelper
         teacher_subject ? '可' : '不',
         id: "button_#{teacher.id}_#{subject.id}",
         class: teacher_subject ? 'btn btn-primary' : 'btn btn-danger',
-        onclick: 'cb_button(event);',
       )
     end
   end

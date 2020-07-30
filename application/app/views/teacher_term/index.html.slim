@@ -22,7 +22,7 @@
             td.align-middle
               div.custom-control.custom-switch[data-id="#{@teacher_terms[t.teacher.id].id}" data-status="#{@teacher_terms[t.teacher.id].is_decided}"]
                 = check_box_tag :is_decided, true, @teacher_terms[t.teacher.id].is_decided, id: "checkbox_#{@teacher_terms[t.teacher.id].id}", class: 'custom-control-input'
-                = label_tag :is_decided, '', class: 'custom-control-label', onclick: 'cb_checkbox(event);'
+                = label_tag :is_decided, '', class: 'custom-control-label'
             th.align-middle
               = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
             th.align-middle

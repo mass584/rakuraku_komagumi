@@ -8,7 +8,6 @@ module StudentHelper
         student_subject ? '受' : '未',
         id: "button_#{student.id}_#{subject.id}",
         class: student_subject ? 'btn btn-primary' : 'btn btn-danger',
-        onclick: 'cb_button(event);',
       )
     end
   end

@@ -9,7 +9,6 @@ module StudentTermHelper
         class: student_request ? 'btn btn-primary' : 'btn btn-danger',
         id: "btn_#{timetable.id}",
         disabled: student_term.is_decided,
-        onclick: student_term.is_decided ? '' : 'cb_button(event)',
       )
     end
   end
