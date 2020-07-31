@@ -16,7 +16,7 @@ services:
       context: ./application
       dockerfile: ./Dockerfile
     ports:
-      - "8000:8000"
+      - "3000:3000"
     working_dir: /root/developer
     command: /bin/bash --login -c "./startup.sh"
     volumes:
@@ -31,6 +31,21 @@ services:
       - DATABASE_NAME=development
     depends_on:
       - db
+  webpack-dev-server:
+    build:
+      context: ./application
+      dockerfile: ./Dockerfile
+    ports:
+      - "3035:3035"
+    working_dir: /root/developer
+    command: /bin/bash --login -c "bin/webpack-dev-server"
+    volumes:
+      - ./application:/root/developer
+      - bundle:/root/developer/vendor/bundle
+    environment:
+      - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+    depends_on:
+      - application
   optimization:
     build:
       context: ./optimization
