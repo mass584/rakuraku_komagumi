@@ -1,4 +1,5 @@
 module Common
+  include ApplicationHelper
   COLOR_HEADER  = 'fdf5e6'.freeze
   COLOR_DISABLE = '7f7f7f'.freeze
   COLOR_ENABLE  = 'ffffff'.freeze
@@ -23,5 +24,20 @@ module Common
       }
     end
     theader + tbody
+  end
+
+  def header_left(date)
+    {
+      content: print_date(date),
+      background_color: COLOR_HEADER,
+    }
+  end
+
+  def print_piece_for_teacher(piece)
+    "[#{piece.contract.subject_term.subject.name}] #{piece.contract.student_term.student.name}"
+  end
+
+  def print_piece_for_student(piece)
+    "[#{piece.contract.subject_term.subject.name}] #{piece.seat.teacher_term.teacher.name}"
   end
 end

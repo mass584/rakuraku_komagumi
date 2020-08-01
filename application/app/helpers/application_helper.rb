@@ -15,14 +15,6 @@ module ApplicationHelper
     "#{seat}番"
   end
 
-  def print_piece_for_teacher(piece)
-    "#{piece.student.grade_when(piece.term)} #{piece.student.name} [#{piece.subject.name}]"
-  end
-
-  def print_piece_for_student(piece)
-    "[#{piece.subject.name}] #{piece.teacher.name}"
-  end
-
   def print_data_array(array)
     str = array.map { |item| "\"#{item}\"" }.join(', ')
     '[' + str + ']'

@@ -14,6 +14,24 @@ class TeacherTermController < ApplicationController
     @week = @term.week(params[:week].to_i)
   end
 
+  def schedule
+    @teacher_term = TeacherTerm.find(params[:id])
+    @timetables = Timetable.get_timetables(@term)
+    @teacher_requests = TeacherRequest.get_teacher_requests(@teacher_term, @term)
+    @week = @term.week(params[:week].to_i)
+    @pieces = @term.pieces_for_teacher(@teacher_term)
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = TeacherSchedule.new(@term, @teacher_term).render
+        send_data pdf,
+                  filename: "#{@term.name}予定表#{@teacher_term.teacher.name}.pdf",
+                  type: 'application/pdf',
+                  disposition: 'inline'
+      end
+    end
+  end
+
   def create
     @teacher_term = TeacherTerm.new(create_params)
     respond_to do |format|

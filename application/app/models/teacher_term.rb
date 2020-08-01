@@ -1,6 +1,7 @@
 class TeacherTerm < ApplicationRecord
   belongs_to :teacher
   belongs_to :term
+  has_many :teacher_requests, dependent: :destroy
 
   def self.bulk_create(term)
     term.room.exist_teachers.each do |teacher|

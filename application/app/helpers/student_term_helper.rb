@@ -12,4 +12,17 @@ module StudentTermHelper
       )
     end
   end
+
+  def schedule_cell(pieces)
+    content_tag(:div) do
+      pieces.each do |piece|
+        concat(
+          content_tag(:div) do
+            "#{piece.contract.subject_term.subject.name}
+            （#{piece.seat.teacher_term.teacher.name}）"
+          end,
+        )
+      end
+    end
+  end
 end

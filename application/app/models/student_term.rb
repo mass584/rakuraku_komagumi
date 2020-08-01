@@ -1,6 +1,7 @@
 class StudentTerm < ApplicationRecord
   belongs_to :student
   belongs_to :term
+  has_many :student_requests, dependent: :destroy
 
   after_create :create_contract
 

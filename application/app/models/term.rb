@@ -46,13 +46,13 @@ class Term < ApplicationRecord
 
   def pieces_for_student(student_term_id)
     @pieces_for_student ||= pieces_per_timetable(
-      pieces.where(student_term_id: student_term_id),
+      pieces.includes(:contract).where('contracts.student_term_id': student_term_id),
     )
   end
 
   def pieces_for_teacher(teacher_term_id)
     @pieces_for_teacher ||= pieces_per_timetable(
-      pieces.where(teacher_term_id: teacher_term_id),
+      pieces.includes(:seat).where('seats.teacher_term_id': teacher_term_id),
     )
   end
 
@@ -158,9 +158,9 @@ class Term < ApplicationRecord
   end
 
   def pieces_per_timetable(items)
-    items.where.not(timetable_id: nil).group_by_recursive(
-      proc { |item| item.timetable.date },
-      proc { |item| item.timetable.period },
+    items.where.not(seat_id: nil).group_by_recursive(
+      proc { |item| item.seat.timetable.date },
+      proc { |item| item.seat.timetable.period },
     )
   end
 end

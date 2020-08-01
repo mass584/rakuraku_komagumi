@@ -8,6 +8,7 @@
         tr
           th.mw-60.align-middle
           th.mw-100.align-middle 氏名
+          th.align-middle マルの数
           th.align-middle マルバツ表の参照
           th.align-middle マルバツ表入力済
           th.align-middle 予定表の参照
@@ -18,6 +19,7 @@
           tr
             th.mw-60.align-middle = "#{s.student.grade_at(@term.year)}"
             th.mw-100.align-middle = s.student.name
+            th.align-middle = s.student_requests.count
             th.align-middle
               = button_to '開く', student_term_path(@student_terms[s.student.id]), { method: :get, class: 'btn btn-secondary' }
             td.align-middle
@@ -25,9 +27,9 @@
                 = check_box_tag :is_decided, true, @student_terms[s.student.id].is_decided, id: "checkbox_#{@student_terms[s.student.id].id}", class: 'custom-control-input'
                 = label_tag :is_decided, '', class: 'custom-control-label'
             th.align-middle
-              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+              = button_to '開く', "/student_term/#{s.id}/schedule", { method: :get, class: 'btn btn-secondary' }
             th.align-middle
-              = button_to '開く', piece_index_path, { method: :get, class: 'btn btn-secondary' }
+              = button_to '開く', "/student_term/#{s.id}/schedule.pdf", { method: :get, class: 'btn btn-secondary' }
             th.align-middle
               = button_to 'メール送信', student_term_path(@student_terms[s.student.id]), { method: :get, class: 'btn btn-danger' }
 == javascript_pack_tag 'student_term/index.js'
