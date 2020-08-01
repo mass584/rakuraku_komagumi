@@ -70,7 +70,6 @@ module PieceHelper
       include_blank: '生徒を選択',
       id: 'select_student_term_id',
       class: 'form-control',
-      onchange: 'cb_select_student_term_id(event);',
     )
   end
 
@@ -83,7 +82,6 @@ module PieceHelper
       include_blank: '科目を選択',
       id: 'select_subject_term_id',
       class: 'form-control',
-      onchange: 'cb_select_subject_term_id(event);',
     )
   end
 end

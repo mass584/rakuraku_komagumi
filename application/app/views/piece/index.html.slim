@@ -19,7 +19,7 @@
                 td.align-middle = div_seat(@seats[date][period][seat])
   .pool
     .pool-head
-      #open-button.open-button[onclick='cb_open_button(event);'] = '●'
+      #open-button.open-button = '●'
     .pool-body.pool-body__closed
       p 新しいコマを配置する
       = select_student_term_id(@term)

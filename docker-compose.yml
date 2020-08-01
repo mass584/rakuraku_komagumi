@@ -38,7 +38,7 @@ services:
     ports:
       - "3035:3035"
     working_dir: /root/developer
-    command: /bin/bash --login -c "bin/webpack-dev-server"
+    command: /bin/bash --login -c "bin/webpack && bin/webpack-dev-server"
     volumes:
       - ./application:/root/developer
       - bundle:/root/developer/vendor/bundle

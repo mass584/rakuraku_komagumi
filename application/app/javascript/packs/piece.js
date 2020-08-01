@@ -8,6 +8,10 @@ $.ajaxSetup({
   { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
+$(() => $('[id=open-button]').on('click', (event) => cb_open_button(event)));
+$(() => $('[id=select_student_term_id]').on('click', (event) => cb_select_student_term_id(event)));
+$(() => $('[id=select_subject_term_id]').on('click', (event) => cb_select_subject_term_id(event)));
+
 $(document).ready(() => {
   $('[id^=piece_]').draggable({
     start: cbDragStart,
@@ -110,11 +114,11 @@ const cbDrop = (event, ui) => {
   });
 }
 
-export const cb_open_button = (_event) => {
+const cb_open_button = (_event) => {
   $(".pool-body").toggleClass("pool-body__closed");
 };
 
-export const cb_select_student_term_id = (event) => {
+const cb_select_student_term_id = (event) => {
   const studentTermId = event.target.value;
   const select = $("#select_subject_term_id");
   select.val('');
@@ -125,7 +129,7 @@ export const cb_select_student_term_id = (event) => {
   });
 };
 
-export const cb_select_subject_term_id = (event) => {
+const cb_select_subject_term_id = (event) => {
   const subjectTermId = event.target.value;
   const selectStudentTermId = $("#select_student_term_id");
   const studentTermId = selectStudentTermId.val();
