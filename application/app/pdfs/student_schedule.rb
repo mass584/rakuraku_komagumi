@@ -13,7 +13,7 @@ class StudentSchedule < Prawn::Document
     move_down 10
     pdf_table(term, student_term)
     move_down 5
-    text "出力日時:#{Time.zone.now.strftime('%Y年%m月%d日')}", align: :right, size: 9
+    text "#{Time.zone.now.strftime('%Y/%m/%d %H:%M')}", align: :right, size: 9
   end
 
   private
@@ -24,7 +24,7 @@ class StudentSchedule < Prawn::Document
     body_col_width = (max_width - header_col_width) / term.max_period
     font_size(8) do
       table table_cells(term, student_term),
-            cell_style: { width: body_col_width, padding: 3 } do
+            cell_style: { width: body_col_width, padding: 3, leading: 2 } do
         cells.borders = [:top, :bottom, :right, :left]
         cells.border_width = 1.0
         columns(0).width = header_col_width

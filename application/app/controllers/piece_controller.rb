@@ -1,7 +1,4 @@
 class PieceController < ApplicationController
-  require './app/pdfs/overlook_schedule'
-  require './app/pdfs/student_schedule'
-  require './app/pdfs/teacher_schedule'
   before_action :authenticate_room!
   before_action :term_selected?
 
@@ -10,15 +7,14 @@ class PieceController < ApplicationController
     @week = @term.week(params[:week].to_i)
     respond_to do |format|
       format.html do
-        case params[:show_type]
-        when 'per_teacher'
-          render 'piece/index_per_teacher'
-        when 'per_student'
-          render 'piece/index_per_student'
-        else
-          use_gon
-          render 'piece/index'
-        end
+        use_gon
+      end
+      format.pdf do
+        pdf = OverlookSchedule.new(@term).render
+        send_data pdf,
+                  filename: "#{@term.name}予定表.pdf",
+                  type: 'application/pdf',
+                  disposition: 'inline'
       end
     end
   end
