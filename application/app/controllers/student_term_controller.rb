@@ -19,11 +19,13 @@ class StudentTermController < ApplicationController
     @timetables = Timetable.get_timetables(@term)
     @student_requests = StudentRequest.get_student_requests(@student_term, @term)
     @week = @term.week(params[:week].to_i)
-    @pieces = Piece.pieces_for_student(@term, @student_term)
+    @pieces = Piece.get_pieces_for_student(@term, @student_term)
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = StudentSchedule.new(@term, @student_term, @pieces).render
+        pdf = StudentSchedule.new(
+          @term, @student_term, @pieces, @student_requests
+        ).render
         send_data pdf,
                   filename: "#{@term.name}予定表#{@student_term.student.name}.pdf",
                   type: 'application/pdf',

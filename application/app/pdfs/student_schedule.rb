@@ -1,7 +1,7 @@
 class StudentSchedule < Prawn::Document
   include Common
 
-  def initialize(term, student_term, pieces)
+  def initialize(term, student_term, pieces, student_requests)
     super(
       page_size: 'A4', # 595.28 x 841.89
       page_layout: rotate?(term) ? :landscape : :portrait,
@@ -11,19 +11,19 @@ class StudentSchedule < Prawn::Document
     font Rails.root.join('vendor', 'assets', 'fonts', 'ipaexm.ttf')
     text "#{term.name}予定表 #{student_term.student.name}", align: :center, size: 16
     move_down 10
-    pdf_table(term, student_term, pieces)
+    pdf_table(term, pieces, student_requests)
     move_down 5
-    text "#{Time.zone.now.strftime('%Y/%m/%d %H:%M')}", align: :right, size: 9
+    text Time.zone.now.strftime('%Y/%m/%d %H:%M').to_s, align: :right, size: 9
   end
 
   private
 
-  def pdf_table(term, student_term, pieces)
+  def pdf_table(term, pieces, student_requests)
     max_width = rotate?(term) ? 801 : 555
     header_col_width = 50
     body_col_width = (max_width - header_col_width) / term.max_period
     font_size(8) do
-      table table_cells(term, student_term, pieces),
+      table table_cells(term, pieces, student_requests),
             cell_style: { width: body_col_width, padding: 3, leading: 2 } do
         cells.borders = [:top, :bottom, :right, :left]
         cells.border_width = 1.0
@@ -36,7 +36,7 @@ class StudentSchedule < Prawn::Document
     end
   end
 
-  def table_cells(term, student_term, pieces)
+  def table_cells(term, pieces, student_requests)
     term.date_array.reduce([header(term)]) do |a_date, date|
       a_date.concat(
         [
@@ -44,11 +44,7 @@ class StudentSchedule < Prawn::Document
             content = pieces.dig(date, period).to_a.map do |piece|
               print_piece_for_student(piece)
             end.join("\n")
-            is_opened = term.student_requests.joins(:timetable).exists?(
-              student_term_id: student_term.id,
-              'timetables.date': date,
-              'timetables.period': period,
-            )
+            is_opened = student_requests[date][period]
             background_color = is_opened ? COLOR_ENABLE : COLOR_DISABLE
             a_period.concat([{
               content: content,

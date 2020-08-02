@@ -13,33 +13,59 @@ class Piece < ApplicationRecord
            on: :update,
            if: :will_save_change_to_seat_id?
 
-  def self.pieces_for_student(term, student_term)
+  def self.get_pieces_for_student(term, student_term)
     pieces_per_timetable(
-      term.pieces.includes(:contract).where(
+      term.pieces.includes(
+        contract: [],
+        seat: [:timetable],
+      ).where(
         'contracts.student_term_id': student_term.id,
       ),
     )
   end
 
-  def self.pieces_for_teacher(term, teacher_term)
+  def self.get_pieces_for_teacher(term, teacher_term)
     pieces_per_timetable(
-      term.pieces.includes(:seat).where(
+      term.pieces.includes(
+        contract: [
+          student_term: [:student],
+          subject_term: [:subject]
+        ],
+        seat: [:timetable],
+      ).where(
         'seats.teacher_term_id': teacher_term.id,
       ),
     )
   end
 
-  def self.pieces(term)
-    pieces_per_timetable(
+  def self.get_pieces(term)
+    pieces_per_seat(
       term.pieces.includes(
-        timetable: [],
-        contracts: [
+        contract: [
           student_term: [:student],
           subject_term: [:subject]
         ],
-      ).where.not(seat_id: nil),
+        seat: [:timetable],
+      ),
     )
   end
+
+  def self.pieces_per_timetable(pieces)
+    pieces.where.not(seat_id: nil).group_by_recursive(
+      proc { |item| item.seat.timetable.date },
+      proc { |item| item.seat.timetable.period },
+    )
+  end
+
+  def self.pieces_per_seat(pieces)
+    pieces.where.not(seat_id: nil).group_by_recursive(
+      proc { |item| item.seat.timetable.date },
+      proc { |item| item.seat.timetable.period },
+      proc { |item| item.seat.number },
+    )
+  end
+
+  private_class_method :pieces_per_timetable
 
   private
 
@@ -66,12 +92,5 @@ class Piece < ApplicationRecord
        ).where.not(seat_id: seat_id_in_database).count >= 1
       errors[:base] << '生徒のダブルブッキングがあります'
     end
-  end
-
-  def pieces_per_timetable(pieces)
-    pieces.where.not(seat_id: nil).group_by_recursive(
-      proc { |item| item.seat.timetable.date },
-      proc { |item| item.seat.timetable.period },
-    )
   end
 end
