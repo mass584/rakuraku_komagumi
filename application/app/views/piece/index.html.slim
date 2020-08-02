@@ -1,28 +1,4 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'piece' }
-.container.piece-index
-  = div_week_selector({ controller: :piece, action: :index }, @term, @week)
-  .container.overflow-auto
-    - @term.date_array(@week).each do |date|
-      table.table.table-bordered.table-condensed
-        caption = print_date(date)
-        thead
-          tr
-            th.align-middle 座席
-            - @term.period_array.each do |period|
-              th.align-middle = print_period(period)
-        tbody
-          - @term.seat_array.each do |seat|
-            tr
-              th.align-middle = print_seat(seat)
-              - @term.period_array.each do |period|
-                td.align-middle = div_seat(@seats[date][period][seat])
-  .pool
-    .pool-head
-      #open-button.open-button = '●'
-    .pool-body.pool-body__closed
-      p 新しいコマを配置する
-      = select_student_term_id(@term)
-      = select_subject_term_id(@term)
-      #holding.holding
+#app
 == javascript_pack_tag 'piece.js'
