@@ -6,14 +6,16 @@ class PieceController < ApplicationController
     @week = @term.week(params[:week].to_i)
     respond_to do |format|
       format.json do
-        render json: @term.all_pieces.to_json, status: :ok
+        @records = @term.pieces
+        render 'index', formats: :json, handlers: 'jbuilder'
       end
       format.html do
       end
       format.pdf do
         seats = Seat.get_seats(@term)
         pieces = Piece.get_pieces(@term)
-        pdf = OverlookSchedule.new(@term, seats, pieces).render
+        begin_end_times = BeginEndTime.get_begin_end_times(@term)
+        pdf = OverlookSchedule.new(@term, seats, pieces, begin_end_times).render
         send_data pdf,
                   filename: "#{@term.name}予定表.pdf",
                   type: 'application/pdf',
