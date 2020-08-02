@@ -44,40 +44,6 @@ class Term < ApplicationRecord
     (1..max_frame)
   end
 
-  def pieces_for_student(student_term_id)
-    @pieces_for_student ||= pieces_per_timetable(
-      pieces.includes(:contract).where('contracts.student_term_id': student_term_id),
-    )
-  end
-
-  def pieces_for_teacher(teacher_term_id)
-    @pieces_for_teacher ||= pieces_per_timetable(
-      pieces.includes(:seat).where('seats.teacher_term_id': teacher_term_id),
-    )
-  end
-
-  def all_pieces
-    @all_pieces ||= pieces_per_timetable(pieces)
-  end
-
-  def pendings
-    pieces.includes(:contract).where(seat_id: nil).map do |item|
-      {
-        id: item.id,
-        contract_id: item.contract_id,
-        student_term_id: item.contract.student_term_id,
-        student_name: item.contract.student_term.student.name,
-        subject_term_id: item.contract.subject_term_id,
-        subject_name: item.contract.subject_term.subject.name,
-        teacher_term_id: item.contract.teacher_term_id,
-        teacher_name: item.contract.teacher_term&.teacher&.name,
-      }
-    end.group_by_recursive(
-      proc { |item| item[:student_term_id] },
-      proc { |item| item[:subject_term_id] },
-    )
-  end
-
   def ordered_students
     student_terms.joins(:student).order(birth_year: 'ASC')
   end
@@ -155,12 +121,5 @@ class Term < ApplicationRecord
     BeginEndTime.bulk_create(self)
     Timetable.bulk_create(self)
     Seat.bulk_create(self)
-  end
-
-  def pieces_per_timetable(items)
-    items.where.not(seat_id: nil).group_by_recursive(
-      proc { |item| item.seat.timetable.date },
-      proc { |item| item.seat.timetable.period },
-    )
   end
 end
