@@ -7,11 +7,19 @@ class TermController < ApplicationController
   end
 
   def show
-    session[:term_id] = params[:id]
-    @term = Term.find(params[:id])
-    @subject_term = SubjectTerm.new
-    @student_term = StudentTerm.new
-    @teacher_term = TeacherTerm.new
+    respond_to do |format|
+      format.html do
+        session[:term_id] = params[:id]
+        @term = Term.find(params[:id])
+        @subject_term = SubjectTerm.new
+        @student_term = StudentTerm.new
+        @teacher_term = TeacherTerm.new
+      end
+      format.json do
+        term = Term.find(params[:id])
+        render json: term.to_json, status: :ok
+      end
+    end
   end
 
   def create
