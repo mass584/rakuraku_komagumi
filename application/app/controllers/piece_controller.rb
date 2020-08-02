@@ -3,14 +3,17 @@ class PieceController < ApplicationController
   before_action :term_selected?
 
   def index
-    @seats = Seat.get_seats(@term)
     @week = @term.week(params[:week].to_i)
     respond_to do |format|
+      format.json do
+        render json: @term.all_pieces.to_json, status: :ok
+      end
       format.html do
-        use_gon
       end
       format.pdf do
-        pdf = OverlookSchedule.new(@term).render
+        seats = Seat.get_seats(@term)
+        pieces = Piece.get_pieces(@term)
+        pdf = OverlookSchedule.new(@term, seats, pieces).render
         send_data pdf,
                   filename: "#{@term.name}予定表.pdf",
                   type: 'application/pdf',
@@ -45,28 +48,5 @@ class PieceController < ApplicationController
 
   def bulk_update_params
     params.require(:piece).permit(:is_fixed)
-  end
-
-  def use_gon
-    gon.teacher_terms = @term.teacher_terms.joins(:teacher).map do |teacher_term|
-      {
-        id: teacher_term.id,
-        name: teacher_term.teacher.name,
-      }
-    end
-    gon.student_terms = @term.student_terms.joins(:student).map do |student_term|
-      {
-        id: student_term.id,
-        name: student_term.student.name,
-        grade: student_term.student.grade_at(@term.year),
-      }
-    end
-    gon.subject_terms = @term.subject_terms.joins(:subject).map do |subject_term|
-      {
-        id: subject_term.id,
-        name: subject_term.subject.name,
-      }
-    end
-    gon.pendings = @term.pendings
   end
 end
