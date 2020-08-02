@@ -14,9 +14,8 @@ class Seat < ApplicationRecord
 
   def self.get_seats(term)
     includes(
-      timetable: [:student_requests, :teacher_requests],
-      term: [],
-      pieces: [],
+      timetable: [],
+      teacher_term: [:teacher],
     ).where(term_id: term.id).reduce({}) do |accu, item|
       accu.deep_merge({
         item.timetable.date => {
