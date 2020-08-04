@@ -12,7 +12,7 @@ class SeatController < ApplicationController
 
   def update
     record = Seat.find(params[:id])
-    if record.update!(update_params)
+    if record.update(update_params)
       render json: record.to_json, status: :ok
     else
       render json: { message: record.errors.full_messages }, status: :bad_request

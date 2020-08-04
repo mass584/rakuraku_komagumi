@@ -13,6 +13,8 @@ class Piece < ApplicationRecord
            on: :update,
            if: :will_save_change_to_seat_id?
 
+  before_update :update_seat, if: :will_save_change_to_seat_id?
+
   def self.get_pieces_for_student(term, student_term)
     pieces_per_timetable(
       term.pieces.includes(
@@ -56,6 +58,7 @@ class Piece < ApplicationRecord
       proc { |item| item.seat.timetable.period },
     )
   end
+  private_class_method :pieces_per_timetable
 
   def self.pieces_per_seat(pieces)
     pieces.where.not(seat_id: nil).group_by_recursive(
@@ -65,9 +68,12 @@ class Piece < ApplicationRecord
     )
   end
 
-  private_class_method :pieces_per_timetable
-
   private
+
+  def update_seat
+    seat = Seat.find_by(id: seat_id)
+    seat.update(teacher_term_id: contract.teacher_term_id)
+  end
 
   def verify_seat_occupation
     if seat_id.present? &&
