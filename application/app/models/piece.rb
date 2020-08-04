@@ -13,7 +13,7 @@ class Piece < ApplicationRecord
            on: :update,
            if: :will_save_change_to_seat_id?
 
-  before_update :update_seat, if: :will_save_change_to_seat_id?
+  before_validation :update_seat, if: :will_save_change_to_seat_id?
 
   def self.get_pieces_for_student(term, student_term)
     pieces_per_timetable(
@@ -72,7 +72,7 @@ class Piece < ApplicationRecord
 
   def update_seat
     seat = Seat.find_by(id: seat_id)
-    seat.update(teacher_term_id: contract.teacher_term_id)
+    seat.update!(teacher_term_id: contract.teacher_term_id)
   end
 
   def verify_seat_occupation
