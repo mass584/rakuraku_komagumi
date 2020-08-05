@@ -72,7 +72,9 @@ class Piece < ApplicationRecord
 
   def update_seat
     seat = Seat.find_by(id: seat_id)
-    seat.update!(teacher_term_id: contract.teacher_term_id)
+    if !seat.update(teacher_term_id: contract.teacher_term_id)
+      errors[:base] << seat.errors[:base]
+    end
   end
 
   def verify_seat_occupation
