@@ -25,6 +25,9 @@
             >
               <div class="frame-teacher">
                 {{ getSeat(date, period, seat).teacher_name }}
+                <button class="btn btn-warn btn-sm" v-on:click="onClickResetSeat(getSeat(date, period, seat))">
+                  確定
+                </button>
               </div>
               <div
                 v-for="frame in frameArray"
@@ -50,6 +53,15 @@
       </tbody>
     </table>
   </div>
+  <div class="pool">
+    <div class="pool-head" v-on:click="togglePool()">
+      ●
+    </div>
+    <div v-bind:class="poolClass()">
+      <div class="holding">
+      </div>
+    </div>
+  </div>
 </div>
 </template>
 
@@ -64,6 +76,7 @@ export default Vue.extend({
     term: {},
     seats: [],
     pieces: [],
+    isOpen: false,
   }),
   computed: {
     dateArray(vm) {
@@ -97,6 +110,14 @@ export default Vue.extend({
       );
       return response.status === 200;
     },
+    updateSeat: async function(seat, teacher_term_id) {
+      const response = await axios.put(
+        `seat/${seat.id}`, { teacher_term_id: teacher_term_id }
+      ).catch(
+        (error) => error.response,
+      );
+      return response.status === 200;
+    },
     getSeat: function(date, period, number) {
       return this.seats.find(item => {
         return item.date === date && item.period === period && item.number === number;
@@ -112,14 +133,14 @@ export default Vue.extend({
         return item.date === date && item.period === period && item.number === number;
       })[frame - 1];
     },
-    getPieces: function(date, period, number) {
-      return this.pieces.filter(item => {
-        return item.date === date && item.period === period && item.number === number;
-      });
-    },
     getPieceById: function(id) {
       return this.pieces.find(item => {
         return item.id === id;
+      });
+    },
+    getPieces: function(date, period, number) {
+      return this.pieces.filter(item => {
+        return item.date === date && item.period === period && item.number === number;
       });
     },
     dragstart: function(event, date, period, seatNumber, frame) {
@@ -157,6 +178,13 @@ export default Vue.extend({
         seat.teacher_name = piece.teacher_name
       }
     },
+    onClickResetSeat: async function(seat) {
+      const res = await this.updateSeat(seat, null);
+      if (res) {
+        seat.teacher_term_id = null;
+        seat.teacher_name = null;
+      }
+    },
     studentVacant: function(seat, piece) {
       return !this.pieces.find(item => {
         return item.student_term_id === piece.student_term_id &&
@@ -176,9 +204,15 @@ export default Vue.extend({
       return seat.teacher_term_id === null ||
         seat.teacher_term_id === piece.teacher_term_id;
     },
+    togglePool: function() {
+      this.isOpen = !this.isOpen;
+    },
     seatClass: function(date, period, seatNumber) {
       const seat = this.getSeat(date, period, seatNumber);
       return seat.droppable ? "seat seat__droppable" : "seat";
+    },
+    poolClass: function() {
+      return this.isOpen ? "pool-body" : "pool-body pool-body__closed";
     }
   },
   created() {
@@ -222,6 +256,44 @@ export default Vue.extend({
     display: inline-block;
     height: 100%;
     width: 100%;
+  }
+
+  .pool {
+    bottom: 0;
+    filter: drop-shadow(2px -1px 2px #888);
+    position: fixed;
+    right: 100px;
+    width: 300px;
+
+    .pool-head {
+      background-color: lemonchiffon;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      cursor: pointer;
+      transform: translateY(1px);
+      text-align: center;
+      width: 40px;
+    }
+
+    .pool-body {
+      background-color: lemonchiffon;
+      border: 1px solid #ddd;
+      max-height: 500px;
+      transition: all 0.5s linear;
+
+      &.pool-body__closed {
+        max-height: 0;
+      }
+
+      .holding {
+        background-color: white;
+        border: 1px solid #ddd;
+        margin: 30px auto 10px;
+        height: 30px;
+        width: 150px;
+      }
+    }
   }
 }
 
