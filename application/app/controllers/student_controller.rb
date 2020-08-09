@@ -8,7 +8,7 @@ class StudentController < ApplicationController
         @student = Student.new
       end
       format.json do
-        render json: current_room.exist_stuents.to_json
+        render json: current_room.exist_students.to_json
       end
     end
   end

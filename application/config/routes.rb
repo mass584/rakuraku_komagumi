@@ -14,7 +14,7 @@ Rails.application.routes.draw do
   resources :student_term, only: [:index, :show, :create, :update]
   get 'student_term/:id/schedule', to: 'student_term#schedule'
   resources :subject, only: [:index, :create, :update, :destroy]
-  resources :subject_term, only: [:create]
+  resources :subject_term, only: [:index, :create]
   resources :teacher, only: [:index, :create, :update, :destroy]
   resources :teacher_term, only: [:index, :show, :create, :update]
   get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
