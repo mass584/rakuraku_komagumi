@@ -2,6 +2,9 @@
   "name": "rakuraku_komagumi",
   "private": true,
   "dependencies": {
+    "@fullcalendar/daygrid": "^5.2.0",
+    "@fullcalendar/interaction": "^5.2.0",
+    "@fullcalendar/vue": "^5.2.0",
     "@rails/webpacker": "5.1.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
