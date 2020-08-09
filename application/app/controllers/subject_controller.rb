@@ -2,8 +2,15 @@ class SubjectController < ApplicationController
   before_action :authenticate_room!
 
   def index
-    @subjects = current_room.exist_subjects
-    @subject = Subject.new
+    respond_to do |format|
+      format.html do
+        @subjects = current_room.exist_subjects
+        @subject = Subject.new
+      end
+      format.json do
+        render json: current_room.exist_subjects.to_json
+      end
+    end
   end
 
   def create

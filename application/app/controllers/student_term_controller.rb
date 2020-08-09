@@ -3,8 +3,15 @@ class StudentTermController < ApplicationController
   before_action :term_selected?
 
   def index
-    @student_terms = StudentTerm.get_student_terms(@term)
-    @page = params[:page].to_i || 1
+    respond_to do |format|
+      format.html do
+        @student_terms = StudentTerm.get_student_terms(@term)
+        @page = params[:page].to_i || 1
+      end
+      format.json do
+        render json: StudentTerm.where(term_id: @term.id).to_json, status: :ok
+      end
+    end
   end
 
   def show

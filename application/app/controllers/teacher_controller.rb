@@ -2,8 +2,15 @@ class TeacherController < ApplicationController
   before_action :authenticate_room!
 
   def index
-    @teachers = current_room.exist_teachers
-    @teacher = Teacher.new
+    respond_to do |format|
+      format.html do
+        @teachers = current_room.exist_teachers
+        @teacher = Teacher.new
+      end
+      format.json do
+        render json: current_room.exist_teachers.to_json
+      end
+    end
   end
 
   def create

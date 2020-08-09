@@ -2,8 +2,15 @@ class StudentController < ApplicationController
   before_action :authenticate_room!
 
   def index
-    @students = current_room.exist_students
-    @student = Student.new
+    respond_to do |format|
+      format.html do
+        @students = current_room.exist_students
+        @student = Student.new
+      end
+      format.json do
+        render json: current_room.exist_stuents.to_json
+      end
+    end
   end
 
   def create

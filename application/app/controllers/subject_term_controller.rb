@@ -2,6 +2,14 @@ class SubjectTermController < ApplicationController
   before_action :authenticate_room!
   before_action :term_selected?
 
+  def index
+    respond_to do |format|
+      format.json do
+        render json: SubjectTerm.where(term_id: @term.id).to_json, status: :ok
+      end
+    end
+  end
+
   def create
     @subject_term = SubjectTerm.new(create_params)
     respond_to do |format|
