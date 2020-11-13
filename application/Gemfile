@@ -3,14 +3,14 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.3'
 
-gem 'rails', '6.0.3'
+gem 'rails', '6.0.3.4'
 
 gem 'bcrypt', '~> 3.1.7'
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'jbuilder'
 gem 'rails-i18n'
 gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 3.12'
+gem 'puma', '~> 5.0'
 gem 'turbolinks', '~> 5'
 gem 'webpacker'
 
@@ -26,8 +26,8 @@ gem 'aws-sdk'
 gem 'aws-sdk-rails'
 
 # Frontend
-gem 'bootstrap', '~> 4.3.1'
-gem 'sass-rails', '~> 5.0'
+gem 'bootstrap', '~> 4.5.3'
+gem 'sass-rails', '~> 6.0'
 gem 'slim-rails'
 
 ## PDF
