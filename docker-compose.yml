@@ -46,18 +46,3 @@ services:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
     depends_on:
       - application
-  optimization:
-    build:
-      context: ./optimization
-      dockerfile: ./Dockerfile
-    working_dir: /root/optimization
-    tty: true
-    volumes:
-      - ./optimization:/root/developer
-    environment:
-      - DATABASE_HOST=db
-      - DATABASE_USERNAME=developer
-      - DATABASE_PASSWORD=password
-      - DATABASE_NAME=development
-    depends_on:
-      - db
