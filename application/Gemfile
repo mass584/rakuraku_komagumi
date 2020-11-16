@@ -27,8 +27,6 @@ gem 'aws-sdk-rails'
 
 # Frontend
 gem 'bootstrap', '~> 4.5.3'
-gem 'erb2slim'
-gem 'html2slim'
 gem 'sass-rails', '~> 6.0'
 gem 'slim-rails'
 
