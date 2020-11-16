@@ -32,11 +32,11 @@ module RakurakuKomagumi
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address: Rails.application.credentials[:smtp][:address],
-      port: Rails.application.credentials[:smtp][:port],
-      user_name: Rails.application.credentials[:smtp][:username],
-      password: Rails.application.credentials[:smtp][:password],
-      authentication: :plain,
-      enable_starttls_auto: true,
+      port: 587,
+      domain: Rails.application.credentials[:smtp][:domain],
+      authentication: :login,
+      user_name: Rails.application.credentials[:smtp][:access_key_id],
+      password: Rails.application.credentials[:smtp][:secret_access_key],
     }
 
     # Set timezone to Japan/Tokyo
