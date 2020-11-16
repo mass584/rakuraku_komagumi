@@ -11,7 +11,7 @@ ja:
         name: アカウント名
         email: メールアドレス
         password: パスワード
-        password_confirmation: パスワード(確認)
+        password_confirmation: パスワード（確認）
         remember_me: ログイン情報を保存
       student:
         name: 氏名
