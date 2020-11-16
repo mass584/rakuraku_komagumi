@@ -30,14 +30,14 @@ module RakurakuKomagumi
       port: 8000,
     }
     config.action_mailer.delivery_method = :smtp
-    #config.action_mailer.smtp_settings = {
-    #  address: Rails.application.credentials[:smtp][:address],
-    #  port: Rails.application.credentials[:smtp][:port],
-    #  user_name: Rails.application.credentials[:smtp][:username],
-    #  password: Rails.application.credentials[:smtp][:password],
-    #  authentication: :plain,
-    #  enable_starttls_auto: true,
-    #}
+    config.action_mailer.smtp_settings = {
+      address: Rails.application.credentials[:smtp][:address],
+      port: Rails.application.credentials[:smtp][:port],
+      user_name: Rails.application.credentials[:smtp][:username],
+      password: Rails.application.credentials[:smtp][:password],
+      authentication: :plain,
+      enable_starttls_auto: true,
+    }
 
     # Set timezone to Japan/Tokyo
     config.time_zone = 'Tokyo'
