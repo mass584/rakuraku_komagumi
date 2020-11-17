@@ -26,14 +26,12 @@ module RakurakuKomagumi
 
     # ActionMailer
     config.action_mailer.default_url_options = {
-      host: 'localhost',
-      port: 8000,
+      host: Rails.application.credentials[:action_mailer][:host],
     }
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
       address: Rails.application.credentials[:smtp][:address],
       port: 587,
-      domain: Rails.application.credentials[:smtp][:domain],
       authentication: :login,
       user_name: Rails.application.credentials[:smtp][:access_key_id],
       password: Rails.application.credentials[:smtp][:secret_access_key],

@@ -2,8 +2,8 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
   = link_to 'らくらくコマ組み',
     {controller: :term, action: :index},
     {method: :get, class: 'navbar-brand'}
-  .collapse.navbar-collapse#navbarSupportedContent
-    ul.navbar-nav
+  .collapse.navbar-collapse
+    ul.navbar-nav.mr-auto
       li class="#{active == 'term' ? 'nav-item active' : 'nav-item'}"
         = link_to 'スケジュール一覧',
           {controller: :term, action: :index},
@@ -20,7 +20,8 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
         = link_to '科目一覧',
           {controller: :subject, action: :index},
           {method: :get, class: 'nav-link'}
+    ul.navbar-nav
       li.nav-item
-        = link_to 'ログアウト',
+        = button_to 'ログアウト',
           destroy_room_session_path,
-          {method: :delete, class: 'nav-link'}
+          {method: :delete, class: 'btn btn-outline-light'}
