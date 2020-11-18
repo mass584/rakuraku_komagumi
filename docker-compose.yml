@@ -38,7 +38,7 @@ services:
     ports:
       - "3035:3035"
     working_dir: /root/rakuraku_komagumi
-    command: /bin/bash --login -c "bin/yarn && bin/webpack-dev-server"
+    command: /bin/bash --login -c "bin/yarn && bin/webpack-dev-server --hot --inline"
     volumes:
       - ./application:/root/rakuraku_komagumi
       - bundle:/root/rakuraku_komagumi/vendor/bundle
