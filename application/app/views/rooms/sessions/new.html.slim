@@ -20,4 +20,7 @@
           = f.label :remember_me
     .text-center.mb-2
       = f.submit "ログイン", class: "btn btn-primary"
+    - if flash[:alert].present?
+      #error_explanation.alert.alert-danger
+        = content_tag :div, flash[:alert]
   = render "rooms/shared/links"

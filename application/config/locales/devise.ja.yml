@@ -10,20 +10,13 @@ ja:
 
   devise:
     failure:
-      unauthenticated: 'ログインしてください。'
-#      unauthenticated: 'You need to sign in or sign up before continuing.'
-      unconfirmed: '本登録を行ってください。'
-#      unconfirmed: 'You have to confirm your account before continuing.'
+      inactive: 'アカウントが有効化されていません。メールに記載された手順にしたがって、アカウントを有効化してください。'
+      invalid: '%{authentication_keys}、もしくはパスワードが誤っています。'
       locked: 'あなたのアカウントは凍結されています。'
-#      locked: 'Your account is locked.'
-      invalid: 'メールアドレスかパスワードが違います。'
-#      invalid: 'Invalid email or password.'
-      invalid_token: '認証キーが不正です。'
-#      invalid_token: 'Invalid authentication token.'
+      not_found_in_database: '%{authentication_keys}、もしくはパスワードが誤っています。'
       timeout: 'セッションがタイムアウトしました。もう一度ログインしてください。'
-#      timeout: 'Your session expired, please sign in again to continue.'
-      inactive: 'アカウントがアクティベートされていません。'
-#      inactive: 'Your account was not activated yet.'
+      unauthenticated: 'アカウント登録もしくはログインしてください。'
+      unconfirmed: 'メールアドレスの本人確認が必要です。'
     sessions:
       signed_in: 'ログインしました。'
 #      signed_in: 'Signed in successfully.'
