@@ -1,3 +1,23 @@
+@import "bootstrap";
+
+th, td {
+  &.mw-60 {
+    min-width: 60px;
+  }
+  &.mw-100 {
+    min-width: 100px;
+  }
+  &.mw-200 {
+    min-width: 200px;
+  }
+  &.bg-inactive {
+    background-color: #bbb;
+  }
+  &.bg-active {
+    background-color: #f0ad4e;
+  }
+}
+
 .navbar-term {
   height: 40px;
   background-color: #eee;
@@ -41,4 +61,9 @@
       background-color: #fff;
     }
   }
+}
+
+.max-width-500 {
+  max-width: 500px;
+  margin: auto;
 }
