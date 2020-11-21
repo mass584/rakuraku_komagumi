@@ -1,1 +1,2 @@
-import '../stylesheets/application.scss'
+import '../stylesheets/application.scss';
+import 'bootstrap';
