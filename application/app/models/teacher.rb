@@ -18,6 +18,12 @@ class Teacher < ApplicationRecord
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
   validate :verify_maximum, on: :create
 
+  scope :active, -> { where(is_deleted: false) }
+  scope :sorted, -> { order(name: 'ASC') }
+  scope :filter_by_page, lambda { |page, record_per_page|
+    !page ? self : slice((page - 1) * record_per_page, page * record_per_page - 1)
+  }
+
   private
 
   def verify_maximum

@@ -4,7 +4,7 @@ class TeacherController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @teachers = current_room.exist_teachers
+        @teachers = current_room.exist_teachers(params[:search], params[:page])
         @teacher = Teacher.new
       end
       format.json do

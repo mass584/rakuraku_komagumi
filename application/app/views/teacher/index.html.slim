@@ -1,23 +1,15 @@
 == render partial: 'navbar', locals: { active: 'teacher' }
-.container
-  .row.justify-content-md-center.pt-5.pb-2
-    .col-md-auto 
-      p.h3 講師一覧 
-  .row.justify-content-md-center.pt-2.pb-2
-    .col-md-auto 
-      table.table
-        thead
-          tr
-            th 氏名
-            - current_room.exist_subjects.each do |su|
-              th = su.name
-            th 編集
-            th 削除
-        tbody
-          - @teachers.each do |te|
-            == render partial: 'teacher/tr', locals: { teacher: te }
-  .row.justify-content-md-center.pt-2.pb-5
-    .col-md-auto
-      button.btn.btn-primary data-toggle="modal" data-target="#teacher_create" = '新規'
-      == render 'teacher/new'
-== javascript_pack_tag 'teacher.js'
+.container-fluid
+  .justify-content-center.border-top.border-bottom.border-dark.ml-5.mr-5.mt-3
+    p.h3.mt-2.mb-2.text-center 講師一覧 
+  .row.justify-content-between.ml-5.mr-5.mt-3
+    .row.ml-0
+      == render partial: 'teacher/new'
+      = form_tag(teacher_index_path, method: 'get')
+        .input-group.ml-2
+          = text_field_tag :search, nil, class: 'form-control'
+          .input-group-append
+            = submit_tag '検索', :name => nil, class: 'btn btn-secondary'
+    == render partial: 'pagenation', locals: { total_record_count: @teachers.count, path: teacher_index_path }
+  .justify-content-center.ml-5.mr-5.mt-3
+    == render partial: 'table', locals: { table_content: teacher_table_content(@teachers) }

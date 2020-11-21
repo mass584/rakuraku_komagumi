@@ -17,11 +17,11 @@ class Room < ApplicationRecord
   validates :name, presence: true
 
   def exist_students
-    students.where(is_deleted: false).order(birth_year: 'ASC', name: 'ASC')
+    students.active.sorted
   end
 
-  def exist_teachers
-    teachers.where(is_deleted: false).order(name: 'ASC')
+  def exist_teachers(search, page)
+    teachers.active.sorted.filter_by_page(page.to_i, 10)
   end
 
   def exist_subjects

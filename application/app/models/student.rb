@@ -19,6 +19,9 @@ class Student < ApplicationRecord
   validate :verify_maximum, on: :create
   enum gender: { male: 0, female: 1 }
 
+  scope :active, -> { where(is_deleted: false) }
+  scope :sorted, -> { order(birth_year: 'ASC', name: 'ASC') }
+
   def birth_year_for(year, grade)
     if grade == 'e1'
       year - 7

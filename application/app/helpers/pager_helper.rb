@@ -4,7 +4,7 @@ module PagerHelper
   end
 
   def max_page(total_record, record_per_page)
-    (1 + total_record / record_per_page).to_i
+    (1 + (total_record - 1) / record_per_page).to_i
   end
 
   def effective_page(total_record, record_per_page, current_page)
