@@ -5,6 +5,7 @@
     "@fullcalendar/daygrid": "^5.2.0",
     "@fullcalendar/interaction": "^5.2.0",
     "@fullcalendar/vue": "^5.2.0",
+    "@rails/ujs": "^6.0.3-4",
     "@rails/webpacker": "5.1.1",
     "axios": "^0.19.2",
     "bootstrap": "^4.5.0",
