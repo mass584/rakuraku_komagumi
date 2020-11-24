@@ -2,6 +2,6 @@
   | $('body').removeClass('modal-open');
   | $('.modal-backdrop').remove();
   | $("#student_destroy_#{@student.id}").modal('hide');
-  | $('#student_#{@student.id}').remove();
+  | $('#table_tr_#{@student.id}').remove();
 - elsif @status == 'fail'
   | $("#student_destroy_alert_#{@student.id}").html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

@@ -16,6 +16,10 @@ class Student < ApplicationRecord
   validates :zip,
             allow_blank: true,
             format: { with: /\A[0-9]{3}-[0-9]{4}\z/ }
+  validates :birth_year,
+            presence: true
+  validates :gender,
+            presence: true
   validate :verify_maximum, on: :create
   enum gender: { male: 0, female: 1 }
 
