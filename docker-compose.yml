@@ -1,6 +1,4 @@
 version: '2'
-volumes:
-  bundle:
 services:
   db:
     image: postgres:10.6
@@ -21,7 +19,7 @@ services:
     command: /bin/bash --login -c "./startup.sh"
     volumes:
       - ./application:/root/rakuraku_komagumi
-      - bundle:/root/rakuraku_komagumi/vendor/bundle
+      - ./application/vendor/bundle:/root/rakuraku_komagumi/vendor/bundle:delegated
     environment:
       - RAILS_ENV=development
       - BUNDLE_APP_CONFIG=/root/rakuraku_komagumi/.bundle
@@ -41,7 +39,7 @@ services:
     command: /bin/bash --login -c "bin/yarn && bin/webpack-dev-server --hot --inline"
     volumes:
       - ./application:/root/rakuraku_komagumi
-      - bundle:/root/rakuraku_komagumi/vendor/bundle
+      - ./application/vendor/bundle:/root/rakuraku_komagumi/vendor/bundle:delegated
     environment:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
     depends_on:
