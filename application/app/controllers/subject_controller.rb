@@ -4,7 +4,7 @@ class SubjectController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @subjects = current_room.exist_subjects
+        @subjects = current_room.subjects.active.sorted
         @subject = Subject.new
       end
       format.json do

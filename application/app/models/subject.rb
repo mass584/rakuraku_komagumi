@@ -5,6 +5,9 @@ class Subject < ApplicationRecord
 
   validate :verify_maximum, on: :create
 
+  scope :active, -> { where(is_deleted: false) }
+  scope :sorted, -> { order(order: 'ASC') }
+
   private
 
   def verify_maximum

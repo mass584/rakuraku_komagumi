@@ -17,7 +17,7 @@ class Teacher < ApplicationRecord
   scope :active, -> { where(is_deleted: false) }
   scope :sorted, -> { order(name: 'ASC') }
   scope :matched, ->(keyword) { where('name like ?', "%#{sanitize_sql_like(keyword || '')}%") }
-  scope :paginated, ->(page) { slice((page - 1) * 10, page * 10) }
+  scope :paginated, ->(page) { slice((page - 1) * 10, 10) }
   scope :searched, ->(keyword, page) { active.sorted.matched(keyword).paginated(page) }
 
   private

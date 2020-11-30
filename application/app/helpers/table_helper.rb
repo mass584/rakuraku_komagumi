@@ -27,7 +27,7 @@ module TableHelper
 
   def student_table_content(students)
     {
-      attributes: %w[氏名 メールアドレス 電話番号 編集 削除],
+      attributes: %w[氏名 学年 メールアドレス 電話番号 編集 削除],
       records: students.map do |student|
         student_table_record(student)
       end,

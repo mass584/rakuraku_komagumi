@@ -17,13 +17,13 @@ class Student < ApplicationRecord
   validates :gender,
             presence: true
   validate :verify_maximum, on: :create
-  enum gender: { unknown: 0, male: 1, female: 2 }
-  enum school_grade: { unknown: 0, e1: 1, e2: 2, e3: 3, e4: 4, e5: 5, e6: 6, j1: 11, j2: 12, j3: 13, h1: 21, h2: 22, h3: 23 }
+  enum gender: { male: 1, female: 2 }
+  enum school_grade: { e1: 1, e2: 2, e3: 3, e4: 4, e5: 5, e6: 6, j1: 11, j2: 12, j3: 13, h1: 21, h2: 22, h3: 23 }
 
   scope :active, -> { where(is_deleted: false) }
   scope :sorted, -> { order(school_grade: 'ASC', name: 'ASC') }
   scope :matched, ->(keyword) { where('name like ?', "%#{sanitize_sql_like(keyword || '')}%") }
-  scope :paginated, ->(page) { slice((page - 1) * 10, page * 10) }
+  scope :paginated, ->(page) { slice((page - 1) * 10, 10) }
   scope :searched, ->(keyword, page) { active.sorted.matched(keyword).paginated(page) }
 
   private
