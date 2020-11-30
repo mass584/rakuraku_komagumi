@@ -7,9 +7,9 @@
       == render partial: 'student/new'
       = form_tag(student_index_path, method: 'get')
         .input-group.ml-2
-          = text_field_tag :search, nil, class: 'form-control'
+          = text_field_tag :keyword, @keyword, class: 'form-control'
           .input-group-append
             = submit_tag '検索', :name => nil, class: 'btn btn-secondary'
-    == render partial: 'pagenation', locals: { total_record_count: @students.count, path: student_index_path }
+    == render partial: 'pagenation', locals: { total_record_count: @active_students.count, path: student_index_path, keyword: @keyword }
   .justify-content-center.ml-5.mr-5.mt-3
     == render partial: 'table', locals: { table_content: student_table_content(@students) }

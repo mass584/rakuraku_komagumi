@@ -4,11 +4,13 @@ class StudentController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @students = current_room.exist_students
-        @student = Student.new
+        page = params[:page] ? params[:page].to_i : 1
+        @keyword = params[:keyword]
+        @active_students = current_room.students.active.matched(@keyword)
+        @students = @active_students.sorted.paginated(page)
       end
       format.json do
-        render json: current_room.exist_students.to_json
+        render json: current_room.students.active.to_json
       end
     end
   end
@@ -54,8 +56,8 @@ class StudentController < ApplicationController
       :name,
       :name_kana,
       :gender,
-      :birth_year,
       :school_name,
+      :school_grade,
       :email,
       :tel,
       :zip,
@@ -68,8 +70,8 @@ class StudentController < ApplicationController
       :name,
       :name_kana,
       :gender,
-      :birth_year,
       :school_name,
+      :school_grade,
       :email,
       :tel,
       :zip,

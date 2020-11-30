@@ -16,9 +16,9 @@ ja:
       student:
         name: 氏名
         name_kana: 氏名(かな)
-        birth_year: 学年
         gender: 性別
         school_name: 学校名
+        school_grade: 学年
         email: メールアドレス
         tel: 電話番号
         zip: 郵便番号

@@ -1,9 +1,9 @@
 nav
   ul.pagination
     li.page-item
-      = link_to '«', "#{path}?page=#{min_page}", { class: 'page-link' }
+      = link_to '«', "#{path}?page=#{min_page}&keyword=#{@keyword}", { class: 'page-link' }
     - 1.step(max_page(total_record_count, 10)) do |n|
       li.page-item
-        = link_to n, "#{path}?page=#{n}", { class: 'page-link' }
+        = link_to n, "#{path}?page=#{n}&keyword=#{@keyword}", { class: 'page-link' }
     li.page-item
-      = link_to '»', "#{path}?page=#{max_page(total_record_count, 10)}", { class: 'page-link' }
+      = link_to '»', "#{path}?page=#{max_page(total_record_count, 10)}&keyword=#{@keyword}", { class: 'page-link' }

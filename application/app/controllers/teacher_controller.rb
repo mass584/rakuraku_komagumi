@@ -4,11 +4,13 @@ class TeacherController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @teachers = current_room.exist_teachers(params[:search], params[:page])
-        @teacher = Teacher.new
+        page = params[:page] ? params[:page].to_i : 1
+        @keyword = params[:keyword]
+        @active_teachers = current_room.teachers.active.matched(@keyword)
+        @teachers = @active_teachers.sorted.paginated(page)
       end
       format.json do
-        render json: current_room.exist_teachers.to_json
+        render json: current_room.teachers.active.to_json
       end
     end
   end

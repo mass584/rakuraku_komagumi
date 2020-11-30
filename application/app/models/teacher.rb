@@ -3,8 +3,6 @@ class Teacher < ApplicationRecord
   has_many :teacher_terms, dependent: :restrict_with_exception
   has_many :terms, through: :teacher_terms
 
-  validates :name_kana,
-            format: { with: /\A[\p{Hiragana}ー]+\z/ }
   validates :email,
             allow_blank: true,
             format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
@@ -18,9 +16,9 @@ class Teacher < ApplicationRecord
 
   scope :active, -> { where(is_deleted: false) }
   scope :sorted, -> { order(name: 'ASC') }
-  scope :filter_by_page, lambda { |page, record_per_page|
-    !page ? self : slice((page - 1) * record_per_page, page * record_per_page - 1)
-  }
+  scope :matched, ->(keyword) { where('name like ?', "%#{sanitize_sql_like(keyword || '')}%") }
+  scope :paginated, ->(page) { slice((page - 1) * 10, page * 10) }
+  scope :searched, ->(keyword, page) { active.sorted.matched(keyword).paginated(page) }
 
   private
 

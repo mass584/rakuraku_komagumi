@@ -45,7 +45,7 @@ class Term < ApplicationRecord
   end
 
   def ordered_students
-    student_terms.joins(:student).order(birth_year: 'ASC')
+    student_terms.joins(:student).order(school_grade: 'ASC')
   end
 
   def ordered_teachers

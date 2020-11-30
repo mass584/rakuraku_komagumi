@@ -18,15 +18,15 @@
             .form-row
               .col-xs-2
                 = f.label :gender, '性別'
-                = f.select :gender, { '男': 'male', '女': 'female' }, { include_blank: '選択して下さい' }, { class: 'form-control' }
+                = f.select :gender, gender_select, { include_blank: '選択して下さい' }, { class: 'form-control' }
           .form-group
             .form-row
               .col
                 = f.label :school_name
                 = f.text_field :school_name, { class: 'form-control' }
               .col
-                = f.label :birth_year
-                = f.select :birth_year, student.birth_year_select, { include_blank: '選択して下さい' }, { class: 'form-control' }
+                = f.label :school_grade
+                = f.select :school_grade, school_grade_select, { include_blank: '選択して下さい' }, { class: 'form-control' }
           .form-group
             .form-row
               .col

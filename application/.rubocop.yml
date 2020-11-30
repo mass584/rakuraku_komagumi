@@ -25,6 +25,9 @@ Metrics/PerceivedComplexity:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
+Layout/LineLength:
+  Max: 100
+
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyleForEmptyBraces: no_space
 

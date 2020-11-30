@@ -2,7 +2,7 @@ button.btn.btn-primary data-toggle="modal" data-target="#teacher_create" = '新�
 .modal.fade id="teacher_create" role="dialog" area-hidden="true"
   .modal-dialog role="document"
     .modal-content
-      = form_for @teacher, :url => { :controller => :teacher, :action => :create }, remote: true do |f|
+      = form_for Teacher.new, :url => { :controller => :teacher, :action => :create }, remote: true do |f|
         .modal-header
           h4.modal-title 講師の追加
         .modal-body

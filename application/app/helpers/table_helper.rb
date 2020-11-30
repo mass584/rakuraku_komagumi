@@ -39,7 +39,7 @@ module TableHelper
       id: student.id,
       tds: [
         student.name,
-        student.grade_at,
+        student.school_grade,
         student.email,
         student.tel,
         content_tag(:div) do
