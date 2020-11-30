@@ -1,7 +1,5 @@
 class Student < ApplicationRecord
   belongs_to :room
-  has_many :student_subjects, dependent: :destroy
-  has_many :subjects, through: :student_subjects
   has_many :student_terms, dependent: :restrict_with_exception
   has_many :terms, through: :student_terms
 

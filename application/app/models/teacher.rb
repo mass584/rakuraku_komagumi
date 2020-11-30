@@ -1,7 +1,5 @@
 class Teacher < ApplicationRecord
   belongs_to :room
-  has_many :teacher_subjects, dependent: :destroy
-  has_many :subjects, through: :teacher_subjects
   has_many :teacher_terms, dependent: :restrict_with_exception
   has_many :terms, through: :teacher_terms
 
