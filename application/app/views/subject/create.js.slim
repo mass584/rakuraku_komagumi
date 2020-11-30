@@ -1,7 +1,7 @@
 - if @status == 'success'
   | $('#subject_create').modal('hide');
   | $('#subject_create_alert').html("");
-  | $('tbody').append("#{escape_javascript(render partial: 'subject/tr', locals: { subject: @subject })}");
+  | $('tbody').append("#{escape_javascript(render partial: 'tr', locals: { record: subject_table_record(@subject)})}");
   | $('tbody').children('tr').sort((a, b) => {
   |   const aN = Number($(a).find('[id^=order_]').text());
   |   const bN = Number($(b).find('[id^=order_]').text());

@@ -1,9 +1,10 @@
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#subject_edit_#{subject.id}"
 .modal.fade id="subject_edit_#{subject.id}" role="dialog" area-hidden="true"
   .modal-dialog
     .modal-content
       = form_for subject, remote: true do |f|
         .modal-header
-          h4.modal-title 科目の編集
+          h4.modal-title 科目情報の編集
         .modal-body
           .form-group
             = f.label :order

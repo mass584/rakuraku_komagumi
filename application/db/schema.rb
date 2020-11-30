@@ -100,14 +100,6 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.index ["term_id", "student_term_id", "timetable_id"], name: "student_request_index", unique: true
   end
 
-  create_table "student_subjects", force: :cascade do |t|
-    t.integer "student_id", null: false
-    t.integer "subject_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["student_id", "subject_id"], name: "index_student_subjects_on_student_id_and_subject_id", unique: true
-  end
-
   create_table "student_terms", force: :cascade do |t|
     t.integer "student_id", null: false
     t.integer "term_id", null: false
@@ -157,14 +149,6 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "teacher_term_id", "timetable_id"], name: "teacher_request_index", unique: true
-  end
-
-  create_table "teacher_subjects", force: :cascade do |t|
-    t.integer "teacher_id", null: false
-    t.integer "subject_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["teacher_id", "subject_id"], name: "index_teacher_subjects_on_teacher_id_and_subject_id", unique: true
   end
 
   create_table "teacher_terms", force: :cascade do |t|
@@ -224,8 +208,6 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   add_foreign_key "student_requests", "student_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_requests", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_requests", "timetables", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "student_subjects", "students", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "student_subjects", "subjects", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_terms", "students", on_update: :cascade, on_delete: :restrict
   add_foreign_key "student_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "students", "rooms", on_update: :cascade, on_delete: :restrict
@@ -235,8 +217,6 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   add_foreign_key "teacher_requests", "teacher_terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_requests", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_requests", "timetables", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacher_subjects", "subjects", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "teacher_subjects", "teachers", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_terms", "teachers", on_update: :cascade, on_delete: :restrict
   add_foreign_key "teacher_terms", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teachers", "rooms", on_update: :cascade, on_delete: :restrict
