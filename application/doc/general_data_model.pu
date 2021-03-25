@@ -1,0 +1,53 @@
+@startuml general_data_model
+
+package "一般データモデル" {
+  entity "rooms" {
+    + id : 教室ID [PK]
+    --
+    name : 教室名
+    email : メールアドレス
+  }
+
+  entity "students" {
+    + id : 生徒ID [PK]
+    --
+    # room_id : 教室ID [FK]
+    name : 生徒名
+    email : メールアドレス
+    school_grade : 学年
+    is_deleted : 削除済み
+  }
+
+  entity "teachers" {
+    + id : 講師ID [PK]
+    --
+    # room_id : 教室ID [FK]
+    name : 講師名
+    email : メールアドレス
+    is_deleted : 削除済み
+  }
+
+  entity "tutorials" {
+    + id : 個別科目ID [PK]
+    --
+    # room_id : 教室ID [FK]
+    name : 個別科目名
+    order : 表示順
+    is_deleted : 削除済み
+  }
+
+  entity "groups" {
+    + id : 集団科目ID [PK]
+    --
+    # room_id : 教室ID [FK]
+    name : 集団科目名
+    order : 表示順
+    is_deleted : 削除済み
+  }
+}
+
+rooms ||-do-o{ students
+rooms ||-do-o{ teachers
+rooms ||-do-o{ tutorials
+rooms ||-do-o{ groups
+@enduml

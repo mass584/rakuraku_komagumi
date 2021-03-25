@@ -1,0 +1,106 @@
+@startuml term_contract_data_model
+
+package "期間の契約データモデル" {
+  entity "students" #F0F0F0 {
+    + id : 生徒ID [PK]
+    --
+  }
+
+  entity "teachers" #F0F0F0 {
+    + id : 講師ID [PK]
+    --
+  }
+
+  entity "terms" #F0F0F0 {
+    + id : 期間ID [PK]
+    --
+  }
+
+  entity "tutorials" #F0F0F0 {
+    + id : 個別科目ID [PK]
+    --
+  }
+
+  entity "groups" #F0F0F0 {
+    + id : 集団科目ID [PK]
+    --
+  }
+
+  entity "term_students" {
+    + id : 期間に紐づいた生徒ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # student_id : 生徒ID [FK]
+    school_grade : 対象期間における学年
+    vacancy_status : 空きステータス
+  }
+
+  entity "term_teachers" {
+    + id : 期間に紐づいた講師ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # teacher_id : 生徒ID [FK]
+    vacancy_status : 空きステータス
+  }
+
+  entity "term_tutorials" {
+    + id : 期間に紐づいた個別科目ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # tutorial_id : 個別科目ID [FK]
+  }
+
+  entity "term_groups" {
+    + id : 期間に紐づいた集団科目ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # group_id : 集団科目ID [FK]
+    term_teacher_id : 期間に紐づいた講師ID
+  }
+
+  entity "tutorial_contracts" {
+    + id : 個別科目の契約ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # term_tutorial_id : 期間に紐づいた個別科目ID [FK]
+    # term_student_id : 期間に紐づいた生徒ID [FK]
+    term_teacher_id : 期間に紐づいた講師ID
+    piece_count : コマ数
+  }
+
+  entity "group_contracts" {
+    + id : 集団科目の契約ID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # term_group_id : 期間に紐づいた集団科目ID [FK]
+    # term_student_id : 期間に紐づいた生徒ID [FK]
+    is_contracted : 契約済みかどうか
+  }
+
+  entity "tutorial_pieces" {
+    + id : 個別科目のコマID [PK]
+    --
+    # term_id : 期間ID [FK]
+    # tutorial_contract_id : 個別科目の契約ID[FK]
+    seat_id : 座席ID
+    is_fixed : 固定済みかどうか
+  }
+}
+
+terms ||-do-o{ term_students
+terms ||-do-o{ term_teachers
+terms ||-do-o{ term_tutorials
+terms ||-do-o{ term_groups
+students ||-do-o{ term_students
+teachers ||-do-o{ term_teachers
+tutorials ||-do-o{ term_tutorials
+groups ||-do-o{ term_groups
+term_students ||-do-|{ tutorial_contracts
+term_students ||-do-|{ group_contracts
+term_teachers |o-do-o{ tutorial_contracts
+term_teachers |o-do-o{ group_contracts
+term_tutorials ||-do-|{ tutorial_contracts
+term_groups ||-do-|{ group_contracts
+term_groups }o-le-o| term_teachers
+tutorial_contracts ||-ri-o{ tutorial_pieces
+@enduml
