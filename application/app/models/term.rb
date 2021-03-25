@@ -1,93 +1,59 @@
 class Term < ApplicationRecord
   belongs_to :room
-  has_many :student_terms, dependent: :destroy
-  has_many :students, through: :student_terms
-  has_many :teacher_terms, dependent: :destroy
-  has_many :teachers, through: :teacher_terms
-  has_many :subject_terms, dependent: :destroy
-  has_many :subjects, through: :subject_terms
+  has_many :term_students, dependent: :destroy
+  has_many :term_teachers, dependent: :destroy
+  has_many :term_tutorials, dependent: :destroy
+  has_many :term_groups, dependent: :destroy
   has_many :begin_end_times, dependent: :destroy
   has_many :timetables, dependent: :destroy
-  has_many :contracts, dependent: :destroy
-  has_many :student_requests, dependent: :destroy
-  has_many :teacher_requests, dependent: :destroy
-  has_many :seats, dependent: :destroy
-  has_many :pieces, dependent: :destroy
+  has_many :tutorial_contracts, dependent: :destroy
+  has_many :group_contracts, dependent: :destroy
+  has_many :tutorial_pieces, dependent: :destroy
 
+  validates :name,
+            length: { minimum: 1, maximum: 40 }
+  validates :year,
+            numericality: { only_integer: true, greater_than_or_equal_to: 2020 }
   validates :begin_at, presence: true
   validates :end_at, presence: true
-  validate :verify_context_for_one_week, if: :one_week?
-  validate :verify_context_for_variable, if: :variable?
-  enum type: { one_week: 0, variable: 1 }
+  validates :periods,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :seats,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :positions,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
-  after_create :create_associations
+  validate :valid_context?
+  enum type: { normal: 0, season: 1 }
 
-  self.inheritance_column = :_type_disabled
-
-  def date_array(*week)
-    if week.present?
-      (begin_at..end_at).to_a.slice((week[0] - 1) * 7, 7)
-    else
-      (begin_at..end_at)
+  def dates
+    if normal?
+      7
+    elsif season?
+      (begin_at..end_at).to_a.length
     end
   end
 
-  def period_array
-    (1..max_period)
+  def date_index_array
+    (1..dates).to_a
   end
 
-  def seat_array
-    (1..max_seat)
+  def period_index_array
+    (1..periods).to_a
   end
 
-  def frame_array
-    (1..max_frame)
+  def seat_index_array
+    (1..seats).to_a
   end
 
-  def ordered_students
-    student_terms.joins(:student).order(school_grade: 'ASC')
+  def position_index_array
+    (1..positions).to_a
   end
 
-  def ordered_teachers
-    teacher_terms.joins(:teacher).order(name: 'DESC')
-  end
-
-  def ordered_subjects
-    subject_terms.joins(:subject).order(order: 'ASC')
-  end
-
-  def readied_students
-    students.joins(:student_terms).where('student_terms.is_decided': true)
-  end
-
-  def readied_teachers
-    teachers.joins(:teacher_terms).where('teacher_terms.is_decided': true)
-  end
-
-  def display_type
-    if one_week?
-      '一週間モード'
-    elsif variable?
-      '任意期間モード'
-    end
-  end
-
-  def display_begin_at
-    begin_at.strftime('%Y/%m/%d')
-  end
-
-  def display_end_at
-    end_at.strftime('%Y/%m/%d')
-  end
-
-  def week(num_week)
-    if num_week < min_week
-      min_week
-    elsif num_week > max_week
-      max_week
-    else
-      num_week
-    end
+  def cutoff_week(week)
+    return min_week if week < min_week
+    return max_week if week > max_week
+    week
   end
 
   def min_week
@@ -100,26 +66,9 @@ class Term < ApplicationRecord
 
   private
 
-  def verify_context_for_one_week
-    if (end_at - begin_at) != 6
-      errors[:base] << '期間は7日間に設定してください。'
-    end
-  end
-
-  def verify_context_for_variable
+  def valid_context?
     if (end_at - begin_at).negative?
-      errors[:base] << '開始日、終了日を正しく設定してください。'
-    elsif (end_at - begin_at) >= 50
-      errors[:base] << '期間は50日間以内に設定してください。'
+      errors[:base] << '開始日・終了日を正しく設定してください'
     end
-  end
-
-  def create_associations
-    SubjectTerm.bulk_create(self)
-    StudentTerm.bulk_create(self)
-    TeacherTerm.bulk_create(self)
-    BeginEndTime.bulk_create(self)
-    Timetable.bulk_create(self)
-    Seat.bulk_create(self)
   end
 end
