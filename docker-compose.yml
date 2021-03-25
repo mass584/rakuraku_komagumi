@@ -7,7 +7,7 @@ services:
     volumes:
       - ./application/db/postgres:/var/lib/postgresql/data
     environment:
-      - POSTGRES_USER=rakuraku_komagumi
+      - POSTGRES_USER=username
       - POSTGRES_PASSWORD=password
   application:
     build:
@@ -15,16 +15,17 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "3000:3000"
-    working_dir: /root/rakuraku_komagumi
+    working_dir: /root/project
     command: /bin/bash --login -c "./startup.sh"
     volumes:
-      - ./application:/root/rakuraku_komagumi
-      - ./application/vendor/bundle:/root/rakuraku_komagumi/vendor/bundle:delegated
+      - ./application:/root/project
+      - ./application/vendor/bundle:/root/project/vendor/bundle:delegated
+      - ./application/node_modules:/root/project/node_modules:delegated
     environment:
       - RAILS_ENV=development
-      - BUNDLE_APP_CONFIG=/root/rakuraku_komagumi/.bundle
+      - BUNDLE_APP_CONFIG=/root/project/.bundle
       - DATABASE_HOST=db
-      - DATABASE_USERNAME=rakuraku_komagumi
+      - DATABASE_USERNAME=username
       - DATABASE_PASSWORD=password
       - DATABASE_NAME=development
     depends_on:
@@ -35,12 +36,11 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "3035:3035"
-    working_dir: /root/rakuraku_komagumi
+    working_dir: /root/project
     command: /bin/bash --login -c "bin/yarn && bin/webpack-dev-server --hot --inline"
     volumes:
-      - ./application:/root/rakuraku_komagumi
-      - ./application/vendor/bundle:/root/rakuraku_komagumi/vendor/bundle:delegated
+      - ./application:/root/project
+      - ./application/vendor/bundle:/root/project/vendor/bundle:delegated
+      - ./application/node_modules:/root/project/node_modules:delegated
     environment:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
-    depends_on:
-      - application
