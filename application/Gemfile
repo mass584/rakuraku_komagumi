@@ -3,52 +3,40 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '3.0.0'
 
-gem 'rails', '6.0.3.4'
-
+gem 'active_model_serializers'
 gem 'bcrypt', '~> 3.1.16'
 gem 'bootsnap', '>= 1.1.0', require: false
-gem 'jbuilder'
-gem 'rails-i18n'
+gem 'daemons'
+gem 'delayed_job'
+gem 'delayed_job_active_record'
+gem 'devise'
+gem 'enum_help'
 gem 'pg', '>= 0.18', '< 2.0'
+gem 'prawn'
+gem 'prawn-table'
 gem 'puma', '~> 5.0'
+gem 'rails', '6.0.3.4'
+gem 'rails-i18n'
+gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'webpacker'
 
-# ActiveJob Backend
-gem 'daemons'
-gem 'delayed_job_active_record'
-
-# Authorization
-gem 'devise'
-
-# AWS SDK
-gem 'aws-sdk'
-gem 'aws-sdk-rails'
-
-# Frontend
-gem 'slim-rails'
-
-## PDF
-gem 'prawn'
-gem 'prawn-table'
-
-## Others
+## should import by npm
 gem 'chartkick'
 gem 'figaro'
 gem 'gon'
 
 group :development do
-  # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
+  gem 'byebug'
   gem 'listen', '>= 3.0.5', '< 3.6'
-  # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
+  gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'web-console', '>= 3.3.0'
 end
 
 group :test do
   gem 'capybara', '>= 2.15'
-  gem 'chromedriver-helper'
   gem 'factory_bot_rails'
   gem 'rspec-rails'
   gem 'rubocop'
@@ -56,5 +44,6 @@ group :test do
   gem 'simplecov'
 end
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem 'tzinfo-data', platforms: [:mingw, :mswin, :x64_mingw, :jruby]
+group :production do
+  gem 'aws-sdk-s3'
+end 
