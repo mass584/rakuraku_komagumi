@@ -22,7 +22,7 @@
     - 全自動モード: 入力された情報から自動でコマ組みを行う
 
 # 設計
-* [データモデル](../application/doc/README.md)
+* [データモデル](./application/doc/README.md)
 
 # 技術スタック
 * フロントエンド

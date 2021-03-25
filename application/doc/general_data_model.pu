@@ -1,11 +1,17 @@
 @startuml general_data_model
 
 package "一般データモデル" {
+  entity "users" {
+    + id : ユーザーID [PK]
+    --
+    name : ユーザー名
+    email : メールアドレス
+  }
+
   entity "rooms" {
     + id : 教室ID [PK]
     --
     name : 教室名
-    email : メールアドレス
   }
 
   entity "students" {
