@@ -156,7 +156,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.date "end_at", null: false
     t.integer "periods", null: false
     t.integer "seats", null: false
-    t.integer "seat_limits", null: false
+    t.integer "positions", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

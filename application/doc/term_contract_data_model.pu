@@ -98,9 +98,8 @@ groups ||-do-o{ term_groups
 term_students ||-do-|{ tutorial_contracts
 term_students ||-do-|{ group_contracts
 term_teachers |o-do-o{ tutorial_contracts
-term_teachers |o-do-o{ group_contracts
+term_teachers |o-ri-o{ term_groups
 term_tutorials ||-do-|{ tutorial_contracts
 term_groups ||-do-|{ group_contracts
-term_groups }o-le-o| term_teachers
 tutorial_contracts ||-ri-o{ tutorial_pieces
 @enduml
