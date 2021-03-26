@@ -9,6 +9,7 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
+  accepts_nested_attributes_for :begin_end_times, :timetables
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
@@ -25,6 +26,28 @@ class Term < ApplicationRecord
 
   validate :valid_context?
   enum type: { normal: 0, season: 1 }
+
+  def self.new(attributes)
+    attributes[:begin_end_times] ||= new_begin_end_times
+    attributes[:timetables] ||= new_timetables
+    super(attributes)
+  end
+
+  def pieces_for_student(student_id)
+    pieces_per_timetable(
+      undetermined_tutorial_pieces.includes(tutorial_contract: [], seat: [:timetable]).where(
+        'tutorial_contracts.term_student_id': student_id,
+      ),
+    )
+  end
+
+  def pieces_for_teacher(teacher_id)
+    pieces_per_timetable(
+      undetermined_tutorial_pieces.includes(seat: [:timetable]).where(
+        'seats.term_teacher_id': teacher_id,
+      ),
+    )
+  end
 
   def dates
     if normal?
@@ -51,13 +74,9 @@ class Term < ApplicationRecord
   end
 
   def cutoff_week(week)
-    return min_week if week < min_week
+    return 1 if week < 1
     return max_week if week > max_week
     week
-  end
-
-  def min_week
-    1
   end
 
   def max_week
@@ -65,6 +84,37 @@ class Term < ApplicationRecord
   end
 
   private
+
+  def undetermined_tutorial_pieces
+    tutorial_pieces.where.not(seat_id: nil)
+  end
+
+  def pieces_per_timetable(items)
+    items.group_by_recursive(
+      proc { |item| item.seat.timetable.date_index },
+      proc { |item| item.seat.timetable.period_index },
+    )
+  end
+
+  def pieces_per_seat(items)
+    items.group_by_recursive(
+      proc { |item| item.seat.timetable.date_index },
+      proc { |item| item.seat.timetable.period_index },
+      proc { |item| item.seat.seat_index },
+    )
+  end
+
+  def new_begin_end_times
+    period_index_array.map do |index|
+      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
+    end
+  end
+
+  def new_timetables
+    date_index_array.product(period_index_array) do |date_index, period_index|
+      { date_index: date_index, period_index: period_index }
+    end
+  end
 
   def valid_context?
     if (end_at - begin_at).negative?

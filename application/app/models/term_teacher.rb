@@ -14,18 +14,13 @@ class TermTeacher < ApplicationRecord
   }
 
   def self.new(attributes)
+    attributes[:teacher_vacancies] ||= new_teacher_vacancies
     super(attributes)
-    self.teacher_vacancies ||= new_teacher_vacancies
   end
 
   private
 
   def new_teacher_vacancies
-    term.timetables.map do |timetable|
-      {
-        timetable_id: timetable.id,
-        is_vacant: false
-      }
-    end
+    term.timetables.map { |timetable| { timetable_id: timetable.id } }
   end
 end

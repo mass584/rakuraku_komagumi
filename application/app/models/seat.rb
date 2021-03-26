@@ -5,54 +5,28 @@ class Seat < ApplicationRecord
   has_many :pieces, dependent: :destroy
 
   validates :number, presence: true
-  validate :can_nullify_teacher_term_id?,
-           on: :update,
-           if: :will_save_change_to_teacher_term_id?
-  validate :verify_doublebooking,
+  validate :can_change_teacher_term_id?,
            on: :update,
            if: :will_save_change_to_teacher_term_id?
 
-  def self.get_seats(term)
-    includes(
-      timetable: [],
-      teacher_term: [:teacher],
-    ).where(term_id: term.id).reduce({}) do |accu, item|
-      accu.deep_merge({
-        item.timetable.date => {
-          item.timetable.period => {
-            item.number => item,
-          },
-        },
-      })
-    end
+  def self.new(attributes)
+    attributes[:term_teacher_id] ||= nil
+    super(attributes)
   end
 
-  def self.bulk_create(term)
-    term.timetables.each do |timetable|
-      term.seat_array.each do |seat_number|
-        create(
-          term_id: term.id,
-          timetable_id: timetable.id,
-          number: seat_number,
-        )
-      end
-    end
+  def self.duplicated?(timetable_id, teacher_term_id)
+    self.class.where(timetable_id: timetable_id, teacher_term_id: teacher_term_id).exists?
   end
 
   private
 
-  def can_nullify_teacher_term_id?
-    if pieces.exists?
-      errors[:base] << '授業が割り当てられているので、変更できません。'
+  def can_change_teacher_term_id?
+    if teacher_term.present? && pieces.exist? 
+      errors[:base] << '授業が割り当てられているため変更できません'
     end
-  end
 
-  def verify_doublebooking
-    if teacher_term_id.present? && Seat.where(
-      timetable_id: timetable_id,
-      teacher_term_id: teacher_term_id,
-    ).exists?
-      errors[:base] << '講師が他の席に割り当てられています。'
+    if teacher_term.present? && self.duplicated?(timetable_id, teacher_term_id)
+      errors[:base] << '講師が他の席に割り当てられています'
     end
   end
 end

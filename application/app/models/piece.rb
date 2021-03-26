@@ -1,6 +1,6 @@
 class Piece < ApplicationRecord
   belongs_to :term
-  belongs_to :contract
+  belongs_to :tutorial_contract
   belongs_to :seat, optional: true
 
   validate :verify_seat_occupation,
@@ -12,74 +12,23 @@ class Piece < ApplicationRecord
   validate :verify_doublebooking,
            on: :update,
            if: :will_save_change_to_seat_id?
-
-  before_validation :update_seat, if: :will_save_change_to_seat_id?
-
-  def self.get_pieces_for_student(term, student_term)
-    pieces_per_timetable(
-      term.pieces.includes(
-        contract: [],
-        seat: [:timetable],
-      ).where(
-        'contracts.student_term_id': student_term.id,
-      ),
-    )
-  end
-
-  def self.get_pieces_for_teacher(term, teacher_term)
-    pieces_per_timetable(
-      term.pieces.includes(
-        contract: [
-          student_term: [:student],
-          subject_term: [:subject]
-        ],
-        seat: [:timetable],
-      ).where(
-        'seats.teacher_term_id': teacher_term.id,
-      ),
-    )
-  end
-
-  def self.get_pieces(term)
-    pieces_per_seat(
-      term.pieces.includes(
-        contract: [
-          student_term: [:student],
-          subject_term: [:subject]
-        ],
-        seat: [:timetable],
-      ),
-    )
-  end
-
-  def self.pieces_per_timetable(pieces)
-    pieces.where.not(seat_id: nil).group_by_recursive(
-      proc { |item| item.seat.timetable.date },
-      proc { |item| item.seat.timetable.period },
-    )
-  end
-  private_class_method :pieces_per_timetable
-
-  def self.pieces_per_seat(pieces)
-    pieces.where.not(seat_id: nil).group_by_recursive(
-      proc { |item| item.seat.timetable.date },
-      proc { |item| item.seat.timetable.period },
-      proc { |item| item.seat.number },
-    )
-  end
+  validate :update_seat,
+           on: :update,
+           if: :will_save_change_to_seat_id?
+  accepts_nested_attributes_for :seat
 
   private
 
-  def update_seat
-    seat = Seat.find_by(id: seat_id)
-    if !seat.update(teacher_term_id: contract.teacher_term_id)
-      errors[:base] << seat.errors[:base]
-    end
+  def self.new(attributes)
+    attributes[:seat] ||= {
+      term_teacher_id: tutorial_contract.teacher_term_id,
+    }
+    super(attributes)
   end
 
   def verify_seat_occupation
     if seat_id.present? &&
-       Piece.where(seat_id: seat_id).count >= term.max_frame
+       Piece.where(seat_id: seat_id).count >= term.positions
       errors[:base] << '座席の最大人数をオーバーしています'
     end
   end

@@ -5,20 +5,15 @@ class TermTutorial < ApplicationRecord
   accepts_nested_attributes_for :tutorial_contracts
 
   def self.new(attributes)
+    attributes[:tutorial_contracts] ||= new_tutorial_contracts
     super(attributes)
-    self.tutorial_contracts ||= new_tutorial_contracts
   end
 
   private
 
   def new_tutorial_contracts 
     term.term_students.map do |term_student|
-      {
-        term_id: term.id,
-        term_student_id: term_student.id,
-        term_teacher_id: nil,
-        piece_count: 0,
-      }
+      { term_id: term.id, term_student_id: term_student.id }
     end
   end
 end
