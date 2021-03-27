@@ -10,8 +10,8 @@ class GroupContract < ApplicationRecord
             on: :update,
             if: :will_save_change_to_is_contracted?
 
-  def self.new(attr = {})
-    attr[:is_contracted] || = false
+  def self.new(attributes = {})
+    attributes[:is_contracted] || = false
     super(attr)
   end
 

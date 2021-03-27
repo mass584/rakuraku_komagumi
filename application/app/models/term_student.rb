@@ -4,7 +4,6 @@ class TermStudent < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :student_vacancies, dependent: :destroy
-  accepts_nested_attributes_for :tutorial_contracts, :group_contracts, :student_vacancies
 
   enum vacancy_status: {
     draft: 0,
@@ -27,24 +26,31 @@ class TermStudent < ApplicationRecord
     other: 99
   }
 
-  def self.new(attributes)
-    attributes[:tutorial_contracts] ||= new_tutorial_contracts
-    attributes[:group_contracts] ||= new_group_contracts
-    attributes[:student_vacancies] ||= new_student_vacancies
-    super(attributes)
-  end
+  before_create :set_nest_objects
 
   private
 
+  def set_nest_objects
+    self.tutorial_contracts = new_tutorial_contracts
+    self.group_contracts = new_group_contracts
+    self.student_vacancies = new_student_vacancies
+  end
+
   def new_tutorial_contracts
-    term.term_tutorials.map { |term_tutorial| { term_id: term.id, term_tutorial_id: term_tutorial.id } }
+    term.term_tutorials.map do |term_tutorial|
+      TutorialContract.new({ term_id: term.id, term_tutorial_id: term_tutorial.id }) 
+    end
   end
 
   def new_group_contracts
-    term.term_groups.map { |term_group| { term_id: term.id, term_group_id: term_group.id } }
+    term.term_groups.map do |term_group|
+      GroupContract.new({ term_id: term.id, term_group_id: term_group.id })
+    end
   end
 
   def new_student_vacancies
-    term.timetables.map { |timetable| { timetable_id: timetable.id } }
+    term.timetables.map do |timetable|
+      StudentVacancy.new({ timetable_id: timetable.id })
+    end
   end
 end

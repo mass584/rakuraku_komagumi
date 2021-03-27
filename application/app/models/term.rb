@@ -9,7 +9,7 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
-  accepts_nested_attributes_for :begin_end_times, :timetables, :term_tutorials, :term_groups
+  accepts_nested_attributes_for :term_tutorials, :term_groups
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
@@ -27,11 +27,7 @@ class Term < ApplicationRecord
   validate :valid_context?
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
-  def self.new(attributes)
-    attributes[:begin_end_times] ||= new_begin_end_times
-    attributes[:timetables] ||= new_timetables
-    super(attributes)
-  end
+  before_create :set_nest_objects
 
   def pieces_for_student(student_id)
     pieces_per_timetable(
@@ -87,6 +83,18 @@ class Term < ApplicationRecord
 
   private
 
+  def new_begin_end_times
+    period_index_array.map do |index|
+      BeginEndTime.new({ period_index: index, begin_at: "18:00:00", end_at: "19:10:00" })
+    end
+  end
+
+  def new_timetables
+    date_index_array.product(period_index_array).map do |date_index, period_index|
+      Timetable.new({ date_index: date_index, period_index: period_index })
+    end
+  end
+
   def undetermined_tutorial_pieces
     tutorial_pieces.where.not(seat_id: nil)
   end
@@ -106,21 +114,16 @@ class Term < ApplicationRecord
     )
   end
 
-  def new_begin_end_times
-    period_index_array.map do |index|
-      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
-    end
-  end
-
-  def new_timetables
-    date_index_array.product(period_index_array) do |date_index, period_index|
-      { date_index: date_index, period_index: period_index }
-    end
-  end
-
+  # validate
   def valid_context?
     if (end_at - begin_at).negative?
       errors[:base] << '開始日・終了日を正しく設定してください'
     end
+  end
+
+  # callback
+  def set_nest_objects
+    self.begin_end_times = new_begin_end_times
+    self.timetables = new_timetables
   end
 end

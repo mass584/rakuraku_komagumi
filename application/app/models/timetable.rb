@@ -19,12 +19,11 @@ class Timetable < ApplicationRecord
            on: :update,
            if: :will_save_change_to_term_group_id?
 
-  accepts_nested_attributes_for :seats
+  before_create :set_nest_objects
 
   def self.new(attr = {})
     attr[:term_group_id] ||= nil
     attr[:is_closed] ||= false
-    attr[:seats] ||= new_seats
     super(attr)
   end
 
@@ -34,9 +33,13 @@ class Timetable < ApplicationRecord
 
   private
 
+  def set_nest_objects
+    self.seats = new_seats
+  end
+
   def new_seats
     term.seat_index_array.map do |index|
-      { seat_index: index, seat_limit: term.positions }
+      Seat.new({ seat_index: index, seat_limit: term.positions })
     end
   end
 

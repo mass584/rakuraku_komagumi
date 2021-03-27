@@ -17,7 +17,7 @@ class Seat < ApplicationRecord
            on: :update,
            if: :will_save_change_to_seat_id?
 
-  def self.new(attributes)
+  def self.new(attributes = {})
     attributes[:term_teacher_id] ||= nil
     super(attributes)
   end
