@@ -8,10 +8,10 @@ class TutorialContract < ApplicationRecord
 
   validates :piece_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
-  validate :can_update_teacher_term_id,
+  validate :verify_update_term_teacher_id,
            on: :update,
-           if: :will_save_change_to_teacher_term_id?
-  validate :can_update_piece_count,
+           if: :will_save_change_to_term_teacher_id?
+  validate :verify_under_limit_of_piece_count,
            on: :update,
            if: :will_save_change_to_piece_count?
 
@@ -43,13 +43,13 @@ class TutorialContract < ApplicationRecord
   end
 
   # validate
-  def can_update_teacher_term_id
+  def verify_update_term_teacher_id
     unless placed_tutorial_pieces.positive?
       errors[:base] << '配置済みのコマがあるため担任を変更できません'
     end
   end
 
-  def can_update_piece_count
+  def verify_under_limit_of_piece_count
     unless decrement_count <= unplaced_tutorial_pieces
       errors[:base] << '配置済みのコマを未決定に戻す必要があります'
     end

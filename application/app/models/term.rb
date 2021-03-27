@@ -9,7 +9,7 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
-  accepts_nested_attributes_for :begin_end_times, :timetables
+  accepts_nested_attributes_for :begin_end_times, :timetables, :term_tutorials, :term_groups
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
@@ -25,7 +25,7 @@ class Term < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
   validate :valid_context?
-  enum type: { normal: 0, season: 1 }
+  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
   def self.new(attributes)
     attributes[:begin_end_times] ||= new_begin_end_times
@@ -35,7 +35,10 @@ class Term < ApplicationRecord
 
   def pieces_for_student(student_id)
     pieces_per_timetable(
-      undetermined_tutorial_pieces.includes(tutorial_contract: [], seat: [:timetable]).where(
+      undetermined_tutorial_pieces.includes([
+        :tutorial_contract,
+        { seat: [:timetable] },
+      ]).where(
         'tutorial_contracts.term_student_id': student_id,
       ),
     )
@@ -43,18 +46,17 @@ class Term < ApplicationRecord
 
   def pieces_for_teacher(teacher_id)
     pieces_per_timetable(
-      undetermined_tutorial_pieces.includes(seat: [:timetable]).where(
+      undetermined_tutorial_pieces.includes([
+        { seat: [:timetable] },
+      ]).where(
         'seats.term_teacher_id': teacher_id,
       ),
     )
   end
 
   def dates
-    if normal?
-      7
-    elsif season?
-      (begin_at..end_at).to_a.length
-    end
+    return 7 if normal?
+    return (begin_at..end_at).to_a.length if season? || exam_planning?
   end
 
   def date_index_array

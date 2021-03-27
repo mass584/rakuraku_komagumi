@@ -22,8 +22,9 @@ class Timetable < ApplicationRecord
   accepts_nested_attributes_for :seats
 
   def self.new(attr = {})
-    attr[:term_group_id] || = nil
-    attr[:is_closed] || = false
+    attr[:term_group_id] ||= nil
+    attr[:is_closed] ||= false
+    attr[:seats] ||= new_seats
     super(attr)
   end
 
@@ -33,9 +34,19 @@ class Timetable < ApplicationRecord
 
   private
 
+  def new_seats
+    term.seat_index_array.map do |index|
+      { seat_index: index, seat_limit: term.positions }
+    end
+  end
+
   def can_update_is_closed?
     unless occupated_seat_count.zero?
-      errors[:base] << '座席にコマが割り当てられているため変更できません'
+      errors[:base] << '個別授業が割り当てられているため変更できません'
+    end
+
+    unless term_group_id.nil?
+      errors[:base] << '集団授業が割り当てられているため変更できません'
     end
   end
 
