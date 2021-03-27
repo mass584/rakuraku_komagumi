@@ -19,8 +19,8 @@ class TutorialContract < ApplicationRecord
   before_save :nest_tutorial_pieces_deletion, if: :nest_tutorial_pieces_deletion?
 
   def self.new(attr = {})
-    attr[:term_teacher_id] || = nil
-    attr[:piece_count] || = 0
+    attr[:term_teacher_id] ||= nil
+    attr[:piece_count] ||= 0
     super(attr)
   end
 
