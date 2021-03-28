@@ -18,10 +18,10 @@ class TutorialContract < ApplicationRecord
   before_save :nest_tutorial_pieces_creation, if: :nest_tutorial_pieces_creation?
   before_save :nest_tutorial_pieces_deletion, if: :nest_tutorial_pieces_deletion?
 
-  def self.new(attr = {})
-    attr[:term_teacher_id] ||= nil
-    attr[:piece_count] ||= 0
-    super(attr)
+  def self.new(attributes = {})
+    attributes[:term_teacher_id] ||= nil
+    attributes[:piece_count] ||= 0
+    super(attributes)
   end
 
   private
@@ -35,11 +35,11 @@ class TutorialContract < ApplicationRecord
   end
 
   def increment_count
-    piece_count - piece_count_in_database
+    piece_count - piece_count_in_database.to_i
   end
 
   def decrement_count
-    piece_count_in_database - piece_count
+    piece_count_in_database.to_i - piece_count
   end
 
   # validate

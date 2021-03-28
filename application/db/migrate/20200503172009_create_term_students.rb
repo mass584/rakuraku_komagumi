@@ -3,6 +3,7 @@ class CreateTermStudents < ActiveRecord::Migration[5.2]
     create_table :term_students do |t|
       t.integer :term_id, null: false
       t.integer :student_id, null: false
+      t.integer :school_grade, null: false
       t.integer :vacancy_status, null: false
       t.timestamps
     end

@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   create_table "term_students", force: :cascade do |t|
     t.integer "term_id", null: false
     t.integer "student_id", null: false
+    t.integer "school_grade", null: false
     t.integer "vacancy_status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
