@@ -1,10 +1,11 @@
 class Seat < ApplicationRecord
-  belongs_to :term
   belongs_to :timetable
   belongs_to :term_teacher, optional: true
   has_many :tutorial_pieces, dependent: :destroy
 
   validates :seat_index,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :seat_limit,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
   validate :verify_doublebooking,

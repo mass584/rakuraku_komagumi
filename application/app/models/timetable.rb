@@ -19,12 +19,12 @@ class Timetable < ApplicationRecord
            on: :update,
            if: :will_save_change_to_term_group_id?
 
-  before_create :set_nest_objects
+  before_save :set_nest_objects
 
-  def self.new(attr = {})
-    attr[:term_group_id] ||= nil
-    attr[:is_closed] ||= false
-    super(attr)
+  def self.new(attributes = {})
+    attributes[:term_group_id] ||= nil
+    attributes[:is_closed] ||= false
+    super(attributes)
   end
 
   def occupated_seat_count
@@ -33,16 +33,18 @@ class Timetable < ApplicationRecord
 
   private
 
+  # callback
   def set_nest_objects
-    self.seats = new_seats
+    self.seats.build(new_seats)
   end
 
   def new_seats
     term.seat_index_array.map do |index|
-      Seat.new({ seat_index: index, seat_limit: term.positions })
+      { seat_index: index, seat_limit: term.positions }
     end
   end
 
+  # validate
   def can_update_is_closed?
     unless occupated_seat_count.zero?
       errors[:base] << '個別授業が割り当てられているため変更できません'

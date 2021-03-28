@@ -27,7 +27,7 @@ class Term < ApplicationRecord
   validate :valid_context?
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
-  before_create :set_nest_objects
+  before_save :set_nest_objects
 
   def pieces_for_student(student_id)
     pieces_per_timetable(
@@ -83,18 +83,6 @@ class Term < ApplicationRecord
 
   private
 
-  def new_begin_end_times
-    period_index_array.map do |index|
-      BeginEndTime.new({ period_index: index, begin_at: "18:00:00", end_at: "19:10:00" })
-    end
-  end
-
-  def new_timetables
-    date_index_array.product(period_index_array).map do |date_index, period_index|
-      Timetable.new({ date_index: date_index, period_index: period_index })
-    end
-  end
-
   def undetermined_tutorial_pieces
     tutorial_pieces.where.not(seat_id: nil)
   end
@@ -123,7 +111,19 @@ class Term < ApplicationRecord
 
   # callback
   def set_nest_objects
-    self.begin_end_times = new_begin_end_times
-    self.timetables = new_timetables
+    self.begin_end_times.build(new_begin_end_times)
+    self.timetables.build(new_timetables)
+  end
+
+  def new_begin_end_times
+    period_index_array.map do |index|
+      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
+    end
+  end
+
+  def new_timetables
+    date_index_array.product(period_index_array).map do |date_index, period_index|
+      { date_index: date_index, period_index: period_index }
+    end
   end
 end
