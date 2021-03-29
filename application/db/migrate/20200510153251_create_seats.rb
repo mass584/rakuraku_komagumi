@@ -5,7 +5,7 @@ class CreateSeats < ActiveRecord::Migration[5.2]
       t.integer :timetable_id, null: false
       t.integer :term_teacher_id
       t.integer :seat_index, null: false
-      t.integer :seat_limit, null: false
+      t.integer :position_count, null: false
       t.timestamps
     end
     add_index :seats, [:term_id, :timetable_id, :seat_index], unique: true

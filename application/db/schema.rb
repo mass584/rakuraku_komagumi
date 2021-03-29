@@ -70,7 +70,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.integer "timetable_id", null: false
     t.integer "term_teacher_id"
     t.integer "seat_index", null: false
-    t.integer "seat_limit", null: false
+    t.integer "position_count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "timetable_id", "seat_index"], name: "index_seats_on_term_id_and_timetable_id_and_seat_index", unique: true
@@ -156,9 +156,9 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.integer "term_type", null: false
     t.date "begin_at", null: false
     t.date "end_at", null: false
-    t.integer "periods", null: false
-    t.integer "seats", null: false
-    t.integer "positions", null: false
+    t.integer "period_count", null: false
+    t.integer "seat_count", null: false
+    t.integer "position_count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end

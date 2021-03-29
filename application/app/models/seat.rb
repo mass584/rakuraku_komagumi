@@ -6,7 +6,7 @@ class Seat < ApplicationRecord
 
   validates :seat_index,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
-  validates :seat_limit,
+  validates :position_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
   validate :verify_doublebooking,

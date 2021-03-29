@@ -18,11 +18,11 @@ class Term < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 2020 }
   validates :begin_at, presence: true
   validates :end_at, presence: true
-  validates :periods,
+  validates :period_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
-  validates :seats,
+  validates :seat_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
-  validates :positions,
+  validates :position_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
   validate :valid_context?
@@ -30,25 +30,25 @@ class Term < ApplicationRecord
 
   before_save :set_nest_objects
 
-  def dates
+  def date_count
     return 7 if normal?
     return (begin_at..end_at).to_a.length if season? || exam_planning?
   end
 
   def date_index_array
-    (1..dates).to_a
+    (1..date_count).to_a
   end
 
   def period_index_array
-    (1..periods).to_a
+    (1..period_count).to_a
   end
 
   def seat_index_array
-    (1..seats).to_a
+    (1..seat_count).to_a
   end
 
   def position_index_array
-    (1..positions).to_a
+    (1..position_count).to_a
   end
 
   private
