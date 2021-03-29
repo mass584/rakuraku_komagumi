@@ -62,6 +62,7 @@ package "期間の予定データモデル" {
   entity "seats" {
     + id : 座席ID [PK]
     --
+    # term_id : 期間ID [FK]
     # timetable_id : 時間枠ID [FK]
     term_teacher_id : 期間に紐づいた講師ID
     seat_index : 座席インデックス
@@ -88,6 +89,7 @@ package "期間の予定データモデル" {
 rooms ||-do-o{ terms
 terms ||-le-|{ begin_end_times
 terms ||-ri-|{ timetables
+terms ||-ri-|{ seats
 timetables ||-ri-|{ seats
 timetables ||-do-|{ student_vacancies
 timetables ||-do-|{ teacher_vacancies

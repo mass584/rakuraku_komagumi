@@ -66,13 +66,14 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   end
 
   create_table "seats", force: :cascade do |t|
+    t.integer "term_id", null: false
     t.integer "timetable_id", null: false
     t.integer "term_teacher_id"
     t.integer "seat_index", null: false
     t.integer "seat_limit", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["timetable_id", "seat_index"], name: "index_seats_on_timetable_id_and_seat_index", unique: true
+    t.index ["term_id", "timetable_id", "seat_index"], name: "index_seats_on_term_id_and_timetable_id_and_seat_index", unique: true
   end
 
   create_table "student_vacancies", force: :cascade do |t|
@@ -229,6 +230,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   add_foreign_key "group_contracts", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_contracts", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "groups", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "seats", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_vacancies", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_vacancies", "timetables", on_update: :cascade, on_delete: :cascade
