@@ -4,10 +4,22 @@ class TermGroup < ApplicationRecord
   belongs_to :term_teacher, optional: true
   has_many :group_contracts, dependent: :restrict_with_exception
 
+  validate :can_update_term_teacher?,
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
+
   before_create :set_nest_objects
 
   private
 
+  # validate
+  def can_update_term_teacher?
+    unless term.seats.filter_by_occupied.zero?
+      errors[:base] << '集団担当を変更するには、個別授業の設定を全て解除する必要があります'
+    end
+  end
+
+  # before_create
   def set_nest_objects
     self.group_contracts = new_group_contracts
   end
