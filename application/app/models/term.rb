@@ -1,5 +1,7 @@
 class Term < ApplicationRecord
   belongs_to :room
+  has_many :student_optimization_rules, dependent: :destroy
+  has_many :teacher_optimization_rules, dependent: :destroy
   has_many :term_students, dependent: :destroy
   has_many :term_teachers, dependent: :destroy
   has_many :term_tutorials, dependent: :destroy
@@ -72,8 +74,37 @@ class Term < ApplicationRecord
 
   # callback
   def set_nest_objects
+    self.student_optimization_rules.build(new_student_optimization_rules)
+    self.teacher_optimization_rules.build(new_teacher_optimization_rules)
     self.begin_end_times.build(new_begin_end_times)
     self.timetables.build(new_timetables)
+  end
+
+  def new_student_optimization_rules
+    Student.school_grades.values.map do |school_grade|
+      {
+        school_grade: school_grade,
+        occupation_limit: 3,
+        occupation_costs: [0, 0, 14, 70],
+        blank_limit: 1,
+        blank_costs: [0, 70],
+        interval_cutoff: 2,
+        interval_costs: [70, 35, 14],
+      }
+    end
+  end
+
+  def new_teacher_optimization_rules
+    [
+      {
+        single_cost: 100,
+        different_pair_cost: 15,
+        occupation_limit: 6,
+        occupation_costs: [0, 30, 18, 3, 0, 6, 24],
+        blank_limit: 1,
+        blank_costs: [0, 30],
+      }
+    ]
   end
 
   def new_begin_end_times

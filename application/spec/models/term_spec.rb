@@ -8,6 +8,8 @@ RSpec.describe Term, type: :model do
 
     context 'ネスト属性を指定しない時' do
       it 'TimetableとBeginEndTimeが生成される' do
+        expect(@term.student_optimization_rules.count).to eq(13)
+        expect(@term.teacher_optimization_rules.count).to eq(1)
         expect(@term.begin_end_times.count).to eq(6)
         expect(@term.timetables.count).to eq(42)
         expect(@term.timetables.map(&:seats).map(&:count).sum).to eq(294)
@@ -22,6 +24,8 @@ RSpec.describe Term, type: :model do
 
     context 'ネスト属性を指定しない時' do
       it 'TimetableとBeginEndTimeが生成される' do
+        expect(@term.student_optimization_rules.count).to eq(13)
+        expect(@term.teacher_optimization_rules.count).to eq(1)
         expect(@term.begin_end_times.count).to eq(6)
         expect(@term.timetables.count).to eq(84)
         expect(@term.timetables.map(&:seats).map(&:count).sum).to eq(588)
@@ -36,6 +40,8 @@ RSpec.describe Term, type: :model do
 
     context 'ネスト属性を指定しない時' do
       it 'TimetableとBeginEndTimeが生成される' do
+        expect(@term.student_optimization_rules.count).to eq(13)
+        expect(@term.teacher_optimization_rules.count).to eq(1)
         expect(@term.begin_end_times.count).to eq(4)
         expect(@term.timetables.count).to eq(12)
         expect(@term.timetables.map(&:seats).map(&:count).sum).to eq(84)
