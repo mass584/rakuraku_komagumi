@@ -17,7 +17,15 @@ Bundler.require(*Rails.groups)
 
 module RakurakuKomagumi
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
+    config.generators.fixture_replacement :factory_bot, dir: 'spec/factories'
+    config.generators.helper false
+    config.generators.stylesheets false
+    config.generators.template_engine = :slim
+    config.generators.test_framework :rspec,
+                                     fixtures: false,
+                                     controller_specs: false,
+                                     helper_specs: false,
+                                     routing_specs: false
     config.load_defaults 5.2
 
     # Settings in config/environments/* take precedence over those specified here.
