@@ -14,8 +14,21 @@ class TermTeacher < ApplicationRecord
 
   before_create :set_nest_objects
 
+  def tutorial_pieces(id)
+    term.tutorial_pieces.filter_by_teacher(id)
+  end
+
+  def occupations(date_index)
+    term.tutorial_pieces.filter_by_teacher_and_date(id, date_index).occupations
+  end
+
+  def blanks(date_index)
+    term.turorial_pieces.filter_by_teacher_and_date(id, date_index).blanks
+  end
+
   private
 
+  # before_create
   def set_nest_objects
     self.teacher_vacancies = new_teacher_vacancies
   end

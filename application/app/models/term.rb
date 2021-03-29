@@ -6,6 +6,7 @@ class Term < ApplicationRecord
   has_many :term_groups, dependent: :destroy
   has_many :begin_end_times, dependent: :destroy
   has_many :timetables, dependent: :destroy
+  has_many :seats, dependent: :destroy
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
@@ -29,27 +30,6 @@ class Term < ApplicationRecord
 
   before_save :set_nest_objects
 
-  def pieces_for_student(student_id)
-    pieces_per_timetable(
-      undetermined_tutorial_pieces.includes([
-        :tutorial_contract,
-        { seat: [:timetable] },
-      ]).where(
-        'tutorial_contracts.term_student_id': student_id,
-      ),
-    )
-  end
-
-  def pieces_for_teacher(teacher_id)
-    pieces_per_timetable(
-      undetermined_tutorial_pieces.includes([
-        { seat: [:timetable] },
-      ]).where(
-        'seats.term_teacher_id': teacher_id,
-      ),
-    )
-  end
-
   def dates
     return 7 if normal?
     return (begin_at..end_at).to_a.length if season? || exam_planning?
@@ -71,6 +51,8 @@ class Term < ApplicationRecord
     (1..positions).to_a
   end
 
+  private
+
   def cutoff_week(week)
     return 1 if week < 1
     return max_week if week > max_week
@@ -79,27 +61,6 @@ class Term < ApplicationRecord
 
   def max_week
     (1 + (end_at - begin_at) / 7).to_i
-  end
-
-  private
-
-  def undetermined_tutorial_pieces
-    tutorial_pieces.where.not(seat_id: nil)
-  end
-
-  def pieces_per_timetable(items)
-    items.group_by_recursive(
-      proc { |item| item.seat.timetable.date_index },
-      proc { |item| item.seat.timetable.period_index },
-    )
-  end
-
-  def pieces_per_seat(items)
-    items.group_by_recursive(
-      proc { |item| item.seat.timetable.date_index },
-      proc { |item| item.seat.timetable.period_index },
-      proc { |item| item.seat.seat_index },
-    )
   end
 
   # validate

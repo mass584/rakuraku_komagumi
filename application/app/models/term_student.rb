@@ -28,8 +28,22 @@ class TermStudent < ApplicationRecord
 
   before_create :set_nest_objects
 
+  def tutorial_pieces(id)
+    term.tutorial_pieces.filter_by_student(id)
+  end
+
+  def occupations(date_index)
+    term.tutorial_pieces.filter_by_student_and_date(id, date_index).occupations
+  end
+
+  def blanks(date_index)
+    term.turorial_pieces.filter_by_student_and_date(id, date_index).blanks
+  end
+
+
   private
 
+  # before_create
   def set_nest_objects
     self.tutorial_contracts.build(new_tutorial_contracts)
     self.group_contracts.build(new_group_contracts)
