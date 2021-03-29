@@ -113,7 +113,7 @@ class TutorialPiece < ApplicationRecord
 
   # validate
   def verify_seat_occupation
-    if (seat_creation? || seat_updation?) && seat.pieces.count >= term.positions
+    if (seat_creation? || seat_updation?) && seat.pieces.count >= term.position_limit
       errors[:base] << '座席の最大人数をオーバーしています'
     end
   end

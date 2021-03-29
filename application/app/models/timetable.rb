@@ -22,7 +22,6 @@ class Timetable < ApplicationRecord
   before_save :set_nest_objects
 
   def self.new(attributes = {})
-    attributes[:term_group_id] ||= nil
     attributes[:is_closed] ||= false
     super(attributes)
   end
@@ -40,7 +39,7 @@ class Timetable < ApplicationRecord
 
   def new_seats
     term.seat_index_array.map do |index|
-      { seat_index: index, seat_limit: term.positions }
+      { term_id: term.id, seat_index: index, position_count: term.position_count }
     end
   end
 
