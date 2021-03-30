@@ -90,21 +90,21 @@ class GroupContract < ApplicationRecord
   # validate
   def verify_daily_occupation_limit
     daily_occupations_invalid = term_group.timetables.reduce(false) do |timetable|
-      accu || new_group_contracts.daily_occupations(term_student_id, timetable) > 3
+      accu || new_group_contracts.daily_occupations(term_student_id, timetable) > term_student.optimization_rule.occupation_limit
     end
 
     if contract_creation? && daily_occupations_invalid
-      errors[:base] << '生徒の合計コマの上限（３コマ）を超えています'
+      errors[:base] << '生徒の合計コマの上限を超えています'
     end
   end
 
   def verify_daily_blank_limit
     daily_blanks_invalid = term_group.timetables.reduce(false) do |timetable|
-      accu || new_group_contracts.daily_blanks(term_student_id, timetable) > 2
+      accu || new_group_contracts.daily_blanks(term_student_id, timetable) > term_student.optimization_rule.blank_limit
     end
 
     if daily_blanks_invalid
-      errors[:base] << '生徒の空きコマの上限（２コマ）を超えています'
+      errors[:base] << '生徒の空きコマの上限を超えています'
     end
   end
 end

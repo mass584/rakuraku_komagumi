@@ -131,29 +131,34 @@ class TutorialPiece < ApplicationRecord
   end
 
   def verify_daily_occupation_limit
-    if seat_creation? && new_tutorial_pieces.daily_occupations(tutorial_contract.term_student_id, seat.timetable) > 3
-      errors[:base] << '生徒の合計コマの上限（３コマ）を超えています'
+    limit = tutorial_contract.term_student.optimization_rule.occupation_limit
+    if seat_creation? &&
+       new_tutorial_pieces.daily_occupations(tutorial_contract.term_student_id, seat.timetable) > limit
+      errors[:base] << '生徒の合計コマの上限を超えています'
     end
 
-    if seat_updation? && new_tutorial_pieces.daily_occupations(tutorial_contract.term_student_id, seat.timetable) > 3
-      errors[:base] << '生徒の合計コマの上限（３コマ）を超えています'
+    if seat_updation? &&
+       new_tutorial_pieces.daily_occupations(tutorial_contract.term_student_id, seat.timetable) > limit
+      errors[:base] << '生徒の合計コマの上限を超えています'
     end
   end
 
   def verify_daily_blank_limit
-    if seat_creation? && new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat.timetable) > 2
-      errors[:base] << '生徒の空きコマの上限（２コマ）を超えています'
+    limit = tutorial_contract.term_student.optimization_rule.blank_limit
+    if seat_creation? && new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat.timetable) > limit
+      errors[:base] << '生徒の空きコマの上限を超えています'
     end
 
     if seat_updation? && (
-      new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat.timetable) > 2 ||
-      new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > 2
+      new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat.timetable) > limit ||
+      new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > limit
     )
-      errors[:base] << '生徒の空きコマの上限（２コマ）を超えています'
+      errors[:base] << '生徒の空きコマの上限を超えています'
     end
 
-    if seat_deletion? && new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > 2
-      errors[:base] << '生徒の空きコマの上限（２コマ）を超えています'
+    if seat_deletion? &&
+       new_tutorial_pieces.daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > limit
+      errors[:base] << '生徒の空きコマの上限を超えています'
     end
   end
 

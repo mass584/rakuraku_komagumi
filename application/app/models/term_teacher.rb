@@ -14,16 +14,8 @@ class TermTeacher < ApplicationRecord
 
   before_create :set_nest_objects
 
-  def tutorial_pieces(id)
-    term.tutorial_pieces.filter_by_teacher(id)
-  end
-
-  def occupations(date_index)
-    term.tutorial_pieces.filter_by_teacher_and_date(id, date_index).occupations
-  end
-
-  def blanks(date_index)
-    term.turorial_pieces.filter_by_teacher_and_date(id, date_index).blanks
+  def optimization_rule
+    @optimization_rule ||= term.teacher_optimization_rules.first
   end
 
   private

@@ -28,18 +28,9 @@ class TermStudent < ApplicationRecord
 
   before_create :set_nest_objects
 
-  def tutorial_pieces(id)
-    term.tutorial_pieces.filter_by_student(id)
+  def optimization_rule
+    @optimization_rule ||= term.student_optimization_rules.find_by(school_grade: school_grade)
   end
-
-  def occupations(date_index)
-    term.tutorial_pieces.filter_by_student_and_date(id, date_index).occupations
-  end
-
-  def blanks(date_index)
-    term.turorial_pieces.filter_by_student_and_date(id, date_index).blanks
-  end
-
 
   private
 
