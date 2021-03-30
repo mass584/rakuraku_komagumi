@@ -15,10 +15,10 @@ class TutorialPiece < ApplicationRecord
   validate :verify_doublebooking,
            on: :update,
            if: :will_save_change_to_seat_id?
-  validate :verify_day_occupation_limit,
+  validate :verify_daily_occupation_limit,
            on: :update,
            if: :will_save_change_to_seat_id?
-  validate :verify_day_blank_limit,
+  validate :verify_daily_blank_limit,
            on: :update,
            if: :will_save_change_to_seat_id?
   accepts_nested_attributes_for :seat
@@ -152,7 +152,7 @@ class TutorialPiece < ApplicationRecord
     end
   end
 
-  def verify_day_occupation_limit
+  def verify_daily_occupation_limit
     if seat_creation? && new_tutorial_pieces.daily_occupations(seat.timetable) > 3
       errors[:base] << '生徒の合計コマの上限（３コマ）を超えています'
     end
@@ -162,7 +162,7 @@ class TutorialPiece < ApplicationRecord
     end
   end
 
-  def verify_day_blank_limit
+  def verify_daily_blank_limit
     if seat_creation? && new_tutorial_pieces.daily_blanks(seat.timetable) > 2
       errors[:base] << '生徒の空きコマの上限（２コマ）を超えています'
     end
