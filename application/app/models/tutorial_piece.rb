@@ -24,6 +24,8 @@ class TutorialPiece < ApplicationRecord
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
+  after_update :save_seat
+  after_update :save_seat_in_database
 
   scope :filter_by_placed, -> { where.not(seat_id: nil) }
   scope :filter_by_unplaced, -> { where(seat_id: nil) }
@@ -93,7 +95,7 @@ class TutorialPiece < ApplicationRecord
   end
 
   def seat_in_database
-    Seat.find_by(id: seat_id_in_database) || Seat.new
+    @seat_in_database ||= (Seat.find_by(id: seat_id_in_database) || Seat.new)
   end
 
   def new_tutorial_pieces
@@ -111,10 +113,6 @@ class TutorialPiece < ApplicationRecord
   end
 
   def verify_term_teacher
-    if seat_creation? && tutorial_contract.term_teacher_id.nil?
-      errors[:base] << '担当講師が設定されていません'
-    end
-
     if (seat_creation? || seat_updation?) &&
       seat.term_teacher_id.present? &&
       seat.term_teacher_id != tutorial_contract.term_teacher_id
@@ -161,16 +159,25 @@ class TutorialPiece < ApplicationRecord
 
   # before_update
   def set_term_teacher_on_seat
-    if (seat_creation? || seat_updation?) && new_tutorial_pieces.position_occupations(tutorial_contract.term_student_id, seat.timetable).positive?
+    if (seat_creation? || seat_updation?) &&
+       new_tutorial_pieces.position_occupations(tutorial_contract.term_student_id, seat.timetable).positive?
       seat.term_teacher_id = tutorial_contract.term_teacher_id
-      # TODO これをトランザクションで保存する
     end
   end
 
   def unset_term_teacher_on_seat
-    if (seat_updation? || seat_deletion?) && new_tutorial_pieces.position_occupations(tutorial_contract.term_student_id, seat.timetable).zero?
+    if (seat_updation? || seat_deletion?) &&
+       new_tutorial_pieces.position_occupations(tutorial_contract.term_student_id, seat_in_database.timetable).zero?
       seat_in_database.term_teacher_id = nil
-      # TODO これをトランザクションで保存する
     end
+  end
+
+  # after_update
+  def save_seat
+    raise ActiveRecord::Rollback if !seat.save
+  end
+
+  def save_seat_in_database
+    raise ActiveRecord::Rollback if !seat_in_database.save
   end
 end
