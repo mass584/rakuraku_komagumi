@@ -18,6 +18,10 @@ class TutorialContract < ApplicationRecord
   before_save :nest_tutorial_pieces_creation, if: :nest_tutorial_pieces_creation?
   before_save :nest_tutorial_pieces_deletion, if: :nest_tutorial_pieces_deletion?
 
+  scope :filter_by_student, lambda { |term_student_id|
+    itself.where(term_student_id: term_student_id)
+  }
+
   def self.new(attributes = {})
     attributes[:piece_count] ||= 0
     super(attributes)
@@ -44,11 +48,11 @@ class TutorialContract < ApplicationRecord
   private
 
   def placed_tutorial_pieces
-    tutorial_pieces.where.not(seat_id: nil).count
+    tutorial_pieces.filter_by_placed.count
   end
 
   def unplaced_tutorial_pieces
-    tutorial_pieces.where(seat_id: nil).count
+    tutorial_pieces.filter_by_unplaced.count
   end
 
   def increment_count

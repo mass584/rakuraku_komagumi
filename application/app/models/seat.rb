@@ -22,13 +22,8 @@ class Seat < ApplicationRecord
            on: :update,
            if: :will_save_change_to_term_teacher_id?
   
-  scope :filter_by_occupied, lambda {
-    itself.where.not(term_teacher_id: nil)
-  }
   scope :filter_by_teachers, lambda { |term_teacher_ids|
-    itself
-      .filter_by_occupied
-      .where(term_teacher_id: term_teacher_ids)
+    itself.where(term_teacher_id: term_teacher_ids)
   }
 
   def self.overwrite_term_teacher_id(id, term_teacher_id)
@@ -39,7 +34,7 @@ class Seat < ApplicationRecord
   end
 
   def self.group_by_teacher_and_date_and_period
-    itself.filter_by_placed.group_by_recursive(
+    itself.group_by_recursive(
       proc { |item| item.term_teacher_id },
       proc { |item| item.timetable.date_index },
       proc { |item| item.timetable.period_index },
@@ -49,7 +44,8 @@ class Seat < ApplicationRecord
   def self.position_occupations(term_teacher_id, timetable)
     itself
       .group_by_teacher_and_date_and_period
-      .dig(term_teacher_id, timetable.date_index, timetable.period_index).count
+      .dig(term_teacher_id, timetable.date_index, timetable.period_index)
+      .count
   end
 
   def self.daily_occupations(term_teacher_id, timetable)
@@ -57,13 +53,10 @@ class Seat < ApplicationRecord
       .group_by_teacher_and_date_and_period
       .dig(term_teacher_id, timetable.date_index)
     groups = timetable.term.group_contracts
-      .where(term_student_id: tutorial_contract.term_student_id)
+      .filter_by_teacher(term_teacher_id)
       .group_by_date_and_period
       .dig(timetable.date_index)
-    tutorials_and_groups = tutorials.deep_merge(groups)
-    tutorials_and_groups.values.reduce(0) do |accu, item|
-      item.length.positive? ? accu + 1 : accu
-    end
+    self.class.daily_occupations_from(tutorials.deep_merge(groups))
   end
 
   def self.daily_blanks(term_teacher_id, timetable)
@@ -71,19 +64,10 @@ class Seat < ApplicationRecord
       .group_by_teacher_and_date_and_period
       .dig(term_teacher_id, timetable.date_index)
     groups = timetable.term.group_contracts
-      .where(term_student_id: tutorial_contract.term_student_id)
+      .filter_by_teacher(term_teacher_id)
       .group_by_date_and_period
       .dig(timetable.date_index)
-    tutorials_and_groups = tutorials.deep_merge(groups)
-    init = { flag: false, buffer: 0, sum: 0 }
-    result = tutorials_and_groups.values.reduce(init) do |accu, item|
-      {
-        flag: accu[:flag] || item.length.positive?,
-        buffer: item.length.zero? ? accu[:buffer] + 1 : 0,
-        sum: (accu[:flag] && item.length.positive?) ? accu[:sum] + accu[:buffer] : accu[:sum],
-      }
-    end
-    result[:sum]
+    self.class.daily_blanks_from(tutorials.deep_merge(groups))
   end
 
   private
@@ -109,21 +93,21 @@ class Seat < ApplicationRecord
 
   # validate
   def verify_timetable
-    if (term_teacher_creation? || term_teacher_updation?) && timetable.term_group_id.present?
+    if term_teacher_creation? && timetable.term_group_id.present?
       errors[:base] << '集団科目が割り当てられています'
     end
 
-    if (term_teacher_creation? || term_teacher_updation?) && timetable.is_closed
+    if term_teacher_creation? && timetable.is_closed
       errors[:base] << '休講に設定されています'
     end
   end
 
   def verify_doublebooking
-    if term_teacher_creation? && new_seats.position_occupations(term_teacher_id, timetable).count > 1
+    if term_teacher_creation? && new_seats.position_occupations(term_teacher_id, timetable) > 1
       errors[:base] << '講師の予定が重複しています'
     end
 
-    if term_teacher_updation? && new_seats.position_occupations(term_teacher_id, timetable).count > 1
+    if term_teacher_updation? && new_seats.position_occupations(term_teacher_id, timetable) > 1
       errors[:base] << '講師の予定が重複しています'
     end
   end
@@ -150,7 +134,7 @@ class Seat < ApplicationRecord
       errors[:base] << '講師の空きコマの上限（２コマ）を超えています'
     end
 
-    if seat_deletion? && new_seats.daily_blanks(term_teacher_id, timetable) > 2
+    if seat_deletion? && new_seats.daily_blanks(term_teacher_id_in_database, timetable) > 2
       errors[:base] << '講師の空きコマの上限（２コマ）を超えています'
     end
   end

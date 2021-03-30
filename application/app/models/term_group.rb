@@ -3,6 +3,7 @@ class TermGroup < ApplicationRecord
   belongs_to :group
   belongs_to :term_teacher, optional: true
   has_many :group_contracts, dependent: :restrict_with_exception
+  has_many :timetables, dependent: :nullify
 
   validate :can_update_term_teacher?,
            on: :update,
