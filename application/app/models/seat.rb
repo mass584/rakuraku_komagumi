@@ -27,18 +27,6 @@ class Seat < ApplicationRecord
       .filter_by_occupied
       .where(term_teacher_id: term_teacher_ids)
   }
-  scope :filter_by_date, lambda { |date_index|
-    itself
-      .filter_by_placed
-      .joins(:timetable)
-      .where('timetables.date_index': date_index)
-  }
-  scope :filter_by_period, lambda { |period_index|
-    itself
-      .filter_by_placed
-      .joins(:timetable)
-      .where('timetables.period_index': period_index)
-  }
 
   def self.overwrite_term_teacher_id(id, term_teacher_id)
     itself.map do |item|

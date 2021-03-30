@@ -26,10 +26,6 @@ class Timetable < ApplicationRecord
     super(attributes)
   end
 
-  def occupated_seat_count
-    seats.filter { |seat| seat.pieces.exists? }.count
-  end
-
   private
 
   # callback

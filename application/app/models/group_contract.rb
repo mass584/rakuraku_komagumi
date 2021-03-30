@@ -15,6 +15,22 @@ class GroupContract < ApplicationRecord
     super(attributes)
   end
 
+  def self.group_by_date_and_period
+    term.timetables.reduce({}) do |accu, timetable|
+      accu.deep_merge({
+        timetable.date_index => {
+          timetable.period_index => itself.group_contracts(timetable),
+        }
+      })
+    end
+  end
+
+  def self.group_contracts(timetable)
+    itself.select do |group_contract|
+      group_contract.term_group_id == timetable.term_group_id && group_contract.is_contracted
+    end
+  end
+
   private
 
   def can_update_is_contracted
