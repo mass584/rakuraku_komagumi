@@ -17,7 +17,7 @@ class GroupContract < ApplicationRecord
     itself.where(term_student_id: term_student_id)
   }
   scope :filter_by_teacher, lambda { |term_teacher_id|
-    itself.joins(:term_groups).where('term_groups.term_teacher_id': term_teacher_id)
+    itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
   }
 
   def self.new(attributes = {})
@@ -32,11 +32,11 @@ class GroupContract < ApplicationRecord
     end
   end
 
-  def self.group_by_date_and_period
+  def self.group_by_date_and_period(array, term)
     term.timetables.reduce({}) do |accu, timetable|
       accu.deep_merge({
         timetable.date_index => {
-          timetable.period_index => itself.group_contracts(timetable),
+          timetable.period_index => array.group_contracts(timetable),
         }
       })
     end
@@ -52,10 +52,10 @@ class GroupContract < ApplicationRecord
     tutorials = timetable.term.tutorial_contracts
       .filter_by_student(term_student_id)
       .group_by_date_and_period
-      .dig(timetable.date_index)
+      .dig(timetable.date_index) || {}
     groups = itself
       .group_by_date_and_period
-      .dig(timetable.date_index)
+      .dig(timetable.date_index) || {}
     self.class.daily_occupations_from(tutorials.deep_merge(groups))
   end
 
@@ -63,10 +63,10 @@ class GroupContract < ApplicationRecord
     tutorials = timetable.term.tutorial_contracts
       .filter_by_student(term_student_id)
       .group_by_date_and_period
-      .dig(timetable.date_index)
+      .dig(timetable.date_index) || {}
     groups = itself
       .group_by_date_and_period
-      .dig(timetable.date_index)
+      .dig(timetable.date_index) || {}
     self.class.daily_blanks_from(tutorials.deep_merge(groups))
   end
 

@@ -4,7 +4,6 @@ class TutorialContract < ApplicationRecord
   belongs_to :term_tutorial
   belongs_to :term_teacher, optional: true
   has_many :tutorial_pieces, dependent: :destroy
-  accepts_nested_attributes_for :tutorial_pieces, allow_destroy: true
 
   validates :piece_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
@@ -47,14 +46,6 @@ class TutorialContract < ApplicationRecord
 
   private
 
-  def placed_tutorial_pieces
-    tutorial_pieces.filter_by_placed.count
-  end
-
-  def unplaced_tutorial_pieces
-    tutorial_pieces.filter_by_unplaced.count
-  end
-
   def increment_count
     piece_count - piece_count_in_database.to_i
   end
@@ -65,24 +56,24 @@ class TutorialContract < ApplicationRecord
 
   # validate
   def verify_update_term_teacher_id
-    unless placed_tutorial_pieces.positive?
+    if tutorial_pieces.filter_by_placed.count.positive?
       errors[:base] << '配置済みのコマがあるため担任を変更できません'
     end
   end
 
   def verify_under_limit_of_piece_count
-    unless decrement_count <= unplaced_tutorial_pieces
+    if decrement_count > tutorial_pieces.filter_by_unplaced.count
       errors[:base] << '配置済みのコマを未決定に戻す必要があります'
     end
   end
 
-  # callback
+  # before_save
   def nest_tutorial_pieces_creation?
     increment_count.positive?
   end
 
   def nest_tutorial_pieces_creation
-    tutorial_pieces(increment_count.times.map { { term_id: term.id } })
+    tutorial_pieces.build(increment_count.times.map { { term_id: term.id } })
   end
 
   def nest_tutorial_pieces_deletion?
@@ -90,6 +81,6 @@ class TutorialContract < ApplicationRecord
   end
 
   def nest_tutorial_pieces_deletion
-    tutorial_pieces(decrement_count.times.map { { seat_id: nil, _destroy: true } })
+    tutorial_pieces.filter_by_unplaced.limit(decrement_count).delete_all
   end
 end

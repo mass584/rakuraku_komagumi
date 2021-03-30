@@ -6,7 +6,7 @@ class TeacherVacancy < ApplicationRecord
             exclusion: { in: [nil], message: 'にnilは許容されません' }
 
   def self.new(attributes = {})
-    attributes[:is_vacant] ||= false
+    attributes[:is_vacant] ||= true
     super(attributes)
   end
 end
