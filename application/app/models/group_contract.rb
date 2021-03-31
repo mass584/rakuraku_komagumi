@@ -50,10 +50,6 @@ class GroupContract < ApplicationRecord
     !is_contracted_in_database && is_contracted
   end
 
-  def seat_deletion?
-    is_contracted_in_database && !is_contracted
-  end
-
   # GroupContract array's dataflow
   def new_group_contracts
     term

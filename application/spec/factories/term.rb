@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :spring_term, class: Term do
     association :room, factory: :room
-    id             { 1 }
     name           { '2020年度春期講習' }
     year           { 2020 }
     term_type      { 1 }
@@ -14,7 +13,6 @@ FactoryBot.define do
 
   factory :first_term, class: Term do
     association :room, factory: :room
-    id             { 2 }
     name           { '2020年度1学期' }
     year           { 2020 }
     term_type      { 0 }
@@ -27,7 +25,6 @@ FactoryBot.define do
 
   factory :summer_term, class: Term do
     association :room, factory: :room
-    id             { 3 }
     name           { '2020年度夏期講習' }
     year           { 2020 }
     term_type      { 1 }
@@ -40,7 +37,6 @@ FactoryBot.define do
 
   factory :second_term, class: Term do
     association :room, factory: :room
-    id             { 4 }
     name           { '2020年度2学期' }
     year           { 2020 }
     term_type      { 0 }
@@ -53,7 +49,6 @@ FactoryBot.define do
 
   factory :winter_term, class: Term do
     association :room, factory: :room
-    id             { 5 }
     name           { '2020年度冬期講習' }
     year           { 2020 }
     term_type      { 1 }
@@ -66,7 +61,6 @@ FactoryBot.define do
 
   factory :third_term, class: Term do
     association :room, factory: :room
-    id             { 6 }
     name           { '2020年度3学期' }
     year           { 2020 }
     term_type      { 0 }
@@ -79,7 +73,6 @@ FactoryBot.define do
 
   factory :exam_planning_term, class: Term do
     association :room, factory: :room
-    id             { 7 }
     name           { 'テスト対策' }
     year           { 2020 }
     term_type      { 2 }

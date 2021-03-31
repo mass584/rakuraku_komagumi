@@ -5,6 +5,5 @@ FactoryBot.define do
     sequence(:name)  { |n| "集団科目#{n}" }
     sequence(:order) { |n| n }
     is_deleted       { false }
-    room_id          { 1 }
   end
 end

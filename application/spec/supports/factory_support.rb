@@ -67,14 +67,4 @@ module FactorySupport
     end
     term.reload
   end
-
-  def set_tutorial_pieces(term)
-    tutorial_contract = term.tutorial_contracts.first
-    tutorial_contract.update(piece_count: 4, term_teacher_id: 1)
-    tutorial_contract.tutorial_pieces.each_with_index do |tutorial_piece, index|
-      timetable = term.timetables.find_by(date_index: index + 1, period_index: 1)
-      seat = timetable.seats.find_by(seat_index: 1)
-      tutorial_piece.update(seat_id: seat.id)
-    end
-  end
 end
