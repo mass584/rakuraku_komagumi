@@ -15,7 +15,7 @@ class TermGroup < ApplicationRecord
 
   # validate
   def can_update_term_teacher?
-    unless term.seats.filter_by_occupied.zero?
+    if term.seats.filter_by_occupied.count.positive?
       errors[:base] << '集団担当を変更するには、個別授業の設定を全て解除する必要があります'
     end
   end
