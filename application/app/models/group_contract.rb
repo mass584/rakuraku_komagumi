@@ -52,22 +52,22 @@ class GroupContract < ApplicationRecord
     tutorials = timetable.term.tutorial_contracts
       .filter_by_student(term_student_id)
       .group_by_date_and_period
-      .dig(timetable.date_index) || {}
+      .dig(timetable.date_index).to_h
     groups = itself
       .group_by_date_and_period
-      .dig(timetable.date_index) || {}
-    self.class.daily_occupations_from(tutorials.deep_merge(groups))
+      .dig(timetable.date_index).to_h
+    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
   def self.daily_blanks(term_student_id, timetable)
     tutorials = timetable.term.tutorial_contracts
       .filter_by_student(term_student_id)
       .group_by_date_and_period
-      .dig(timetable.date_index) || {}
+      .dig(timetable.date_index).to_h
     groups = itself
       .group_by_date_and_period
-      .dig(timetable.date_index) || {}
-    self.class.daily_blanks_from(tutorials.deep_merge(groups))
+      .dig(timetable.date_index).to_h
+    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
   private

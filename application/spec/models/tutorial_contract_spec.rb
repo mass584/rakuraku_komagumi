@@ -30,14 +30,4 @@ RSpec.describe TutorialContract, type: :model do
       end
     end
   end
-
-  describe 'DateとPeriodでのマッピング' do
-    before :each do
-      @term = create_normal_term_with_teacher_and_student(1, 1)
-      @first = @term.tutorial_contracts.first
-      @second = @term.tutorial_contracts.second
-      @first.update(piece_count: 4, term_teacher_id: 1)
-      @second.update(piece_count: 4, term_teacher_id: 1)
-    end
-  end
 end

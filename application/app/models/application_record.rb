@@ -12,7 +12,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.daily_blanks_from(tutorials_and_groups)
     init = { flag: false, buffer: 0, sum: 0 }
-    result = tutorials_and_groups.values.reduce(init) do |accu, item|
+    result = tutorials_and_groups.sort.to_h.values.reduce(init) do |accu, item|
       {
         flag: accu[:flag] || item.length.positive?,
         buffer: item.length.zero? ? accu[:buffer] + 1 : 0,

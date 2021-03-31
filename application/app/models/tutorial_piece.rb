@@ -78,27 +78,27 @@ class TutorialPiece < ApplicationRecord
 
   def daily_occupations(term_student_id, timetable)
     tutorials = group_by_student_and_date_and_period
-      .dig(term_student_id, timetable.date_index) || {}
+      .dig(term_student_id, timetable.date_index).to_h
     groups = GroupContract.group_by_date_and_period(
       timetable.term.group_contracts.filter_by_student(term_student_id).filter_by_is_contracted,
       term,
-    ).dig(timetable.date_index) || {}
-    self.class.daily_occupations_from(tutorials.deep_merge(groups))
+    ).dig(timetable.date_index).to_h
+    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
   def daily_blanks(term_student_id, timetable)
     tutorials = group_by_student_and_date_and_period
-      .dig(term_student_id, timetable.date_index) || {}
+      .dig(term_student_id, timetable.date_index).to_h
     groups = GroupContract.group_by_date_and_period(
       timetable.term.group_contracts.filter_by_student(term_student_id).filter_by_is_contracted,
       term,
-    ).dig(timetable.date_index) || {}
-    self.class.daily_blanks_from(tutorials.deep_merge(groups))
+    ).dig(timetable.date_index).to_h
+    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
   # validate
   def verify_seat_occupation
-    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count >= term.position_count
+    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count >= seat.position_count
       errors[:base] << '座席の最大人数をオーバーしています'
     end
   end
@@ -124,29 +124,29 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_occupation_limit
     limit = tutorial_contract.term_student.optimization_rule.occupation_limit
     if seat_creation? && daily_occupations(tutorial_contract.term_student_id, seat.timetable) > limit
-      errors[:base] << '生徒の合計コマの上限を超えています'
+      errors[:base] << '生徒の１日の上限コマの上限を超えています'
     end
 
     if seat_updation? && daily_occupations(tutorial_contract.term_student_id, seat.timetable) > limit
-      errors[:base] << '生徒の合計コマの上限を超えています'
+      errors[:base] << '生徒の１日の上限コマの上限を超えています'
     end
   end
 
   def verify_daily_blank_limit
     limit = tutorial_contract.term_student.optimization_rule.blank_limit
     if seat_creation? && daily_blanks(tutorial_contract.term_student_id, seat.timetable) > limit
-      errors[:base] << '生徒の空きコマの上限を超えています'
+      errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
 
     if seat_updation? && (
       daily_blanks(tutorial_contract.term_student_id, seat.timetable) > limit ||
       daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > limit
     )
-      errors[:base] << '生徒の空きコマの上限を超えています'
+      errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
 
     if seat_deletion? && daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > limit
-      errors[:base] << '生徒の空きコマの上限を超えています'
+      errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
   end
 
