@@ -70,8 +70,7 @@ class Seat < ApplicationRecord
   end
 
   def daily_occupations(term_teacher_id, timetable)
-    tutorials = group_by_teacher_and_date_and_period
-      .dig(term_teacher_id, timetable.date_index).to_h
+    tutorials = group_by_teacher_and_date_and_period.dig(term_teacher_id, timetable.date_index).to_h
     groups = GroupContract.group_by_date_and_period(
       timetable.term.group_contracts.filter_by_teacher(term_teacher_id),
       term,
@@ -80,8 +79,7 @@ class Seat < ApplicationRecord
   end
 
   def daily_blanks(term_teacher_id, timetable)
-    tutorials = group_by_teacher_and_date_and_period
-      .dig(term_teacher_id, timetable.date_index).to_h
+    tutorials = group_by_teacher_and_date_and_period.dig(term_teacher_id, timetable.date_index).to_h
     groups = GroupContract.group_by_date_and_period(
       timetable.term.group_contracts.filter_by_teacher(term_teacher_id),
       term,

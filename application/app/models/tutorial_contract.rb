@@ -26,18 +26,18 @@ class TutorialContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.group_by_date_and_period
+  def self.group_by_date_and_period(tutorial_contracts, term)
     term.timetables.reduce({}) do |accu, timetable|
       accu.deep_merge({
         timetable.date_index => {
-          timetable.period_index => itself.tutorial_contracts(timetable),
+          timetable.period_index => filter_by_timetable(tutorial_contracts, timetable),
         }
       })
     end
   end
 
-  def self.tutorial_contracts(timetable)
-    itself.select do |tutorial_contract|
+  def self.filter_by_timetable(tutorial_contracts, timetable)
+    tutorial_contracts.select do |tutorial_contract|
       timetable.seats.map(&:tutorial_pieces).flatten.find do |tutorial_piece|
         tutorial_contract.id == tutorial_piece.tutorial_contract_id
       end
