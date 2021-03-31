@@ -110,31 +110,31 @@ class Seat < ApplicationRecord
   def verify_daily_occupation_limit
     if term_teacher_creation? &&
        daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の合計コマの上限を超えています'
+      errors[:base] << '講師の１日の上限コマを超えています'
     end
 
     if term_teacher_updation? &&
        daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の合計コマの上限を超えています'
+      errors[:base] << '講師の１日の上限コマを超えています'
     end
   end
 
   def verify_daily_blank_limit
     if term_teacher_creation? &&
        daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit
-      errors[:base] << '講師の空きコマの上限（２コマ）を超えています'
+      errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
 
     if term_teacher_updation? && (
       daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit || 
       daily_blanks(term_teacher_id_in_database, timetable) > term_teacher_in_database.optimization_rule.blank_limit
     )
-      errors[:base] << '講師の空きコマの上限（２コマ）を超えています'
+      errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
 
     if term_teacher_deletion? &&
        daily_blanks(term_teacher_id_in_database, timetable) > term_teacher_in_database.optimization_rule.blank_limit
-      errors[:base] << '講師の空きコマの上限（２コマ）を超えています'
+      errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
   end
 end
