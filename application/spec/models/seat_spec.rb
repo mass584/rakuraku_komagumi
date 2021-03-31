@@ -171,4 +171,21 @@ RSpec.describe Seat, type: :model do
       end
     end
   end
+
+  describe '講師の予定の空きバリデーションの検証' do
+    before :each do
+      term = create_normal_term_with_teacher_and_student(1, 0)
+      @term_teacher = term.term_teachers.first
+      @seat = term.seats.first
+      @timetable = @seat.timetable
+      teacher_vacancy = @timetable.teacher_vacancies.find_by(timetable_id: @timetable.id, term_teacher_id: @term_teacher.id)
+      teacher_vacancy.update(is_vacant: false)
+    end
+
+    it '設定先の講師の予定が空いていない場合、update失敗' do
+      expect(@seat.update(term_teacher_id: @term_teacher.id)).to eq(false)
+      expect(@seat.reload.term_teacher_id).to eq(nil)
+      expect(@seat.errors.full_messages).to include('講師の予定が空いていません')
+    end
+  end
 end

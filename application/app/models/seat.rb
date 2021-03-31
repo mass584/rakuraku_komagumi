@@ -21,7 +21,10 @@ class Seat < ApplicationRecord
   validate :verify_daily_blank_limit,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
-  
+  validate :verify_teacher_vacancy,
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
+
   scope :filter_by_teachers, lambda { |term_teacher_ids|
     where(term_teacher_id: term_teacher_ids)
   }
@@ -136,6 +139,13 @@ class Seat < ApplicationRecord
     if term_teacher_deletion? &&
        daily_blanks(term_teacher_id_in_database, timetable) > term_teacher_in_database.optimization_rule.blank_limit
       errors[:base] << '講師の１日の空きコマの上限を超えています'
+    end
+  end
+
+  def verify_teacher_vacancy
+    if (term_teacher_creation? || term_teacher_updation?) &&
+       !timetable.teacher_vacancies.find_by(term_teacher_id: term_teacher_id).is_vacant
+      errors[:base] << '講師の予定が空いていません'
     end
   end
 end

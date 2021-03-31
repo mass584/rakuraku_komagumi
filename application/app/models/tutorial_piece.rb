@@ -18,6 +18,9 @@ class TutorialPiece < ApplicationRecord
   validate :verify_daily_blank_limit,
            on: :update,
            if: :will_save_change_to_seat_id?
+  validate :verify_student_vacancy,
+           on: :update,
+           if: :will_save_change_to_seat_id?
   accepts_nested_attributes_for :seat
 
   before_update :set_term_teacher_on_seat,
@@ -145,6 +148,13 @@ class TutorialPiece < ApplicationRecord
 
     if seat_deletion? && daily_blanks(tutorial_contract.term_student_id, seat_in_database.timetable) > limit
       errors[:base] << '生徒の１日の空きコマの上限を超えています'
+    end
+  end
+
+  def verify_student_vacancy
+    if (seat_creation? || seat_updation?) &&
+       !seat.timetable.student_vacancies.find_by(term_student_id: tutorial_contract.term_student_id).is_vacant
+      errors[:base] << '生徒の予定が空いていません'
     end
   end
 

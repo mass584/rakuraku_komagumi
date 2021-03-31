@@ -275,4 +275,23 @@ RSpec.describe TutorialPiece, type: :model do
       end
     end
   end
+
+  describe '生徒の予定の空きバリデーションの検証' do
+    before :each do
+      term = create_normal_term_with_teacher_and_student(1, 1)
+      tutorial_contract = term.tutorial_contracts.first
+      tutorial_contract.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
+      @tutorial_piece = tutorial_contract.tutorial_pieces.first
+      @seat = term.seats.first
+      @timetable = @seat.timetable
+      student_vacancy = tutorial_contract.term_student.student_vacancies.find_by(timetable_id: @timetable.id)
+      student_vacancy.update(is_vacant: false)
+    end
+
+    it '設定先の生徒の予定が空いていない場合、update失敗' do
+      expect(@tutorial_piece.update(seat_id: @seat.id)).to eq(false)
+      expect(@tutorial_piece.reload.seat_id).to eq(nil)
+      expect(@tutorial_piece.errors.full_messages).to include('生徒の予定が空いていません')
+    end
+  end
 end
