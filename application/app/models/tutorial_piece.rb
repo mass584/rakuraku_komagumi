@@ -152,25 +152,23 @@ class TutorialPiece < ApplicationRecord
 
   # before_update
   def set_term_teacher_on_seat
-    if (seat_creation? || seat_updation?) &&
-       position_occupations(tutorial_contract.term_student_id, seat.timetable).positive?
+    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count == 0 
       seat.term_teacher_id = tutorial_contract.term_teacher_id
     end
   end
 
   def unset_term_teacher_on_seat
-    if (seat_updation? || seat_deletion?) &&
-       position_occupations(tutorial_contract.term_student_id, seat_in_database.timetable).zero?
+    if (seat_updation? || seat_deletion?) && seat_in_database.tutorial_pieces.count == 1
       seat_in_database.term_teacher_id = nil
     end
   end
 
   # after_update
   def save_seat
-    raise ActiveRecord::Rollback if (!!seat && !seat.save)
+    raise ActiveRecord::Rollback if (seat.present? && !seat.save)
   end
 
   def save_seat_in_database
-    raise ActiveRecord::Rollback if (!!seat_in_database && !seat_in_database.save)
+    raise ActiveRecord::Rollback if (seat_in_database.present? && !seat_in_database.save)
   end
 end
