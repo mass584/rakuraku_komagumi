@@ -1,6 +1,28 @@
 require 'rails_helper'
 
 RSpec.describe Seat, type: :model do
+  describe '集団や休講との重複検証' do
+    before :each do
+      term = create_normal_term_with_teacher_and_student(1, 0)
+      @term_teacher = term.term_teachers.first
+      @term_group = term.term_groups.first
+      @timetable = term.timetables.find_by(date_index: 1, period_index: 1)
+      @first = @timetable.seats.first
+    end
+
+    it '休講と重複した場合にupdate失敗' do
+      @timetable.update(is_closed: true)
+      expect(@first.update(term_teacher_id: @term_teacher.id)).to eq(false)
+      expect(@first.errors.full_messages).to include('休講に設定されています')
+    end
+
+    it '集団科目と重複した場合にupdate失敗' do
+      @timetable.update(term_group_id: @term_group.id)
+      expect(@first.update(term_teacher_id: @term_teacher.id)).to eq(false)
+      expect(@first.errors.full_messages).to include('集団科目が割り当てられています')
+    end
+  end
+
   describe 'ダブルブッキングバリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 0)

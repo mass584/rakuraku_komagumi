@@ -30,7 +30,7 @@ class Term < ApplicationRecord
   validate :valid_context?
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
-  before_save :set_nest_objects
+  before_create :set_nest_objects
 
   def date_count
     return 7 if normal?

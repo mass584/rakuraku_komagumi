@@ -19,7 +19,7 @@ class Timetable < ApplicationRecord
            on: :update,
            if: :will_save_change_to_term_group_id?
 
-  before_save :set_nest_objects
+  before_create :set_nest_objects
 
   def self.new(attributes = {})
     attributes[:is_closed] ||= false
@@ -41,13 +41,13 @@ class Timetable < ApplicationRecord
 
   # validate
   def can_update_is_closed?
-    unless seats.filter_by_occupied.zero?
+    unless seats.filter_by_occupied.count.zero?
       errors[:base] << '個別授業が割り当てられているため変更できません'
     end
   end
 
   def can_update_term_group_id?
-    unless term.seats.filter_by_occupied.zero?
+    unless seats.filter_by_occupied.count.zero?
       errors[:base] << '集団日程を変更するには、個別授業の設定を全て解除する必要があります'
     end
   end

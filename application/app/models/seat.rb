@@ -23,7 +23,10 @@ class Seat < ApplicationRecord
            if: :will_save_change_to_term_teacher_id?
   
   scope :filter_by_teachers, lambda { |term_teacher_ids|
-    itself.where(term_teacher_id: term_teacher_ids)
+    where(term_teacher_id: term_teacher_ids)
+  }
+  scope :filter_by_occupied, lambda {
+    where.not(term_teacher_id: nil)
   }
 
   private
