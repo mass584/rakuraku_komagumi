@@ -6,7 +6,10 @@ class GroupContract < ApplicationRecord
   validates :is_contracted,
             exclusion: { in: [nil], message: 'にnilは許容されません' }
 
-  validate :can_update_is_contracted,
+  validate :verify_daily_blank_limit,
+            on: :update,
+            if: :will_save_change_to_is_contracted?
+  validate :verify_daily_occupation_limit,
             on: :update,
             if: :will_save_change_to_is_contracted?
 
@@ -55,7 +58,7 @@ class GroupContract < ApplicationRecord
   def new_group_contracts
     term
       .group_contracts
-      .filter_by_student(group_contract.term_student_id)
+      .filter_by_student(term_student_id)
       .map { |item| item.is_contracted = is_contracted if item.id == id; item }
   end
 
@@ -95,22 +98,22 @@ class GroupContract < ApplicationRecord
 
   # validate
   def verify_daily_occupation_limit
-    daily_occupations_invalid = term_group.timetables.reduce(false) do |timetable|
+    daily_occupations_invalid = term_group.timetables.reduce(false) do |accu, timetable|
       accu || daily_occupations(term_student_id, timetable) > term_student.optimization_rule.occupation_limit
     end
 
     if contract_creation? && daily_occupations_invalid
-      errors[:base] << '生徒の合計コマの上限を超えています'
+      errors[:base] << '生徒の１日の合計コマの上限を超えています'
     end
   end
 
   def verify_daily_blank_limit
-    daily_blanks_invalid = term_group.timetables.reduce(false) do |timetable|
+    daily_blanks_invalid = term_group.timetables.reduce(false) do |accu, timetable|
       accu || daily_blanks(term_student_id, timetable) > term_student.optimization_rule.blank_limit
     end
 
     if daily_blanks_invalid
-      errors[:base] << '生徒の空きコマの上限を超えています'
+      errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
   end
 end

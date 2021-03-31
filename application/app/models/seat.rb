@@ -111,12 +111,12 @@ class Seat < ApplicationRecord
   def verify_daily_occupation_limit
     if term_teacher_creation? &&
        daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の１日の上限コマを超えています'
+      errors[:base] << '講師の１日の合計コマの上限を超えています'
     end
 
     if term_teacher_updation? &&
        daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の１日の上限コマを超えています'
+      errors[:base] << '講師の１日の合計コマの上限を超えています'
     end
   end
 
