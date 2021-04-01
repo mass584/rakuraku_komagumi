@@ -16,8 +16,8 @@ class StudentVacancy < ApplicationRecord
   private
 
   def verify_vacancy
-    if !is_vacant &&
-       timetable.seats.map(&:tutorial_pieces).flatten.find { |tutorial_piece| tutorial_piece.tutorial_contract.term_student_id == term_student_id }
+    term_student_ids = timetable.seats.joins(tutorial_pieces: :tutorial_contract).pluck(:term_student_id).flatten.uniq
+    if !is_vacant && term_student_ids.find { |item| item == term_student_id }
       errors[:base] << '生徒の予定がすでに埋まっています'
     end
   end
