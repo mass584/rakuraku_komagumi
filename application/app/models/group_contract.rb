@@ -6,10 +6,10 @@ class GroupContract < ApplicationRecord
   validates :is_contracted,
             exclusion: { in: [nil], message: 'にnilは許容されません' }
 
-  validate :verify_daily_blank_limit,
+  validate :verify_daily_occupation_limit,
             on: :update,
             if: :will_save_change_to_is_contracted?
-  validate :verify_daily_occupation_limit,
+  validate :verify_daily_blank_limit,
             on: :update,
             if: :will_save_change_to_is_contracted?
 
@@ -22,6 +22,10 @@ class GroupContract < ApplicationRecord
   scope :filter_by_teacher, lambda { |term_teacher_id|
     itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
   }
+
+  before_validation :fetch_new_group_contracts, on: :update
+  before_validation :fetch_new_group_contracts_group_by_timetable, on: :update
+  before_validation :fetch_tutorial_contracts_group_by_timetable, on: :update
 
   def self.new(attributes = {})
     attributes[:is_contracted] ||= false
@@ -50,52 +54,18 @@ class GroupContract < ApplicationRecord
     !is_contracted_in_database && is_contracted
   end
 
-  # GroupContract array's dataflow
-  def new_group_contracts
-    term
-      .group_contracts
-      .filter_by_student(term_student_id)
-      .map { |item| item.is_contracted = is_contracted if item.id == id; item }
-  end
-
-  def group_by_date_and_period
-    term.timetables.reduce({}) do |accu, timetable|
-      accu.deep_merge({
-        timetable.date_index => {
-          timetable.period_index => group_contracts(timetable),
-        }
-      })
-    end
-  end
-
-  def group_contracts(timetable)
-    new_group_contracts.select do |group_contract|
-      group_contract.term_group_id == timetable.term_group_id && group_contract.is_contracted
-    end
-  end
-
-  def daily_occupations(term_student_id, timetable)
-    tutorials = TutorialContract.group_by_date_and_period(
-      timetable.term.tutorial_contracts.filter_by_student(term_student_id),
-      term,
-    ).dig(timetable.date_index).to_h
-    groups = group_by_date_and_period.dig(timetable.date_index).to_h
+  # validate
+  def daily_occupations(date_index)
+    tutorials = @tutorial_contracts_group_by_timetable.dig(date_index).to_h
+    groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
     self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
-  def daily_blanks(term_student_id, timetable)
-    tutorials = TutorialContract.group_by_date_and_period(
-      timetable.term.tutorial_contracts.filter_by_student(term_student_id),
-      term,
-    ).dig(timetable.date_index).to_h
-    groups = group_by_date_and_period.dig(timetable.date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
-  end
-
-  # validate
   def verify_daily_occupation_limit
-    daily_occupations_invalid = term_group.timetables.reduce(false) do |accu, timetable|
-      accu || daily_occupations(term_student_id, timetable) > term_student.optimization_rule.occupation_limit
+    date_indexes = term_group.timetables.pluck(:date_index).uniq
+    occupation_limit = term_student.optimization_rule.occupation_limit
+    daily_occupations_invalid = date_indexes.reduce(false) do |accu, date_index|
+      accu || daily_occupations(date_index) > occupation_limit
     end
 
     if contract_creation? && daily_occupations_invalid
@@ -103,13 +73,60 @@ class GroupContract < ApplicationRecord
     end
   end
 
+  def daily_blanks(date_index)
+    tutorials = @tutorial_contracts_group_by_timetable.dig(date_index).to_h
+    groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
+    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+  end
+
   def verify_daily_blank_limit
-    daily_blanks_invalid = term_group.timetables.reduce(false) do |accu, timetable|
-      accu || daily_blanks(term_student_id, timetable) > term_student.optimization_rule.blank_limit
+    date_indexes = term_group.timetables.pluck(:date_index).uniq
+    blank_limit = term_student.optimization_rule.blank_limit
+    daily_blanks_invalid = date_indexes.reduce(false) do |accu, date_index|
+      accu || daily_blanks(date_index) > blank_limit
     end
 
     if daily_blanks_invalid
       errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
+  end
+
+  # before_validation
+  def fetch_new_group_contracts
+    @new_group_contracts = term
+      .group_contracts
+      .filter_by_student(term_student_id)
+      .pluck(:id, :term_group_id, :is_contracted)
+      .map { |item| [:id, :term_group_id, :is_contracted].zip(item).to_h }
+      .map do |item|
+        {
+          id: item[:id],
+          term_group_id: item[:term_group_id],
+          is_contracted: item[:id] == id ? is_contracted : item[:is_contracted],
+        }
+      end 
+  end
+
+  def selected_new_group_contracts(term_group_id)
+    @new_group_contracts.select do |new_group_contract|
+      new_group_contract[:term_group_id] == term_group_id && new_group_contract[:is_contracted]
+    end
+  end
+
+  def fetch_new_group_contracts_group_by_timetable
+    timetables = term.timetables.pluck(:date_index, :period_index, :term_group_id).map do |item|
+      [:date_index, :period_index, :term_group_id].zip(item).to_h
+    end
+    @new_group_contracts_group_by_timetable = timetables.reduce({}) do |accu, timetable|
+      accu.deep_merge({
+        timetable[:date_index] => {
+          timetable[:period_index] => selected_new_group_contracts(timetable[:term_group_id]),
+        }
+      })
+    end
+  end
+
+  def fetch_tutorial_contracts_group_by_timetable
+    @tutorial_contracts_group_by_timetable = TutorialContract.group_by_date_and_period(term, term_student_id)
   end
 end
