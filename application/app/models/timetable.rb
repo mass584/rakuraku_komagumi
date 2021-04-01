@@ -1,6 +1,6 @@
 class Timetable < ApplicationRecord
   belongs_to :term
-  belongs_to :term_groups, optional: true
+  belongs_to :term_group, optional: true
   has_many :student_vacancies, dependent: :destroy
   has_many :teacher_vacancies, dependent: :destroy
   has_many :seats, dependent: :destroy

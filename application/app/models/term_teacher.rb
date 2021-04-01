@@ -14,6 +14,11 @@ class TermTeacher < ApplicationRecord
 
   before_create :set_nest_objects
 
+  def self.new(attributes = {})
+    attributes[:vacancy_status] ||= 'draft'
+    super(attributes)
+  end
+
   def optimization_rule
     @optimization_rule ||= term.teacher_optimization_rules.first
   end

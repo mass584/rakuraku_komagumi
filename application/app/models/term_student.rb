@@ -28,6 +28,11 @@ class TermStudent < ApplicationRecord
 
   before_create :set_nest_objects
 
+  def self.new(attributes = {})
+    attributes[:vacancy_status] ||= 'draft'
+    super(attributes)
+  end
+
   def optimization_rule
     @optimization_rule ||= term.student_optimization_rules.find_by(school_grade: school_grade)
   end
