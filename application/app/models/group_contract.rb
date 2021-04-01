@@ -32,19 +32,36 @@ class GroupContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.group_by_date_and_period(group_contracts, term)
-    term.timetables.reduce({}) do |accu, timetable|
+  def self.group_by_timetable_for_teacher(term, term_teacher_id)
+    records = term
+      .group_contracts
+      .filter_by_teacher(term_teacher_id)
+      .joins(term_group: :timetables)
+      .select("timetables.*")
+    term.timetables.pluck(:id, :date_index, :period_index, :term_group_id).reduce({}) do |accu, timetable|
       accu.deep_merge({
-        timetable.date_index => {
-          timetable.period_index => filter_by_timetable(group_contracts, timetable),
+        timetable[1] => {
+          timetable[2] => 
+            records.filter { |record| record.term_group_id == timetable[3] },
         }
       })
     end
   end
 
-  def self.filter_by_timetable(group_contracts, timetable)
-    group_contracts.select do |group_contract|
-      group_contract.term_group_id == timetable.term_group_id && group_contract.is_contracted
+  def self.group_by_timetable_for_student(term, term_student_id)
+    records = term
+      .group_contracts
+      .filter_by_student(term_student_id)
+      .filter_by_is_contracted
+      .joins(term_group: :timetables)
+      .select("timetables.*")
+    term.timetables.pluck(:id, :date_index, :period_index, :term_group_id).reduce({}) do |accu, timetable|
+      accu.deep_merge({
+        timetable[1] => {
+          timetable[2] => 
+            records.filter { |record| record.term_group_id == timetable[3] },
+        }
+      })
     end
   end
 
@@ -127,6 +144,6 @@ class GroupContract < ApplicationRecord
   end
 
   def fetch_tutorial_contracts_group_by_timetable
-    @tutorial_contracts_group_by_timetable = TutorialContract.group_by_date_and_period(term, term_student_id)
+    @tutorial_contracts_group_by_timetable = TutorialContract.group_by_timetable_for_student(term, term_student_id)
   end
 end

@@ -12,6 +12,9 @@ class Seat < ApplicationRecord
   validate :verify_timetable,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
+  validate :verify_teacher_vacancy,
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
   validate :verify_doublebooking,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
@@ -21,9 +24,10 @@ class Seat < ApplicationRecord
   validate :verify_daily_blank_limit,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
-  validate :verify_teacher_vacancy,
-           on: :update,
-           if: :will_save_change_to_term_teacher_id?
+
+  before_validation :fetch_term_teacher_in_database, on: :update
+  before_validation :fetch_new_seats_group_by_teacher_and_timetable, on: :update
+  before_validation :fetch_group_contracts_group_by_timetable, on: :update
 
   scope :filter_by_teachers, lambda { |term_teacher_ids|
     where(term_teacher_id: term_teacher_ids)
@@ -46,50 +50,6 @@ class Seat < ApplicationRecord
     term_teacher_id_in_database.present? && term_teacher_id.nil?
   end
 
-  def term_teacher_in_database
-    @term_teacher_in_database ||= (TermTeacher.find_by(id: term_teacher_id_in_database) || TermTeacher.new)
-  end
-
-  # Seat array's dataflow
-  def new_seats
-    term
-      .seats
-      .filter_by_teachers([term_teacher_id, term_teacher_id_in_database])
-      .map { |item| item.term_teacher_id = term_teacher_id if item.id == id; item }
-  end
-
-  def group_by_teacher_and_date_and_period
-    new_seats.group_by_recursive(
-      proc { |item| item.term_teacher_id },
-      proc { |item| item.timetable.date_index },
-      proc { |item| item.timetable.period_index },
-    )
-  end
-
-  def position_occupations(term_teacher_id, timetable)
-    (group_by_teacher_and_date_and_period
-      .dig(term_teacher_id, timetable.date_index, timetable.period_index) || [])
-      .count
-  end
-
-  def daily_occupations(term_teacher_id, timetable)
-    tutorials = group_by_teacher_and_date_and_period.dig(term_teacher_id, timetable.date_index).to_h
-    groups = GroupContract.group_by_date_and_period(
-      timetable.term.group_contracts.filter_by_teacher(term_teacher_id),
-      term,
-    ).dig(timetable.date_index).to_h
-    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
-  end
-
-  def daily_blanks(term_teacher_id, timetable)
-    tutorials = group_by_teacher_and_date_and_period.dig(term_teacher_id, timetable.date_index).to_h
-    groups = GroupContract.group_by_date_and_period(
-      timetable.term.group_contracts.filter_by_teacher(term_teacher_id),
-      term,
-    ).dig(timetable.date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
-  end
-
   # validate
   def verify_timetable
     if term_teacher_creation? && timetable.term_group_id.present?
@@ -101,6 +61,18 @@ class Seat < ApplicationRecord
     end
   end
 
+  def verify_teacher_vacancy
+    if (term_teacher_creation? || term_teacher_updation?) &&
+       !timetable.teacher_vacancies.find_by(term_teacher_id: term_teacher_id).is_vacant
+      errors[:base] << '講師の予定が空いていません'
+    end
+  end
+
+  def position_occupations(term_teacher_id, timetable)
+    @new_seats_group_by_teacher_and_timetable
+      .dig(term_teacher_id, timetable.date_index, timetable.period_index).to_a.count
+  end
+
   def verify_doublebooking
     if term_teacher_creation? && position_occupations(term_teacher_id, timetable) > 1
       errors[:base] << '講師の予定が重複しています'
@@ -109,6 +81,12 @@ class Seat < ApplicationRecord
     if term_teacher_updation? && position_occupations(term_teacher_id, timetable) > 1
       errors[:base] << '講師の予定が重複しています'
     end
+  end
+
+  def daily_occupations(term_teacher_id, timetable)
+    tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
+    groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
+    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
   end
 
   def verify_daily_occupation_limit
@@ -123,6 +101,12 @@ class Seat < ApplicationRecord
     end
   end
 
+  def daily_blanks(term_teacher_id, timetable)
+    tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
+    groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
+    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+  end
+
   def verify_daily_blank_limit
     if term_teacher_creation? &&
        daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit
@@ -131,21 +115,51 @@ class Seat < ApplicationRecord
 
     if term_teacher_updation? && (
       daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit || 
-      daily_blanks(term_teacher_id_in_database, timetable) > term_teacher_in_database.optimization_rule.blank_limit
+      daily_blanks(term_teacher_id_in_database, timetable) > @term_teacher_in_database.optimization_rule.blank_limit
     )
       errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
 
     if term_teacher_deletion? &&
-       daily_blanks(term_teacher_id_in_database, timetable) > term_teacher_in_database.optimization_rule.blank_limit
+       daily_blanks(term_teacher_id_in_database, timetable) > @term_teacher_in_database.optimization_rule.blank_limit
       errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
   end
 
-  def verify_teacher_vacancy
-    if (term_teacher_creation? || term_teacher_updation?) &&
-       !timetable.teacher_vacancies.find_by(term_teacher_id: term_teacher_id).is_vacant
-      errors[:base] << '講師の予定が空いていません'
-    end
+  # before_validation
+  def fetch_term_teacher_in_database
+    @term_teacher_in_database = TermTeacher.find_by(id: term_teacher_id_in_database)
+  end
+
+  def new_seats
+    term
+      .seats
+      .filter_by_teachers([term_teacher_id, term_teacher_id_in_database])
+      .joins(:timetable)
+      .pluck(:id, :term_teacher_id, :date_index, :period_index)
+      .map do |item|
+        [:id, :term_teacher_id, :date_index, :period_index].zip(item).to_h
+      end
+      .map do |item|
+        {
+          id: item[:id],
+          term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
+          date_index: item[:date_index],
+          period_index: item[:period_index],
+        }
+      end
+      .select { |item| item[:term_teacher_id].present? }
+  end
+
+  def fetch_new_seats_group_by_teacher_and_timetable
+    @new_seats_group_by_teacher_and_timetable = new_seats.group_by_recursive(
+      proc { |item| item[:term_teacher_id] },
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
+  end
+
+  def fetch_group_contracts_group_by_timetable
+    @group_contracts_group_by_timetable = GroupContract.group_by_timetable_for_teacher(term, term_teacher_id)
   end
 end
