@@ -1,4 +1,6 @@
 class GroupContract < ApplicationRecord
+  extend OccupationsBlanks
+
   belongs_to :term
   belongs_to :term_student
   belongs_to :term_group
@@ -13,6 +15,9 @@ class GroupContract < ApplicationRecord
             on: :update,
             if: :will_save_change_to_is_contracted?
 
+  before_validation :fetch_tutorials_group_by_timetable, on: :update
+  before_validation :fetch_new_groups_group_by_timetable, on: :update
+
   scope :filter_by_is_contracted, lambda {
     itself.where(is_contracted: true)
   }
@@ -22,9 +27,6 @@ class GroupContract < ApplicationRecord
   scope :filter_by_teacher, lambda { |term_teacher_id|
     itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
   }
-
-  before_validation :fetch_tutorials_group_by_timetable, on: :update
-  before_validation :fetch_new_groups_group_by_timetable, on: :update
 
   def self.new(attributes = {})
     attributes[:is_contracted] ||= false
@@ -41,8 +43,7 @@ class GroupContract < ApplicationRecord
   def daily_occupations(date_index)
     tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
     groups = @new_groups_group_by_timetable.dig(date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_occupations_from(tutorials_and_groups)
+    self.class.daily_occupations_from(term, tutorials, groups)
   end
 
   def verify_daily_occupation_limit
@@ -60,8 +61,7 @@ class GroupContract < ApplicationRecord
   def daily_blanks(date_index)
     tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
     groups = @new_groups_group_by_timetable.dig(date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_blanks_from(tutorials_and_groups)
+    self.class.daily_blanks_from(term, tutorials, groups)
   end
 
   def verify_daily_blank_limit

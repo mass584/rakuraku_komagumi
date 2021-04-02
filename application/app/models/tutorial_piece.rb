@@ -1,4 +1,6 @@
 class TutorialPiece < ApplicationRecord
+  extend OccupationsBlanks
+
   belongs_to :term
   belongs_to :tutorial_contract
   belongs_to :seat, optional: true
@@ -94,8 +96,7 @@ class TutorialPiece < ApplicationRecord
   def daily_occupations(date_index)
     tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
     groups = @groups_group_by_timetable.dig(date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_occupations_from(tutorials_and_groups)
+    self.class.daily_occupations_from(term, tutorials, groups)
   end
 
   def verify_daily_occupation_limit
@@ -112,8 +113,7 @@ class TutorialPiece < ApplicationRecord
   def daily_blanks(date_index)
     tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
     groups = @groups_group_by_timetable.dig(date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_blanks_from(tutorials_and_groups)
+    self.class.daily_blanks_from(term, tutorials, groups)
   end
 
   def verify_daily_blank_limit

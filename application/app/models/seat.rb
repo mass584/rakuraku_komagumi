@@ -1,4 +1,6 @@
 class Seat < ApplicationRecord
+  extend OccupationsBlanks
+
   belongs_to :term
   belongs_to :timetable
   belongs_to :term_teacher, optional: true
@@ -88,8 +90,7 @@ class Seat < ApplicationRecord
       .dig(term_teacher_id, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
       .dig(term_teacher_id, timetable.date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_occupations_from(tutorials_and_groups)
+    self.class.daily_occupations_from(term, tutorials, groups)
   end
 
   def verify_daily_occupation_limit
@@ -104,8 +105,7 @@ class Seat < ApplicationRecord
       .dig(term_teacher_id, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
       .dig(term_teacher_id, timetable.date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_blanks_from(tutorials_and_groups)
+    self.class.daily_blanks_from(term, tutorials, groups)
   end
 
   def verify_daily_blank_limit_for_creation
@@ -120,8 +120,7 @@ class Seat < ApplicationRecord
       .dig(term_teacher_id_in_database, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
       .dig(term_teacher_id_in_database, timetable.date_index).to_h
-    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
-    self.class.daily_blanks_from(tutorials_and_groups)
+    self.class.daily_blanks_from(term, tutorials, groups)
   end
 
   def verify_daily_blank_limit_for_deletion
