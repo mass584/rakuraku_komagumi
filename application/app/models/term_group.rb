@@ -8,6 +8,12 @@ class TermGroup < ApplicationRecord
   validate :verify_daily_occupation_limit,
             on: :update,
             if: :will_save_change_to_term_teacher_id?
+  validate :verify_daily_blank_limit_for_creation,
+            on: :update,
+            if: :will_save_change_to_term_teacher_id?
+  validate :verify_daily_blank_limit_for_deletion,
+            on: :update,
+            if: :will_save_change_to_term_teacher_id?
 
   before_validation :fetch_term_teacher_in_database, on: :update
   before_validation :fetch_tutorial_contracts_group_by_teacher_and_timetable, on: :update
@@ -29,10 +35,11 @@ class TermGroup < ApplicationRecord
   end
 
   # validate
-  def term_teacher_daily_occupations(date_index)
+  def daily_occupations(date_index)
     tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
     groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
-    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
@@ -50,7 +57,8 @@ class TermGroup < ApplicationRecord
   def term_teacher_for_creation_daily_blanks(date_index)
     tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
     groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit_for_creation
@@ -68,7 +76,8 @@ class TermGroup < ApplicationRecord
   def term_teacher_for_deletion_daily_blanks(date_index)
     tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
     groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit_for_deletion

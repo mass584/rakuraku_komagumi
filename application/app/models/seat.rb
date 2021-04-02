@@ -159,6 +159,7 @@ class Seat < ApplicationRecord
     )
   end
 
+  # TODO : [BUGFIX] 変更前の講師のGrouoContractは別途取得の必要がある！
   def fetch_group_contracts_group_by_timetable
     @group_contracts_group_by_timetable = GroupContract.group_by_timetable_for_teacher(term, term_teacher_id)
   end
