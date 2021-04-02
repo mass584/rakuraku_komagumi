@@ -26,22 +26,6 @@ class TutorialContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.group_by_teacher_and_timetable(term)
-    records = term
-      .tutorial_contracts
-      .joins(tutorial_pieces: [seat: :timetable])
-      .select("seats.*", "timetables.*")
-    records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record.term_teacher_id => {
-          record.date_index => {
-            record.period_index => [record]
-          }
-        }
-      })
-    end
-  end
-
   def self.group_by_student_and_timetable(term)
     records = term
       .tutorial_contracts

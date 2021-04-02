@@ -16,8 +16,8 @@ class TermGroup < ApplicationRecord
             if: :will_save_change_to_term_teacher_id?
 
   before_validation :fetch_term_teacher_in_database, on: :update
-  before_validation :fetch_tutorial_contracts_group_by_teacher_and_timetable, on: :update
-  before_validation :fetch_new_group_contracts_group_by_teacher_and_timetable, on: :update
+  before_validation :fetch_tutorials_group_by_teacher_and_timetable, on: :update
+  before_validation :fetch_new_groups_group_by_teacher_and_timetable, on: :update
   before_create :set_nest_objects
 
   private
@@ -36,8 +36,8 @@ class TermGroup < ApplicationRecord
 
   # validate
   def daily_occupations(date_index)
-    tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
-    groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
+    tutorials = @tutorials_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
+    groups = @new_groups_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
   end
@@ -55,8 +55,8 @@ class TermGroup < ApplicationRecord
   end
 
   def term_teacher_for_creation_daily_blanks(date_index)
-    tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
-    groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
+    tutorials = @tutorials_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
+    groups = @new_groups_group_by_teacher_and_timetable.dig(term_teacher_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
@@ -74,8 +74,8 @@ class TermGroup < ApplicationRecord
   end
 
   def term_teacher_for_deletion_daily_blanks(date_index)
-    tutorials = @tutorial_contracts_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
-    groups = @new_group_contracts_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
+    tutorials = @tutorials_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
+    groups = @new_groups_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
@@ -97,34 +97,37 @@ class TermGroup < ApplicationRecord
     @term_teacher_in_database = TermTeacher.find_by(id: term_teacher_id_in_database)
   end
 
-  def fetch_tutorial_contracts_group_by_teacher_and_timetable
-    @tutorial_contracts_group_by_teacher_and_timetable =
-      TutorialContract.group_by_teacher_and_timetable(term)
+  def fetch_tutorials_group_by_teacher_and_timetable
+    records = term
+      .tutorial_contracts
+      .joins(tutorial_pieces: [seat: :timetable])
+      .select(:term_teacher_id, :date_index, :period_index)
+    @tutorials_group_by_teacher_and_timetable = records.group_by_recursive(
+      proc { |item| item[:term_teacher_id] },
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
   end
 
-  def fetch_new_group_contracts_group_by_teacher_and_timetable
+  def fetch_new_groups_group_by_teacher_and_timetable
     records = term
       .term_groups
       .left_joins(:timetables)
       .select(:id, :term_teacher_id, :date_index, :period_index)
       .map do |item|
         {
-          id: item['id'],
-          term_teacher_id: item['id'] == id ? term_teacher_id : item['term_teacher_id'],
-          date_index: item['date_index'],
-          period_index: item['period_index'],
+          id: item[:id],
+          term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
+          date_index: item[:date_index],
+          period_index: item[:period_index],
         }
       end
-    @new_group_contracts_group_by_teacher_and_timetable = 
-      records.reduce({}) do |accu, item|
-        accu.deep_merge({
-          item[:term_teacher_id] => {
-            item[:date_index] => {
-              item[:period_index] => item
-            }
-          }
-        })
-      end
+      .select { |record| record[:term_teacher_id].present? }
+    @new_groups_group_by_teacher_and_timetable = records.group_by_recursive(
+      proc { |item| item[:term_teacher_id] },
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
   end
 
   # before_create
