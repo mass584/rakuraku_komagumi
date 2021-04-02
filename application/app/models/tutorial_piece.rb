@@ -24,8 +24,8 @@ class TutorialPiece < ApplicationRecord
   accepts_nested_attributes_for :seat
 
   before_validation :fetch_seat_in_database, on: :update
-  before_validation :fetch_new_tutorials_group_by_student_and_timetable, on: :update
-  before_validation :fetch_groups_group_by_student_and_timetable, on: :update
+  before_validation :fetch_new_tutorials_group_by_timetable, on: :update
+  before_validation :fetch_groups_group_by_timetable, on: :update
   before_update :set_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
@@ -77,64 +77,59 @@ class TutorialPiece < ApplicationRecord
     end
   end
 
-  def position_occupations(term_student_id, timetable)
-    @new_tutorials_group_by_student_and_timetable
-      .dig(term_student_id, timetable.date_index, timetable.period_index).to_a.count
+  def position_occupations(timetable)
+    @new_tutorials_group_by_timetable.dig(timetable.date_index, timetable.period_index).to_a.count
   end
 
   def verify_doublebooking
-    if seat_creation? && position_occupations(tutorial_contract.term_student_id, seat.timetable) > 1
+    if seat_creation? && position_occupations(seat.timetable) > 1
       errors[:base] << '生徒の予定が重複しています'
     end
 
-    if seat_updation? && position_occupations(tutorial_contract.term_student_id, seat.timetable) > 1
+    if seat_updation? && position_occupations(seat.timetable) > 1
       errors[:base] << '生徒の予定が重複しています'
     end
   end
 
-  def daily_occupations(term_student_id, date_index)
-    tutorials = @new_tutorials_group_by_student_and_timetable
-      .dig(tutorial_contract.term_student_id, date_index).to_h
-    groups = @groups_group_by_student_and_timetable
-      .dig(tutorial_contract.term_student_id, date_index).to_h
+  def daily_occupations(date_index)
+    tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
+    groups = @groups_group_by_timetable.dig(date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
     limit = tutorial_contract.term_student.optimization_rule.occupation_limit
-    if seat_creation? && daily_occupations(tutorial_contract.term_student_id, seat.timetable.date_index) > limit
+    if seat_creation? && daily_occupations(seat.timetable.date_index) > limit
       errors[:base] << '生徒の１日の合計コマの上限を超えています'
     end
 
-    if seat_updation? && daily_occupations(tutorial_contract.term_student_id, seat.timetable.date_index) > limit
+    if seat_updation? && daily_occupations(seat.timetable.date_index) > limit
       errors[:base] << '生徒の１日の合計コマの上限を超えています'
     end
   end
 
-  def daily_blanks(term_student_id, date_index)
-    tutorials = @new_tutorials_group_by_student_and_timetable
-      .dig(tutorial_contract.term_student_id, date_index).to_h
-    groups = @groups_group_by_student_and_timetable
-      .dig(tutorial_contract.term_student_id, date_index).to_h
+  def daily_blanks(date_index)
+    tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
+    groups = @groups_group_by_timetable.dig(date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit
     limit = tutorial_contract.term_student.optimization_rule.blank_limit
-    if seat_creation? && daily_blanks(tutorial_contract.term_student_id, seat.timetable.date_index) > limit
+    if seat_creation? && daily_blanks(seat.timetable.date_index) > limit
       errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
 
     if seat_updation? && (
-      daily_blanks(tutorial_contract.term_student_id, seat.timetable.date_index) > limit ||
-      daily_blanks(tutorial_contract.term_student_id, @seat_in_database.timetable.date_index) > limit
+      daily_blanks(seat.timetable.date_index) > limit ||
+      daily_blanks(@seat_in_database.timetable.date_index) > limit
     )
       errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
 
-    if seat_deletion? && daily_blanks(tutorial_contract.term_student_id, @seat_in_database.timetable.date_index) > limit
+    if seat_deletion? && daily_blanks(@seat_in_database.timetable.date_index) > limit
       errors[:base] << '生徒の１日の空きコマの上限を超えています'
     end
   end
@@ -144,7 +139,7 @@ class TutorialPiece < ApplicationRecord
     @seat_in_database = Seat.find_by(id: seat_id_in_database)
   end
 
-  def fetch_new_tutorials_group_by_student_and_timetable
+  def fetch_new_tutorials_group_by_timetable
     records = term
       .tutorial_pieces
       .filter_by_student(tutorial_contract.term_student_id)
@@ -160,21 +155,20 @@ class TutorialPiece < ApplicationRecord
         }
       end
       .select { |item| item[:seat_id].present? }
-    @new_tutorials_group_by_student_and_timetable = records.group_by_recursive(
-      proc { |item| item[:term_student_id] },
+    @new_tutorials_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
     )
   end
 
-  def fetch_groups_group_by_student_and_timetable
+  def fetch_groups_group_by_timetable
     records = term
       .group_contracts
+      .filter_by_student(tutorial_contract.term_student_id)
       .filter_by_is_contracted
       .joins(term_group: :timetables)
       .select(:term_student_id, :date_index, :period_index)
-    @groups_group_by_student_and_timetable = records.group_by_recursive(
-      proc { |item| item[:term_student_id] },
+    @groups_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
     )
