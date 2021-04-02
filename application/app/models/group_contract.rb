@@ -23,8 +23,8 @@ class GroupContract < ApplicationRecord
     itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
   }
 
-  before_validation :fetch_new_group_contracts_group_by_timetable, on: :update
-  before_validation :fetch_tutorial_contracts_group_by_student_and_timetable, on: :update
+  before_validation :fetch_tutorials_group_by_timetable, on: :update
+  before_validation :fetch_new_groups_group_by_timetable, on: :update
 
   def self.new(attributes = {})
     attributes[:is_contracted] ||= false
@@ -39,8 +39,8 @@ class GroupContract < ApplicationRecord
 
   # validate
   def daily_occupations(date_index)
-    tutorials = @tutorial_contracts_group_by_student_and_timetable.dig(term_student_id, date_index).to_h
-    groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
+    tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
+    groups = @new_groups_group_by_timetable.dig(date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
   end
@@ -58,8 +58,8 @@ class GroupContract < ApplicationRecord
   end
 
   def daily_blanks(date_index)
-    tutorials = @tutorial_contracts_group_by_student_and_timetable.dig(term_student_id, date_index).to_h
-    groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
+    tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
+    groups = @new_groups_group_by_timetable.dig(date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
@@ -77,7 +77,7 @@ class GroupContract < ApplicationRecord
   end
 
   # before_validation
-  def fetch_new_group_contracts_group_by_timetable
+  def fetch_new_groups_group_by_timetable
     records = term
       .group_contracts
       .filter_by_student(term_student_id)
@@ -93,16 +93,21 @@ class GroupContract < ApplicationRecord
         }
       end
       .select { |item| item[:is_contracted] }
-    @new_group_contracts_group_by_timetable = records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record[:date_index] => {
-          record[:period_index] => [record],
-        }
-      })
-    end
+    @new_groups_group_by_timetable = records.group_by_recursive(
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
   end
 
-  def fetch_tutorial_contracts_group_by_student_and_timetable
-    @tutorial_contracts_group_by_student_and_timetable = TutorialContract.group_by_student_and_timetable(term)
+  def fetch_tutorials_group_by_timetable
+    records = term
+      .tutorial_contracts
+      .filter_by_student(term_student_id)
+      .joins(tutorial_pieces: [seat: :timetable])
+      .select(:date_index, :period_index)
+    @tutorials_group_by_timetable = records.group_by_recursive(
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
   end
 end

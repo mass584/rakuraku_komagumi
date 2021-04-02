@@ -26,22 +26,6 @@ class TutorialContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.group_by_student_and_timetable(term)
-    records = term
-      .tutorial_contracts
-      .joins(tutorial_pieces: [seat: :timetable])
-      .select("tutorial_contracts.*", "timetables.*")
-    records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record.term_student_id => {
-          record.date_index => {
-            record.period_index => [record]
-          }
-        }
-      })
-    end
-  end
-
   private
 
   def increment_count
