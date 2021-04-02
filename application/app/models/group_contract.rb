@@ -23,7 +23,6 @@ class GroupContract < ApplicationRecord
     itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
   }
 
-  before_validation :fetch_new_group_contracts, on: :update
   before_validation :fetch_new_group_contracts_group_by_timetable, on: :update
   before_validation :fetch_tutorial_contracts_group_by_student_and_timetable, on: :update
 
@@ -111,35 +110,26 @@ class GroupContract < ApplicationRecord
   end
 
   # before_validation
-  def fetch_new_group_contracts
-    @new_group_contracts = term
+  def fetch_new_group_contracts_group_by_timetable
+    records = term
       .group_contracts
       .filter_by_student(term_student_id)
-      .pluck(:id, :term_group_id, :is_contracted)
-      .map { |item| [:id, :term_group_id, :is_contracted].zip(item).to_h }
+      .joins(term_group: :timetables)
+      .select(:id, :term_group_id, :is_contracted, :date_index, :period_index)
       .map do |item|
         {
           id: item[:id],
           term_group_id: item[:term_group_id],
           is_contracted: item[:id] == id ? is_contracted : item[:is_contracted],
+          date_index: item[:date_index],
+          period_index: item[:period_index],
         }
-      end 
-  end
-
-  def selected_new_group_contracts(term_group_id)
-    @new_group_contracts.select do |new_group_contract|
-      new_group_contract[:term_group_id] == term_group_id && new_group_contract[:is_contracted]
-    end
-  end
-
-  def fetch_new_group_contracts_group_by_timetable
-    timetables = term.timetables.pluck(:date_index, :period_index, :term_group_id).map do |item|
-      [:date_index, :period_index, :term_group_id].zip(item).to_h
-    end
-    @new_group_contracts_group_by_timetable = timetables.reduce({}) do |accu, timetable|
+      end
+      .select { |item| item[:is_contracted] }
+    @new_group_contracts_group_by_timetable = records.reduce({}) do |accu, record|
       accu.deep_merge({
-        timetable[:date_index] => {
-          timetable[:period_index] => selected_new_group_contracts(timetable[:term_group_id]),
+        record[:date_index] => {
+          record[:period_index] => [record],
         }
       })
     end
