@@ -172,16 +172,12 @@ class TutorialPiece < ApplicationRecord
       .group_contracts
       .filter_by_is_contracted
       .joins(term_group: :timetables)
-      .select("group_contracts.*", "timetables.*")
-    @groups_group_by_student_and_timetable = records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record.term_student_id => {
-          record.date_index => {
-            record.period_index => [record]
-          }
-        }
-      })
-    end
+      .select(:term_student_id, :date_index, :period_index)
+    @groups_group_by_student_and_timetable = records.group_by_recursive(
+      proc { |item| item[:term_student_id] },
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
   end
 
   # before_update
