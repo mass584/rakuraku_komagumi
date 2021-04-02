@@ -1,53 +1,182 @@
 ja:
   activerecord:
     models:
+      user: ユーザー
       room: 教室
       student: 生徒
       teacher: 講師
-      subject: 科目
-      term: 予定
+      tutorial: 個別科目
+      group: 集団科目
+      term: 期間
+      begin_end_time: 開始・終了時刻
+      teacher_optimization_rule: 講師の予定最適化ルール
+      student_optimization_rule: 生徒の予定最適化ルール
+      timetable: 時間枠
+      seat: 座席
+      student_vacancy: 生徒の空き
+      teacher_vacancy: 講師の空き
+      term_teacher: 講師
+      term_student: 生徒
+      term_tutorial: 個別科目
+      term_group: 集団科目
+      tutorial_contract: 個別科目の契約
+      tutorial_piece: 個別科目のコマ
+      group_contract: 集団科目の契約
     attributes:
+      user:
+        name: ユーザー名
+        email: メールアドレス
       room:
-        name: アカウント名
-        email: メールアドレス
-        password: パスワード
-        password_confirmation: パスワード（確認）
-        remember_me: ログイン情報を保存
+        name: 教室名
       student:
-        name: 氏名
-        name_kana: 氏名(かな)
-        gender: 性別
-        school_name: 学校名
+        room_id: 教室ID
+        name: 生徒名
+        email: メールアドレス
         school_grade: 学年
-        email: メールアドレス
-        tel: 電話番号
-        zip: 郵便番号
-        address: 住所
+        is_deleted: 削除済み
       teacher:
-        name: 氏名
-        name_kana: 氏名(かな)
+        room_id: 教室ID
+        name: 講師名
         email: メールアドレス
-        tel: 電話番号
-        zip: 郵便番号
-        address: 住所
-      subject:
-        name: 科目名
+        is_deleted: 削除済み
+      tutorial:
+        room_id: 教室ID
+        name: 個別科目名
         order: 表示順
+        is_deleted: 削除済み
+      group:
+        room_id: 教室ID
+        name: 集団科目名
+        order: 表示順
+        is_deleted: 削除済み
       term:
+        room_id: 教室ID
         name: スケジュール名
-        type: 種別
         year: 年度
+        term_type: 期間種別
         begin_at: 開始日
         end_at: 終了日
-        max_seat: 座席数
-        max_period: 時限数
-        max_frame: 講師1人当たりの生徒数
-      student_term:
-        student_id: 生徒
-      teacher_term:
-        teacher_id: 講師
-      subject_term:
-        subject_id: 科目
-      timetable:
+        period_count: 時限数
+        position_count: 座席あたりの生徒数
+      begin_end_time:
+        term_id: 期間ID
+        period_index: 時限インデックス
         begin_at: 開始時刻
         end_at: 終了時刻
+      teacher_optimization_rule:
+        term_id: 期間ID
+        single_cost: １対１授業のコスト値
+        different_pair_cost: 違う科目を同時に教える時のコスト値
+        occupation_limit: １日の最大コマ数
+        occupation_costs: １日のコマ数に対するコスト値
+        blank_limit: １日の最大空きコマ数
+        blank_costs: １日の空きコマ数に対するコスト値
+      student_optimization_rule:
+        term_id: 期間ID
+        school_grade: 学年
+        occupation_limit: １日の最大コマ数
+        occupation_costs: １日のコマ数に対するコスト値
+        blank_limit: １日の最大空きコマ数
+        blank_costs: １日の空きコマ数に対するコスト値
+        interval_cutoff: 科目の受講日数間隔のカットオフ値
+        interval_costs: 科目の受講日数間隔に対するコスト値
+      timetable:
+        term_id: 期間ID
+        term_group_id: 集団科目ID
+        date_index: 日付インデックス
+        period_index: 時限インデックス
+        is_closed: 閉室かどうか
+      seat:
+        term_id: 期間ID
+        timetable_id: 時間枠ID
+        term_teacher_id: 講師ID
+        seat_index: 座席インデックス
+        position_count: 座席あたりの生徒数
+      student_vacancy:
+        timetable_id: 時間枠ID
+        term_student_id: 生徒ID
+        is_vacant: 空きかどうか
+      teacher_vacancy:
+        timetable_id: 時間枠ID
+        term_teacher_id: 講師ID
+        is_vacant: 空きかどうか
+      term_teacher:
+        term_id: 期間ID
+        teacher_id: 講師ID
+        vacancy_status: 空きステータス
+      term_student:
+        term_id: 期間ID
+        student_id: 生徒ID
+        school_grade: 学年
+        vacancy_status: 空きステータス
+      term_tutorial:
+        term_id: 期間ID
+        tutorial_id: 個別科目ID
+      term_group:
+        term_id: 期間ID
+        group_id: 集団科目ID
+      tutorial_contract:
+        term_id: 期間ID
+        term_tutorial_id: 個別科目ID
+        term_student_id: 生徒ID
+        term_teacher_id: 講師ID
+        is_contracted: 契約済みかどうか
+      tutorial_piece:
+        term_id: 期間ID
+        term_contract_id: 個別科目ID
+        seat_id: 座席ID
+        is_fixed: 固定済みかどうか
+      group_contract:
+        term_id: 期間ID
+        term_group_id: 集団科目ID
+        term_student_id: 生徒ID
+        is_contracted: 契約済みかどうか
+  enums:
+    student:
+      school_grade:
+        e1: 小学１年
+        e2: 小学２年
+        e3: 小学３年
+        e4: 小学４年
+        e5: 小学５年
+        e6: 小学６年
+        j1: 中学１年
+        j2: 中学２年
+        j3: 中学３年
+        h1: 高校１年
+        h2: 高校２年
+        h3: 高校３年
+        other: その他
+    term:
+      term_type:
+        normal: 通常期
+        season: 講習期
+        exam_planning: テスト対策
+    student_optimization_rule:
+      school_grade:
+        e1: 小学１年
+        e2: 小学２年
+        e3: 小学３年
+        e4: 小学４年
+        e5: 小学５年
+        e6: 小学６年
+        j1: 中学１年
+        j2: 中学２年
+        j3: 中学３年
+        h1: 高校１年
+        h2: 高校２年
+        h3: 高校３年
+        other: その他
+    term_teacher:
+      vacancy_status:
+        draft: 編集中
+        submitted: 提出済み
+        fixed: 確定
+    term_student:
+      vacancy_status:
+        draft: 編集中
+        submitted: 提出済み
+        fixed: 確定
+  time:
+    formats:
+      default: "%Y/%m/%d %H:%M:%S"
