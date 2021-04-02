@@ -25,7 +25,7 @@ class TutorialPiece < ApplicationRecord
 
   before_validation :fetch_seat_in_database, on: :update
   before_validation :fetch_new_tutorial_pieces_group_by_student_and_timetable, on: :update
-  before_validation :fetch_group_contracts_group_by_timetable, on: :update
+  before_validation :fetch_group_contracts_group_by_student_and_timetable, on: :update
   before_update :set_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
@@ -94,8 +94,9 @@ class TutorialPiece < ApplicationRecord
 
   def daily_occupations(term_student_id, date_index)
     tutorials = @new_tutorial_pieces_group_by_student_and_timetable
-      .dig(term_student_id, date_index).to_h
-    groups = @group_contracts_group_by_timetable.dig(date_index).to_h
+      .dig(tutorial_contract.term_student_id, date_index).to_h
+    groups = @group_contracts_group_by_student_and_timetable
+      .dig(tutorial_contract.term_student_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
   end
@@ -112,8 +113,10 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_blanks(term_student_id, date_index)
-    tutorials = @new_tutorial_pieces_group_by_student_and_timetable.dig(term_student_id, date_index).to_h
-    groups = @group_contracts_group_by_timetable.dig(date_index).to_h
+    tutorials = @new_tutorial_pieces_group_by_student_and_timetable
+      .dig(tutorial_contract.term_student_id, date_index).to_h
+    groups = @group_contracts_group_by_student_and_timetable
+      .dig(tutorial_contract.term_student_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
@@ -170,8 +173,8 @@ class TutorialPiece < ApplicationRecord
     )
   end
 
-  def fetch_group_contracts_group_by_timetable
-    @group_contracts_group_by_timetable = GroupContract.group_by_timetable_for_student(term, tutorial_contract.term_student_id)
+  def fetch_group_contracts_group_by_student_and_timetable
+    @group_contracts_group_by_student_and_timetable = GroupContract.group_by_student_and_timetable(term)
   end
 
   # before_update

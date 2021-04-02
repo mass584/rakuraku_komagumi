@@ -21,13 +21,16 @@ class Seat < ApplicationRecord
   validate :verify_daily_occupation_limit,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
-  validate :verify_daily_blank_limit,
+  validate :verify_daily_blank_limit_for_creation,
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
+  validate :verify_daily_blank_limit_for_deletion,
            on: :update,
            if: :will_save_change_to_term_teacher_id?
 
   before_validation :fetch_term_teacher_in_database, on: :update
   before_validation :fetch_new_seats_group_by_teacher_and_timetable, on: :update
-  before_validation :fetch_group_contracts_group_by_timetable, on: :update
+  before_validation :fetch_group_contracts_group_by_teacher_and_timetable, on: :update
 
   scope :filter_by_teachers, lambda { |term_teacher_ids|
     where(term_teacher_id: term_teacher_ids)
@@ -83,47 +86,50 @@ class Seat < ApplicationRecord
     end
   end
 
-  def daily_occupations(term_teacher_id, timetable)
-    tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
-    groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
+  def daily_occupations
+    tutorials = @new_seats_group_by_teacher_and_timetable
+      .dig(term_teacher_id, timetable.date_index).to_h
+    groups = @group_contracts_group_by_teacher_and_timetable
+      .dig(term_teacher_id, timetable.date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
-    if term_teacher_creation? &&
-       daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の１日の合計コマの上限を超えています'
-    end
-
-    if term_teacher_updation? &&
-       daily_occupations(term_teacher_id, timetable) > term_teacher.optimization_rule.occupation_limit
+    if (term_teacher_creation? || term_teacher_updation?) &&
+       daily_occupations > term_teacher.optimization_rule.occupation_limit
       errors[:base] << '講師の１日の合計コマの上限を超えています'
     end
   end
 
-  def daily_blanks(term_teacher_id, timetable)
-    tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
-    groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
+  def daily_blanks_for_creation
+    tutorials = @new_seats_group_by_teacher_and_timetable
+      .dig(term_teacher_id, timetable.date_index).to_h
+    groups = @group_contracts_group_by_teacher_and_timetable
+      .dig(term_teacher_id, timetable.date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
   end
 
-  def verify_daily_blank_limit
-    if term_teacher_creation? &&
-       daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit
+  def verify_daily_blank_limit_for_creation
+    if (term_teacher_creation? || term_teacher_updation?) &&
+       daily_blanks_for_creation > term_teacher.optimization_rule.blank_limit
       errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
+  end
 
-    if term_teacher_updation? && (
-      daily_blanks(term_teacher_id, timetable) > term_teacher.optimization_rule.blank_limit || 
-      daily_blanks(term_teacher_id_in_database, timetable) > @term_teacher_in_database.optimization_rule.blank_limit
-    )
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
-    end
+  def daily_blanks_for_deletion
+    tutorials = @new_seats_group_by_teacher_and_timetable
+      .dig(term_teacher_id_in_database, timetable.date_index).to_h
+    groups = @group_contracts_group_by_teacher_and_timetable
+      .dig(term_teacher_id_in_database, timetable.date_index).to_h
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
+  end
 
-    if term_teacher_deletion? &&
-       daily_blanks(term_teacher_id_in_database, timetable) > @term_teacher_in_database.optimization_rule.blank_limit
+  def verify_daily_blank_limit_for_deletion
+    if (term_teacher_updation? || term_teacher_deletion?) &&
+       daily_blanks_for_deletion > @term_teacher_in_database.optimization_rule.blank_limit
       errors[:base] << '講師の１日の空きコマの上限を超えています'
     end
   end
@@ -161,8 +167,7 @@ class Seat < ApplicationRecord
     )
   end
 
-  # TODO : [BUGFIX] 変更前の講師のGrouoContractは別途取得の必要がある！
-  def fetch_group_contracts_group_by_timetable
-    @group_contracts_group_by_timetable = GroupContract.group_by_timetable_for_teacher(term, term_teacher_id)
+  def fetch_group_contracts_group_by_teacher_and_timetable
+    @group_contracts_group_by_teacher_and_timetable = GroupContract.group_by_teacher_and_timetable(term)
   end
 end
