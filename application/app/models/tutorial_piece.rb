@@ -24,8 +24,8 @@ class TutorialPiece < ApplicationRecord
   accepts_nested_attributes_for :seat
 
   before_validation :fetch_seat_in_database, on: :update
-  before_validation :fetch_new_tutorial_pieces_group_by_student_and_timetable, on: :update
-  before_validation :fetch_group_contracts_group_by_student_and_timetable, on: :update
+  before_validation :fetch_new_tutorials_group_by_student_and_timetable, on: :update
+  before_validation :fetch_groups_group_by_student_and_timetable, on: :update
   before_update :set_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
@@ -78,7 +78,7 @@ class TutorialPiece < ApplicationRecord
   end
 
   def position_occupations(term_student_id, timetable)
-    @new_tutorial_pieces_group_by_student_and_timetable
+    @new_tutorials_group_by_student_and_timetable
       .dig(term_student_id, timetable.date_index, timetable.period_index).to_a.count
   end
 
@@ -93,9 +93,9 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_occupations(term_student_id, date_index)
-    tutorials = @new_tutorial_pieces_group_by_student_and_timetable
+    tutorials = @new_tutorials_group_by_student_and_timetable
       .dig(tutorial_contract.term_student_id, date_index).to_h
-    groups = @group_contracts_group_by_student_and_timetable
+    groups = @groups_group_by_student_and_timetable
       .dig(tutorial_contract.term_student_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_occupations_from(tutorials_and_groups)
@@ -113,9 +113,9 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_blanks(term_student_id, date_index)
-    tutorials = @new_tutorial_pieces_group_by_student_and_timetable
+    tutorials = @new_tutorials_group_by_student_and_timetable
       .dig(tutorial_contract.term_student_id, date_index).to_h
-    groups = @group_contracts_group_by_student_and_timetable
+    groups = @groups_group_by_student_and_timetable
       .dig(tutorial_contract.term_student_id, date_index).to_h
     tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
     self.class.daily_blanks_from(tutorials_and_groups)
@@ -144,37 +144,44 @@ class TutorialPiece < ApplicationRecord
     @seat_in_database = Seat.find_by(id: seat_id_in_database)
   end
 
-  def new_tutorial_pieces
-    term
+  def fetch_new_tutorials_group_by_student_and_timetable
+    records = term
       .tutorial_pieces
       .filter_by_student(tutorial_contract.term_student_id)
       .left_joins(:tutorial_contract, seat: :timetable)
-      .pluck('tutorial_pieces.id', 'seat_id', 'term_student_id', 'date_index', 'period_index')
-      .map do |item|
-        [:id, :seat_id, :term_student_id, :date_index, :period_index].zip(item).to_h
-      end
+      .select(:id, :term_student_id, :date_index, :period_index, :seat_id)
       .map do |item|
         {
           id: item[:id],
-          seat_id: item[:id] == id ? seat_id : item[:seat_id],
           term_student_id: item[:term_student_id],
           date_index: item[:id] == id ? seat&.timetable&.date_index : item[:date_index],
           period_index: item[:id] == id ? seat&.timetable&.period_index : item[:period_index],
+          seat_id: item[:id] == id ? seat_id : item[:seat_id],
         }
       end
       .select { |item| item[:seat_id].present? }
-  end
-
-  def fetch_new_tutorial_pieces_group_by_student_and_timetable
-    @new_tutorial_pieces_group_by_student_and_timetable = new_tutorial_pieces.group_by_recursive(
+    @new_tutorials_group_by_student_and_timetable = records.group_by_recursive(
       proc { |item| item[:term_student_id] },
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
     )
   end
 
-  def fetch_group_contracts_group_by_student_and_timetable
-    @group_contracts_group_by_student_and_timetable = GroupContract.group_by_student_and_timetable(term)
+  def fetch_groups_group_by_student_and_timetable
+    records = term
+      .group_contracts
+      .filter_by_is_contracted
+      .joins(term_group: :timetables)
+      .select("group_contracts.*", "timetables.*")
+    @groups_group_by_student_and_timetable = records.reduce({}) do |accu, record|
+      accu.deep_merge({
+        record.term_student_id => {
+          record.date_index => {
+            record.period_index => [record]
+          }
+        }
+      })
+    end
   end
 
   # before_update

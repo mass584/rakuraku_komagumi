@@ -47,23 +47,6 @@ class GroupContract < ApplicationRecord
     end
   end
 
-  def self.group_by_student_and_timetable(term)
-    records = term
-      .group_contracts
-      .filter_by_is_contracted
-      .joins(term_group: :timetables)
-      .select("group_contracts.*", "timetables.*")
-    records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record.term_student_id => {
-          record.date_index => {
-            record.period_index => [record]
-          }
-        }
-      })
-    end
-  end
-
   private
 
   def contract_creation?
