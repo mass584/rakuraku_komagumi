@@ -109,12 +109,22 @@ RSpec.describe TermGroup, type: :model do
     end
 
     context '担任の変更設定時(term_teacher_id : integer -> integer)' do
-      it '最大空きコマ数を越した場合にupdate失敗' do
+      it '変更先の担任が最大空きコマ数を越した場合にupdate失敗' do
         expect(@term_group_second.update(term_teacher_id: @term_teacher_second.id)).to eq(true)
         expect(@term_group_second.reload.term_teacher_id).to eq(@term_teacher_second.id)
         expect(@term_group_second.update(term_teacher_id: @term_teacher_first.id)).to eq(false)
         expect(@term_group_second.reload.term_teacher_id).to eq(@term_teacher_second.id)
         expect(@term_group_second.errors.full_messages).to include('講師の１日の空きコマの上限を超えています')
+      end
+
+      it '変更元の担任が最大空きコマ数を越した場合にupdate失敗' do
+        expect(@term_group_first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
+        expect(@term_group_first.reload.term_teacher_id).to eq(@term_teacher_first.id)
+        expect(@term_group_second.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
+        expect(@term_group_second.reload.term_teacher_id).to eq(@term_teacher_first.id)
+        expect(@term_group_first.update(term_teacher_id: @term_teacher_second.id)).to eq(false)
+        expect(@term_group_first.reload.term_teacher_id).to eq(@term_teacher_first.id)
+        expect(@term_group_first.errors.full_messages).to include('講師の１日の空きコマの上限を超えています')
       end
     end
 

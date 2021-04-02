@@ -102,25 +102,21 @@ class TermGroup < ApplicationRecord
       TutorialContract.group_by_teacher_and_timetable(term)
   end
 
-  def new_term_groups
-    term
+  def fetch_new_group_contracts_group_by_teacher_and_timetable
+    records = term
       .term_groups
       .left_joins(:timetables)
-      .pluck(:id, :term_teacher_id, :date_index, :period_index)
-      .map { |item| [:id, :term_teacher_id, :date_index, :period_index].zip(item).to_h }
+      .select(:id, :term_teacher_id, :date_index, :period_index)
       .map do |item|
         {
-          id: item[:id],
-          term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
-          date_index: item[:date_index],
-          period_index: item[:period_index],
+          id: item['id'],
+          term_teacher_id: item['id'] == id ? term_teacher_id : item['term_teacher_id'],
+          date_index: item['date_index'],
+          period_index: item['period_index'],
         }
       end
-  end
-  
-  def fetch_new_group_contracts_group_by_teacher_and_timetable
     @new_group_contracts_group_by_teacher_and_timetable = 
-      new_term_groups.reduce({}) do |accu, item|
+      records.reduce({}) do |accu, item|
         accu.deep_merge({
           item[:term_teacher_id] => {
             item[:date_index] => {
