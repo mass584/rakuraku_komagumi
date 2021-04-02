@@ -86,7 +86,8 @@ class Seat < ApplicationRecord
   def daily_occupations(term_teacher_id, timetable)
     tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
     groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
-    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
@@ -104,7 +105,8 @@ class Seat < ApplicationRecord
   def daily_blanks(term_teacher_id, timetable)
     tutorials = @new_seats_group_by_teacher_and_timetable.dig(term_teacher_id, timetable.date_index).to_h
     groups = @group_contracts_group_by_timetable.dig(timetable.date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit

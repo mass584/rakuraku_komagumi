@@ -96,7 +96,8 @@ class TutorialPiece < ApplicationRecord
     tutorials = @new_tutorial_pieces_group_by_student_and_timetable
       .dig(term_student_id, date_index).to_h
     groups = @group_contracts_group_by_timetable.dig(date_index).to_h
-    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
@@ -111,10 +112,10 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_blanks(term_student_id, date_index)
-    tutorials = @new_tutorial_pieces_group_by_student_and_timetable
-      .dig(term_student_id, date_index).to_h
+    tutorials = @new_tutorial_pieces_group_by_student_and_timetable.dig(term_student_id, date_index).to_h
     groups = @group_contracts_group_by_timetable.dig(date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit

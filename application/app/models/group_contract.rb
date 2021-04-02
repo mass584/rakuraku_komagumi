@@ -75,7 +75,8 @@ class GroupContract < ApplicationRecord
   def daily_occupations(date_index)
     tutorials = @tutorial_contracts_group_by_timetable.dig(date_index).to_h
     groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
-    self.class.daily_occupations_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_occupations_from(tutorials_and_groups)
   end
 
   def verify_daily_occupation_limit
@@ -93,7 +94,8 @@ class GroupContract < ApplicationRecord
   def daily_blanks(date_index)
     tutorials = @tutorial_contracts_group_by_timetable.dig(date_index).to_h
     groups = @new_group_contracts_group_by_timetable.dig(date_index).to_h
-    self.class.daily_blanks_from(tutorials.merge(groups) { |_k, v1, v2| v1.to_a + v2.to_a })
+    tutorials_and_groups = self.class.merge_tutorials_and_groups(term, tutorials, groups)
+    self.class.daily_blanks_from(tutorials_and_groups)
   end
 
   def verify_daily_blank_limit
