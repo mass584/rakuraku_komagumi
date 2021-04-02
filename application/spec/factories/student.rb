@@ -1,18 +1,9 @@
 FactoryBot.define do
   factory :student, class: Student do
-    id              { 1 }
-    lastname        { 'lastname' }
-    firstname       { 'firstname' }
-    lastname_kana   { 'しめい' }
-    firstname_kana  { 'しめい' }
-    gender          { 'gender' }
-    grade           { 'grade' }
-    school_name     { 'school_name' }
-    zip             { '123-4567' }
-    address         { 'address' }
-    mail            { 'sample@sample.com' }
-    tel             { '012-3456-7890' }
+    association :room, factory: :room
+    sequence(:name) { |n| "生徒#{n}" }
+    email           { 'student@example.com' }
+    school_grade    { 21 }
     is_deleted      { false }
-    room_id         { 1 }
   end
 end

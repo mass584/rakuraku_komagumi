@@ -15,9 +15,34 @@ package "期間の予定データモデル" {
     term_type : 期間種別
     begin_at : 開始日
     end_at : 終了日
-    periods : 時限数
-    seats : 座席数
-    seat_limits : 座席の上限
+    period_count : 時限数
+    seat_count : 座席数
+    position_count : 座席あたりの生徒数
+  }
+
+  entity "student_optimization_rules" {
+    + id : 生徒の予定最適化ルール
+    --
+    # term_id : 期間ID [FK]
+    school_grade : 対象期間における学年
+    occupation_limit : １日の最大コマ数
+    occupation_costs : １日のコマ数に対するコスト値
+    blank_limit : １日の最大空きコマ数
+    blank_costs : １日の空きコマ数に対するコスト値
+    interval_cutoff : 科目の受講日数間隔のカットオフ値
+    interval_costs : 科目の受講日数間隔に対するコスト値
+  }
+
+  entity "teacher_optimization_rules" {
+    + id : 講師の予定最適化ルール
+    --
+    # term_id : 期間ID [FK]
+    single_cost : １対１授業のコスト値
+    different_pair_cost : 違う科目を同時に教える時のコスト値
+    occupation_limit : １日の最大コマ数
+    occupation_costs : １日のコマ数に対するコスト値
+    blank_limit : １日の最大空きコマ数
+    blank_costs : １日の空きコマ数に対するコスト値
   }
 
   entity "term_students" #F0F0F0 {
@@ -62,10 +87,11 @@ package "期間の予定データモデル" {
   entity "seats" {
     + id : 座席ID [PK]
     --
+    # term_id : 期間ID [FK]
     # timetable_id : 時間枠ID [FK]
     term_teacher_id : 期間に紐づいた講師ID
     seat_index : 座席インデックス
-    seat_limit : 座席の上限
+    position_count : 座席あたりの生徒数
   }
 
   entity "student_vacancies" {
@@ -86,8 +112,11 @@ package "期間の予定データモデル" {
 }
 
 rooms ||-do-o{ terms
+terms ||-up-|{ teacher_optimization_rules
+terms ||-up-|{ student_optimization_rules 
 terms ||-le-|{ begin_end_times
 terms ||-ri-|{ timetables
+terms ||-ri-|{ seats
 timetables ||-ri-|{ seats
 timetables ||-do-|{ student_vacancies
 timetables ||-do-|{ teacher_vacancies

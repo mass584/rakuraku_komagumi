@@ -1,33 +1,62 @@
 class Timetable < ApplicationRecord
   belongs_to :term
-  has_many :student_requests, dependent: :destroy
-  has_many :teacher_requests, dependent: :destroy
+  belongs_to :term_group, optional: true
+  has_many :student_vacancies, dependent: :destroy
+  has_many :teacher_vacancies, dependent: :destroy
   has_many :seats, dependent: :destroy
-  validate :can_update_is_closed?, on: :update, if: :will_save_change_to_is_closed?
 
-  def self.get_timetables(term)
-    where(term_id: term.id).reduce({}) do |accu, item|
-      accu.deep_merge({
-        item.date => {
-          item.period => item,
-        },
-      })
-    end
-  end
+  validates :date_index,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :period_index,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :is_closed,
+            exclusion: { in: [nil], message: 'にnilは許容されません' }
 
-  def self.bulk_create(term)
-    term.date_array.each do |date|
-      term.period_array.each do |period|
-        create(term_id: term.id, date: date, period: period)
-      end
-    end
+  validate :can_update_is_closed?,
+           on: :update,
+           if: :will_save_change_to_is_closed?
+  validate :can_update_term_group_id?,
+           on: :update,
+           if: :will_save_change_to_term_group_id?
+
+  before_create :set_nest_objects
+
+  def self.new(attributes = {})
+    attributes[:is_closed] ||= false
+    super(attributes)
   end
 
   private
 
+  # callback
+  def set_nest_objects
+    self.seats.build(new_seats)
+  end
+
+  def new_seats
+    term.seat_index_array.map do |index|
+      { term_id: term.id, seat_index: index, position_count: term.position_count }
+    end
+  end
+
+  # validate
   def can_update_is_closed?
-    if seats.filter { |seat| seat.pieces.exists? }.count.positive?
-      errors[:base] << '座席が割り当てられているので、変更できません。'
+    if is_closed && seats.filter_by_occupied.count.positive?
+      errors[:base] << '個別授業が割り当てられているため変更できません'
+    end
+
+    if is_closed && term_group_id.present?
+      errors[:base] << '集団授業が割り当てられているため変更できません'
+    end
+  end
+
+  def can_update_term_group_id?
+    if term_group_id.present? && seats.filter_by_occupied.count.positive?
+      errors[:base] << '個別授業が割り当てられているため変更できません'
+    end
+
+    if term_group_id.present? && is_closed
+      errors[:base] << '休講のため変更できません'
     end
   end
 end

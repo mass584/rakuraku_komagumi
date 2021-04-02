@@ -1,125 +1,121 @@
 class Term < ApplicationRecord
   belongs_to :room
-  has_many :student_terms, dependent: :destroy
-  has_many :students, through: :student_terms
-  has_many :teacher_terms, dependent: :destroy
-  has_many :teachers, through: :teacher_terms
-  has_many :subject_terms, dependent: :destroy
-  has_many :subjects, through: :subject_terms
+  has_many :student_optimization_rules, dependent: :destroy
+  has_many :teacher_optimization_rules, dependent: :destroy
+  has_many :term_students, dependent: :destroy
+  has_many :term_teachers, dependent: :destroy
+  has_many :term_tutorials, dependent: :destroy
+  has_many :term_groups, dependent: :destroy
   has_many :begin_end_times, dependent: :destroy
   has_many :timetables, dependent: :destroy
-  has_many :contracts, dependent: :destroy
-  has_many :student_requests, dependent: :destroy
-  has_many :teacher_requests, dependent: :destroy
   has_many :seats, dependent: :destroy
-  has_many :pieces, dependent: :destroy
+  has_many :tutorial_contracts, dependent: :destroy
+  has_many :group_contracts, dependent: :destroy
+  has_many :tutorial_pieces, dependent: :destroy
+  accepts_nested_attributes_for :term_tutorials, :term_groups
 
+  validates :name,
+            length: { minimum: 1, maximum: 40 }
+  validates :year,
+            numericality: { only_integer: true, greater_than_or_equal_to: 2020 }
   validates :begin_at, presence: true
   validates :end_at, presence: true
-  validate :verify_context_for_one_week, if: :one_week?
-  validate :verify_context_for_variable, if: :variable?
-  enum type: { one_week: 0, variable: 1 }
+  validates :period_count,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :seat_count,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+  validates :position_count,
+            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
-  after_create :create_associations
+  validate :valid_context?
+  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
-  self.inheritance_column = :_type_disabled
+  before_create :set_nest_objects
 
-  def date_array(*week)
-    if week.present?
-      (begin_at..end_at).to_a.slice((week[0] - 1) * 7, 7)
-    else
-      (begin_at..end_at)
-    end
+  def date_count
+    return 7 if normal?
+    return (begin_at..end_at).to_a.length if season? || exam_planning?
   end
 
-  def period_array
-    (1..max_period)
+  def date_index_array
+    (1..date_count).to_a
   end
 
-  def seat_array
-    (1..max_seat)
+  def period_index_array
+    (1..period_count).to_a
   end
 
-  def frame_array
-    (1..max_frame)
+  def seat_index_array
+    (1..seat_count).to_a
   end
 
-  def ordered_students
-    student_terms.joins(:student).order(school_grade: 'ASC')
+  def position_index_array
+    (1..position_count).to_a
   end
 
-  def ordered_teachers
-    teacher_terms.joins(:teacher).order(name: 'DESC')
-  end
+  private
 
-  def ordered_subjects
-    subject_terms.joins(:subject).order(order: 'ASC')
-  end
-
-  def readied_students
-    students.joins(:student_terms).where('student_terms.is_decided': true)
-  end
-
-  def readied_teachers
-    teachers.joins(:teacher_terms).where('teacher_terms.is_decided': true)
-  end
-
-  def display_type
-    if one_week?
-      '一週間モード'
-    elsif variable?
-      '任意期間モード'
-    end
-  end
-
-  def display_begin_at
-    begin_at.strftime('%Y/%m/%d')
-  end
-
-  def display_end_at
-    end_at.strftime('%Y/%m/%d')
-  end
-
-  def week(num_week)
-    if num_week < min_week
-      min_week
-    elsif num_week > max_week
-      max_week
-    else
-      num_week
-    end
-  end
-
-  def min_week
-    1
+  def cutoff_week(week)
+    return 1 if week < 1
+    return max_week if week > max_week
+    week
   end
 
   def max_week
     (1 + (end_at - begin_at) / 7).to_i
   end
 
-  private
-
-  def verify_context_for_one_week
-    if (end_at - begin_at) != 6
-      errors[:base] << '期間は7日間に設定してください。'
-    end
-  end
-
-  def verify_context_for_variable
+  # validate
+  def valid_context?
     if (end_at - begin_at).negative?
-      errors[:base] << '開始日、終了日を正しく設定してください。'
-    elsif (end_at - begin_at) >= 50
-      errors[:base] << '期間は50日間以内に設定してください。'
+      errors[:base] << '開始日・終了日を正しく設定してください'
     end
   end
 
-  def create_associations
-    SubjectTerm.bulk_create(self)
-    StudentTerm.bulk_create(self)
-    TeacherTerm.bulk_create(self)
-    BeginEndTime.bulk_create(self)
-    Timetable.bulk_create(self)
-    Seat.bulk_create(self)
+  # callback
+  def set_nest_objects
+    self.student_optimization_rules.build(new_student_optimization_rules)
+    self.teacher_optimization_rules.build(new_teacher_optimization_rules)
+    self.begin_end_times.build(new_begin_end_times)
+    self.timetables.build(new_timetables)
+  end
+
+  def new_student_optimization_rules
+    Student.school_grades.values.map do |school_grade|
+      {
+        school_grade: school_grade,
+        occupation_limit: 3,
+        occupation_costs: [0, 0, 14, 70],
+        blank_limit: 1,
+        blank_costs: [0, 70],
+        interval_cutoff: 2,
+        interval_costs: [70, 35, 14],
+      }
+    end
+  end
+
+  def new_teacher_optimization_rules
+    [
+      {
+        single_cost: 100,
+        different_pair_cost: 15,
+        occupation_limit: 6,
+        occupation_costs: [0, 30, 18, 3, 0, 6, 24],
+        blank_limit: 1,
+        blank_costs: [0, 30],
+      }
+    ]
+  end
+
+  def new_begin_end_times
+    period_index_array.map do |index|
+      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
+    end
+  end
+
+  def new_timetables
+    date_index_array.product(period_index_array).map do |date_index, period_index|
+      { date_index: date_index, period_index: period_index }
+    end
   end
 end

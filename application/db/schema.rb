@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_29_155951) do
+ActiveRecord::Schema.define(version: 2021_03_29_151306) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,13 +66,27 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   end
 
   create_table "seats", force: :cascade do |t|
+    t.integer "term_id", null: false
     t.integer "timetable_id", null: false
     t.integer "term_teacher_id"
     t.integer "seat_index", null: false
-    t.integer "seat_limit", null: false
+    t.integer "position_count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["timetable_id", "seat_index"], name: "index_seats_on_timetable_id_and_seat_index", unique: true
+    t.index ["term_id", "timetable_id", "seat_index"], name: "index_seats_on_term_id_and_timetable_id_and_seat_index", unique: true
+  end
+
+  create_table "student_optimization_rules", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "school_grade", null: false
+    t.integer "occupation_limit", null: false
+    t.integer "occupation_costs", null: false, array: true
+    t.integer "blank_limit", null: false
+    t.integer "blank_costs", null: false, array: true
+    t.integer "interval_cutoff", null: false
+    t.integer "interval_costs", null: false, array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "student_vacancies", force: :cascade do |t|
@@ -92,6 +106,18 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.boolean "is_deleted", default: false, null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "teacher_optimization_rules", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "single_cost", null: false
+    t.integer "different_pair_cost", null: false
+    t.integer "occupation_limit", null: false
+    t.integer "occupation_costs", null: false, array: true
+    t.integer "blank_limit", null: false
+    t.integer "blank_costs", null: false, array: true
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "teacher_vacancies", force: :cascade do |t|
@@ -124,6 +150,7 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   create_table "term_students", force: :cascade do |t|
     t.integer "term_id", null: false
     t.integer "student_id", null: false
+    t.integer "school_grade", null: false
     t.integer "vacancy_status", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -154,9 +181,9 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
     t.integer "term_type", null: false
     t.date "begin_at", null: false
     t.date "end_at", null: false
-    t.integer "periods", null: false
-    t.integer "seats", null: false
-    t.integer "seat_limits", null: false
+    t.integer "period_count", null: false
+    t.integer "seat_count", null: false
+    t.integer "position_count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
@@ -228,10 +255,13 @@ ActiveRecord::Schema.define(version: 2020_07_29_155951) do
   add_foreign_key "group_contracts", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_contracts", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "groups", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "seats", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "timetables", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "student_optimization_rules", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_vacancies", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_vacancies", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "students", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "teacher_optimization_rules", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_vacancies", "term_teachers", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_vacancies", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teachers", "rooms", on_update: :cascade, on_delete: :restrict
