@@ -136,9 +136,7 @@ class Seat < ApplicationRecord
   end
 
   def fetch_new_tutorials_group_by_teacher_and_timetable
-    records = term
-      .seats
-      .joins(:timetable)
+    records = term.seats.joins(:timetable)
       .select(:id, :term_teacher_id, :date_index, :period_index)
       .map do |item|
         {
@@ -157,9 +155,7 @@ class Seat < ApplicationRecord
   end
 
   def fetch_groups_group_by_teacher_and_timetable
-    records = term
-      .group_contracts
-      .joins(term_group: :timetables)
+    records = term.timetables.joins(:term_group)
       .select(:term_teacher_id, :date_index, :period_index)
       .select { |item| item[:term_teacher_id].present? }
     @groups_group_by_teacher_and_timetable = records.group_by_recursive(

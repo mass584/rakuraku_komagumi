@@ -61,18 +61,24 @@ RSpec.describe Seat, type: :model do
       term.teacher_optimization_rules.first.update(occupation_limit: 4, occupation_costs: [0, 18, 3, 0, 6])
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
-      @first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 2).first
-      @third = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 3).first
-      @fourth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 4).first
-      @fifth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 5).first
-      @sixth = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      term_group = term.term_groups.first
+      term_group.update(term_teacher_id: @term_teacher_first.id)
+      timetable_first = term.timetables.find_by(date_index: 1, period_index: 1)
+      timetable_first.update(term_group_id: term_group.id)
+      timetable_second = term.timetables.find_by(date_index: 1, period_index: 2)
+      timetable_third = term.timetables.find_by(date_index: 1, period_index: 3)
+      timetable_fourth = term.timetables.find_by(date_index: 1, period_index: 4)
+      timetable_fifth = term.timetables.find_by(date_index: 1, period_index: 5)
+      timetable_sixth = term.timetables.find_by(date_index: 1, period_index: 6)
+      @second = timetable_second.seats.first
+      @third = timetable_third.seats.first
+      @fourth = timetable_fourth.seats.first
+      @fifth = timetable_fifth.seats.first
+      @sixth = timetable_sixth.seats.first
     end
 
     context '座席の新規設定時(term_teacher_id : nil -> integer)' do
       it '最大コマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@second.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@second.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
@@ -87,8 +93,6 @@ RSpec.describe Seat, type: :model do
 
     context '座席の追加設定時(term_teacher_id : integer -> integer)' do
       it '最大コマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@second.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@second.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
@@ -109,18 +113,24 @@ RSpec.describe Seat, type: :model do
       term = create_normal_term_with_teacher_and_student(2, 0)
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
-      @first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 2).first
-      @third = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 3).first
-      @fourth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 4).first
-      @fifth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 5).first
-      @sixth = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      term_group = term.term_groups.first
+      term_group.update(term_teacher_id: @term_teacher_first.id)
+      timetable_first = term.timetables.find_by(date_index: 1, period_index: 1)
+      timetable_first.update(term_group_id: term_group.id)
+      timetable_second = term.timetables.find_by(date_index: 1, period_index: 2)
+      timetable_third = term.timetables.find_by(date_index: 1, period_index: 3)
+      timetable_fourth = term.timetables.find_by(date_index: 1, period_index: 4)
+      timetable_fifth = term.timetables.find_by(date_index: 1, period_index: 5)
+      timetable_sixth = term.timetables.find_by(date_index: 1, period_index: 6)
+      @second = timetable_second.seats.first
+      @third = timetable_third.seats.first
+      @fourth = timetable_fourth.seats.first
+      @fifth = timetable_fifth.seats.first
+      @sixth = timetable_sixth.seats.first
     end
 
     context '座席の新規設定時(term_teacher_id : nil -> integer)' do
       it '最大空きコマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@third.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@fifth.update(term_teacher_id: @term_teacher_first.id)).to eq(false)
@@ -131,8 +141,6 @@ RSpec.describe Seat, type: :model do
 
     context '座席の追加設定時(term_teacher_id : integer -> integer)' do
       it '移転先で最大空きコマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@third.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@fifth.update(term_teacher_id: @term_teacher_second.id)).to eq(true)
@@ -145,8 +153,6 @@ RSpec.describe Seat, type: :model do
 
     context '座席の追加設定時(term_teacher_id : integer -> integer)' do
       it '移転元で最大空きコマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@third.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@fourth.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
@@ -159,8 +165,6 @@ RSpec.describe Seat, type: :model do
 
     context '座席の削除設定時(term_teacher_id : integer -> nil)' do
       it '最大空きコマ数を越した場合にupdate失敗' do
-        expect(@first.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
-        expect(@first.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@third.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
         expect(@third.reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@fourth.update(term_teacher_id: @term_teacher_first.id)).to eq(true)
