@@ -31,22 +31,6 @@ class GroupContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.group_by_teacher_and_timetable(term)
-    records = term
-      .group_contracts
-      .joins(term_group: :timetables)
-      .select("term_groups.*", "timetables.*")
-    records.reduce({}) do |accu, record|
-      accu.deep_merge({
-        record.term_teacher_id => {
-          record.date_index => {
-            record.period_index => [record]
-          }
-        }
-      })
-    end
-  end
-
   private
 
   def contract_creation?
