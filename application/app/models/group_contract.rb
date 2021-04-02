@@ -24,9 +24,6 @@ class GroupContract < ApplicationRecord
   scope :filter_by_student, lambda { |term_student_id|
     itself.where(term_student_id: term_student_id)
   }
-  scope :filter_by_teacher, lambda { |term_teacher_id|
-    itself.joins(:term_group).where('term_groups.term_teacher_id': term_teacher_id)
-  }
 
   def self.new(attributes = {})
     attributes[:is_contracted] ||= false
