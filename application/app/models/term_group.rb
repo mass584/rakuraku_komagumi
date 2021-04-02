@@ -28,10 +28,6 @@ class TermGroup < ApplicationRecord
     !term_teacher_id_in_database && term_teacher_id
   end
 
-  def term_teacher_updateion?
-    term_teacher_id_in_database && term_teacher_id && (term_teacher_id_in_database != term_teacher_id)
-  end
-
   def term_teacher_deletion?
     term_teacher_id_in_database && !term_teacher_id
   end
