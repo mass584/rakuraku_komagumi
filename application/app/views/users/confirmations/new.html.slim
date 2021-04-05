@@ -1,0 +1,12 @@
+.max-width-500
+  h1.mt-4.mb-4.text-center
+    = image_tag "/logo.png", alt: "らくらくコマ組み", class: "w-100"
+  h2.mb-4.text-center 登録確認メールの再送
+  = form_for(resource, as: resource_name, url: user_confirmation_path, html: { method: :post }) do |f|
+    = render "users/shared/error_messages", resource: resource
+    .form-group
+      = f.label :email
+      = f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email)
+    .text-center.mb-2
+      = f.submit "登録確認メールを再送する", class: "btn btn-primary"
+  = render "users/shared/links"

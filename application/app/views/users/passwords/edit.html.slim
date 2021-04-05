@@ -1,7 +1,7 @@
 .max-width-500
   h1.mt-4.mb-4.text-center
     = image_tag "/logo.png", alt: "らくらくコマ組み", class: "w-100"
-  h2.mt-4.mb-4.text-center パスワードを変更する
+  h2.mb-4.text-center パスワードを変更する
   = form_for(resource, as: resource_name, url: user_password_path, html: { method: :put }) do |f|
     = render "users/shared/error_messages", resource: resource
     = f.hidden_field :reset_password_token
@@ -11,11 +11,9 @@
         | （
         = @minimum_password_length
         | 文字以上）
-        br
       = f.password_field :password, class: "form-control", autofocus: true, autocomplete: "new-password"
     .form-group
       = f.label :password_confirmation, "新しいパスワード（確認）"
-      br
       = f.password_field :password_confirmation, class: "form-control", autocomplete: "new-password"
     .text-center.mb-2
       = f.submit "パスワードを変更する", class: "btn btn-primary"

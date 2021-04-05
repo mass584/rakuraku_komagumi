@@ -1,42 +1,28 @@
-h2
-  | Edit 
-  = resource_name.to_s.humanize
-= form_for(resource, as: resource_name, url: user_registration_path, html: { method: :put }) do |f|
-  = render "users/shared/error_messages", resource: resource
-  .field
-    = f.label :email
-    br
-    = f.email_field :email, autofocus: true, autocomplete: "email"
-  - if devise_mapping.confirmable? && resource.pending_reconfirmation?
-    div
-      | Currently waiting confirmation for: 
-      = resource.unconfirmed_email
-  .field
-    = f.label :password
-    e
-      | (leave blank if you don't want to change it)
-    br
-    = f.password_field :password, autocomplete: "new-password"
-    - if @minimum_password_length
-      br
-      em
+.max-width-500
+  h1.mt-4.mb-4.text-center
+    = image_tag "/logo.png", alt: "らくらくコマ組み", class: "w-100"
+  h2.mb-4.text-center ユーザー登録情報の変更
+  = form_for(resource, as: resource_name, url: user_registration_path, html: { method: :put }) do |f|
+    = render "users/shared/error_messages", resource: resource
+    .form-group
+      = f.label :email
+      = f.email_field :email, class: "form-control", autofocus: true, autocomplete: "email"
+    .form-group
+      = f.label :password
+        | （変更の必要がない場合、空欄のままにしてください。）
+      = f.password_field :password, autocomplete: "new-password"
+      - if @minimum_password_length
+        | （
         = @minimum_password_length
-        |  characters minimum
-  .field
-    = f.label :password_confirmation
-    br
-    = f.password_field :password_confirmation, autocomplete: "new-password"
-  .field
-    = f.label :current_password
-    i
-      | (we need your current password to confirm your changes)
-    br
-    = f.password_field :current_password, autocomplete: "current-password"
-  .actions
-    = f.submit "Update"
-h3
-  | Cancel my account
-p
-  | Unhappy? 
-  = button_to "Cancel my account", user_registration_path(resource_name), data: { confirm: "Are you sure?" }, method: :delete
-= link_to "Back", :back
+        | 文字以上）
+    .form-group
+      = f.label :password_confirmation
+      = f.password_field :password_confirmation, autocomplete: "new-password"
+    .form-group
+      = f.label :current_password
+      = f.password_field :current_password, autocomplete: "current-password"
+    .form-group
+      = f.label :name
+      = f.text_field :name, class: "form-control"
+    .text-center.mb-2
+      = f.submit "更新"

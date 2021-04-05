@@ -29,6 +29,7 @@ ja:
         password: パスワード
         password_confirmation: "確認用パスワード"
         remember_me: "次回から自動的にログイン"
+        confirmation_token: 確認トークン
       room:
         name: 教室名
       student:
