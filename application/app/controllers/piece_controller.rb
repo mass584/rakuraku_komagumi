@@ -1,5 +1,5 @@
 class PieceController < ApplicationController
-  before_action :authenticate_room!
+  before_action :authenticate_user!
   before_action :term_selected?
 
   def index

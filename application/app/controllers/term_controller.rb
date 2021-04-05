@@ -1,5 +1,5 @@
 class TermController < ApplicationController
-  before_action :authenticate_room!
+  before_action :authenticate_user!
 
   def index
     @terms = current_room.terms.order(begin_at: 'DESC')

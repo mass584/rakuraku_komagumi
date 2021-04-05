@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Rooms::SessionsController < Devise::SessionsController
+class Users::SessionsController < Devise::SessionsController
   # before_action :configure_sign_in_params, only: [:create]
 
   # GET /resource/sign_in
@@ -26,6 +26,6 @@ class Rooms::SessionsController < Devise::SessionsController
   # end
 
   def after_sign_in_path_for(_resource)
-    '/term'
+    '/'
   end
 end

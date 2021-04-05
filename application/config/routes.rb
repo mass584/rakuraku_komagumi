@@ -1,12 +1,13 @@
 Rails.application.routes.draw do
+  devise_for :users, controllers: {
+    passwords: 'users/passwords',
+    registrations: 'users/registrations',
+    sessions: 'users/sessions',
+  }
   resources :begin_end_time, only: [:update]
   resources :contract, only: [:index, :update]
   resources :piece, only: [:index, :update]
   put 'piece/bulk_update', to: 'piece#bulk_update'
-  devise_for :rooms, controllers: {
-    registrations: 'rooms/registrations',
-    sessions: 'rooms/sessions',
-  }
   resources :seat, only: [:index, :update]
   resources :student, only: [:index, :create, :update, :destroy]
   resources :student_request, only: [:create, :destroy]
