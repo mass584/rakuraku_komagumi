@@ -1,6 +1,7 @@
-table.table
-  thead.thead-dark
-    == render partial: 'tr_head', locals: { attributes: table_content[:attributes] }
-  tbody
-    - table_content[:records].each do |record|
-      == render partial: 'tr', locals: { record: record }
+.justify-content-center.ml-5.mr-5.mt-3.mb-3
+  table.table
+    thead.thead-dark
+      == render partial: 'tr_head', locals: { attributes: table_content[:attributes] }
+    tbody
+      - table_content[:records].each do |record|
+        == render partial: 'tr', locals: { record: record }

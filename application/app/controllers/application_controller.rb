@@ -11,7 +11,15 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def sanitize_integer_query_param(value)
+    value.present? ? value.to_i : nil
+  end
+
+  def sanitize_string_query_param(value)
+    value.present? ? value.to_s : nil
+  end
+
   def after_sign_in_path_for(_resource)
-    '/term'
+    '/rooms'
   end
 end

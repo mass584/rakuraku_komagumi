@@ -1,15 +1,11 @@
 module PagerHelper
-  def min_page
-    1
-  end
-
-  def max_page(total_record, record_per_page)
-    (1 + (total_record - 1) / record_per_page).to_i
+  def max_page(total_record, page_size)
+    (1 + (total_record - 1) / page_size).to_i
   end
 
   def effective_page(total_record, record_per_page, current_page)
-    if min_page > current_page
-      min_page
+    if 1 > current_page
+      1
     elsif max_page(total_record, record_per_page) < current_page
       max_page(total_record, record_per_page)
     else
@@ -31,8 +27,8 @@ module PagerHelper
           {
             method: :get,
             class: 'btn btn-sm btn-dark m-1',
-            params: { page: min_page },
-            disabled: effective_page == min_page,
+            params: { page: 1 },
+            disabled: effective_page == 1,
           }
         ),
       )
@@ -43,7 +39,7 @@ module PagerHelper
             method: :get,
             class: 'btn btn-sm btn-dark m-1',
             params: { page: effective_page - 1 },
-            disabled: effective_page == min_page,
+            disabled: effective_page == 1,
           }
         ),
       )
