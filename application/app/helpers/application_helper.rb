@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def enum_to_select(model, enum_attr)
+    model.send(enum_attr.pluralize).map do |key, _value|
+      [model.send("#{enum_attr.pluralize}_i18n")[key], key]
+    end
+  end
+
   def youbi(number)
     %w[日 月 火 水 木 金 土][number]
   end

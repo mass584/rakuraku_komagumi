@@ -14,7 +14,7 @@ module RoomHelper
       tds: [
         room.name,
         content_tag(:div) { link_to '開く', room_path(room) },
-        content_tag(:div) { link_to '開く', rooms_path }
+        content_tag(:div) { link_to '開く', terms_path(room_id: room.id) }
       ],
     }
   end

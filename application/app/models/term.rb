@@ -16,6 +16,8 @@ class Term < ApplicationRecord
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
+  validates :term_type,
+            presence: true
   validates :year,
             numericality: { only_integer: true, greater_than_or_equal_to: 2020 }
   validates :begin_at, presence: true
@@ -27,10 +29,12 @@ class Term < ApplicationRecord
   validates :position_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
-  validate :valid_context?
-  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
+  validate :valid_context?, on: :create
+  validate :valid_date_count?, on: :create
 
   before_create :set_nest_objects
+
+  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
   def date_count
     return 7 if normal?
@@ -69,6 +73,12 @@ class Term < ApplicationRecord
   def valid_context?
     if (end_at - begin_at).negative?
       errors[:base] << '開始日・終了日を正しく設定してください'
+    end
+  end
+
+  def valid_date_count?
+    if date_count > 50
+      errors[:base] << '講習期とテスト対策の期間は最大５０日までです'
     end
   end
 

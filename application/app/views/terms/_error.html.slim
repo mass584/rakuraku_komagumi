@@ -1,0 +1,6 @@
+- if @term.errors.any?
+  .justify-content-center.mx-5.my-3
+    .alert.alert-danger
+      ul.my-0
+        - @term.errors.full_messages.each do |message|
+          li = message

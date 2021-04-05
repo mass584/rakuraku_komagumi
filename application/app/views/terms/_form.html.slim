@@ -1,0 +1,46 @@
+.justify-content-center.mx-5.my-3
+  = form_for @term, url: path do |f|
+    p.h4.my-3 スケジュールの作成
+    .form-group
+      .form-row
+        .col-lg-4
+          = f.label :name
+          = f.text_field :name, { class: 'form-control' }
+        .col-lg-4
+          = f.label :year
+          = f.number_field :year, { min: 2020, max: 2100, class: 'form-control' }
+        .col-lg-4
+          = f.label :term_type
+          = f.select :term_type,
+            enum_to_select(@term.class, 'term_type'),
+            { include_blank: '選択して下さい' },
+            { class: 'form-control' }
+    .form-group
+      .form-row
+        .col-lg-4
+          = f.label :begin_at
+          #term_begin_at_datepicker.input-group.date
+            .input-group-prepend
+              span.input-group-addon.input-group-text @
+            = f.text_field :begin_at, { class: 'form-control' }
+        .col-lg-4
+          = f.label :end_at
+          #term_end_at_datepicker.input-group.date
+            .input-group-prepend
+              span.input-group-addon.input-group-text @
+            = f.text_field :end_at, { class: 'form-control' }
+    .form-group
+      .form-row
+        .col-lg-4
+          = f.label :period_count
+          = f.number_field :period_count, { min: 1, max: 10, class: 'form-control' }
+        .col-lg-4
+          = f.label :seat_count
+          = f.number_field :seat_count, { min: 1, max: 10, class: 'form-control' }
+        .col-lg-4
+          = f.label :position_count
+          = f.number_field :position_count, { min: 1, max: 3, class: 'form-control' }
+    = f.hidden_field :room_id, :value => @room.id
+    .text-center
+      = f.submit '保存', { "class" => "btn btn-primary mx-1" }
+      = link_to '戻る', terms_path, { "class" => "btn btn-secondary mx-1" }

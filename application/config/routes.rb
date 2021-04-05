@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
     resources :teacher_subject, only: [:create, :destroy]
     resources :teacher_request, only: [:create, :destroy]
-    resources :term, only: [:index, :create, :show, :update, :destroy]
+    resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
     resources :timetable, only: [:index, :update]
     root 'room#index'
   end

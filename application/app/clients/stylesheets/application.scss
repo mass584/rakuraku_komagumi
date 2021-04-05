@@ -1,8 +1,5 @@
 @import "bootstrap";
-
-ul {
-  margin-bottom: 0;
-}
+@import '~bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker';
 
 th, td {
   &.mw-60 {
