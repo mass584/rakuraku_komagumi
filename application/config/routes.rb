@@ -12,13 +12,15 @@ Rails.application.routes.draw do
     put 'piece/bulk_update', to: 'piece#bulk_update'
     resources :rooms, only: [:index, :update]
     resources :seat, only: [:index, :update]
-    resources :students, only: [:index, :create, :update, :destroy]
+    resources :students, only: [:index]
+    resources :students, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :student_request, only: [:create, :destroy]
     resources :student_subject, only: [:create, :destroy]
     resources :student_term, only: [:index, :show, :create, :update]
     get 'student_term/:id/schedule', to: 'student_term#schedule'
     resources :subject_term, only: [:index, :create]
-    resources :teachers, only: [:index, :create, :update, :destroy]
+    resources :teachers, only: [:index]
+    resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :teacher_term, only: [:index, :show, :create, :update]
     get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
     resources :teacher_subject, only: [:create, :destroy]

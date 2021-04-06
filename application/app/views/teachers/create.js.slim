@@ -1,6 +1,6 @@
-- if @status == 'success'
+- if @success
   | $('#teacher_create').modal('hide');
   | $('#teacher_create_alert').html("");
   | $('tbody').append("#{escape_javascript(render partial: 'tr', locals: { record: teacher_table_record(@teacher)})}");
-- elsif @status == 'fail'
+- else
   | $('#teacher_create_alert').html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

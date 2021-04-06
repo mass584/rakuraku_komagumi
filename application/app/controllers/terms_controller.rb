@@ -8,10 +8,6 @@ class TermsController < ApplicationController
     @terms = current_room.terms.order(begin_at: 'DESC')
   end
 
-  def show
-    @term = current_term
-  end
-
   def new
     @term = Term.new
   end
@@ -23,6 +19,10 @@ class TermsController < ApplicationController
     else
       render action: :new
     end
+  end
+
+  def show
+    @term = current_term
   end
 
   protected

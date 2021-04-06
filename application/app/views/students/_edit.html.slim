@@ -1,0 +1,30 @@
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#student_edit_#{student.id}"
+.modal.fade id="student_edit_#{student.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for student, url: student_path(student), remote: true do |f|
+        .modal-header
+          h4.modal-title 生徒情報の編集
+        .modal-body
+          .form-group
+            .form-row
+              .col
+                = f.label :name, '氏名'
+                = f.text_field :name, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :school_grade
+                = f.select :school_grade,
+                  enum_to_select(student.class, 'school_grade'),
+                  { include_blank: '選択して下さい' },
+                  { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :email
+                = f.text_field :email, { class: 'form-control' }
+          div id="student_edit_alert_#{student.id}"
+        .modal-footer
+          = f.submit '保存', {"class" => "btn btn-primary"}
+          = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

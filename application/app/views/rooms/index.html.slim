@@ -2,7 +2,7 @@
 .container-fluid.my-5
   == render partial: 'application/title',
     locals: { title: '教室の一覧' }
-  .row.justify-content-end.mx-5.my-3
+  .row.float-right.mx-5
     .mr-1
       == render partial: 'application/search',
         locals: { path: rooms_path, keyword: @keyword, page: @page }

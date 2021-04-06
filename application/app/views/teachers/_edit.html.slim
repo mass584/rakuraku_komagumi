@@ -2,7 +2,7 @@
 .modal.fade id="teacher_edit_#{teacher.id}" role="dialog" area-hidden="true"
   .modal-dialog
     .modal-content
-      = form_for teacher, remote: true do |f|
+      = form_for teacher, url: teacher_path(teacher), remote: true do |f|
         .modal-header
           h4.modal-title 講師情報の編集
         .modal-body
@@ -11,27 +11,11 @@
               .col
                 = f.label :name, '氏名'
                 = f.text_field :name, { class: 'form-control' }
-              .col
-                = f.label :name_kana, '氏名(かな)'
-                = f.text_field :name_kana, { class: 'form-control' }
           .form-group
             .form-row
               .col
                 = f.label :email
                 = f.text_field :email, { class: 'form-control' }
-              .col
-                = f.label :tel
-                = f.text_field :tel, { class: 'form-control' }
-          .form-group
-            .form-row
-              .col-xs-2
-                = f.label :zip
-                = f.text_field :zip, { class: 'form-control' }
-          .form-group
-            .form-row
-              .col
-                = f.label :address
-                = f.text_field :address, { class: 'form-control' }
           div id="teacher_edit_alert_#{teacher.id}"
         .modal-footer
           = f.submit '保存', {"class" => "btn btn-primary"}

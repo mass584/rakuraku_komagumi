@@ -2,7 +2,7 @@ button.btn.btn-primary data-toggle="modal" data-target="#teacher_create" = '新�
 .modal.fade id="teacher_create" role="dialog" area-hidden="true"
   .modal-dialog role="document"
     .modal-content
-      = form_for Teacher.new, :url => { :controller => :teacher, :action => :create }, remote: true do |f|
+      = form_for teacher, url: teachers_path, remote: true do |f|
         .modal-header
           h4.modal-title 講師の追加
         .modal-body
@@ -11,29 +11,13 @@ button.btn.btn-primary data-toggle="modal" data-target="#teacher_create" = '新�
               .col
                 = f.label :name, '氏名'
                 = f.text_field :name, { class: 'form-control' }
-              .col
-                = f.label :name_kana, '氏名(かな)'
-                = f.text_field :name_kana, { class: 'form-control' }
           .form-group
             .form-row
               .col
                 = f.label :email
                 = f.text_field :email, { class: 'form-control' }
-              .col
-                = f.label :tel
-                = f.text_field :tel, { class: 'form-control' }
-          .form-group
-            .form-row
-              .col-xs-2
-                = f.label :zip
-                = f.text_field :zip, { class: 'form-control' }
-          .form-group
-            .form-row
-              .col
-                = f.label :address
-                = f.text_field :address, { class: 'form-control' }
-          = f.hidden_field :room_id, :value => current_room.id
-          div id="teacher_create_alert"
+          = f.hidden_field :room_id, :value => @room.id
+          #teacher_create_alert
         .modal-footer
           = f.submit '追加', { "class" => "btn btn-primary" }
           = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }
