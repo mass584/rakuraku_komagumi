@@ -16,7 +16,9 @@ module TermHelper
         term.term_type_i18n,
         "#{l term.begin_at}",
         "#{l term.end_at}",
-        content_tag(:div) { link_to '開く', term_path(term, {term_id: term.id}) },
+        content_tag(:div) do
+          link_to '編集', term_path(term, {term_id: term.id}), { class: 'btn btn-secondary' }
+        end,
       ],
     }
   end
