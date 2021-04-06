@@ -2,6 +2,8 @@ class RoomsController < ApplicationController
   PAGE_SIZE = 10
 
   before_action :authenticate_user!
+  before_action :set_rooms!
+  before_action :set_room!
 
   def index
     @keyword = sanitize_string_query_param(params[:keyword])

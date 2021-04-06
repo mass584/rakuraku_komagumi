@@ -3,10 +3,13 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def set_rooms!
+    @rooms = Room.ordered.all
+  end
+
   def set_room!
     room_id = sanitize_integer_query_param(params[:room_id]) || cookies[:room_id]
-    @room = Room.find_by(id: room_id)
-    redirect_to rooms_path if @room.nil?
+    @room = Room.find_by(id: room_id) || Room.new
     cookies[:room_id] = room_id
   end
 

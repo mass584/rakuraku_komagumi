@@ -1,5 +1,6 @@
 class TermsController < ApplicationController
   before_action :authenticate_user!
+  before_action :set_rooms!
   before_action :set_room!
   before_action :set_term!, except: [:index]
 
