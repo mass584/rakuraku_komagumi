@@ -3,7 +3,7 @@
   == render partial: 'application/title',
     locals: { title: 'スケジュールの一覧' }
   .row.justify-content-start.mx-5.my-3
-    = link_to '追加', new_term_path, {"class" => "btn btn-primary mr-1"}
+    = link_to '新規', new_term_path, {"class" => "btn btn-primary mr-1"}
   == render partial: 'application/table',
     locals: { table_content: terms_table_content(@terms) }
 
