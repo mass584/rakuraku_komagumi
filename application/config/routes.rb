@@ -7,7 +7,8 @@ Rails.application.routes.draw do
   defaults format: :html do
     resources :begin_end_time, only: [:update]
     resources :contract, only: [:index, :update]
-    resources :groups, only: [:index, :create, :update, :destroy]
+    resources :groups, only: [:index]
+    resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :piece, only: [:index, :update]
     put 'piece/bulk_update', to: 'piece#bulk_update'
     resources :rooms, only: [:index, :update]
@@ -27,7 +28,8 @@ Rails.application.routes.draw do
     resources :teacher_request, only: [:create, :destroy]
     resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
     resources :timetable, only: [:index, :update]
-    resources :tutorials, only: [:index, :create, :update, :destroy]
+    resources :tutorials, only: [:index]
+    resources :tutorials, only: [:create, :update, :destroy], defaults: { format: 'js' }
     root 'room#index'
   end
 end

@@ -3,15 +3,15 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
   .collapse.navbar-collapse
     ul.navbar-nav.mr-auto
       li class="#{active == 'term' ? 'nav-item active' : 'nav-item'}"
-        = link_to 'スケジュール一覧', terms_path, { method: :get, class: 'nav-link' }
+        = link_to 'スケジュール', terms_path, { method: :get, class: 'nav-link' }
       li class="#{active == 'teacher' ? 'nav-item active' : 'nav-item'}"
-        = link_to '講師一覧', teachers_path, { method: :get, class: 'nav-link' }
+        = link_to '講師', teachers_path, { method: :get, class: 'nav-link' }
       li class="#{active == 'student' ? 'nav-item active' : 'nav-item'}"
-        = link_to '生徒一覧', students_path, { method: :get, class: 'nav-link' }
+        = link_to '生徒', students_path, { method: :get, class: 'nav-link' }
       li class="#{active == 'tutorial' ? 'nav-item active' : 'nav-item'}"
-        = link_to '個別科目一覧', tutorials_path, { method: :get, class: 'nav-link' }
+        = link_to '個別科目', tutorials_path, { method: :get, class: 'nav-link' }
       li class="#{active == 'group' ? 'nav-item active' : 'nav-item'}"
-        = link_to '集団科目一覧', groups_path, { method: :get, class: 'nav-link' }
+        = link_to '集団科目', groups_path, { method: :get, class: 'nav-link' }
     ul.navbar-nav
       li.nav-item.mx-1
         = form_tag(terms_path, method: 'get', class: 'mx-1')

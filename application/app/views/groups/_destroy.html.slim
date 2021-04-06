@@ -1,0 +1,12 @@
+= button_tag '削除', 'class' => 'btn btn-danger', 'data-toggle' => 'modal', 'data-target' => "#group_destroy_#{group.id}"
+.modal.fade id="group_destroy_#{group.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      .modal-header
+        h4.modal-title 科目の削除
+      .modal-body
+        p 削除してもよろしいですか。削除しても既存のスケジュールには表示されます。
+        div id="group_destroy_alert_#{group.id}"
+      .modal-footer
+        = button_to '削除', group_path(group), { method: 'delete', class: 'btn btn-danger', remote: true }
+        = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

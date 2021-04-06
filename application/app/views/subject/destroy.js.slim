@@ -1,7 +1,0 @@
-- if @status == 'success'
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $("#subject_destroy_#{@subject.id}").modal('hide');
-  | $('#table_tr_#{@subject.id}').remove();
-- elsif @status == 'fail'
-  | $("#subject_destroy_alert_#{@subject.id}").html("#{escape_javascript(render partial: 'subject/error', locals: { subject: @subject })}");

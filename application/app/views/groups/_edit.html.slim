@@ -1,8 +1,8 @@
-= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#subject_edit_#{subject.id}"
-.modal.fade id="subject_edit_#{subject.id}" role="dialog" area-hidden="true"
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#group_edit_#{group.id}"
+.modal.fade id="group_edit_#{group.id}" role="dialog" area-hidden="true"
   .modal-dialog
     .modal-content
-      = form_for subject, remote: true do |f|
+      = form_for group, url: group_path(group), remote: true do |f|
         .modal-header
           h4.modal-title 科目情報の編集
         .modal-body
@@ -12,7 +12,7 @@
           .form-group
             = f.label :name
             = f.text_field :name, { class: 'form-control' }
-          div id="subject_edit_alert_#{subject.id}"
+          div id="group_edit_alert_#{group.id}"
         .modal-footer
           = f.submit '保存', { "class" => "btn btn-primary" }
           = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }
