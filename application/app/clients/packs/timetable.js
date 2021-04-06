@@ -1,56 +1,54 @@
 import $ from 'jquery';
 
 $.ajaxSetup({
-  headers:
-  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+  headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 });
 
-$(document).ready(() => {
-  $('[id=begin_at]').on('change', cb_textbox_time);
-  $('[id=end_at]').on('change', cb_textbox_time);
-  $('[id=select_is_closed]').on('change', cb_select_is_closed);
-});
-
-export const cb_textbox_time = (event) => {
-  const textbox = $(event.target);
-  const div = textbox.parent();
-  const id = div.data('id');
-  const url = `/begin_end_time/${id}`;
-  const data = {
-    timetable: {
-      [textbox.attr('id')]: textbox.val(),
-    },
-  };
+const onBlurBeginEndTime = (event) => {
+  const timeElement = $(event.target);
+  const wrapperElement = timeElement.parent();
+  const id = wrapperElement.data('id');
+  const key = wrapperElement.data('key');
+  const value = timeElement.val();
+  const url = `/begin_end_times/${id}`;
+  const data = { timetable: { [key]: value } };
   $.ajax({
     type: 'put',
     url: url,
     data: JSON.stringify(data),
     contentType: 'application/json',
-  }).fail(() => {
-    alert('操作に失敗しました。');
+  }).fail(({ responseText }) => {
+    const response = JSON.parse(responseText);
+    alert(response.message);
   });
 }
 
-export const cb_select_is_closed = (event) => {
-  const select = $(event.target);
-  const div = select.parent();
-  const td = div.parent();
-  const id = div.data('id');
-  const url = `/timetable/${id}`;
-  const data = {
-    timetable: {
-      is_closed: select.val() === "true",
-    }
-  };
+const onBlurIsClosed = (event) => {
+  const selectElement = $(event.target);
+  const wrapperElement = selectElement.parent();
+  const tdElement = wrapperElement.parent();
+  const id = wrapperElement.data('id');
+  const key = wrapperElement.data('key');
+  const value = selectElement.val() === 'true';
+  const url = `/timetables/${id}`;
+  const data = { timetable: { [key]: value } };
   $.ajax({
     type: 'put',
     url: url,
     data: JSON.stringify(data),
     contentType: 'application/json',
   }).done(() => {
-    div.data('is_closed', select.val());
-    td.attr('class', select.val() === "true" ? 'bg-inactive' : '');
-  }).fail(() => {
-    alert('操作に失敗しました。');
+    const className = value ? 'bg-inactive' : '';
+    tdElement.attr('class', className);
+  }).fail(({ responseText }) => {
+    selectElement.val(String(!value));
+    const response = JSON.parse(responseText);
+    alert(response.message);
   });
 }
+
+$(document).ready(() => {
+  $('[id^=begin_at]').on('blur', onBlurBeginEndTime);
+  $('[id^=end_at]').on('blur', onBlurBeginEndTime);
+  $('[id^=is_closed]').on('change', onBlurIsClosed);
+});

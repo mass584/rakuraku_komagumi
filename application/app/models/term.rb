@@ -41,8 +41,20 @@ class Term < ApplicationRecord
     return (begin_at..end_at).to_a.length if season? || exam_planning?
   end
 
-  def date_index_array
-    (1..date_count).to_a
+  def date_array(*week)
+    if week.first.nil?
+      (begin_at..end_at).to_a
+    else
+      (begin_at..end_at).to_a.slice(week.first*7-7, week.first*7)
+    end
+  end
+
+  def date_index_array(*week)
+    if week.first.nil?
+      (1..date_count).to_a
+    else
+      (1..date_count).to_a.slice(week.first*7-7, week.first*7)
+    end
   end
 
   def period_index_array

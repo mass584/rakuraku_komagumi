@@ -26,6 +26,15 @@ class Timetable < ApplicationRecord
     super(attributes)
   end
 
+  def self.timetables_group_by_date_and_period(term)
+    term.timetables.select(
+      :id, :date_index, :period_index, :is_closed, :term_group_id
+    ).group_by_recursive(
+      proc { |item| item[:date_index] },
+      proc { |item| item[:period_index] },
+    )
+  end
+
   private
 
   # callback

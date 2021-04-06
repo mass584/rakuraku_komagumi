@@ -5,7 +5,7 @@ Rails.application.routes.draw do
     sessions: 'users/sessions',
   }
   defaults format: :html do
-    resources :begin_end_time, only: [:update]
+    resources :begin_end_times, only: [:update], defaults: { format: 'json' }
     resources :contract, only: [:index, :update]
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
@@ -27,7 +27,8 @@ Rails.application.routes.draw do
     resources :teacher_subject, only: [:create, :destroy]
     resources :teacher_request, only: [:create, :destroy]
     resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
-    resources :timetable, only: [:index, :update]
+    resources :timetables, only: [:index]
+    resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]
     resources :tutorials, only: [:create, :update, :destroy], defaults: { format: 'js' }
     root 'room#index'

@@ -1,6 +1,9 @@
-class BeginEndTimeController < ApplicationController
+class BeginEndTimesController < ApplicationController
+
   before_action :authenticate_user!
-  before_action :term_selected?
+  before_action :set_rooms!
+  before_action :set_room!
+  before_action :set_term!
 
   def update
     record = BeginEndTime.find(params[:id])
