@@ -40,19 +40,16 @@ class Term < ApplicationRecord
     return (begin_at..end_at).to_a.length if season? || exam_planning?
   end
 
-  def date_array(*week)
-    if week.first.nil?
-      (begin_at..end_at).to_a
-    else
-      (begin_at..end_at).to_a.slice(week.first*7-7, week.first*7)
-    end
+  def date_index_to_date(date_index)
+    (begin_at..end_at).to_a[date_index - 1]
   end
 
-  def date_index_array(*week)
-    if week.first.nil?
+  def date_index_array(*argv)
+    week = argv.first
+    if week.nil?
       (1..date_count).to_a
     else
-      (1..date_count).to_a.slice(week.first*7-7, week.first*7)
+      (1..date_count).to_a.slice(week * 7 - 7, 7)
     end
   end
 
@@ -105,17 +102,13 @@ class Term < ApplicationRecord
 
   def new_term_tutorials
     room.tutorials.select(:id).map do |tutorial|
-      {
-        tutorial_id: tutorial.id,
-      }
+      { tutorial_id: tutorial.id }
     end
   end
 
   def new_term_groups
     room.groups.select(:id).map do |group|
-      {
-        group_id: group.id,
-      }
+      { group_id: group.id }
     end
   end
 

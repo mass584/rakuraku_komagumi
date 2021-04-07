@@ -3,7 +3,7 @@
 .container-fluid.my-5
   .row.float-right.mx-5
     == render partial: 'application/pagenation',
-      locals: { path: timetables_path, keyword: nil, page: @page, max_page: max_page(@timetables.count, @page_size) }
+      locals: { path: timetables_path, keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
     table.table
       thead.thead-dark
@@ -13,26 +13,16 @@
             th.align-middle #{period_index}限
       tbody
         tr
-          td.align-middle 開始時刻
+          td.align-middle.bg-light 開始時刻
           - @period_index_array.each do |period_index|
-            td.align-middle
-              div data-id="#{@begin_end_times[period_index].first.id}" data-key="begin_at"
-                = time_field_tag :begin_at, I18n.l(@begin_end_times[period_index].first.begin_at),
-                  { id: "begin_at_#{period_index}", class: 'form-control form-control-sm' }
+            = begin_at_cell(@begin_end_times, period_index)
         tr
-          td.align-middle 終了時刻
+          td.align-middle.bg-light 終了時刻
           - @period_index_array.each do |period_index|
-            td.align-middle
-              div data-id="#{@begin_end_times[period_index].first.id}" data-key="end_at"
-                = time_field_tag :end_at, I18n.l(@begin_end_times[period_index].first.end_at),
-                  { id: "end_at_#{period_index}", class: 'form-control form-control-sm' }
-        - @date_index_array.each_with_index do |date_index, index|
+            = end_at_cell(@begin_end_times, period_index)
+        - @date_index_array.each do |date_index|
           tr
-            td.align-middle = I18n.l(@date_array[index])
+            td.align-middle = I18n.l(@term.date_index_to_date(date_index))
             - @period_index_array.each do |period_index|
-              td.align-middle class="#{@timetables[date_index][period_index].first.is_closed && 'bg-inactive'}"
-                div data-id="#{@timetables[date_index][period_index].first.id}" data-key="is_closed"
-                  = select_tag :is_closed,
-                    options_for_select({ '開講': false, '休講': true }, selected: @timetables[date_index][period_index].first.is_closed),
-                    { id: "is_closed_#{date_index}_#{period_index}", class: 'form-control form-control-sm' }
+              = timetable_table_cell(@timetables, @term_groups, date_index, period_index)
 == javascript_pack_tag 'timetable.js'

@@ -9,12 +9,11 @@ class TimetablesController < ApplicationController
   def index
     @page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = PAGE_SIZE
-    @date_array = current_term.date_array(@page)
     @date_index_array = current_term.date_index_array(@page)
     @period_index_array = current_term.period_index_array
-    @timetables = Timetable.timetables_group_by_date_and_period(current_term)
-    @begin_end_times = BeginEndTime.begin_end_times_group_by_period(current_term)
-    @term_groups = current_term.term_groups
+    @timetables = current_term.timetables
+    @begin_end_times = current_term.begin_end_times
+    @term_groups = current_term.term_groups.joins(:group).select('term_groups.id', 'groups.name')
   end
 
   def update
@@ -29,6 +28,6 @@ class TimetablesController < ApplicationController
   private
 
   def update_params
-    params.require(:timetable).permit(:is_closed)
+    params.require(:timetable).permit(:is_closed, :term_group_id)
   end
 end
