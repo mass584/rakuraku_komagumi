@@ -28,9 +28,20 @@ class TermStudent < ApplicationRecord
 
   before_create :set_nest_objects
 
+  scope :ordered, lambda {
+    joins(:student).order(school_grade: 'ASC', 'students.name': 'ASC')
+  }
+  scope :pagenated, lambda { |page, page_size|
+    page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
+      offset((page - 1) * page_size).limit(page_size) :
+      itself
+  }
+
   def self.new(attributes = {})
     attributes[:vacancy_status] ||= 'draft'
-    super(attributes)
+    record = super(attributes)
+    record.school_grade = record.student&.school_grade
+    record
   end
 
   def optimization_rule

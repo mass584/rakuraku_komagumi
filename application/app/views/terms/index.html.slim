@@ -1,0 +1,7 @@
+== render partial: 'navbar', locals: { active: 'term' }
+.container-fluid.my-5
+  == render partial: 'application/title', locals: { title: 'スケジュールの一覧' }
+  .row.float-left.ml-5.mb-3
+    == render partial: 'terms/new', locals: { term: Term.new }
+  == render partial: 'application/table', locals: { table_content: terms_table_content(@terms) }
+== javascript_pack_tag 'term_new.js'

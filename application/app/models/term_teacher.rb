@@ -14,6 +14,15 @@ class TermTeacher < ApplicationRecord
 
   before_create :set_nest_objects
 
+  scope :ordered, lambda {
+    joins(:teacher).order('teachers.name': 'ASC')
+  }
+  scope :pagenated, lambda { |page, page_size|
+    page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
+      offset((page - 1) * page_size).limit(page_size) :
+      itself
+  }
+
   def self.new(attributes = {})
     attributes[:vacancy_status] ||= 'draft'
     super(attributes)

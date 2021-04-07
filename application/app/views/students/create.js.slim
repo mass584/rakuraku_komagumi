@@ -1,0 +1,4 @@
+- if @success
+  | location.reload();
+- else
+  | $('#student_create_alert').html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

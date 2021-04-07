@@ -8,8 +8,15 @@ class Teacher < ApplicationRecord
             format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
 
   scope :active, -> { where(is_deleted: false) }
-  scope :sorted, -> { order(name: 'ASC') }
-  scope :matched, ->(keyword) { where('name like ?', "%#{sanitize_sql_like(keyword || '')}%") }
-  scope :paginated, ->(page) { slice((page - 1) * 20, 20) }
-  scope :searched, ->(keyword, page) { active.sorted.matched(keyword).paginated(page) }
+  scope :ordered, -> { order(name: 'ASC') }
+  scope :matched, lambda { |keyword|
+    keyword.instance_of?(String) && keyword.present? ?
+      where('name like ?', "%#{sanitize_sql_like(keyword)}%") :
+      itself
+  }
+  scope :pagenated, lambda { |page, page_size|
+    page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
+      offset((page - 1) * page_size).limit(page_size) :
+      itself
+  }
 end

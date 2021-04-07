@@ -1,0 +1,31 @@
+button.btn.btn-primary data-toggle="modal" data-target="#student_create" = '新規'
+.modal.fade id="student_create" role="dialog" area-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      = form_for student, url: students_path, remote: true do |f|
+        .modal-header
+          h4.modal-title 生徒の追加
+        .modal-body
+          .form-group
+            .form-row
+              .col
+                = f.label :name, '氏名'
+                = f.text_field :name, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :school_grade
+                = f.select :school_grade,
+                  enum_to_select(student.class, 'school_grade'),
+                  { include_blank: '選択して下さい' },
+                  { class: 'form-control' }
+          .form-group
+            .form-row
+              .col
+                = f.label :email
+                = f.text_field :email, { class: 'form-control' }
+          = f.hidden_field :room_id, :value => @room.id
+          #student_create_alert
+        .modal-footer
+          = f.submit '追加', { "class" => "btn btn-primary" }
+          = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

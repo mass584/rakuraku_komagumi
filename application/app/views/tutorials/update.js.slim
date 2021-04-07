@@ -1,0 +1,4 @@
+- if @success
+  | location.reload();
+- else
+  | $("tutorial_edit_alert_#{@tutorial.id}").html("#{escape_javascript(render partial: 'tutorials/error', locals: { tutorial: @tutorial })}");

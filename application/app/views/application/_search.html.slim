@@ -1,0 +1,6 @@
+= form_tag(path, method: 'get', class: 'mx-1')
+  .input-group.mx-1
+    = text_field_tag :keyword, keyword, class: 'form-control'
+    = hidden_field_tag :page, page
+    .input-group-append
+      = submit_tag '検索', :name => nil, class: 'btn btn-secondary'

@@ -1,7 +1,0 @@
-- if @status == 'success'
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $("#student_edit_#{@student.id}").modal('hide');
-  | $('#table_tr_#{@student.id}').replaceWith("#{escape_javascript(render partial: 'tr', locals: { record: student_table_record(@student) })}");
-- elsif @status == 'fail'
-  | $("#student_edit_alert_#{@student.id}").html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

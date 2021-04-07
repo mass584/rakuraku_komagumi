@@ -1,26 +1,5 @@
 @import "bootstrap";
-
-ul {
-  margin-bottom: 0;
-}
-
-th, td {
-  &.mw-60 {
-    min-width: 60px;
-  }
-  &.mw-100 {
-    min-width: 100px;
-  }
-  &.mw-200 {
-    min-width: 200px;
-  }
-  &.bg-inactive {
-    background-color: #bbb;
-  }
-  &.bg-active {
-    background-color: #f0ad4e;
-  }
-}
+@import '~bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker';
 
 .navbar-term {
   height: 40px;

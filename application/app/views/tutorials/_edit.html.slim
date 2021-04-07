@@ -1,0 +1,18 @@
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#tutorial_edit_#{tutorial.id}"
+.modal.fade id="tutorial_edit_#{tutorial.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for tutorial, url: tutorial_path(tutorial), remote: true do |f|
+        .modal-header
+          h4.modal-title 科目情報の編集
+        .modal-body
+          .form-group
+            = f.label :order
+            = f.number_field :order, { min: 1, class: 'form-control' }
+          .form-group
+            = f.label :name
+            = f.text_field :name, { class: 'form-control' }
+          div id="tutorial_edit_alert_#{tutorial.id}"
+        .modal-footer
+          = f.submit '保存', { "class" => "btn btn-primary" }
+          = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

@@ -1,0 +1,15 @@
+== render partial: 'navbar', locals: { active: 'group' }
+.container-fluid.my-5
+  == render partial: 'application/title',
+    locals: { title: '集団科目の一覧' }
+  .row.float-left.mx-5
+    == render partial: 'groups/new', locals: { group: Group.new }
+  .row.float-right.mx-5
+    .mr-1
+      == render partial: 'application/search',
+        locals: { path: groups_path, keyword: @keyword, page: @page }
+    .ml-1
+      == render partial: 'application/pagenation',
+        locals: { path: groups_path, keyword: @keyword, page: @page, max_page: max_page(@groups.count, @page_size) }
+  == render partial: 'application/table',
+    locals: { table_content: groups_table_content(@groups) }

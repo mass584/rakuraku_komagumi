@@ -1,0 +1,25 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'teacher_request' }
+.container
+  .row.float-right.mx-5
+    == render partial: 'application/pagenation',
+      locals: { path: term_teacher_path(@term_teacher), keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+    table.table
+      thead.thead-dark
+        tr
+          th.align-middle 日程
+          - @term.period_index_array.each do |period_index|
+            th.align-middle #{period_index}限
+      tbody
+        - @term.date_index_array(@week).each do |date_index|
+          tr
+            td.align-middle = I18n.l(@term.date_index_to_date(date_index))
+            - @term.period_index_array.each do |period_index|
+              td.align-middle
+                = teacher_vacancy_button(@term_teacher, @teacher_vacancies, date_index, period_index)
+  .text-center
+    = button_to '戻る',
+      term_teachers_path,
+      {class: 'btn btn-dark', method: :get}
+== javascript_pack_tag 'term_teacher_show.js'

@@ -1,27 +1,27 @@
 module StudentHelper
-  def gender_select
+  def students_table_content(students)
     {
-      '不明': 'unknown',
-      '男': 'male',
-      '女': 'female',
+      attributes: %w[氏名 学年 メールアドレス 編集 削除],
+      records: students.map do |student|
+        student_table_record(student)
+      end,
     }
   end
 
-  def school_grade_select
+  def student_table_record(student)
     {
-      '不明': 'unknown',
-      '小1': 'e1',
-      '小2': 'e2',
-      '小3': 'e3',
-      '小4': 'e4',
-      '小5': 'e5',
-      '小6': 'e6',
-      '中1': 'j1',
-      '中2': 'j2',
-      '中3': 'j3',
-      '高1': 'h1',
-      '高2': 'h2',
-      '高3': 'h3',
+      id: student.id,
+      tds: [
+        student.name,
+        student.school_grade_i18n,
+        student.email,
+        content_tag(:div) do
+          render partial: 'students/edit', locals: { student: student }
+        end,
+        content_tag(:div) do
+          render partial: 'students/destroy', locals: { student: student }
+        end
+      ],
     }
   end
 end

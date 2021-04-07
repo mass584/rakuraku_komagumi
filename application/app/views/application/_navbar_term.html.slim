@@ -1,16 +1,16 @@
 nav.navbar-term
   ul.nav.nav-tabs
     li class="#{active == 'top' ? 'nav-item active' : 'nav-item'}"
-      = link_to 'トップ', term_path(@term), :class => "nav-link"
+      = link_to 'ホーム', term_path(@term), :class => "nav-link"
     li class="#{active == 'timetable' ? 'nav-item active' : 'nav-item'}"
-      = link_to '時間割', {controller: :timetable, action: :index}, method: :get, :class => "nav-link"
+      = link_to '時間割り', timetables_path, :class => "nav-link"
     li class="#{active == 'contract' ? 'nav-item active' : 'nav-item'}"
-      = link_to '受講科目', {controller: :contract, action: :index}, method: :get, :class => "nav-link"
+      = link_to '受講科目', contracts_path, :class => "nav-link"
     li class="#{active == 'teacher_request' ? 'nav-item active' : 'nav-item'}"
-      = link_to '講師予定', {controller: :teacher_term, action: :index}, method: :get, :class => "nav-link"
+      = link_to '講師予定', term_teachers_path, :class => "nav-link"
     li class="#{active == 'student_request' ? 'nav-item active' : 'nav-item'}"
-      = link_to '生徒予定', {controller: :student_term, action: :index}, method: :get, :class => "nav-link"
+      = link_to '生徒予定', term_students_path, :class => "nav-link"
     li class="#{active == 'piece' ? 'nav-item active' : 'nav-item'}"
-      = link_to '全体予定', {controller: :piece, action: :index}, method: :get, :class => "nav-link"
+      = link_to '全体予定', tutorial_pieces_path, :class => "nav-link"
     li.nav-item 
-      .nav-link.disabled = "#{@term.name}（#{@term.begin_at.strftime("%Y/%m/%d")} 〜 #{@term.end_at.strftime("%Y/%m/%d")}）"
+      .nav-link.disabled = "#{@term.name}　#{l @term.begin_at} 〜 #{l @term.end_at}"

@@ -1,6 +1,0 @@
-- if @status == 'success'
-  | $('#term_create').modal('hide');
-  | $('#term_create_alert').html('');
-  | $('tbody').append("#{escape_javascript(render partial: 'term/tr', locals: { term: @term })}");
-- elsif @status == 'fail'
-  | $('#term_create_alert').html("#{escape_javascript(render partial: 'term/error', locals: { term: @term })}");

@@ -1,0 +1,4 @@
+- if @success
+  | location.reload();
+- else
+  | $('#term_student_create_alert').html("#{escape_javascript(render partial: 'term_students/error', locals: { term_student: @term_student })}");

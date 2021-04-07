@@ -1,0 +1,4 @@
+- if @success
+  | location.reload();
+- else
+  | $("#teacher_destroy_alert_#{@teacher.id}").html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

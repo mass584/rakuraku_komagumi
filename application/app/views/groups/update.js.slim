@@ -1,0 +1,4 @@
+- if @success
+  | location.reload();
+- else
+  | $("group_edit_alert_#{@group.id}").html("#{escape_javascript(render partial: 'groups/error', locals: { group: @group })}");

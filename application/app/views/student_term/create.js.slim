@@ -1,4 +1,0 @@
-- if @status == 'success'
-  | $("#student_term_create").modal("hide");
-  | $("#student_count").html("紐付け済み : #{@term.students.count} 人");
-  | $("#student_term_student_id").children("option[value=#{@student_term.student.id}]").remove();;

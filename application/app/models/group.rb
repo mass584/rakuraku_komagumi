@@ -8,5 +8,5 @@ class Group < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
   scope :active, -> { where(is_deleted: false) }
-  scope :sorted, -> { order(order: 'ASC') }
+  scope :ordered, -> { order(order: 'ASC') }
 end

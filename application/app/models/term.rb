@@ -12,10 +12,11 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
-  accepts_nested_attributes_for :term_tutorials, :term_groups
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
+  validates :term_type,
+            presence: true
   validates :year,
             numericality: { only_integer: true, greater_than_or_equal_to: 2020 }
   validates :begin_at, presence: true
@@ -27,18 +28,36 @@ class Term < ApplicationRecord
   validates :position_count,
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
 
-  validate :valid_context?
-  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
+  validate :valid_context?, on: :create
+  validate :valid_date_count?, on: :create
 
   before_create :set_nest_objects
 
+  enum term_type: { normal: 0, season: 1, exam_planning: 2 }
+
   def date_count
-    return 7 if normal?
-    return (begin_at..end_at).to_a.length if season? || exam_planning?
+    if normal?
+      7
+    elsif season?
+      (begin_at..end_at).to_a.length
+    elsif exam_planning?
+      (begin_at..end_at).to_a.length
+    else
+      0
+    end
   end
 
-  def date_index_array
-    (1..date_count).to_a
+  def date_index_to_date(date_index)
+    (begin_at..end_at).to_a[date_index - 1]
+  end
+
+  def date_index_array(*argv)
+    week = argv.first
+    if week.nil?
+      (1..date_count).to_a
+    else
+      (1..date_count).to_a.slice(week * 7 - 7, 7)
+    end
   end
 
   def period_index_array
@@ -55,20 +74,20 @@ class Term < ApplicationRecord
 
   private
 
-  def cutoff_week(week)
-    return 1 if week < 1
-    return max_week if week > max_week
-    week
-  end
-
   def max_week
     (1 + (end_at - begin_at) / 7).to_i
   end
 
   # validate
   def valid_context?
-    if (end_at - begin_at).negative?
+    if begin_at.present? && end_at.present? && (end_at - begin_at).negative?
       errors[:base] << '開始日・終了日を正しく設定してください'
+    end
+  end
+
+  def valid_date_count?
+    if begin_at.present? && end_at.present? && (date_count > 50)
+      errors[:base] << '講習期とテスト対策の期間は最大５０日までです'
     end
   end
 
@@ -78,6 +97,20 @@ class Term < ApplicationRecord
     self.teacher_optimization_rules.build(new_teacher_optimization_rules)
     self.begin_end_times.build(new_begin_end_times)
     self.timetables.build(new_timetables)
+    self.term_tutorials.build(new_term_tutorials)
+    self.term_groups.build(new_term_groups)
+  end
+
+  def new_term_tutorials
+    room.tutorials.select(:id).map do |tutorial|
+      { tutorial_id: tutorial.id }
+    end
+  end
+
+  def new_term_groups
+    room.groups.select(:id).map do |group|
+      { group_id: group.id }
+    end
   end
 
   def new_student_optimization_rules
