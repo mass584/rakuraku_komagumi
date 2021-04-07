@@ -1,4 +1,0 @@
-- if @status = 'success'
-  | $("#subject_term_create").modal("hide");
-  | $("#subject_count").html("紐付け済み : #{@term.subjects.count} 人");
-  | $("#subject_term_subject_id").children("option[value=#{@subject_term.subject.id}]").remove();;

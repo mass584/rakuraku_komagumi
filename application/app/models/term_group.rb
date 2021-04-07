@@ -22,6 +22,10 @@ class TermGroup < ApplicationRecord
   before_validation :fetch_new_groups_group_by_teacher_and_timetable, on: :update
   before_create :set_nest_objects
 
+  scope :ordered, lambda {
+    joins(:group).order('groups.order': 'ASC')
+  }
+
   private
 
   def term_teacher_creation?

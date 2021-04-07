@@ -17,7 +17,6 @@ Rails.application.routes.draw do
     resources :student_request, only: [:create, :destroy]
     resources :student_subject, only: [:create, :destroy]
     get 'student_term/:id/schedule', to: 'student_term#schedule'
-    resources :subject_term, only: [:index, :create]
     resources :teachers, only: [:index]
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
     get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
@@ -25,10 +24,12 @@ Rails.application.routes.draw do
     resources :teacher_request, only: [:create, :destroy]
     resources :terms, only: [:index, :show]
     resources :terms, only: [:create], defaults: { format: 'js' }
-    resources :term_teachers, only: [:index]
-    resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
+    resources :term_groups, only: [:create], defaults: { format: 'js' }
     resources :term_students, only: [:index]
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
+    resources :term_teachers, only: [:index]
+    resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
+    resources :term_tutorials, only: [:create], defaults: { format: 'js' }
     resources :timetables, only: [:index]
     resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]

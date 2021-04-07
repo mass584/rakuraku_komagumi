@@ -5,6 +5,10 @@ class TermTutorial < ApplicationRecord
 
   before_create :set_nest_objects
 
+  scope :ordered, lambda {
+    joins(:tutorial).order('tutorials.order': 'ASC')
+  }
+
   private
 
   def set_nest_objects
