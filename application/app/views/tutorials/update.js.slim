@@ -1,13 +1,4 @@
 - if @success
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $("tutorial_edit_#{@tutorial.id}").modal('hide');
-  | $('#table_tr_#{@tutorial.id}').replaceWith("#{escape_javascript(render partial: 'tr', locals: { record: tutorial_table_record(@tutorial) })}");
-  | $('tbody').children('tr').sort((a, b) => {
-  |   const aN = Number($(a).find('[id^=order_]').text());
-  |   const bN = Number($(b).find('[id^=order_]').text());
-  |   if (aN > bN) return 1;
-  |   return -1;
-  | }).appendTo('tbody');
+  | location.reload();
 - else
   | $("tutorial_edit_alert_#{@tutorial.id}").html("#{escape_javascript(render partial: 'tutorials/error', locals: { tutorial: @tutorial })}");

@@ -1,12 +1,14 @@
-class PieceController < ApplicationController
+class TutorialPiecesController < ApplicationController
   before_action :authenticate_user!
-  before_action :term_selected?
+  before_action :set_rooms!
+  before_action :set_room!
+  before_action :set_term!
 
   def index
-    @week = @term.week(params[:week].to_i)
+    @page = sanitize_integer_query_param(params[:page]) || 1
     respond_to do |format|
       format.json do
-        @records = @term.pieces
+        @records = @term.tutorial_pieces
         render 'index', formats: :json, handlers: 'jbuilder'
       end
       format.html do

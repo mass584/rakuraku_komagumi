@@ -1,7 +1,4 @@
 - if @success
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $('#teacher_destroy_#{@teacher.id}').modal('hide');
-  | $('#table_tr_#{@teacher.id}').remove();
+  | location.reload();
 - else
   | $("#teacher_destroy_alert_#{@teacher.id}").html("#{escape_javascript(render partial: 'teacher/error', locals: { teacher: @teacher })}");

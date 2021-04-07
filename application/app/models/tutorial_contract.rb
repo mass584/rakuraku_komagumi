@@ -26,15 +26,6 @@ class TutorialContract < ApplicationRecord
     super(attributes)
   end
 
-  def self.tutorial_contracts_group_by_student_and_tutorial(term)
-    term.tutorial_contracts.select(
-      :id, :term_student_id, :term_tutorial_id, :term_teacher_id, :piece_count,
-    ).group_by_recursive(
-      proc { |item| item[:term_student_id] },
-      proc { |item| item[:term_tutorial_id] },
-    )
-  end
-
   def is_active?
     term_teacher_id.present? || piece_count.positive?
   end

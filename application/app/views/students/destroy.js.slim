@@ -1,7 +1,4 @@
 - if @success
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $("#student_destroy_#{@student.id}").modal('hide');
-  | $('#table_tr_#{@student.id}').remove();
+  | location.reload();
 - else
   | $("#student_destroy_alert_#{@student.id}").html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

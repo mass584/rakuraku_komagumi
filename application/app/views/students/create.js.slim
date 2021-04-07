@@ -1,6 +1,4 @@
 - if @success
-  | $('#student_create').modal('hide');
-  | $('#student_create_alert').html("");
-  | $('tbody').append("#{escape_javascript(render partial: 'tr', locals: { record: student_table_record(@student)})}");
+  | location.reload();
 - else
   | $('#student_create_alert').html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");

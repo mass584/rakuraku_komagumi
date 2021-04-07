@@ -1,7 +1,4 @@
 - if @success
-  | $('body').removeClass('modal-open');
-  | $('.modal-backdrop').remove();
-  | $("#group_destroy_#{@group.id}").modal('hide');
-  | $('#table_tr_#{@group.id}').remove();
+  | location.reload();
 - else
   | $("#group_destroy_alert_#{@group.id}").html("#{escape_javascript(render partial: 'groups/error', locals: { group: @group })}");

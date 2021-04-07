@@ -1,12 +1,4 @@
 - if @success
-  | $('#tutorial_create').modal('hide');
-  | $('#tutorial_create_alert').html("");
-  | $('tbody').append("#{escape_javascript(render partial: 'tr', locals: { record: tutorial_table_record(@tutorial)})}");
-  | $('tbody').children('tr').sort((a, b) => {
-  |   const aN = Number($(a).find('[id^=table_tr_]').text());
-  |   const bN = Number($(b).find('[id^=table_tr_]').text());
-  |   if (aN > bN) return 1;
-  |   return -1;
-  | }).appendTo('tbody');
+  | location.reload();
 - else
   | $('#tutorial_create_alert').html("#{escape_javascript(render partial: 'tutorials/error', locals: { tutorial: @tutorial })}");

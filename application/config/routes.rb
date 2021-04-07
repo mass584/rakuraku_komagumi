@@ -10,8 +10,6 @@ Rails.application.routes.draw do
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
-    resources :piece, only: [:index, :update]
-    put 'piece/bulk_update', to: 'piece#bulk_update'
     resources :rooms, only: [:index, :update]
     resources :seat, only: [:index, :update]
     resources :students, only: [:index]
@@ -25,7 +23,8 @@ Rails.application.routes.draw do
     get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
     resources :teacher_subject, only: [:create, :destroy]
     resources :teacher_request, only: [:create, :destroy]
-    resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
+    resources :terms, only: [:index, :show]
+    resources :terms, only: [:create], defaults: { format: 'js' }
     resources :term_teachers, only: [:index]
     resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
     resources :term_students, only: [:index]
@@ -35,6 +34,8 @@ Rails.application.routes.draw do
     resources :tutorials, only: [:index]
     resources :tutorials, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :tutorial_contracts, only: [:update], defaults: { format: 'json' }
+    resources :tutorial_pieces, only: [:index]
+    resources :tutorial_pieces, only: [:update], defaults: { format: 'json' }
     root 'terms#index'
   end
 end

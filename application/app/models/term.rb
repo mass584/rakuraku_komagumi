@@ -36,8 +36,15 @@ class Term < ApplicationRecord
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
   def date_count
-    return 7 if normal?
-    return (begin_at..end_at).to_a.length if season? || exam_planning?
+    if normal?
+      7
+    elsif season?
+      (begin_at..end_at).to_a.length
+    elsif exam_planning?
+      (begin_at..end_at).to_a.length
+    else
+      0
+    end
   end
 
   def date_index_to_date(date_index)
@@ -67,25 +74,19 @@ class Term < ApplicationRecord
 
   private
 
-  def cutoff_week(week)
-    return 1 if week < 1
-    return max_week if week > max_week
-    week
-  end
-
   def max_week
     (1 + (end_at - begin_at) / 7).to_i
   end
 
   # validate
   def valid_context?
-    if (end_at - begin_at).negative?
+    if begin_at.present? && end_at.present? && (end_at - begin_at).negative?
       errors[:base] << '開始日・終了日を正しく設定してください'
     end
   end
 
   def valid_date_count?
-    if date_count > 50
+    if begin_at.present? && end_at.present? && (date_count > 50)
       errors[:base] << '講習期とテスト対策の期間は最大５０日までです'
     end
   end

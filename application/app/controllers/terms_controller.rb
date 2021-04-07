@@ -8,16 +8,14 @@ class TermsController < ApplicationController
     @terms = current_room.terms.order(begin_at: 'DESC')
   end
 
-  def new
-    @term = Term.new
-  end
-
   def create
     @term = Term.new(create_params)
-    if @term.save
-      redirect_to term_path(@term, { term_id: @term.id })
-    else
-      render action: :new
+    respond_to do |format|
+      if @term.save
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
     end
   end
 

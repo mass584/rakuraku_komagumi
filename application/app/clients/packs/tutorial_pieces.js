@@ -3,7 +3,6 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import Pieces from './vues/pieces.vue'
 
-
 Vue.use(Vuex)
 
 Vue.config.productionTip = false
