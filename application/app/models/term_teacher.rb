@@ -19,7 +19,7 @@ class TermTeacher < ApplicationRecord
   }
   scope :pagenated, lambda { |page, page_size|
     page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
-      slice((page - 1) * page_size, page_size) :
+      offset((page - 1) * page_size).limit(page_size) :
       itself
   }
 
