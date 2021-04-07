@@ -4,11 +4,12 @@ $.ajaxSetup({
   headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-$(() => $('[id^=select_term_teacher_id]').on('change', (event) => onChangeSelect(event)));
-$(() => $('[id^=select_piece_count]').on('change', (event) => onChangeSelect(event)));
+$(() => $('[id^=select_term_teacher_id]').on('change', (event) => onChangeSelectTutorialContract(event)));
+$(() => $('[id^=select_piece_count]').on('change', (event) => onChangeSelectTutorialContract(event)));
 $(() => $('[id^=button_delete]').on('click', (event) => onClickDelete(event)));
+$(() => $('[id^=select_is_contracted]').on('change', (event) => onChangeSelectGroupContract(event)));
 
-const onChangeSelect = (event) => {
+const onChangeSelectTutorialContract = (event) => {
   const tdElement = $(event.target).parent().parent().parent();
   const tdInnerElement = $(event.target).parent().parent();
   const selectWrapperElement = $(event.target).parent();
@@ -43,6 +44,36 @@ const onChangeSelect = (event) => {
     alert(responseJSON.message);
   });
 }
+
+const onChangeSelectGroupContract = (event) => {
+  const tdElement = $(event.target).parent().parent().parent();
+  const tdInnerElement = $(event.target).parent().parent();
+  const selectElement = $(event.target);
+  const groupContractId = Number(tdInnerElement.data('id'));
+  const isContracted = tdInnerElement.data('is_contracted') === 'true';
+  const newIsContracted = selectElement.val() === 'true';
+  $.ajax({
+    type: 'put',
+    url: `/group_contracts/${groupContractId}`,
+    data: JSON.stringify({
+      group_contract: {
+        is_contracted: newIsContracted,
+      },
+    }),
+    contentType: 'application/json',
+  }).done(() => {
+    tdInnerElement.data('is_contracted', newIsContracted);
+    if ( newIsContracted ) {
+      tdElement.addClass('bg-active');
+    } else {
+      tdElement.removeClass('bg-active');
+    }
+  }).fail(({ responseJSON }) => {
+    selectElement.val(isContracted);
+    alert(responseJSON.message);
+  });
+}
+
 
 const onClickDelete = (event) => {
   if (!window.confirm('削除してよろしいですか。')) return;

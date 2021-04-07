@@ -10,13 +10,17 @@
         tr
           th.align-middle 氏名
           th.align-middle 学年
-          - @term_tutorials.each do |tutorial|
-            th.align-middle = tutorial.name
+          - @term_tutorials.each do |term_tutorial|
+            th.align-middle = term_tutorial.name
+          - @term_groups.each do |term_group|
+            th.align-middle = term_group.name
       tbody
         - @term_students.each do |term_student|
           tr
-            th.align-middle = "#{term_student.name}"
-            th.align-middle = "#{term_student.school_grade_i18n}"
+            td.align-middle = "#{term_student.name}"
+            td.align-middle = "#{term_student.school_grade_i18n}"
             - @term_tutorials.each do |term_tutorial|
-              = tutorial_contract_table_cell(@tutorial_contracts.find do |item| item.term_student_id == term_student.id && item.term_tutorial_id == term_tutorial.id end, @term_teachers)
+              = tutorial_contract_table_cell(@tutorial_contracts, @term_teachers, term_student, term_tutorial)
+            - @term_groups.each do |term_group|
+              = group_contract_table_cell(@group_contracts, term_student, term_group)
 == javascript_pack_tag 'contract.js'

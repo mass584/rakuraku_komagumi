@@ -21,8 +21,11 @@ module ContractHelper
     )
   end
 
-  def tutorial_contract_table_cell(tutorial_contract, term_teachers)
-    td_class = tutorial_contract.is_active? ? 'align-middle mw-200 bg-active' : 'align-middle mw-200'
+  def tutorial_contract_table_cell(tutorial_contracts, term_teachers, term_student, term_tutorial)
+    tutorial_contract = tutorial_contracts.find do |item|
+      item.term_student_id == term_student.id && item.term_tutorial_id == term_tutorial.id
+    end
+    td_class = tutorial_contract.is_active? ? 'align-middle bg-active' : 'align-middle'
     content_tag(:td, class: td_class) do
       concat(
         content_tag(:div,
@@ -43,6 +46,37 @@ module ContractHelper
                 id: "button_delete_#{tutorial_contract.id}",
                 class: %w[btn btn-sm btn-danger],
               )
+            end,
+          )
+        end,
+      )
+    end
+  end
+
+  def select_tag_is_contracted(group_contract)
+    select = { '受講しない' => false, '受講する' => true }
+    select_tag(
+      :is_contracted,
+      options_for_select(select, selected: group_contract.is_contracted),
+      id: "select_is_contracted_#{group_contract.id}",
+      class: 'form-control form-control-sm',
+    )
+  end
+
+  def group_contract_table_cell(group_contracts, term_student, term_group)
+    group_contract = group_contracts.find do |item|
+      item.term_student_id == term_student.id && item.term_group_id == term_group.id
+    end
+    td_class = group_contract.is_contracted ? 'align-middle bg-active' : 'align-middle'
+    content_tag(:td, class: td_class) do
+      concat(
+        content_tag(:div,
+                    'data-id' => group_contract.id,
+                    'data-is_contracted' => group_contract.is_contracted,
+                    'class' => 'row align-items-center') do
+          concat(
+            content_tag(:div, class: 'col-9 pl-4 pr-2') do
+              concat select_tag_is_contracted(group_contract)
             end,
           )
         end,
