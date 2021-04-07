@@ -30,6 +30,15 @@ class GroupContract < ApplicationRecord
     super(attributes)
   end
 
+  def self.group_contracts_group_by_student_and_group(term)
+    term.group_contracts.select(
+      :id, :term_student_id, :term_group_id, :is_contracted,
+    ).group_by_recursive(
+      proc { |item| item[:term_student_id] },
+      proc { |item| item[:term_group_id] },
+    )
+  end
+
   private
 
   def contract_creation?

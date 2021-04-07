@@ -1,10 +1,12 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'contract' }
-.container.contract-index
-  = div_pager({ controller: :contract, action: :index }, @term.students.count, 8, @page)
-  .table-responsive.mt-3.mb-3
-    table.table.table-condensed
-      thead
+.container-fluid.my-5
+  .row.float-right.mx-5
+    == render partial: 'application/pagenation',
+      locals: { path: contracts_path, keyword: nil, page: @page, max_page: max_page(@contracts.count, @page_size) }
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+    table.table
+      thead.thead-dark
         tr
           th.mw-60.align-middle
           th.mw-100.align-middle 氏名

@@ -6,7 +6,8 @@ Rails.application.routes.draw do
   }
   defaults format: :html do
     resources :begin_end_times, only: [:update], defaults: { format: 'json' }
-    resources :contract, only: [:index, :update]
+    resources :contracts, only: [:index]
+    resources :contracts, only: [:update], defaults: { format: 'json' }
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :piece, only: [:index, :update]
