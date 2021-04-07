@@ -1,5 +1,5 @@
 class TermTeachersController < ApplicationController
-  PAGE_SIZE = 7
+  PAGE_SIZE = 10
 
   before_action :authenticate_user!
   before_action :set_rooms!
@@ -10,6 +10,7 @@ class TermTeachersController < ApplicationController
     @page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = PAGE_SIZE
     @term_teachers = current_term.term_teachers.ordered.pagenated(@page, @page_size)
+    @term_teachers_count = current_term.term_teachers.count
   end
 
   def create
