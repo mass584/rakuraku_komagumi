@@ -213,6 +213,20 @@ ja:
         submitted: 提出済み
         fixed: 確定
     term_student:
+      school_grade:
+        e1: 小学１年
+        e2: 小学２年
+        e3: 小学３年
+        e4: 小学４年
+        e5: 小学５年
+        e6: 小学６年
+        j1: 中学１年
+        j2: 中学２年
+        j3: 中学３年
+        h1: 高校１年
+        h2: 高校２年
+        h3: 高校３年
+        other: その他
       vacancy_status:
         draft: 編集中
         submitted: 提出済み

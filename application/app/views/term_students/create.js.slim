@@ -1,4 +1,5 @@
-- if @status == 'success'
-  | $("#student_term_create").modal("hide");
-  | $("#student_count").html("紐付け済み : #{@term.students.count} 人");
-  | $("#student_term_student_id").children("option[value=#{@student_term.student.id}]").remove();;
+- if @success
+  | $("#term_student_create").modal("hide");
+  | $("#term_student_student_id").children("option[value=#{@term_student.student_id}]").remove();;
+- else
+  | $('#term_student_create_alert').html("#{escape_javascript(render partial: 'term_students/error', locals: { term_student: @term_student })}");

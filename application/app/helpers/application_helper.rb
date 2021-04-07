@@ -5,14 +5,6 @@ module ApplicationHelper
     end
   end
 
-  def youbi(number)
-    %w[日 月 火 水 木 金 土][number]
-  end
-
-  def print_date(date)
-    "#{date.strftime('%Y/%m/%d')}（#{youbi(date.wday)}）"
-  end
-
   def print_period(period)
     "#{period}限"
   end

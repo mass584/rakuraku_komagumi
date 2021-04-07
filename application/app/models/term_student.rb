@@ -39,7 +39,9 @@ class TermStudent < ApplicationRecord
 
   def self.new(attributes = {})
     attributes[:vacancy_status] ||= 'draft'
-    super(attributes)
+    record = super(attributes)
+    record.school_grade = record.student&.school_grade
+    record
   end
 
   def optimization_rule

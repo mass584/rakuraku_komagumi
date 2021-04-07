@@ -12,6 +12,17 @@ class TermTeachersController < ApplicationController
     @term_teachers = current_term.term_teachers.ordered.pagenated(@page, @page_size)
   end
 
+  def create
+    @term_teacher = TermTeacher.new(create_params)
+    respond_to do |format|
+      if @term_teacher.save
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
+    end
+  end
+
   def show
     @teacher_term = TeacherTerm.find(params[:id])
     @timetables = Timetable.get_timetables(@term)
@@ -39,17 +50,6 @@ class TermTeachersController < ApplicationController
     end
   end
 
-  def create
-    @teacher_term = TeacherTerm.new(create_params)
-    respond_to do |format|
-      if @teacher_term.save
-        format.js { @status = 'success' }
-      else
-        format.js { @status = 'fail' }
-      end
-    end
-  end
-
   def update
     record = TeacherTerm.find(params[:id])
     if record.update(update_params)
@@ -62,7 +62,7 @@ class TermTeachersController < ApplicationController
   private
 
   def create_params
-    params.require(:teacher_term).permit(:teacher_id).merge({ term_id: @term.id })
+    params.require(:term_teacher).permit(:term_id, :teacher_id)
   end
 
   def update_params

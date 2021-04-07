@@ -1,4 +1,10 @@
-module TeacherTermHelper
+module TermTeacherHelper
+  def options_for_select_teacher_id(room, term)
+    plucked_teachers = room.teachers.active.pluck(:name, :id) 
+    plucked_term_teachers = term.term_teachers.ordered.joins(:teacher).pluck( 'teachers.name', :teacher_id)
+    plucked_teachers - plucked_term_teachers
+  end
+
   def teacher_request_button(teacher_request, timetable, teacher_term)
     content_tag(:div,
                 'data-id' => teacher_request ? teacher_request.id : nil,

@@ -26,8 +26,10 @@ Rails.application.routes.draw do
     resources :teacher_subject, only: [:create, :destroy]
     resources :teacher_request, only: [:create, :destroy]
     resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
-    resources :term_teachers, only: [:index, :create, :update]
-    resources :term_students, only: [:index, :create, :update]
+    resources :term_teachers, only: [:index]
+    resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
+    resources :term_students, only: [:index]
+    resources :term_students, only: [:create, :update], defaults: { format: 'js' }
     resources :timetables, only: [:index]
     resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]
