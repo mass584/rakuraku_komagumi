@@ -13,11 +13,6 @@ module ApplicationHelper
     "#{seat}番"
   end
 
-  def print_data_array(array)
-    str = array.map { |item| "\"#{item}\"" }.join(', ')
-    '[' + str + ']'
-  end
-
   def error_msg(messages)
     content_tag :ul do
       messages.each do |item|
