@@ -2,7 +2,7 @@ class TermsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_rooms!
   before_action :set_room!
-  before_action :set_term!, except: [:index]
+  before_action :set_term!, except: [:index, :new, :create]
 
   def index
     @terms = current_room.terms.order(begin_at: 'DESC')

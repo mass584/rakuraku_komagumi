@@ -34,6 +34,6 @@ Rails.application.routes.draw do
     resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]
     resources :tutorials, only: [:create, :update, :destroy], defaults: { format: 'js' }
-    root 'room#index'
+    root 'terms#index'
   end
 end

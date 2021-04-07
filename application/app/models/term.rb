@@ -12,7 +12,6 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
-  accepts_nested_attributes_for :term_tutorials, :term_groups
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
@@ -100,6 +99,24 @@ class Term < ApplicationRecord
     self.teacher_optimization_rules.build(new_teacher_optimization_rules)
     self.begin_end_times.build(new_begin_end_times)
     self.timetables.build(new_timetables)
+    self.term_tutorials.build(new_term_tutorials)
+    self.term_groups.build(new_term_groups)
+  end
+
+  def new_term_tutorials
+    room.tutorials.select(:id).map do |tutorial|
+      {
+        tutorial_id: tutorial.id,
+      }
+    end
+  end
+
+  def new_term_groups
+    room.groups.select(:id).map do |group|
+      {
+        group_id: group.id,
+      }
+    end
   end
 
   def new_student_optimization_rules
