@@ -34,9 +34,9 @@ const onChangeSelectTutorialContract = (event) => {
     tdInnerElement.data('term_teacher_id', newTermTeacherId);
     tdInnerElement.data('piece_count', newPieceCount);
     if ( newPieceCount === 0 && newTermTeacherId === null ) {
-      tdElement.removeClass('bg-active');
+      tdElement.removeClass('bg-warning');
     } else {
-      tdElement.addClass('bg-active');
+      tdElement.addClass('bg-warning');
     }
   }).fail(({ responseJSON }) => {
     selectTermTeacherIdElement.val(termTeacherId);
@@ -64,9 +64,9 @@ const onChangeSelectGroupContract = (event) => {
   }).done(() => {
     tdInnerElement.data('is_contracted', newIsContracted);
     if ( newIsContracted ) {
-      tdElement.addClass('bg-active');
+      tdElement.addClass('bg-warning');
     } else {
-      tdElement.removeClass('bg-active');
+      tdElement.removeClass('bg-warning');
     }
   }).fail(({ responseJSON }) => {
     selectElement.val(isContracted);
@@ -98,7 +98,7 @@ const onClickDelete = (event) => {
     tdInnerElement.data('piece_count', 0);
     selectTermTeacherIdElement.val(null);
     selectPieceCountElement.val(0);
-    tdElement.removeClass('bg-active');
+    tdElement.removeClass('bg-warning');
   }).fail(({ responseJSON }) => {
     alert(responseJSON.message);
   });
