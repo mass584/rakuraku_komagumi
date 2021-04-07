@@ -11,23 +11,18 @@ Rails.application.routes.draw do
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
     resources :rooms, only: [:index, :update]
-    resources :seat, only: [:index, :update]
     resources :students, only: [:index]
     resources :students, only: [:create, :update, :destroy], defaults: { format: 'js' }
-    resources :student_request, only: [:create, :destroy]
-    resources :student_subject, only: [:create, :destroy]
-    get 'student_term/:id/schedule', to: 'student_term#schedule'
+    resources :student_vacancies, only: [:update], defaults: { format: 'json' }
     resources :teachers, only: [:index]
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
-    get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
-    resources :teacher_subject, only: [:create, :destroy]
-    resources :teacher_request, only: [:create, :destroy]
+    resources :teacher_vacancies, only: [:update], defaults: { format: 'json' }
     resources :terms, only: [:index, :show]
     resources :terms, only: [:create], defaults: { format: 'js' }
     resources :term_groups, only: [:create], defaults: { format: 'js' }
-    resources :term_students, only: [:index]
+    resources :term_students, only: [:index, :show]
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
-    resources :term_teachers, only: [:index]
+    resources :term_teachers, only: [:index, :show]
     resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
     resources :term_tutorials, only: [:create], defaults: { format: 'js' }
     resources :timetables, only: [:index]

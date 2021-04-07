@@ -5,16 +5,16 @@ module TermStudentHelper
     plucked_students - plucked_term_students
   end
 
-  def student_request_button(student_request, timetable, student_term)
-    content_tag(:div,
-                'data-id' => student_request ? student_request.id : nil,
-                'data-student_term_id' => student_term.id,
-                'data-timetable_id' => timetable.id) do
+  def student_vacancy_button(term_student, student_vacancies, date_index, period_index)
+    student_vacancy = student_vacancies.find do |item|
+      item.date_index == date_index && item.period_index == period_index
+    end
+    content_tag(:div, 'data-id' => student_vacancy.id) do
       button_tag(
-        student_request ? 'OK' : 'NG',
-        class: student_request ? 'btn btn-primary' : 'btn btn-danger',
-        id: "btn_#{timetable.id}",
-        disabled: student_term.is_decided,
+        student_vacancy.is_vacant ? 'OK' : 'NG',
+        class: student_vacancy.is_vacant ? 'btn btn-primary' : 'btn btn-danger',
+        id: "button_#{date_index}_#{period_index}",
+        disabled: term_student.fixed?,
       )
     end
   end

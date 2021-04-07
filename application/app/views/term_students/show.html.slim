@@ -1,23 +1,25 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'student_request' }
 .container
-  = div_week_selector(student_term_path(@student_term), @term, @week)
-  .table-responsive.mt-3.mb-3
+  .row.float-right.mx-5
+    == render partial: 'application/pagenation',
+      locals: { path: term_student_path(@term_student), keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
     table.table
-      thead
+      thead.thead-dark
         tr
-          th.align-middle 日付
-          - @term.period_array.each do |p|
-            th.class = print_period(p)
+          th.align-middle 日程
+          - @term.period_index_array.each do |period_index|
+            th.align-middle #{period_index}限
       tbody
-        - @term.date_array(@week).each do |d|
+        - @term.date_index_array(@week).each do |date_index|
           tr
-            th.align-middle = print_date(d)
-            - @term.period_array.each do |c|
+            td.align-middle = I18n.l(@term.date_index_to_date(date_index))
+            - @term.period_index_array.each do |period_index|
               td.align-middle
-                = student_request_button(@student_requests[d][c], @timetables[d][c], @student_term)
-  div.text-center
+                = student_vacancy_button(@term_student, @student_vacancies, date_index, period_index)
+  .text-center
     = button_to '戻る',
-      student_term_index_path,
+      term_students_path,
       {class: 'btn btn-dark', method: :get}
-== javascript_pack_tag 'student_term/show.js'
+== javascript_pack_tag 'term_student_show.js'

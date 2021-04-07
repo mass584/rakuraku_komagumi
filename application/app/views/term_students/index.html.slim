@@ -24,10 +24,9 @@
           tr
             td.align-middle = s.student.name
             td.align-middle = s.school_grade_i18n
-            td.align-middle = s.student_vacancies.count
+            td.align-middle = "#{s.student_vacancies.where(is_vacant: true).count}コマ"
+            td.align-middle = link_to '編集', term_student_path(s), { class: 'btn btn-secondary' }
             td.align-middle 開く
             td.align-middle 開く
             td.align-middle 開く
             td.align-middle 開く
-            td.align-middle 開く
-== javascript_pack_tag 'student_term/index.js'

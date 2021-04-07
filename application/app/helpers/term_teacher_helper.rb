@@ -5,16 +5,16 @@ module TermTeacherHelper
     plucked_teachers - plucked_term_teachers
   end
 
-  def teacher_request_button(teacher_request, timetable, teacher_term)
-    content_tag(:div,
-                'data-id' => teacher_request ? teacher_request.id : nil,
-                'data-teacher_term_id' => teacher_term.id,
-                'data-timetable_id' => timetable.id) do
+  def teacher_vacancy_button(term_teacher, teacher_vacancies, date_index, period_index)
+    teacher_vacancy = teacher_vacancies.find do |item|
+      item.date_index == date_index && item.period_index == period_index
+    end
+    content_tag(:div, 'data-id' => teacher_vacancy.id) do
       button_tag(
-        teacher_request ? 'OK' : 'NG',
-        class: teacher_request ? 'btn btn-primary' : 'btn btn-danger',
-        id: "btn_#{timetable.id}",
-        disabled: teacher_term.is_decided,
+        teacher_vacancy.is_vacant ? 'OK' : 'NG',
+        class: teacher_vacancy.is_vacant ? 'btn btn-primary' : 'btn btn-danger',
+        id: "button_#{date_index}_#{period_index}",
+        disabled: term_teacher.fixed?,
       )
     end
   end

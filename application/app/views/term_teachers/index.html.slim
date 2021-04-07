@@ -22,10 +22,9 @@
         - @term_teachers.each do |t|
           tr
             td.align-middle = t.teacher.name
-            td.align-middle = t.teacher_vacancies.count
+            td.align-middle = "#{t.teacher_vacancies.where(is_vacant: true).count}コマ"
+            td.align-middle = link_to '編集', term_teacher_path(t), { class: 'btn btn-secondary' }
             td.align-middle 開く
             td.align-middle 開く
             td.align-middle 開く
             td.align-middle 開く
-            td.align-middle 開く
-== javascript_pack_tag 'teacher_term/index.js'

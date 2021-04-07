@@ -13,9 +13,6 @@
             予定入力済 : {{ decidedStudentTerms.length }} 人
             <br>
           </p>
-          <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#student_term_new">
-            新しい生徒の紐付け
-          </button>
         </div>
       </div>
       <div class="card bg-light mt-2 mb-2">
@@ -29,9 +26,6 @@
             予定入力済 : {{ decidedTeacherTerms.length }} 人
             <br>
           </p>
-          <button class="btn btn-sm btn-primary" data-toggle="modal" data-target="#teacher_term_new">
-            新しい講師の紐付け
-          </button>
         </div>
       </div>
     </div>

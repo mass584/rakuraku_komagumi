@@ -1,5 +1,6 @@
 class TermTeachersController < ApplicationController
-  PAGE_SIZE = 10
+  INDEX_PAGE_SIZE = 10
+  SHOW_PAGE_SIZE = 7
 
   before_action :authenticate_user!
   before_action :set_rooms!
@@ -8,7 +9,7 @@ class TermTeachersController < ApplicationController
 
   def index
     @page = sanitize_integer_query_param(params[:page]) || 1
-    @page_size = PAGE_SIZE
+    @page_size = INDEX_PAGE_SIZE
     @term_teachers = current_term.term_teachers.ordered.pagenated(@page, @page_size)
     @term_teachers_count = current_term.term_teachers.count
   end
@@ -25,10 +26,10 @@ class TermTeachersController < ApplicationController
   end
 
   def show
-    @teacher_term = TeacherTerm.find(params[:id])
-    @timetables = Timetable.get_timetables(@term)
-    @teacher_requests = TeacherRequest.get_teacher_requests(@teacher_term, @term)
-    @week = @term.week(params[:week].to_i)
+    @page = sanitize_integer_query_param(params[:page]) || 1
+    @page_size = SHOW_PAGE_SIZE
+    @term_teacher = TermTeacher.find(params[:id])
+    @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
   def schedule
