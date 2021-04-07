@@ -7,9 +7,9 @@ Rails.application.routes.draw do
   defaults format: :html do
     resources :begin_end_times, only: [:update], defaults: { format: 'json' }
     resources :contracts, only: [:index]
-    resources :contracts, only: [:update], defaults: { format: 'json' }
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
+    resources :group_contracts, only: [:update], defaults: { format: 'json' }
     resources :piece, only: [:index, :update]
     put 'piece/bulk_update', to: 'piece#bulk_update'
     resources :rooms, only: [:index, :update]
@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]
     resources :tutorials, only: [:create, :update, :destroy], defaults: { format: 'js' }
+    resources :tutorial_contracts, only: [:update], defaults: { format: 'json' }
     root 'terms#index'
   end
 end

@@ -1,70 +1,74 @@
 import $ from 'jquery';
 
 $.ajaxSetup({
-  headers:
-  { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
+  headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') }
 });
 
-$(() => $('[id^=select_teacher_term_id_]').on('click', (event) => cb_select(event)));
-$(() => $('[id^=select_count_]').on('click', (event) => cb_select(event)));
-$(() => $('[id^=button_delete_]').on('click', (event) => cb_button(event)));
+$(() => $('[id^=select_term_teacher_id]').on('change', (event) => onChangeSelect(event)));
+$(() => $('[id^=select_piece_count]').on('change', (event) => onChangeSelect(event)));
+$(() => $('[id^=button_delete]').on('click', (event) => onClickDelete(event)));
 
-function cb_select(event) {
-  const td = $(event.target).parent().parent().parent().parent();
-  const div1 = $(event.target).parent().parent().parent();
-  const div2 = $(event.target).parent().parent();
-  const select_count = div2.children('[id^=select_count]');
-  const select_teacher_term_id = div2.children('[id^=select_teacher_term_id]');
-  const teacher_term_id = select_teacher_term_id.val() ? Number(select_teacher_term_id.val()) : null;
-  const count = Number(select_count.val());
+const onChangeSelect = (event) => {
+  const tdElement = $(event.target).parent().parent().parent();
+  const tdInnerElement = $(event.target).parent().parent();
+  const selectWrapperElement = $(event.target).parent();
+  const selectTermTeacherIdElement = selectWrapperElement.children('[id^=select_term_teacher_id]');
+  const selectPieceCountElement = selectWrapperElement.children('[id^=select_piece_count]');
+  const tutorialContractId = Number(tdInnerElement.data('id'));
+  const termTeacherId = Number(tdInnerElement.data('term_teacher_id')) || null;
+  const newTermTeacherId = Number(selectTermTeacherIdElement.val()) || null;
+  const pieceCount = Number(tdInnerElement.data('piece_count'));
+  const newPieceCount = Number(selectPieceCountElement.val());
   $.ajax({
     type: 'put',
-    url: `/contract/${div1.data('id')}`,
+    url: `/tutorial_contracts/${tutorialContractId}`,
     data: JSON.stringify({
-      contract: {
-        count,
-        teacher_term_id,
+      tutorial_contract: {
+        term_teacher_id: newTermTeacherId,
+        piece_count: newPieceCount,
       },
     }),
     contentType: 'application/json',
   }).done(() => {
-    div1.data('count', count);
-    div1.data('teacher_term_id', teacher_term_id);
-    if ( count === 0 && teacher_term_id === null ) {
-      td.removeClass('bg-active');
+    tdInnerElement.data('term_teacher_id', newTermTeacherId);
+    tdInnerElement.data('piece_count', newPieceCount);
+    if ( newPieceCount === 0 && newTermTeacherId === null ) {
+      tdElement.removeClass('bg-active');
     } else {
-      td.addClass('bg-active');
+      tdElement.addClass('bg-active');
     }
-  }).fail((xhr) => {
-    select_count.val(div1.data('count'));
-    select_teacher_term_id.val(div1.data('teacher_term_id'));
-    alert(xhr.responseJSON.message);
+  }).fail(({ responseJSON }) => {
+    selectTermTeacherIdElement.val(termTeacherId);
+    selectPieceCountElement.val(pieceCount);
+    alert(responseJSON.message);
   });
 }
 
-function cb_button(event) {
+const onClickDelete = (event) => {
   if (!window.confirm('削除してよろしいですか。')) return;
-  const td = $(event.target).parent().parent().parent();
-  const div = $(event.target).parent().parent();
-  const select_count = div.children(':first').children('[id^=select_count]');
-  const select_teacher_term_id = div.children(':first').children('[id^=select_teacher_term_id]');
+  const tdElement = $(event.target).parent().parent().parent();
+  const tdInnerElement = $(event.target).parent().parent();
+  const selectWrapperElement = tdInnerElement.children(':first');
+  const selectPieceCountElement = selectWrapperElement.children('[id^=select_piece_count]');
+  const selectTermTeacherIdElement = selectWrapperElement.children('[id^=select_term_teacher_id]');
+  const tutorialContractId = Number(tdInnerElement.data('id'));
   $.ajax({
-    url: `/contract/${div.data('id')}`,
+    url: `/tutorial_contracts/${tutorialContractId}`,
     type: 'put',
     data: JSON.stringify({
-      contract: {
-        count: 0,
-        teacher_term_id: null,
+      tutorial_contract: {
+        term_teacher_id: null,
+        piece_count: 0,
       },
     }),
     contentType: 'application/json',
   }).done(() => {
-    div.data('count', 0);
-    div.data('teacher_term_id', null);
-    select_count.val(0);
-    select_teacher_term_id.val(null);
-    td.removeClass('bg-active');
-  }).fail((xhr) => {
-    alert(xhr.responseJSON.message);
+    tdInnerElement.data('term_teacher_id', null);
+    tdInnerElement.data('piece_count', 0);
+    selectTermTeacherIdElement.val(null);
+    selectPieceCountElement.val(0);
+    tdElement.removeClass('bg-active');
+  }).fail(({ responseJSON }) => {
+    alert(responseJSON.message);
   });
 }
