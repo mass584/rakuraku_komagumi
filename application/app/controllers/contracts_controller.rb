@@ -12,8 +12,8 @@ class ContractsController < ApplicationController
     @term_students = current_term.term_students.ordered.pagenated(@page, @page_size).joins(:student).select('term_students.id', 'students.name', 'term_students.school_grade')
     @term_students_count = current_term.term_students.count
     @term_teachers = current_term.term_teachers.joins(:teacher).select('term_teachers.id', 'teachers.name')
-    @term_tutorials = current_term.term_tutorials.joins(:tutorial).select('term_tutorials.id', 'tutorials.name')
-    @term_groups = current_term.term_groups.joins(:group).select('term_groups.id', 'groups.name')
+    @term_tutorials = current_term.term_tutorials.ordered.joins(:tutorial).select('term_tutorials.id', 'tutorials.name')
+    @term_groups = current_term.term_groups.ordered.joins(:group).select('term_groups.id', 'groups.name')
     @tutorial_contracts = current_term.tutorial_contracts
     @group_contracts = current_term.group_contracts
   end
