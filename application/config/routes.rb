@@ -18,16 +18,16 @@ Rails.application.routes.draw do
     resources :students, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :student_request, only: [:create, :destroy]
     resources :student_subject, only: [:create, :destroy]
-    resources :student_term, only: [:index, :show, :create, :update]
     get 'student_term/:id/schedule', to: 'student_term#schedule'
     resources :subject_term, only: [:index, :create]
     resources :teachers, only: [:index]
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
-    resources :teacher_term, only: [:index, :show, :create, :update]
     get 'teacher_term/:id/schedule', to: 'teacher_term#schedule'
     resources :teacher_subject, only: [:create, :destroy]
     resources :teacher_request, only: [:create, :destroy]
     resources :terms, only: [:index, :new, :create, :show, :update, :destroy]
+    resources :term_teachers, only: [:index, :create, :update]
+    resources :term_students, only: [:index, :create, :update]
     resources :timetables, only: [:index]
     resources :timetables, only: [:update], defaults: { format: 'json' }
     resources :tutorials, only: [:index]

@@ -7,9 +7,9 @@ nav.navbar-term
     li class="#{active == 'contract' ? 'nav-item active' : 'nav-item'}"
       = link_to '受講科目', contracts_path, :class => "nav-link"
     li class="#{active == 'teacher_request' ? 'nav-item active' : 'nav-item'}"
-      = link_to '講師予定', {controller: :teacher_term, action: :index}, method: :get, :class => "nav-link"
+      = link_to '講師予定', term_teachers_path, :class => "nav-link"
     li class="#{active == 'student_request' ? 'nav-item active' : 'nav-item'}"
-      = link_to '生徒予定', {controller: :student_term, action: :index}, method: :get, :class => "nav-link"
+      = link_to '生徒予定', term_students_path, :class => "nav-link"
     li class="#{active == 'piece' ? 'nav-item active' : 'nav-item'}"
       = link_to '全体予定', {controller: :piece, action: :index}, method: :get, :class => "nav-link"
     li.nav-item 

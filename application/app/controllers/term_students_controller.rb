@@ -1,17 +1,15 @@
-class StudentTermController < ApplicationController
+class TermStudentsController < ApplicationController
+  PAGE_SIZE = 7
+
   before_action :authenticate_user!
-  before_action :term_selected?
+  before_action :set_rooms!
+  before_action :set_room!
+  before_action :set_term!
 
   def index
-    respond_to do |format|
-      format.html do
-        @student_terms = StudentTerm.get_student_terms(@term)
-        @page = params[:page].to_i || 1
-      end
-      format.json do
-        render json: StudentTerm.where(term_id: @term.id).to_json, status: :ok
-      end
-    end
+    @page = sanitize_integer_query_param(params[:page]) || 1
+    @page_size = PAGE_SIZE
+    @term_students = current_term.term_students.ordered.pagenated(@page, @page_size)
   end
 
   def show

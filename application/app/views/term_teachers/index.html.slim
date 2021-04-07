@@ -1,0 +1,29 @@
+== render partial: 'navbar', locals: { active: 'term' }
+== render partial: 'navbar_term', locals: { active: 'teacher_request' }
+.container-fluid.my-5
+  .row.float-right.mx-5
+    .ml-1
+      == render partial: 'application/pagenation',
+        locals: { path: term_teachers_path, keyword: nil, page: @page, max_page: max_page(@term_teachers.count, @page_size) }
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+    table.table
+      thead.thead-dark
+        tr
+          th.align-middle 氏名
+          th.align-middle マルの数
+          th.align-middle マルバツ表の参照
+          th.align-middle マルバツ表入力済
+          th.align-middle 予定表の参照
+          th.align-middle 予定表の出力
+          th.align-middle 予定表の送信
+      tbody
+        - @term_teachers.each do |t|
+          tr
+            td.align-middle = t.teacher.name
+            td.align-middle = t.teacher_vacancies.count
+            td.align-middle 開く
+            td.align-middle 開く
+            td.align-middle 開く
+            td.align-middle 開く
+            td.align-middle 開く
+== javascript_pack_tag 'teacher_term/index.js'
