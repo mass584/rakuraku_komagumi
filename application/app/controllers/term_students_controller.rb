@@ -32,6 +32,16 @@ class TermStudentsController < ApplicationController
     @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
+  def update
+    record = StudentTerm.find(params[:id])
+    if record.update(update_params)
+      render json: record.to_json, status: :ok
+    else
+      render json: { message: record.errors.full_messages }, status: :bad_request
+    end
+  end
+
+  # TODO: FIX
   def schedule
     @student_term = StudentTerm.find(params[:id])
     @timetables = Timetable.get_timetables(@term)
@@ -49,15 +59,6 @@ class TermStudentsController < ApplicationController
                   type: 'application/pdf',
                   disposition: 'inline'
       end
-    end
-  end
-
-  def update
-    record = StudentTerm.find(params[:id])
-    if record.update(update_params)
-      render json: record.to_json, status: :ok
-    else
-      render json: { message: record.errors.full_messages }, status: :bad_request
     end
   end
 
