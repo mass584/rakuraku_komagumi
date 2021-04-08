@@ -1,5 +1,4 @@
 <template>
-<div class="container wrapper">
   <div class="overflow-auto">
     <table
       v-for="date in dateArray"
@@ -23,28 +22,28 @@
               v-if="getSeat(date, period, seat)"
               v-bind:class="seatClass(date, period, seat)"
             >
-              <div class="frame-teacher">
+              <div class="position-teacher">
                 {{ getSeat(date, period, seat).teacher_name }}
                 <button class="btn btn-warn btn-sm" v-on:click="onClickResetSeat(getSeat(date, period, seat))">
                   確定
                 </button>
               </div>
               <div
-                v-for="frame in frameArray"
-                v-bind:key="frame"
-                class="frame-student"
-                @drop="drop($event, date, period, seat, frame)"
-                @dragover="dragover($event, date, period, seat, frame)"
+                v-for="position in positionArray"
+                v-bind:key="position"
+                class="position-student"
+                @drop="drop($event, date, period, seat, position)"
+                @dragover="dragover($event, date, period, seat, position)"
                 @dragenter.prevent
               >
                 <div
-                  v-if="getPiece(date, period, seat, frame)"
+                  v-if="getPiece(date, period, seat, position)"
                   class="piece"
-                  v-bind:draggable="!getPiece(date, period, seat, frame).is_fixed"
-                  @dragstart="dragstart($event, date, period, seat, frame)"
+                  v-bind:draggable="!getPiece(date, period, seat, position).is_fixed"
+                  @dragstart="dragstart($event, date, period, seat, position)"
                 >
-                  {{ getPiece(date, period, seat, frame).student_name }}
-                  {{ getPiece(date, period, seat, frame).subject_name }}
+                  {{ getPiece(date, period, seat, position).student_name }}
+                  {{ getPiece(date, period, seat, position).subject_name }}
                 </div>
               </div>
             </div>
@@ -53,98 +52,45 @@
       </tbody>
     </table>
   </div>
-  <div class="pool">
-    <div class="pool-head" v-on:click="togglePool()">
-      ●
-    </div>
-    <div v-bind:class="poolClass()">
-      <div class="holding">
-      </div>
-    </div>
-  </div>
-</div>
 </template>
 
 <script>
 import axios from 'axios';
-import Vue from "vue";
+import Vue from 'vue';
+import _ from 'lodash';
 
 export default Vue.extend({
-  name: 'pieces',
-  props: ['termId'],
-  data: () => ({
-    term: {},
-    seats: [],
-    pieces: [],
-    isOpen: false,
-  }),
+  name: 'tutorial_pieces',
+  data: () => ({ term: null }),
   computed: {
-    dateArray(vm) {
-      return [vm.term.begin_at, vm.term.end_at];
+    dateArray() {
+      return _.range(1, this.term.date_count);
     },
-    periodArray(vm) {
-      return Array.from({ length: vm.term.max_period }, (v, k) => k + 1);
+    periodArray() {
+      return _.range(1, this.term.period_count);
     },
-    seatArray(vm) {
-      return Array.from({ length: vm.term.max_seat }, (v, k) => k + 1);
+    seatArray() {
+      return _.range(1, this.term.seat_count);
     },
-    frameArray(vm) {
-      return Array.from({ length: vm.term.max_frame }, (v, k) => k + 1);
+    positionArray() {
+      return _.range(1, this.term.position_count);
     },
   },
   methods: {
-    fetchTerm: function() {
-      axios.get(`term/${this.termId}.json`).then(res => this.term = res.data);
+    fetchTutorialPieces: function() {
+      axios.get("tutorial_pieces.json").then(response => this.term = response.data);
     },
-    fetchSeats: function() {
-      axios.get("seat.json").then(res => this.seats = res.data);
-    },
-    fetchPieces: function() {
-      axios.get("piece.json").then(res => this.pieces = res.data);
-    },
-    updatePiece: async function(piece, seat) {
+    updateTutorialPiece: async function(tutorial_piece, seat) {
       const response = await axios.put(
-        `piece/${piece.id}`, { seat_id: seat.id }
+        `tutorial_pieces/${tutorial_piece.id}`,
+        { seat_id: seat.id },
       ).catch(
         (error) => error.response,
       );
       return response.status === 200;
     },
-    updateSeat: async function(seat, teacher_term_id) {
-      const response = await axios.put(
-        `seat/${seat.id}`, { teacher_term_id: teacher_term_id }
-      ).catch(
-        (error) => error.response,
-      );
-      return response.status === 200;
-    },
-    getSeat: function(date, period, number) {
-      return this.seats.find(item => {
-        return item.date === date && item.period === period && item.number === number;
-      });
-    },
-    getSeatById: function(id) {
-      return this.seats.find(item => {
-        return item.id === id;
-      });
-    },
-    getPiece: function(date, period, number, frame) {
-      return this.pieces.filter(item => {
-        return item.date === date && item.period === period && item.number === number;
-      })[frame - 1];
-    },
-    getPieceById: function(id) {
-      return this.pieces.find(item => {
-        return item.id === id;
-      });
-    },
-    getPieces: function(date, period, number) {
-      return this.pieces.filter(item => {
-        return item.date === date && item.period === period && item.number === number;
-      });
-    },
-    dragstart: function(event, date, period, seatNumber, frame) {
-      const piece = this.getPiece(date, period, seatNumber, frame);
+    dragstart: function(event, date, period, seatNumber, position) {
+      const piece = this.getPiece(date, period, seatNumber, position);
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.dropEffect = 'move';
       event.dataTransfer.setData('pieceId', piece.id);
@@ -155,13 +101,13 @@ export default Vue.extend({
         return { ...seat, droppable };
       });
     },
-    dragover: function(event, date, period, seatNumber, frame) {
+    dragover: function(event, date, period, seatNumber, position) {
       const pieceId = Number(event.dataTransfer.getData('pieceId'));
       const piece = this.getPieceById(pieceId);
       const seat = this.getSeat(date, period, seatNumber);
       if (seat.droppable) event.preventDefault();
     },
-    drop: async function(event, date, period, seatNumber, frame) {
+    drop: async function(event, date, period, seatNumber, position) {
       const pieceId = Number(event.dataTransfer.getData('pieceId'));
       const piece = this.getPieceById(pieceId);
       const seat = this.getSeat(date, period, seatNumber);
@@ -178,9 +124,9 @@ export default Vue.extend({
         seat.teacher_name = piece.teacher_name
       }
     },
-    onClickResetSeat: async function(seat) {
-      const res = await this.updateSeat(seat, null);
-      if (res) {
+    onClickBulkReset: async function(seat) {
+      const response = await this.updateSeat(seat, null);
+      if (response) {
         seat.teacher_term_id = null;
         seat.teacher_name = null;
       }
@@ -216,9 +162,7 @@ export default Vue.extend({
     }
   },
   created() {
-    this.fetchTerm();
-    this.fetchSeats();
-    this.fetchPieces();
+    this.fetchTutorialPieces();
   }
 }) 
 </script>
@@ -239,12 +183,12 @@ export default Vue.extend({
   .seat__droppable {
     background-color: tomato;
   }
-  .frame-teacher {
+  .position-teacher {
     background-color: #eee;
     height: 25px;
     text-align: center;
   }
-  .frame-student {
+  .position-student {
     box-sizing: border-box;
     border: 1px solid #eee;
     height: 30px;
