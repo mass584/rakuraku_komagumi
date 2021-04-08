@@ -14,7 +14,7 @@ module ApplicationHelper
   end
 
   def error_msg(messages)
-    content_tag :ul do
+    content_tag(:ul, 'class' => 'mb-0') do
       messages.each do |item|
         concat content_tag(:li, item)
       end

@@ -2,6 +2,8 @@
 .container-fluid.my-5
   == render partial: 'application/title',
     locals: { title: '教室の一覧' }
+  .row.float-left.mx-5
+    == render partial: 'rooms/new', locals: { room: Room.new }
   .row.float-right.mx-5
     .mr-1
       == render partial: 'application/search',

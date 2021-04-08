@@ -1,0 +1,17 @@
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#room_edit_#{room.id}"
+.modal.fade id="room_edit_#{room.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for room, url: room_path(room), remote: true do |f|
+        .modal-header
+          h4.modal-title 教室情報の編集
+        .modal-body
+          .form-group
+            .form-row
+              .col
+                = f.label :name, '教室名'
+                = f.text_field :name, { class: 'form-control' }
+          div id="room_edit_alert_#{room.id}"
+        .modal-footer
+          = f.submit '保存', {"class" => "btn btn-primary"}
+          = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}
