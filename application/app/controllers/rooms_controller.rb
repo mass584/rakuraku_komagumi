@@ -11,4 +11,36 @@ class RoomsController < ApplicationController
     @page_size = PAGE_SIZE
     @rooms = Room.ordered.matched(@keyword).pagenated(@page, @page_size)
   end
+
+  def create
+    @room = Room.new(create_params)
+    respond_to do |format|
+      if @room.save
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
+    end
+  end
+
+  def update
+    @room = Room.find(params[:id])
+    respond_to do |format|
+      if @room.update(update_params)
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
+    end
+  end
+
+  private
+
+  def create_params
+    params.require(:room).permit(:name)
+  end
+
+  def update_params
+    params.require(:room).permit(:name)
+  end
 end

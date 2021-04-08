@@ -1,0 +1,22 @@
+= button_tag '編集', 'class' => 'btn btn-secondary', 'data-toggle' => 'modal', 'data-target' => "#term_edit_#{term.id}"
+.modal.fade id="term_edit_#{term.id}" role="dialog" area-hidden="true"
+  .modal-dialog
+    .modal-content
+      = form_for term, url: term_path(term), remote: true do |f|
+        .modal-header
+          h4.modal-title スケジュール情報の編集
+        .modal-body
+          .form-group
+            .form-row
+              .col
+                = f.label :name
+                = f.text_field :name, { class: 'form-control' }
+          .form-group
+            .form-row
+              .col-lg-4
+                = f.label :year
+                = f.number_field :year, { min: 2020, max: 2100, class: 'form-control' }
+          div id="term_edit_alert_#{term.id}"
+        .modal-footer
+          = f.submit '保存', {"class" => "btn btn-primary"}
+          = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

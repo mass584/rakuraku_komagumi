@@ -1,5 +1,5 @@
 nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
-  = link_to 'らくらくコマ組み', rooms_path, { method: :get, class: 'navbar-brand' }
+  = link_to 'らくらくコマ組み', terms_path, { method: :get, class: 'navbar-brand' }
   .collapse.navbar-collapse
     ul.navbar-nav.mr-auto
       li class="#{active == 'term' ? 'nav-item active' : 'nav-item'}"
@@ -19,7 +19,7 @@ nav.navbar.navbar-expand-lg.navbar-dark.bg-primary
             = collection_select nil, :room_id, @rooms, :id, :name,
               { selected: @room.id }, { class: 'custom-select' }
             .input-group-append
-              = submit_tag '変更', :name => nil, class: 'btn btn-outline-light'
+              = submit_tag '選択', :name => nil, class: 'btn btn-outline-light'
       li.nav-item.ml-1
         = button_to 'ログアウト',
           destroy_user_session_path,

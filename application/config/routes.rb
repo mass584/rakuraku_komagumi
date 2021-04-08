@@ -10,7 +10,8 @@ Rails.application.routes.draw do
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
-    resources :rooms, only: [:index, :update]
+    resources :rooms, only: [:index]
+    resources :rooms, only: [:create, :update], defaults: { format: 'js' }
     resources :students, only: [:index]
     resources :students, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :student_vacancies, only: [:update], defaults: { format: 'json' }
@@ -18,7 +19,7 @@ Rails.application.routes.draw do
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :teacher_vacancies, only: [:update], defaults: { format: 'json' }
     resources :terms, only: [:index, :show]
-    resources :terms, only: [:create], defaults: { format: 'js' }
+    resources :terms, only: [:create, :update], defaults: { format: 'js' }
     resources :term_groups, only: [:create], defaults: { format: 'js' }
     resources :term_students, only: [:index, :show]
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
