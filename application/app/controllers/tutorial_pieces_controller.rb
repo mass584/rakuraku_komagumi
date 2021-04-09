@@ -13,7 +13,7 @@ class TutorialPiecesController < ApplicationController
           .preload(term_teachers: :teacher)
           .preload(timetables: [
             { term_group: [:group, :group_contracts] },
-            { seats: { tutorial_pieces: :term_contract } },
+            { seats: { tutorial_pieces: :tutorial_contract } },
             :teacher_vacancies,
             :student_vacancies,
           ])

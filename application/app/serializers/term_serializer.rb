@@ -1,8 +1,18 @@
 class TermSerializer < ActiveModel::Serializer
   attributes :id, :name, :year, :date_count, :period_count, :seat_count, :position_count
+  has_many :teacher_optimization_rules
+  has_many :student_optimization_rules
   has_many :term_teachers
   has_many :timetables
   has_many :tutorial_pieces
+
+  class TeacherOptimizationRuleSerializer < ActiveModel::Serializer
+    attributes :id, :occupation_limit, :blank_limit
+  end
+
+  class StudentOptimizationRuleSerializer < ActiveModel::Serializer
+    attributes :id, :school_grade, :occupation_limit, :blank_limit
+  end
 
   class TermTeacherSerializer < ActiveModel::Serializer
     attributes :id, :vacancy_status
@@ -24,11 +34,15 @@ class TermSerializer < ActiveModel::Serializer
     has_many :seats
 
     def vacant_term_teacher_ids
-      object.teacher_vacancies.pluck(:term_teacher_id)
+      object.teacher_vacancies.filter do |teacher_vacancy|
+        teacher_vacancy.is_vacant
+      end.pluck(:term_teacher_id)
     end
 
     def vacant_term_student_ids
-      object.student_vacancies.pluck(:term_student_id)
+      object.student_vacancies.filter do |student_vacancy|
+        student_vacancy.is_vacant
+      end.pluck(:term_student_id)
     end
 
     def occupied_term_teacher_ids
@@ -38,7 +52,7 @@ class TermSerializer < ActiveModel::Serializer
     def occupied_term_student_ids
       object.seats.map do |seat|
         seat.tutorial_pieces.map do |tutorial_piece|
-          tutorial_piece.term_contract.term_student_id
+          tutorial_piece.tutorial_contract.term_student_id
         end
       end.flatten.uniq
     end

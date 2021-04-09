@@ -15,5 +15,8 @@ Axios.interceptors.request.use((config) => {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-  new Vue({ el: '#tutorial_pieces_table', render: (createElement) => createElement(TutorialPiecesTable) });
+  new Vue({
+    el: '#tutorial_pieces_table',
+    render: (createElement) => createElement(TutorialPiecesTable),
+  });
 });

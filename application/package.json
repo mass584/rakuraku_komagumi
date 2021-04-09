@@ -24,6 +24,7 @@
     "vuex": "^3.5.1"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.168",
     "webpack-dev-server": "^3.11.0"
   }
 }
