@@ -5,7 +5,7 @@
         <tr>
           <td class="nospace fixed1">
             <div class="border w-150px h-60px d-table">
-              <div class="d-table-cell align-middle">日付 時限（残席）</div>
+              <div class="d-table-cell align-middle text-center">日時（残席）</div>
             </div>
           </td>
           <td class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
@@ -24,8 +24,8 @@
         <tr v-for="timetable in timetables" v-bind:key="timetable.id">
           <td class="nospace fixed2">
             <div class="border w-150px h-30px d-table">
-              <div class="d-table-cell align-middle">
-                {{ timetable.dateIndex }}日目 {{ timetable.periodIndex }}限（席）
+              <div class="d-table-cell align-middle text-center">
+                {{ rowTopDisplayText(timetable) }}
               </div>
             </div>
           </td>
@@ -56,6 +56,7 @@ import './StandBy.vue';
 
 export default Vue.component('scheduling-table', {
   props: {
+    seatCount: Number,
     positionCount: Number,
     termTeachers: Array,
     timetables: Array,
@@ -63,12 +64,20 @@ export default Vue.component('scheduling-table', {
     droppables: Array,
   },
   methods: {
+    rowTopDisplayText: function(timetable) {
+      const maxSeat = this.seatCount;
+      const occupiedSeat = timetable.occupiedTermTeacherIds.length;
+      const unoccupiedSeat = maxSeat - occupiedSeat;
+
+      return `${timetable.dateIndex}日目${timetable.periodIndex}限（${unoccupiedSeat}席）`;
+    },
     tutorialPiecesPerSeat: function(timetable, termTeacher) {
       const seat = timetable.seats.find((seat) => seat.termTeacherId === termTeacher.id);
       const tutorialPieceIds = seat ? seat.tutorialPieceIds : [];
       const tutorialPiece = this.tutorialPieces.filter(
         (tutorialPiece) => tutorialPieceIds.includes(tutorialPiece.id)
       );
+
       return tutorialPiece;
     },
     isDroppable: function(timetable, termTeacher) {

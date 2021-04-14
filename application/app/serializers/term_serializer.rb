@@ -59,7 +59,9 @@ class TermSerializer < ActiveModel::Serializer
     end
 
     def occupied_term_teacher_ids
-      object.seats.pluck(:term_teacher_id).uniq.delete(nil).to_a
+      object.seats.pluck(:term_teacher_id).filter do |id|
+        id != nil
+      end
     end
 
     def occupied_term_student_ids

@@ -1,6 +1,7 @@
 <template>
   <scheduling-table
     v-if="term"
+    :seat-count="term.seatCount"
     :position-count="term.positionCount"
     :term-teachers="term.termTeachers"
     :timetables="term.timetables"
