@@ -55,6 +55,7 @@ export default Vue.extend({
         return validate(
           this.term.periodCount,
           this.term.seatCount,
+          this.term.positionCount,
           this.term.studentOptimizationRules,
           this.term.teacherOptimizationRules,
           this.term.timetables,

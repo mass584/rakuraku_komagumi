@@ -10,6 +10,7 @@ import {
 export const validate = (
   periodCount: number,
   seatCount: number,
+  positionCount: number,
   studentOptimizationRules: StudentOptimizationRule[],
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
@@ -19,50 +20,22 @@ export const validate = (
   tutorialPiece: TutorialPiece,
 ) => {
   return (
-    isValidTermTeacher(termTeacher, tutorialPiece) &&
-    isValidTimetable(destTimetable) &&
-    isSeatVacant(seatCount, destTimetable, tutorialPiece) &&
     isStudentVacant(destTimetable, tutorialPiece) &&
     isTeacherVacant(destTimetable, termTeacher) &&
+    isSeatVacant(seatCount, positionCount, destTimetable, tutorialPiece) &&
     isNotDuplicateStudent(destTimetable, tutorialPiece) &&
-    isOccupationLimitStudent(studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
-    isOccupationLimitTeacher(teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
-    isBlankLimitStudent(periodCount, studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
-    isBlankLimitTeacher(periodCount, teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece)
+    isUnderStudentOccupationLimit(studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
+    isUnderTeacherOccupationLimit(teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
+    isUnderStudentBlankLimit(periodCount, studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
+    isUnderTeacherBlankLimit(periodCount, teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece)
   );
-};
-
-const isValidTermTeacher = (
-  termTeacher: TermTeacher,
-  tutorialPiece: TutorialPiece,
-) => {
-  return termTeacher.id === tutorialPiece.termTeacherId;
-};
-
-const isValidTimetable = (destTimetable: Timetable) => {
-  const isClosed = destTimetable.isClosed;
-  const isTermGroup = !!destTimetable.termGroupId;
-  return !isClosed && !isTermGroup;
-};
-
-const isSeatVacant = (
-  seatCount: number,
-  destTimetable: Timetable,
-  tutorialPiece: TutorialPiece,
-) => {
-  const occupiedSeatCount = destTimetable.occupiedTermTeacherIds.length;
-  const isVacant = occupiedSeatCount < seatCount;
-  const termTeacherId = tutorialPiece.termTeacherId;
-  const isAssigned = destTimetable.occupiedTermTeacherIds.includes(termTeacherId);
-  return isVacant || isAssigned;
 };
 
 export const isStudentVacant = (
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
-  const termStudentId = tutorialPiece.termStudentId;
-  return destTimetable.vacantTermStudentIds.includes(termStudentId);
+  return destTimetable.vacantTermStudentIds.includes(tutorialPiece.termStudentId);
 };
 
 export const isTeacherVacant = (
@@ -72,15 +45,30 @@ export const isTeacherVacant = (
   return destTimetable.vacantTermTeacherIds.includes(termTeacher.id);
 };
 
+const isSeatVacant = (
+  seatCount: number,
+  positionCount: number,
+  destTimetable: Timetable,
+  tutorialPiece: TutorialPiece,
+) => {
+  const occupiedSeatCount = destTimetable.occupiedTermTeacherIds.length;
+  const nullSeatVacant = occupiedSeatCount < seatCount;
+  const termTeacherSeat = destTimetable.seats.find((seat) => {
+    return seat.termTeacherId === tutorialPiece.termTeacherId;
+  });
+  const termTeacherSeatVacant = termTeacherSeat && (termTeacherSeat.tutorialPieceIds.length < positionCount);
+
+  return termTeacherSeatVacant || nullSeatVacant;
+};
+
 const isNotDuplicateStudent = (
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
-  const termStudentId = tutorialPiece.termStudentId;
-  return !destTimetable.occupiedTermStudentIds.includes(termStudentId);
+  return !destTimetable.occupiedTermStudentIds.includes(tutorialPiece.termStudentId);
 };
 
-const isOccupationLimitStudent = (
+const isUnderStudentOccupationLimit = (
   studentOptimizationRules: StudentOptimizationRule[],
   timetables: Timetable[],
   srcTimetable: Timetable | null,
@@ -95,8 +83,7 @@ const isOccupationLimitStudent = (
   const occupationLimit = optimizationRule ? optimizationRule.occupationLimit : 0;
   const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
-  const isDifferentDate = srcDateIndex !== destDateIndex;
-
+  const isSameDate = srcDateIndex === destDateIndex;
   const destDateOccupation = timetables.filter((timetable) => {
     const isTutorial =
       (timetable.dateIndex === destDateIndex) &&
@@ -106,12 +93,12 @@ const isOccupationLimitStudent = (
       timetable.termGroupStudentIds.includes(termStudentId);
     return isTutorial || isGroup;
   }).length;
-  const reachedToLimit = destDateOccupation < occupationLimit;
+  const isUnderLimit = destDateOccupation < occupationLimit;
 
-  return isDifferentDate && reachedToLimit;
+  return isSameDate || isUnderLimit;
 };
 
-const isOccupationLimitTeacher = (
+const isUnderTeacherOccupationLimit = (
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
   srcTimetable: Timetable | null,
@@ -119,10 +106,10 @@ const isOccupationLimitTeacher = (
   tutorialPiece: TutorialPiece,
 ) => {
   const termTeacherId = tutorialPiece.termTeacherId;
+  const occupationLimit = teacherOptimizationRules[0].occupationLimit;
   const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
-  const isDifferentDate = srcDateIndex !== destDateIndex;
-
+  const isSameDate = srcDateIndex === destDateIndex;
   const destDateOccupation = timetables.filter((timetable) => {
     const isTutorial =
       (timetable.dateIndex === destDateIndex) &&
@@ -132,13 +119,12 @@ const isOccupationLimitTeacher = (
       timetable.termGroupTeacherId === termTeacherId;
     return isTutorial || isGroup;
   }).length;
-  const occupationLimit = teacherOptimizationRules[0].occupationLimit;
-  const reachedToLimit = destDateOccupation < occupationLimit;
+  const isUnderLimit = destDateOccupation < occupationLimit;
 
-  return isDifferentDate && reachedToLimit;
+  return isSameDate || isUnderLimit;
 }
 
-const isBlankLimitStudent = (
+const isUnderStudentBlankLimit = (
   periodCount: number,
   studentOptimizationRules: StudentOptimizationRule[],
   timetables: Timetable[],
@@ -185,7 +171,7 @@ const isBlankLimitStudent = (
   return srcDateOk && destDateOk;
 };
 
-const isBlankLimitTeacher = (
+const isUnderTeacherBlankLimit = (
   periodCount: number,
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
