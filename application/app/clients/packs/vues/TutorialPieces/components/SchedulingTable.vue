@@ -32,6 +32,7 @@
           <td class="nospace" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
             <seat
               :is-droppable="isDroppable(timetable, termTeacher)"
+              :is-not-vacant="isNotVacant(timetable, termTeacher)"
               :position-count="positionCount"
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
@@ -62,6 +63,7 @@ export default Vue.component('scheduling-table', {
     timetables: Array,
     tutorialPieces: Array,
     droppables: Array,
+    notVacants: Array,
   },
   methods: {
     rowTopDisplayText: function(timetable) {
@@ -84,6 +86,12 @@ export default Vue.component('scheduling-table', {
       return this.droppables.some((droppable) => {
         return droppable.timetableId === timetable.id &&
           droppable.termTeacherId === termTeacher.id;
+      });
+    },
+    isNotVacant: function(timetable, termTeacher) {
+      return this.notVacants.some((vacant) => {
+        return vacant.timetableId === timetable.id &&
+          vacant.termTeacherId === termTeacher.id;
       });
     },
   },

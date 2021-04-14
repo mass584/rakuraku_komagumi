@@ -57,7 +57,7 @@ const isSeatVacant = (
   return isVacant || isAssigned;
 };
 
-const isStudentVacant = (
+export const isStudentVacant = (
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
@@ -65,7 +65,7 @@ const isStudentVacant = (
   return destTimetable.vacantTermStudentIds.includes(termStudentId);
 };
 
-const isTeacherVacant = (
+export const isTeacherVacant = (
   destTimetable: Timetable,
   termTeacher: TermTeacher,
 ) => {

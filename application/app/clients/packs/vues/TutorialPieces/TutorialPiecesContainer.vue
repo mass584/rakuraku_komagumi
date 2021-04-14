@@ -7,6 +7,7 @@
     :timetables="term.timetables"
     :tutorial-pieces="term.tutorialPieces"
     :droppables="droppables"
+    :notVacants="notVacants"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
     v-on:dragend="onDragEnd()"
     v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -20,13 +21,14 @@ import Vue from 'vue';
 
 import './components/SchedulingTable.vue';
 import { Timetable, TermTeacher, TutorialPiece } from './types';
-import { validate } from './validator';
+import { validate, isStudentVacant, isTeacherVacant } from './validator';
 
 export default Vue.extend({
   name: 'tutorial_pieces_container',
   data: () => ({
     term: null,
     droppables: [],
+    notVacants: [],
   }),
   methods: {
     fetchTutorialPieces: async function() {
@@ -46,26 +48,33 @@ export default Vue.extend({
       event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.dropEffect = 'move';
-      this.droppables = this.term.termTeachers.reduce((accu1, destTermTeacher) => {
-        return accu1.concat(this.term.timetables.reduce((accu2, destTimetable) => {
-          const isValid = validate(
-            this.term.periodCount,
-            this.term.seatCount,
-            this.term.studentOptimizationRules,
-            this.term.teacherOptimizationRules,
-            this.term.timetables,
-            srcTimetable,
-            destTimetable,
-            destTermTeacher,
-            tutorialPiece,
-          );
-          const droppable = { timetableId: destTimetable.id, termTeacherId: destTermTeacher.id };
-          return isValid ? accu2.concat([droppable]) : accu2;
-        }, []));
-      }, []);
+      const termTeacher = this.term.termTeachers.find((termTeacher) => {
+        return termTeacher.id === tutorialPiece.termTeacherId;
+      });
+      this.droppables = this.term.timetables.filter((timetable) => {
+        return validate(
+          this.term.periodCount,
+          this.term.seatCount,
+          this.term.studentOptimizationRules,
+          this.term.teacherOptimizationRules,
+          this.term.timetables,
+          srcTimetable,
+          timetable,
+          termTeacher,
+          tutorialPiece,
+        );
+      }).map((timetable) => {
+        return { timetableId: timetable.id, termTeacherId: termTeacher.id };
+      });;
+      this.notVacants = this.term.timetables.filter((timetable) => {
+        return !isStudentVacant(timetable, tutorialPiece) || !isTeacherVacant(timetable, termTeacher)
+      }).map((timetable) => {
+        return { timetableId: timetable.id, termTeacherId: termTeacher.id };
+      });
     },
     onDragEnd: function() {
       this.droppables = [];
+      this.notVacants = [];
     },
     onDrop: async function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));

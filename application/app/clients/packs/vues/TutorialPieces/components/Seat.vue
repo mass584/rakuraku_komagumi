@@ -18,6 +18,7 @@
       v-for="positionIndex in positionIndexes"
       v-bind:key="positionIndex"
       :is-droppable="isDroppable"
+      :is-not-vacant="isNotVacant"
       :tutorial-piece="tutorialPiece(positionIndex)"
       v-on:dragstart="$emit('dragstart', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
       v-on:dragend="$emit('dragend', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
@@ -37,6 +38,7 @@ import './ClosedPosition.vue';
 
 export default Vue.component('seat', {
   props: {
+    isNotVacant: Boolean,
     isDroppable: Boolean,
     positionCount: Number,
     tutorialPieces: Array,
