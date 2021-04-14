@@ -27,7 +27,7 @@
           <td class="nospace" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
             <seat
               :is-droppable="isDroppable(timetable, termTeacher)"
-              :position-count="count.positionCount"
+              :position-count="positionCount"
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
               :term-teacher="termTeacher"
@@ -49,7 +49,7 @@ import './Seat.vue';
 
 export default Vue.component('scheduling-table', {
   props: {
-    count: Object,
+    positionCount: Number,
     termTeachers: Array,
     timetables: Array,
     tutorialPieces: Array,

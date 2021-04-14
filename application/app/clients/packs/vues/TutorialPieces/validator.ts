@@ -1,6 +1,5 @@
 import _ from 'lodash';
 import {
-  Count,
   StudentOptimizationRule,
   TeacherOptimizationRule,
   Timetable,
@@ -9,7 +8,8 @@ import {
 } from './types';
 
 export const validate = (
-  count: Count,
+  periodCount: number,
+  seatCount: number,
   studentOptimizationRules: StudentOptimizationRule[],
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
@@ -21,14 +21,14 @@ export const validate = (
   return (
     isValidTermTeacher(termTeacher, tutorialPiece) &&
     isValidTimetable(destTimetable) &&
-    isSeatVacant(count, destTimetable, tutorialPiece) &&
+    isSeatVacant(seatCount, destTimetable, tutorialPiece) &&
     isStudentVacant(destTimetable, tutorialPiece) &&
     isTeacherVacant(destTimetable, termTeacher) &&
     isNotDuplicateStudent(destTimetable, tutorialPiece) &&
     isOccupationLimitStudent(studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
     isOccupationLimitTeacher(teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
-    isBlankLimitStudent(count, studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
-    isBlankLimitTeacher(count, teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece)
+    isBlankLimitStudent(periodCount, studentOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece) &&
+    isBlankLimitTeacher(periodCount, teacherOptimizationRules, timetables, srcTimetable, destTimetable, tutorialPiece)
   );
 };
 
@@ -46,12 +46,12 @@ const isValidTimetable = (destTimetable: Timetable) => {
 };
 
 const isSeatVacant = (
-  count: Count,
+  seatCount: number,
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
   const occupiedSeatCount = destTimetable.occupiedTermTeacherIds.length;
-  const isVacant = occupiedSeatCount < count.seatCount;
+  const isVacant = occupiedSeatCount < seatCount;
   const termTeacherId = tutorialPiece.termTeacherId;
   const isAssigned = destTimetable.occupiedTermTeacherIds.includes(termTeacherId);
   return isVacant || isAssigned;
@@ -139,7 +139,7 @@ const isOccupationLimitTeacher = (
 }
 
 const isBlankLimitStudent = (
-  count: Count,
+  periodCount: number,
   studentOptimizationRules: StudentOptimizationRule[],
   timetables: Timetable[],
   srcTimetable: Timetable,
@@ -166,7 +166,7 @@ const isBlankLimitStudent = (
       timetable.termGroupStudentIds.includes(termStudentId);
     return isTutorial || isDestTutorial || isGroup;
   }).map((item) => item.periodIndex);
-  const srcDateOk = dailyBlanksFrom(count, srcDateOccupiedPeriodIndexes) <= blankLimit;
+  const srcDateOk = dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
 
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
@@ -179,13 +179,13 @@ const isBlankLimitStudent = (
       timetable.termGroupStudentIds.includes(termStudentId);
     return isTutorial || isDestTutorial || isGroup;
   }).map((item) => item.periodIndex);
-  const destDateOk = dailyBlanksFrom(count, destDateOccupiedPeriodIndexes) <= blankLimit;
+  const destDateOk = dailyBlanksFrom(periodCount, destDateOccupiedPeriodIndexes) <= blankLimit;
 
   return srcDateOk && destDateOk;
 };
 
 const isBlankLimitTeacher = (
-  count: Count,
+  periodCount: number,
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
   srcTimetable: Timetable,
@@ -208,7 +208,7 @@ const isBlankLimitTeacher = (
       timetable.termGroupTeacherId === termTeacherId;
     return isTutorial || isDestTutorial || isGroup;
   }).map((item) => item.periodIndex);
-  const srcDateOk = dailyBlanksFrom(count, srcDateOccupiedPeriodIndexes) <= blankLimit;
+  const srcDateOk = dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
 
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
@@ -221,14 +221,14 @@ const isBlankLimitTeacher = (
       timetable.termGroupTeacherId === termTeacherId;
     return isTutorial || isDestTutorial || isGroup;
   }).map((item) => item.periodIndex);
-  const destDateOk = dailyBlanksFrom(count, destDateOccupiedPeriodIndexes) <= blankLimit;
+  const destDateOk = dailyBlanksFrom(periodCount, destDateOccupiedPeriodIndexes) <= blankLimit;
 
   return srcDateOk && destDateOk;
 };
 
-const dailyBlanksFrom = (count: Count, periodIndexes: number[]) => {
+const dailyBlanksFrom = (periodCount: number, periodIndexes: number[]) => {
   const init = { flag: false, buffer: 0, sum: 0 };
-  const result = _.range(1, count.periodCount + 1).reduce((accu, periodIndex) => {
+  const result = _.range(1, periodCount + 1).reduce((accu, periodIndex) => {
     const occupied = periodIndexes.includes(periodIndex);
     return {
       flag: accu.flag || occupied,

@@ -1,9 +1,10 @@
 <template>
   <scheduling-table
-    :count="count"
-    :term-teachers="termTeachers"
-    :timetables="timetables"
-    :tutorial-pieces="tutorialPieces"
+    v-if="term"
+    :position-count="term.positionCount"
+    :term-teachers="term.termTeachers"
+    :timetables="term.timetables"
+    :tutorial-pieces="term.tutorialPieces"
     :droppables="droppables"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
     v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -22,12 +23,7 @@ import { validate } from './validator';
 export default Vue.extend({
   name: 'tutorial_pieces_container',
   data: () => ({
-    count: null,
-    studentOptimizationRules: [],
-    teacherOptimizationRules: [],
-    termTeachers: [],
-    timetables: [],
-    tutorialPieces: [],
+    term: null,
     droppables: [],
   }),
   methods: {
@@ -35,17 +31,7 @@ export default Vue.extend({
       const url = '/tutorial_pieces.json';
       const response = await axios.get(url);
       const { term } = response.data;
-      this.count = {
-        dateCount: term.dateCount,
-        periodCount: term.periodCount,
-        seatCount: term.seatCount,
-        positionCount: term.positionCount,
-      };
-      this.studentOptimizationRules = term.studentOptimizationRules;
-      this.teacherOptimizationRules = term.teacherOptimizationRules;
-      this.termTeachers = term.termTeachers;
-      this.timetables = term.timetables;
-      this.tutorialPieces = term.tutorialPieces;
+      this.term = term;
       return response;
     },
     updateTutorialPiece: async function(tutorialPieceId: number, seatId: number) {
@@ -58,13 +44,14 @@ export default Vue.extend({
       event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.dropEffect = 'move';
-      this.droppables = this.termTeachers.reduce((accu1, destTermTeacher) => {
-        return accu1.concat(this.timetables.reduce((accu2, destTimetable) => {
+      this.droppables = this.term.termTeachers.reduce((accu1, destTermTeacher) => {
+        return accu1.concat(this.term.timetables.reduce((accu2, destTimetable) => {
           const isValid = validate(
-            this.count,
-            this.studentOptimizationRules,
-            this.teacherOptimizationRules,
-            this.timetables,
+            this.term.periodCount,
+            this.term.seatCount,
+            this.term.studentOptimizationRules,
+            this.term.teacherOptimizationRules,
+            this.term.timetables,
             srcTimetable,
             destTimetable,
             destTermTeacher,
@@ -89,15 +76,13 @@ export default Vue.extend({
       this.droppables = [];
     },
     onDragOver: function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
-      if (this.isDroppable(destTimetable, termTeacher)) {
-        event.preventDefault();
-      }
-    },
-    isDroppable: function(timetable: Timetable, termTeacher: TermTeacher) {
-      return this.droppables.some((droppable) => {
-        return droppable.timetableId === timetable.id &&
+      const isDroppable = this.droppables.some((droppable) => {
+        return droppable.timetableId === destTimetable.id &&
           droppable.termTeacherId === termTeacher.id;
       });
+      if (isDroppable) {
+        event.preventDefault();
+      }
     },
   },
   created: async function() {

@@ -1,10 +1,3 @@
-export type Count = {
-  dateCount: number,
-  periodCount: number,
-  seatCount: number,
-  positionCount: number;
-};
-
 export type StudentOptimizationRule = {
   id: number,
   schoolGrade: SchoolGrade,
