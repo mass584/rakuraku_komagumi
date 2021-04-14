@@ -13,7 +13,7 @@ export const validate = (
   studentOptimizationRules: StudentOptimizationRule[],
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
-  srcTimetable: Timetable,
+  srcTimetable: Timetable | null,
   destTimetable: Timetable,
   termTeacher: TermTeacher,
   tutorialPiece: TutorialPiece,
@@ -83,7 +83,7 @@ const isNotDuplicateStudent = (
 const isOccupationLimitStudent = (
   studentOptimizationRules: StudentOptimizationRule[],
   timetables: Timetable[],
-  srcTimetable: Timetable,
+  srcTimetable: Timetable | null,
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
@@ -93,7 +93,7 @@ const isOccupationLimitStudent = (
     return item.schoolGrade === termStudentSchoolGrade;
   });
   const occupationLimit = optimizationRule ? optimizationRule.occupationLimit : 0;
-  const srcDateIndex = srcTimetable.dateIndex;
+  const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
   const isDifferentDate = srcDateIndex !== destDateIndex;
 
@@ -114,12 +114,12 @@ const isOccupationLimitStudent = (
 const isOccupationLimitTeacher = (
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
-  srcTimetable: Timetable,
+  srcTimetable: Timetable | null,
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
   const termTeacherId = tutorialPiece.termTeacherId;
-  const srcDateIndex = srcTimetable.dateIndex;
+  const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
   const isDifferentDate = srcDateIndex !== destDateIndex;
 
@@ -142,7 +142,7 @@ const isBlankLimitStudent = (
   periodCount: number,
   studentOptimizationRules: StudentOptimizationRule[],
   timetables: Timetable[],
-  srcTimetable: Timetable,
+  srcTimetable: Timetable | null,
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
@@ -152,11 +152,12 @@ const isBlankLimitStudent = (
     return item.schoolGrade === termStudentSchoolGrade;
   });
   const blankLimit = optimizationRule ? optimizationRule.blankLimit : 0;
-  const srcDateIndex = srcTimetable.dateIndex;
+  const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
 
   const srcDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
+      srcTimetable &&
       timetable.id !== srcTimetable.id &&
       timetable.dateIndex === srcDateIndex &&
       timetable.occupiedTermStudentIds.includes(termStudentId);
@@ -170,7 +171,7 @@ const isBlankLimitStudent = (
 
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
-      timetable.id !== srcTimetable.id &&
+      timetable.id !== destTimetable.id &&
       timetable.dateIndex === destDateIndex &&
       timetable.occupiedTermStudentIds.includes(termStudentId);
     const isDestTutorial = timetable.id === destTimetable.id;
@@ -188,17 +189,18 @@ const isBlankLimitTeacher = (
   periodCount: number,
   teacherOptimizationRules: TeacherOptimizationRule[],
   timetables: Timetable[],
-  srcTimetable: Timetable,
+  srcTimetable: Timetable | null,
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
   const termTeacherId = tutorialPiece.termTeacherId;
   const blankLimit = teacherOptimizationRules[0].blankLimit;
-  const srcDateIndex = srcTimetable.dateIndex;
+  const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
 
   const srcDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
+      srcTimetable &&
       timetable.id !== srcTimetable.id &&
       timetable.dateIndex === srcDateIndex &&
       timetable.occupiedTermTeacherIds.includes(termTeacherId);
@@ -212,7 +214,7 @@ const isBlankLimitTeacher = (
 
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
-      timetable.id !== srcTimetable.id &&
+      timetable.id !== destTimetable.id &&
       timetable.dateIndex === destDateIndex &&
       timetable.occupiedTermStudentIds.includes(termTeacherId);
     const isDestTutorial = timetable.id === destTimetable.id;

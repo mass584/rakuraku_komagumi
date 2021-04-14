@@ -3,16 +3,21 @@
     <table class="table table-borderless">
       <thead>
         <tr>
-          <th class="nospace fixed1">
+          <td class="nospace fixed1">
             <div class="border w-150px h-60px d-table">
-              <div class="d-table-cell align-middle">日付・時限（残席）</div>
+              <div class="d-table-cell align-middle">日付 時限（残席）</div>
             </div>
-          </th>
-          <th class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
+          </td>
+          <td class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
             <div class="border h-60px">
-              {{ termTeacher.termTeacherName }}
+              <stand-by
+                :tutorialPieces="tutorialPieces"
+                :termTeacher="termTeacher"
+                v-on:dragstart="$emit('dragstart', { ...$event, timetable: null, termTeacher })"
+                v-on:dragend="$emit('dragend', { ...$event, timetable: null, termTeacher })"
+              />
             </div>
-          </th>
+          </td>
         </tr>
       </thead>
       <tbody>
@@ -47,6 +52,7 @@
 import Vue from 'vue';
 
 import './Seat.vue';
+import './StandBy.vue';
 
 export default Vue.component('scheduling-table', {
   props: {
