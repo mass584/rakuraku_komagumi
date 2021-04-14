@@ -32,6 +32,7 @@
               :timetable="timetable"
               :term-teacher="termTeacher"
               v-on:dragstart="$emit('dragstart', { ...$event, timetable, termTeacher })"
+              v-on:dragend="$emit('dragend', { ...$event, timetable, termTeacher })"
               v-on:drop="$emit('drop', { ...$event, timetable, termTeacher })"
               v-on:dragover="$emit('dragover', { ...$event, timetable, termTeacher })"
             />

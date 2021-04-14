@@ -20,6 +20,7 @@
       :is-droppable="isDroppable"
       :tutorial-piece="tutorialPiece(positionIndex)"
       v-on:dragstart="$emit('dragstart', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
+      v-on:dragend="$emit('dragend', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
       v-on:drop="$emit('drop', { event: $event })"
       v-on:dragover="$emit('dragover', { event: $event })"
     />

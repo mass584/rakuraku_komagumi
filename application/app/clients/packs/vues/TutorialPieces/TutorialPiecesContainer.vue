@@ -7,6 +7,7 @@
     :tutorial-pieces="term.tutorialPieces"
     :droppables="droppables"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
+    v-on:dragend="onDragEnd()"
     v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
     v-on:dragover="onDragOver($event.event, $event.timetable, $event.termTeacher)"
   />
@@ -62,6 +63,9 @@ export default Vue.extend({
         }, []));
       }, []);
     },
+    onDragEnd: function() {
+      this.droppables = [];
+    },
     onDrop: async function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));
       const termTeacherSeat = destTimetable.seats.find((seat) => {
@@ -73,7 +77,6 @@ export default Vue.extend({
       const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat.id;
       await this.updateTutorialPiece(tutorialPieceId, seatId);
       await this.fetchTutorialPieces();
-      this.droppables = [];
     },
     onDragOver: function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
       const isDroppable = this.droppables.some((droppable) => {

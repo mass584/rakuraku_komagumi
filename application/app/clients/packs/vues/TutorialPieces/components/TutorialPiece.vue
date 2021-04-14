@@ -3,6 +3,7 @@
     class="piece border text-center bg-warning"
     v-bind:draggable="!tutorialPiece.isFixed"
     v-on:dragstart="$emit('dragstart', { event: $event })"
+    v-on:dragend="$emit('dragend', { event: $event })"
   >
     {{ displayText }}
   </div>

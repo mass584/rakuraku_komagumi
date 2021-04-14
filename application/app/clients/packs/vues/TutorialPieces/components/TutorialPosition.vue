@@ -10,6 +10,7 @@
       :tutorial-piece="tutorialPiece"
       v-if="tutorialPiece"
       v-on:dragstart="$emit('dragstart', $event)"
+      v-on:dragend="$emit('dragend', $event)"
     />
   </div>
 </template>
