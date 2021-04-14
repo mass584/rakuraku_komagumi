@@ -6,7 +6,7 @@
     <div class="d-flex flex-column justify-content-between h-100">
       <div class="my-auto mx-1">
         <select class="form-select form-select-sm w-100" v-model="selectedId">
-          <option>
+          <option value="">
             未決定コマ
           </option>
           <option
