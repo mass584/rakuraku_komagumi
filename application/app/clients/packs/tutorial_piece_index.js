@@ -1,6 +1,6 @@
 import Axios from 'axios';
-import Vue from 'vue'
-import TutorialPiecesTable from './vues/TutorialPiecesTable'
+import Vue from 'vue';
+import TutorialPiecesContainer from './vues/TutorialPiecesContainer';
 
 Vue.config.productionTip = false
 
@@ -16,7 +16,7 @@ Axios.interceptors.request.use((config) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
-    el: '#tutorial_pieces_table',
-    render: (createElement) => createElement(TutorialPiecesTable),
+    el: '#tutorial_pieces_container',
+    render: (createElement) => createElement(TutorialPiecesContainer),
   });
 });

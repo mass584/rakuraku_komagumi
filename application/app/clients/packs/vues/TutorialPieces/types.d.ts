@@ -1,16 +1,8 @@
-export type Term = {
-  id: number,
-  name: string,
-  year: number,
+export type Count = {
   dateCount: number,
   periodCount: number,
   seatCount: number,
   positionCount: number;
-  studentOptimitzationRules: StudentOptimizationRule[];
-  teacherOptimizationRules: TeacherOptimizationRule[];
-  termTeachers: TermTeacher[];
-  timetables: Timetable[];
-  tutorialPieces: TutorialPiece[];
 };
 
 export type StudentOptimizationRule = {
@@ -30,21 +22,16 @@ export type Timetable = {
   id: number;
   dateIndex: number;
   periodIndex: number;
-  termGroupId: number;
-  termGroup: TermGroup | null;
+  termGroupId: number | null;
+  termGroupName: string | null;
+  termGroupTeacherId: number | null;
+  termGroupStudentIds: number[];
   isClosed: boolean;
   vacantTermTeacherIds: number[];
   vacantTermStudentIds: number[];
   occupiedTermTeacherIds: number[];
   occupiedTermStudentIds: number[];
   seats: Seat[];
-};
-
-export type TermGroup = {
-  id: number;
-  termTeacherId: number;
-  termGroupName: string;
-  termStudentIds: number[];
 };
 
 export type Seat = {
@@ -65,21 +52,14 @@ export type VacancyStatus = 'draft' | 'submitted' | 'fixed';
 
 export type TutorialPiece = {
   id: number;
-  tutorialContractId: number;
-  tutorialContract: TutorialContract;
   seatId: number | null;
   isFixed: boolean;
-};
-
-export type TutorialContract = {
-  id: number;
-  termTutorialId: number;
   termStudentId: number;
-  termTeacherId: number;
-  pieceCount: number;
-  termTutorialName: string;
   termStudentName: string;
   termStudentSchoolGrade: SchoolGrade;
+  termTutorialId: number;
+  termTutorialName: string;
+  termTeacherId: number;
 };
 
 export type SchoolGrade =
