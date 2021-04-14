@@ -1,5 +1,5 @@
 class TermSerializer < ActiveModel::Serializer
-  attributes :id, :name, :year, :date_count, :period_count, :seat_count, :position_count
+  attributes :date_count, :period_count, :seat_count, :position_count
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
   has_many :term_teachers
@@ -25,13 +25,26 @@ class TermSerializer < ActiveModel::Serializer
 
   class TimetableSerializer < ActiveModel::Serializer
     attributes :id, :date_index, :period_index, :term_group_id, :is_closed
+    attribute :term_group_name
+    attribute :term_group_teacher_id
+    attribute :term_group_student_ids
     attribute :vacant_term_teacher_ids
     attribute :vacant_term_student_ids
     attribute :occupied_term_teacher_ids
     attribute :occupied_term_student_ids
-
-    belongs_to :term_group
     has_many :seats
+
+    def term_group_name
+      object.term_group && object.term_group.group.name
+    end
+
+    def term_group_teacher_id
+      object.term_group && object.term_group.term_teacher_id
+    end
+
+    def term_group_student_ids
+      object.term_group ? object.term_group.group_contracts.pluck(:term_student_id) : [] 
+    end
 
     def vacant_term_teacher_ids
       object.teacher_vacancies.filter do |teacher_vacancy|
@@ -57,20 +70,6 @@ class TermSerializer < ActiveModel::Serializer
       end.flatten.uniq
     end
 
-    class TermGroupSerializer < ActiveModel::Serializer
-      attributes :id, :term_teacher_id
-      attribute :term_group_name
-      attribute :term_student_ids
-
-      def term_group_name
-        object.group.name
-      end
-
-      def term_student_ids
-        object.group_contracts.pluck(:term_student_id)
-      end
-    end
-
     class SeatSerializer < ActiveModel::Serializer
       attributes :id, :seat_index, :term_teacher_id, :position_count
       attribute :tutorial_piece_ids
@@ -82,26 +81,36 @@ class TermSerializer < ActiveModel::Serializer
   end
 
   class TutorialPieceSerializer < ActiveModel::Serializer
-    attributes :id, :tutorial_contract_id, :seat_id, :is_fixed
-    belongs_to :tutorial_contract
+    attributes :id, :seat_id, :is_fixed
+    attribute :term_student_id
+    attribute :term_student_name
+    attribute :term_student_school_grade
+    attribute :term_tutorial_id
+    attribute :term_tutorial_name
+    attribute :term_teacher_id
 
-    class TutorialContractSerializer < ActiveModel::Serializer
-      attributes :id, :term_tutorial_id, :term_student_id, :term_teacher_id, :piece_count
-      attribute :term_tutorial_name
-      attribute :term_student_name
-      attribute :term_student_school_grade
+    def term_student_id
+      object.tutorial_contract.term_student_id
+    end
 
-      def term_tutorial_name
-        object.term_tutorial.tutorial.name
-      end
+    def term_student_name
+      object.tutorial_contract.term_student.student.name
+    end
 
-      def term_student_name
-        object.term_student.student.name
-      end
+    def term_student_school_grade
+      object.tutorial_contract.term_student.school_grade
+    end
 
-      def term_student_school_grade
-        object.term_student.school_grade
-      end
+    def term_tutorial_id
+      object.tutorial_contract.term_tutorial_id
+    end
+
+    def term_tutorial_name
+      object.tutorial_contract.term_tutorial.tutorial.name
+    end
+
+    def term_teacher_id
+      object.tutorial_contract.term_teacher_id
     end
   end
 end
