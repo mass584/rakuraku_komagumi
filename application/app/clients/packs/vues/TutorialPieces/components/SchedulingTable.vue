@@ -46,7 +46,6 @@
 import Vue from 'vue';
 
 import './Seat.vue';
-import { Timetable, TermTeacher } from './TutorialPieces/types';
 
 export default Vue.component('scheduling-table', {
   props: {
@@ -57,7 +56,7 @@ export default Vue.component('scheduling-table', {
     droppables: Array,
   },
   methods: {
-    tutorialPiecesPerSeat: function(timetable: Timetable, termTeacher: TermTeacher) {
+    tutorialPiecesPerSeat: function(timetable, termTeacher) {
       const seat = timetable.seats.find((seat) => seat.termTeacherId === termTeacher.id);
       const tutorialPieceIds = seat ? seat.tutorialPieceIds : [];
       const tutorialPiece = this.tutorialPieces.filter(
@@ -65,7 +64,7 @@ export default Vue.component('scheduling-table', {
       );
       return tutorialPiece;
     },
-    isDroppable: function(timetable: Timetable, termTeacher: TermTeacher) {
+    isDroppable: function(timetable, termTeacher) {
       return this.droppables.some((droppable) => {
         return droppable.timetableId === timetable.id &&
           droppable.termTeacherId === termTeacher.id;

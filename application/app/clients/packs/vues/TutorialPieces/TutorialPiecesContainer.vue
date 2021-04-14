@@ -15,9 +15,9 @@
 import axios from 'axios';
 import Vue from 'vue';
 
-import './SchedulingTable.vue';
-import { Timetable, TermTeacher, TutorialPiece } from './TutorialPieces/types';
-import { validate } from './TutorialPieces/validator';
+import './components/SchedulingTable.vue';
+import { Timetable, TermTeacher, TutorialPiece } from './types';
+import { validate } from './validator';
 
 export default Vue.extend({
   name: 'tutorial_pieces_container',
