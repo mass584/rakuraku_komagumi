@@ -143,11 +143,12 @@ const isUnderStudentBlankLimit = (
 
   const srcDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     const isTutorial =
-      srcTimetable &&
-      timetable.id !== srcTimetable.id &&
+      srcTimetable && timetable.id !== srcTimetable.id &&
       timetable.dateIndex === srcDateIndex &&
       timetable.occupiedTermStudentIds.includes(termStudentId);
-    const isDestTutorial = timetable.id === destTimetable.id;
+    const isDestTutorial =
+      timetable.id === destTimetable.id &&
+      timetable.dateIndex === srcDateIndex;
     const isGroup =
       timetable.dateIndex === srcDateIndex &&
       timetable.termGroupStudentIds.includes(termStudentId);
@@ -160,7 +161,9 @@ const isUnderStudentBlankLimit = (
       timetable.id !== destTimetable.id &&
       timetable.dateIndex === destDateIndex &&
       timetable.occupiedTermStudentIds.includes(termStudentId);
-    const isDestTutorial = timetable.id === destTimetable.id;
+    const isDestTutorial =
+      timetable.id === destTimetable.id &&
+      timetable.dateIndex === destDateIndex;
     const isGroup =
       timetable.dateIndex === destDateIndex &&
       timetable.termGroupStudentIds.includes(termStudentId);
@@ -190,7 +193,9 @@ const isUnderTeacherBlankLimit = (
       timetable.id !== srcTimetable.id &&
       timetable.dateIndex === srcDateIndex &&
       timetable.occupiedTermTeacherIds.includes(termTeacherId);
-    const isDestTutorial = timetable.id === destTimetable.id;
+    const isDestTutorial =
+      timetable.dateIndex === destDateIndex &&
+      timetable.id === destTimetable.id;
     const isGroup =
       timetable.dateIndex === srcDateIndex &&
       timetable.termGroupTeacherId === termTeacherId;
@@ -203,7 +208,9 @@ const isUnderTeacherBlankLimit = (
       timetable.id !== destTimetable.id &&
       timetable.dateIndex === destDateIndex &&
       timetable.occupiedTermStudentIds.includes(termTeacherId);
-    const isDestTutorial = timetable.id === destTimetable.id;
+    const isDestTutorial =
+      timetable.dateIndex === destDateIndex &&
+      timetable.id === destTimetable.id;
     const isGroup =
       timetable.dateIndex === destDateIndex &&
       timetable.termGroupTeacherId === termTeacherId;
