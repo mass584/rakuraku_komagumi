@@ -7,41 +7,27 @@
   font-size: 12px;
   .nav-tabs {
     padding: 0 4px;
-    border-bottom: 1px solid #aaa !important;
   }
   .nav-link {
-    color: black;
-    margin: 5px 1px 0px 1px;
-    height: 35px;
-    border: 1px solid #aaa !important;
     background-color: #eee;
+    margin-top: 4px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #dee2e6;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
   }
   .nav-link:hover {
-    color: black;
-    margin: 3px 1px 0px 1px;
-    height: 37px;
-    border: 1px solid #aaa !important;
-    background-color: #eee;
-  }
-  .nav-link.disabled {
-    margin: 5px 1px 0px 1px;
-    height: 35px;
-    border: none !important;
+    border-top: 1px solid #eee;
+    border-left: 1px solid #eee;
+    border-right: 1px solid #eee;
   }
   .active {
     .nav-link {
-      color: black;
-      margin: 5px 1px 0px 1px;
-      height: 35px;
-      border-bottom-width: 0px !important;
       background-color: #fff;
-    }
-    .nav-link:hover {
-      color: black;
-      margin: 3px 1px 0px 1px;
-      height: 37px;
-      border-bottom-width: 0px !important;
-      background-color: #fff;
+      border-top: 1px solid #dee2e6;
+      border-bottom: 1px solid #fff;
+      border-left: 1px solid #dee2e6;
+      border-right: 1px solid #dee2e6;
     }
   }
 }
