@@ -20,7 +20,7 @@ Rails.application.routes.draw do
     resources :teacher_vacancies, only: [:update], defaults: { format: 'json' }
     resources :terms, only: [:index, :show]
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
-    resources :term_groups, only: [:create], defaults: { format: 'js' }
+    resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_students, only: [:index, :show]
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
     resources :term_teachers, only: [:index, :show]

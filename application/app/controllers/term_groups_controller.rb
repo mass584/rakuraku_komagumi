@@ -15,9 +15,24 @@ class TermGroupsController < ApplicationController
     end
   end
 
+  def update
+    @term_group = TermGroup.find_by(id: params[:id])
+    respond_to do |format|
+      if @term_group.update(update_params)
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
+    end
+  end
+
   private
 
   def create_params
     params.require(:term_group).permit(:term_id, :group_id)
+  end
+
+  def update_params
+    params.require(:term_group).permit(:term_teacher_id)
   end
 end

@@ -1,0 +1,21 @@
+button.btn.btn-secondary data-toggle="modal" data-target="#term_group_edit" = '集団担任'
+.modal.fade id="term_group_edit" role="dialog" area-hidden="true"
+  .modal-dialog role="document"
+    .modal-content
+      .modal-header
+        h4.modal-title 集団担任を変更する
+      .modal-body
+        - for term_group in term_groups
+          .my-4
+            = form_for term_group, url: term_group_path(term_group), remote: true do |f|
+              = f.label :term_teacher_id, "#{term_group.name}の担任"
+              .input-group
+                = f.select :term_teacher_id,
+                  options_for_select_term_teacher_id(@term),
+                  { include_blank: '選択してください' },
+                  { class: 'form-control custom-input' }
+                .input-group-append
+                  = f.submit '保存', {"class" => "btn btn-primary"}
+        #term_group_update_alert
+      .modal-footer
+        = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

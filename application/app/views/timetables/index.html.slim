@@ -1,6 +1,9 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'timetable' }
 .container-fluid.my-5
+  .row.float-left.mx-5
+    == render partial: 'term_groups/edit',
+      locals: { term_groups: @term_groups }
   .row.float-right.mx-5
     == render partial: 'application/pagenation',
       locals: { path: timetables_path, keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
