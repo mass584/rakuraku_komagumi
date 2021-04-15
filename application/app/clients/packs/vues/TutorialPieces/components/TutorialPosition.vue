@@ -1,7 +1,7 @@
 <template>
   <div
     class="position"
-    v-bind:class="{ 'bg-info': isDroppable, 'bg-secondary': isNotVacant }"
+    v-bind:class="{ 'bg-info': isDroppable, 'bg-secondary': isNotVacant || isDisabled }"
     v-on:drop="$emit('drop', $event)"
     v-on:dragover="$emit('dragover', $event)"
     v-on:dragenter.prevent
@@ -21,8 +21,9 @@ import './TutorialPiece.vue';
 
 export default Vue.component('tutorial-position', {
   props: {
-    isNotVacant: Boolean,
     isDroppable: Boolean,
+    isNotVacant: Boolean,
+    isDisabled: Boolean,
     tutorialPiece: Object,
   },
 }) 

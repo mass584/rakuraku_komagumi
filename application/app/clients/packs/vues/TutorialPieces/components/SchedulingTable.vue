@@ -40,6 +40,7 @@
             <seat
               :is-droppable="isDroppable(timetable, termTeacher)"
               :is-not-vacant="isNotVacant(timetable, termTeacher)"
+              :is-disabled="isDisabled(termTeacher)"
               :position-count="positionCount"
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
@@ -71,6 +72,7 @@ export default Vue.component('scheduling-table', {
     tutorialPieces: Array,
     droppables: Array,
     notVacants: Array,
+    isDisables: Array,
   },
   methods: {
     rowTopDisplayText: function(timetable) {
@@ -99,6 +101,11 @@ export default Vue.component('scheduling-table', {
       return this.notVacants.some((vacant) => {
         return vacant.timetableId === timetable.id &&
           vacant.termTeacherId === termTeacher.id;
+      });
+    },
+    isDisabled: function(termTeacher) {
+      return this.isDisables.some((isDisable) => {
+        return isDisable.termTeacherId === termTeacher.id;
       });
     },
   },

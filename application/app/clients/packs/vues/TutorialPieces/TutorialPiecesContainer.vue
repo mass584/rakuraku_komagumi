@@ -8,6 +8,7 @@
     :tutorial-pieces="term.tutorialPieces"
     :droppables="droppables"
     :notVacants="notVacants"
+    :isDisables="isDisables"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
     v-on:dragend="onDragEnd()"
     v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -29,6 +30,7 @@ export default Vue.extend({
     term: null,
     droppables: [],
     notVacants: [],
+    isDisables: [],
   }),
   methods: {
     fetchTutorialPieces: async function() {
@@ -68,14 +70,20 @@ export default Vue.extend({
         return { timetableId: timetable.id, termTeacherId: termTeacher.id };
       });;
       this.notVacants = this.term.timetables.filter((timetable) => {
-        return !isStudentVacant(timetable, tutorialPiece) || !isTeacherVacant(timetable, termTeacher)
+        return !isStudentVacant(timetable, tutorialPiece) || !isTeacherVacant(timetable, termTeacher);
       }).map((timetable) => {
         return { timetableId: timetable.id, termTeacherId: termTeacher.id };
+      });
+      this.isDisables = this.term.termTeachers.filter((item) => {
+        return item.id !== termTeacher.id;
+      }).map((item) => {
+        return { termTeacherId: item.id };
       });
     },
     onDragEnd: function() {
       this.droppables = [];
       this.notVacants = [];
+      this.isDisables = [];
     },
     onDrop: async function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));
