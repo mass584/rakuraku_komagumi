@@ -4,8 +4,13 @@
       <thead>
         <tr>
           <td class="nospace fixed1">
-            <div class="border w-150px h-60px d-table">
-              <div class="d-table-cell align-middle text-center">日時（残席）</div>
+            <div class="d-flex">
+              <div class="border w-150px h-60px d-table">
+                <div class="d-table-cell align-middle text-center">日時</div>
+              </div>
+              <div class="border w-50px h-60px d-table">
+                <div class="d-table-cell align-middle text-center">残席</div>
+              </div>
             </div>
           </td>
           <td class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
@@ -32,9 +37,16 @@
           }"
         >
           <td class="nospace fixed2">
-            <div class="border w-150px h-30px d-table">
-              <div class="d-table-cell align-middle text-center">
-                {{ rowTopDisplayText(timetable) }}
+            <div class="d-flex">
+              <div class="border w-150px h-30px d-table">
+                <div class="d-table-cell align-middle text-center">
+                  {{ dateDisplayText(timetable) }}
+                </div>
+              </div>
+              <div class="border w-50px h-30px d-table">
+                <div class="d-table-cell align-middle text-center">
+                  {{ seatDisplayText(timetable) }}
+                </div>
               </div>
             </div>
           </td>
@@ -60,6 +72,7 @@
 </template>
 
 <script lang="ts">
+import moment from 'moment';
 import Vue from 'vue';
 
 import './Seat.vue';
@@ -67,6 +80,7 @@ import './StandBy.vue';
 
 export default Vue.component('scheduling-table', {
   props: {
+    beginAt: String,
     seatCount: Number,
     positionCount: Number,
     termTeachers: Array,
@@ -77,12 +91,17 @@ export default Vue.component('scheduling-table', {
     isDisables: Array,
   },
   methods: {
-    rowTopDisplayText: function(timetable) {
+    dateDisplayText: function(timetable) {
+      const date = moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+
+      return `${date} ${timetable.periodIndex}限`;
+    },
+    seatDisplayText: function(timetable) {
       const maxSeat = this.seatCount;
       const occupiedSeat = timetable.occupiedTermTeacherIds.length;
       const unoccupiedSeat = maxSeat - occupiedSeat;
 
-      return `${timetable.dateIndex}日目${timetable.periodIndex}限（${unoccupiedSeat}席）`;
+      return `${unoccupiedSeat}席`;
     },
     tutorialPiecesPerSeat: function(timetable, termTeacher) {
       const seat = timetable.seats.find((seat) => seat.termTeacherId === termTeacher.id);
@@ -134,8 +153,14 @@ export default Vue.component('scheduling-table', {
   margin: 0;
   padding: 0;
 }
+.w-50px {
+  width: 50px;
+}
 .w-150px {
   width: 150px;
+}
+.w-200px {
+  width: 200px;
 }
 .h-30px {
   height: 30px;
