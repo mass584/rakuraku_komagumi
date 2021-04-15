@@ -1,9 +1,10 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'student_request' }
-.container
-  .row.float-right.mx-5
-    == render partial: 'application/pagenation',
-      locals: { path: term_student_path(@term_student), keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
+.container.my-5
+  .row.float-left.mx-5.mb-3
+    p.h4 = "#{@term_student.name}さん（#{@term_student.school_grade_i18n}）の予定"
+  .row.float-right.mx-5.mb-3
+    = button_to '戻る', term_students_path, { class: 'btn btn-secondary', method: :get }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
     table.table
       thead.thead-dark
@@ -18,8 +19,4 @@
             - @term.period_index_array.each do |period_index|
               td.align-middle
                 = student_vacancy_button(@term_student, @student_vacancies, date_index, period_index)
-  .text-center
-    = button_to '戻る',
-      term_students_path,
-      {class: 'btn btn-dark', method: :get}
 == javascript_pack_tag 'term_student_show.js'

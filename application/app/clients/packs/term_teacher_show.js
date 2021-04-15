@@ -29,7 +29,7 @@ const onClickButton = (event) => {
     $.ajax({
       type: 'put',
       url,
-      data: JSON.stringify({ teacher_vacancy: { is_vacant: false } }),
+      data: JSON.stringify({ teacher_vacancy: { is_vacant: true } }),
       contentType: 'application/json',
     }).done(() => {
       buttonElement.addClass('btn-primary');

@@ -1,6 +1,5 @@
 class TermTeachersController < ApplicationController
   INDEX_PAGE_SIZE = 10
-  SHOW_PAGE_SIZE = 7
 
   before_action :authenticate_user!
   before_action :set_rooms!
@@ -26,9 +25,7 @@ class TermTeachersController < ApplicationController
   end
 
   def show
-    @page = sanitize_integer_query_param(params[:page]) || 1
-    @page_size = SHOW_PAGE_SIZE
-    @term_teacher = TermTeacher.find(params[:id])
+    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find(params[:id])
     @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
