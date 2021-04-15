@@ -10,6 +10,8 @@
     :droppables="droppables"
     :notVacants="notVacants"
     :isDisables="isDisables"
+    v-on:toggle="onClickToggle($event.tutorialPiece)"
+    v-on:delete="onClickDelete($event.tutorialPiece)"
     v-on:pushleft="onPushLeft($event.termTeacher)"
     v-on:pushright="onPushRight($event.termTeacher)"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
@@ -44,9 +46,9 @@ export default Vue.extend({
       this.term = term;
       return response;
     },
-    updateTutorialPiece: async function(tutorialPieceId: number, seatId: number) {
+    updateTutorialPiece: async function(tutorialPieceId: number, seatId: number | null, isFixed: boolean) {
       const url = `/tutorial_pieces/${tutorialPieceId}`;
-      const reqBody = { tutorial_piece: { seat_id: seatId } };
+      const reqBody = { tutorial_piece: { seat_id: seatId, is_fixed: isFixed } };
       const response = await axios.put(url, reqBody);
       return response;
     },
@@ -83,6 +85,14 @@ export default Vue.extend({
         ...this.term,
         termTeachers: newTermTeachers,
       }
+    },
+    onClickToggle: async function(tutorialPiece) {
+      await this.updateTutorialPiece(tutorialPiece.id, tutorialPiece.seatId, !tutorialPiece.isFixed);
+      await this.fetchTutorialPieces();
+    },
+    onClickDelete: async function(tutorialPiece) {
+      await this.updateTutorialPiece(tutorialPiece.id, null, false);
+      await this.fetchTutorialPieces();
     },
     onDragStart: function(event, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
       event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);
@@ -132,7 +142,7 @@ export default Vue.extend({
         return seat.termTeacherId === null;
       });
       const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat.id;
-      await this.updateTutorialPiece(tutorialPieceId, seatId);
+      await this.updateTutorialPiece(tutorialPieceId, seatId, false);
       await this.fetchTutorialPieces();
     },
     onDragOver: function(event, destTimetable: Timetable, termTeacher: TermTeacher) {

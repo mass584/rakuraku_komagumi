@@ -1,11 +1,18 @@
 <template>
   <div
-    class="piece border text-center bg-warning"
+    class="px-1 d-flex align-item-center justify-content-between piece border text-center bg-warning"
+    v-bind:class="{ 'bg-warning-light': tutorialPiece.isFixed }"
     v-bind:draggable="!tutorialPiece.isFixed"
     v-on:dragstart="$emit('dragstart', { event: $event })"
     v-on:dragend="$emit('dragend', { event: $event })"
   >
-    {{ displayText }}
+    <div>
+      <small>{{ displayText }}</small>
+    </div>
+    <div>
+      <i v-on:click="$emit('toggle', { event: $event })" class="bi bi-key"></i>
+      <i v-on:click="$emit('delete', { event: $event })" class="bi bi-x-circle"></i>
+    </div>
   </div>
 </template>
 
@@ -19,7 +26,7 @@ export default Vue.component('tutorial-piece', {
   computed: {
     displayText() {
       const studentName = this.tutorialPiece.termStudentName;
-      const studentSchoolGrade = this.tutorialPiece.termStudentSchoolGrade;
+      const studentSchoolGrade = this.tutorialPiece.termStudentSchoolGradeI18n;
       const tutorialName = this.tutorialPiece.termTutorialName.charAt(0);
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;

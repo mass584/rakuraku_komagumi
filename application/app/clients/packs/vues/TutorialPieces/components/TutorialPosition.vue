@@ -11,6 +11,8 @@
       v-if="tutorialPiece"
       v-on:dragstart="$emit('dragstart', $event)"
       v-on:dragend="$emit('dragend', $event)"
+      v-on:toggle="$emit('toggle', $event)"
+      v-on:delete="$emit('delete', $event)"
     />
   </div>
 </template>

@@ -1,7 +1,7 @@
 <template>
   <div class="d-table">
     <div class="text-center d-table-cell align-middle position bg-secondary">
-      休講
+      <small>休講</small>
     </div>
   </div>
 </template>

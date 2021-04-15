@@ -50,6 +50,7 @@ export type TutorialPiece = {
   termStudentId: number;
   termStudentName: string;
   termStudentSchoolGrade: SchoolGrade;
+  termStudentSchoolGradeI18n: string;
   termTutorialId: number;
   termTutorialName: string;
   termTeacherId: number;
