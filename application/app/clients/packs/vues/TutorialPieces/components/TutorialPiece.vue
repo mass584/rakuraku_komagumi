@@ -1,6 +1,6 @@
 <template>
   <div
-    class="px-1 d-flex align-item-center justify-content-between piece border text-center bg-warning"
+    class="px-1 d-flex align-item-center justify-content-between piece border border-white text-center bg-warning"
     v-bind:class="{ 'bg-warning-light': tutorialPiece.isFixed }"
     v-bind:draggable="!tutorialPiece.isFixed"
     v-on:dragstart="$emit('dragstart', { event: $event })"
