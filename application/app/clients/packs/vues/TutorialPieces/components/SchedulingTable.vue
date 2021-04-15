@@ -13,6 +13,8 @@
               <stand-by
                 :tutorialPieces="tutorialPieces"
                 :termTeacher="termTeacher"
+                v-on:pushleft="$emit('pushleft', $event)"
+                v-on:pushright="$emit('pushright', $event)"
                 v-on:dragstart="$emit('dragstart', { ...$event, timetable: null, termTeacher })"
                 v-on:dragend="$emit('dragend', { ...$event, timetable: null, termTeacher })"
               />

@@ -9,6 +9,8 @@
     :droppables="droppables"
     :notVacants="notVacants"
     :isDisables="isDisables"
+    v-on:pushleft="onPushLeft($event.termTeacher)"
+    v-on:pushright="onPushRight($event.termTeacher)"
     v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
     v-on:dragend="onDragEnd()"
     v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -18,6 +20,7 @@
 
 <script lang="ts">
 import axios from 'axios';
+import _ from 'lodash';
 import Vue from 'vue';
 
 import './components/SchedulingTable.vue';
@@ -45,6 +48,40 @@ export default Vue.extend({
       const reqBody = { tutorial_piece: { seat_id: seatId } };
       const response = await axios.put(url, reqBody);
       return response;
+    },
+    onPushLeft: function(termTeacher) {
+      const termTeachers = this.term.termTeachers;
+      const rightIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
+        return item.id === termTeacher.id;
+      });
+      const leftIndex = rightIndex > 0 ? rightIndex - 1 : 0;
+      const leftArray = _.slice(termTeachers, 0, leftIndex);
+      const centerArray = rightIndex !== leftIndex ?
+        [termTeachers[rightIndex], termTeachers[leftIndex]] :
+        [termTeachers[rightIndex]];
+      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
+      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
+      this.term = {
+        ...this.term,
+        termTeachers: newTermTeachers,
+      }
+    },
+    onPushRight: function(termTeacher) {
+      const termTeachers = this.term.termTeachers;
+      const leftIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
+        return item.id === termTeacher.id;
+      });
+      const rightIndex = leftIndex < termTeachers.length - 1 ? leftIndex + 1 : termTeachers.length - 1;
+      const leftArray = _.slice(termTeachers, 0, leftIndex);
+      const centerArray = rightIndex !== leftIndex ?
+        [termTeachers[rightIndex], termTeachers[leftIndex]] :
+        [termTeachers[rightIndex]];
+      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
+      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
+      this.term = {
+        ...this.term,
+        termTeachers: newTermTeachers,
+      }
     },
     onDragStart: function(event, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
       event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);

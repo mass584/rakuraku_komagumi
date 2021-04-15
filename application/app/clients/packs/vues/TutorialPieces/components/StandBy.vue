@@ -1,7 +1,21 @@
 <template>
-  <div class="d-flex justify-content-between h-100 align-items-center">
-    <div class="text-center w-100">
-      {{ termTeacher.termTeacherName }}
+  <div class="d-flex justify-content-between align-items-center h-100">
+    <div class="d-flex justify-content-around align-items-center text-center w-100">
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        v-on:click="$emit('pushleft', { termTeacher })"
+      >
+        ◀︎
+      </button>
+      <div>{{ termTeacher.termTeacherName }}</div>
+      <button
+        type="button"
+        class="btn btn-outline-secondary btn-sm"
+        v-on:click="$emit('pushright', { termTeacher })"
+      >
+        ▶
+      </button>
     </div>
     <div class="d-flex flex-column justify-content-between h-100">
       <div class="my-auto mx-1">
