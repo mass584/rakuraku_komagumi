@@ -51,14 +51,19 @@ const isSeatVacant = (
   destTimetable: Timetable,
   tutorialPiece: TutorialPiece,
 ) => {
-  const occupiedSeatCount = destTimetable.occupiedTermTeacherIds.length;
-  const nullSeatVacant = occupiedSeatCount < seatCount;
   const termTeacherSeat = destTimetable.seats.find((seat) => {
     return seat.termTeacherId === tutorialPiece.termTeacherId;
   });
-  const termTeacherSeatVacant = termTeacherSeat && (termTeacherSeat.tutorialPieceIds.length < positionCount);
+  const isVacant = (() => {
+    if (termTeacherSeat) {
+      return termTeacherSeat.tutorialPieceIds.length < positionCount;
+    } else {
+      const occupiedSeatCount = destTimetable.occupiedTermTeacherIds.length;
+      return occupiedSeatCount < seatCount;
+    }
+  })();
 
-  return termTeacherSeatVacant || nullSeatVacant;
+  return isVacant;
 };
 
 const isNotDuplicateStudent = (
@@ -140,28 +145,28 @@ const isUnderStudentBlankLimit = (
   const blankLimit = optimizationRule ? optimizationRule.blankLimit : 0;
   const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
-
   const srcDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     return timetable.dateIndex === srcDateIndex;
   }).filter((timetable) => {
-    const isTutorial =
-      srcTimetable && timetable.id !== srcTimetable.id &&
-      timetable.occupiedTermStudentIds.includes(termStudentId);
+    const isTutorialBefore = timetable.occupiedTermStudentIds.includes(termStudentId);
+    const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
+    const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
     const isGroup = timetable.termGroupStudentIds.includes(termStudentId);
-    return isTutorial || isDestTutorial || isGroup;
-  }).map((item) => item.periodIndex);
-  const srcDateOk = dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
 
+    return isTutorial || isGroup;
+  }).map((item) => item.periodIndex);
+  const srcDateOk = !srcTimetable || dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     return timetable.dateIndex === destDateIndex;
   }).filter((timetable) => {
-    const isTutorial =
-      timetable.id !== destTimetable.id &&
-      timetable.occupiedTermStudentIds.includes(termStudentId);
+    const isTutorialBefore = timetable.occupiedTermStudentIds.includes(termStudentId);
+    const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
+    const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
     const isGroup = timetable.termGroupStudentIds.includes(termStudentId);
-    return isTutorial || isDestTutorial || isGroup;
+
+    return isTutorial || isGroup;
   }).map((item) => item.periodIndex);
   const destDateOk = dailyBlanksFrom(periodCount, destDateOccupiedPeriodIndexes) <= blankLimit;
 
@@ -180,31 +185,28 @@ const isUnderTeacherBlankLimit = (
   const blankLimit = teacherOptimizationRules[0].blankLimit;
   const srcDateIndex = srcTimetable ? srcTimetable.dateIndex : null;
   const destDateIndex = destTimetable.dateIndex;
-
   const srcDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     return timetable.dateIndex === srcDateIndex;
   }).filter((timetable) => {
-    const isTutorial =
-      srcTimetable &&
-      timetable.id !== srcTimetable.id &&
-      timetable.occupiedTermTeacherIds.includes(termTeacherId);
+    const isTutorialBefore = timetable.occupiedTermTeacherIds.includes(termTeacherId);
+    const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
+    const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
     const isGroup = timetable.termGroupTeacherId === termTeacherId;
 
-    return isTutorial || isDestTutorial || isGroup;
+    return isTutorial || isGroup;
   }).map((item) => item.periodIndex);
-  const srcDateOk = dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
-
+  const srcDateOk = !srcTimetable || dailyBlanksFrom(periodCount, srcDateOccupiedPeriodIndexes) <= blankLimit;
   const destDateOccupiedPeriodIndexes = timetables.filter((timetable) => {
     return timetable.dateIndex === destDateIndex;
   }).filter((timetable) => {
-    const isTutorial =
-      timetable.id !== srcTimetable.id &&
-      timetable.occupiedTermTeacherIds.includes(termTeacherId);
+    const isTutorialBefore = timetable.occupiedTermTeacherIds.includes(termTeacherId);
+    const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
+    const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
     const isGroup = timetable.termGroupTeacherId === termTeacherId;
 
-    return isTutorial || isDestTutorial || isGroup;
+    return isTutorial || isGroup;
   }).map((item) => item.periodIndex);
   const destDateOk = dailyBlanksFrom(periodCount, destDateOccupiedPeriodIndexes) <= blankLimit;
 

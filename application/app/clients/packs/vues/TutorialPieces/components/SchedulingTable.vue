@@ -1,5 +1,5 @@
 <template>
-  <div class="table-wrapper overflow-auto">
+  <div class="table-wrapper overflow-auto border border-secondary">
     <table class="table table-borderless">
       <thead>
         <tr>
@@ -21,7 +21,14 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="timetable in timetables" v-bind:key="timetable.id">
+        <tr
+          v-for="timetable in timetables"
+          v-bind:key="timetable.id"
+          v-bind:class="{
+            'border-top': timetable.periodIndex === 1,
+            'border-secondary': timetable.periodIndex === 1,
+          }"
+        >
           <td class="nospace fixed2">
             <div class="border w-150px h-30px d-table">
               <div class="d-table-cell align-middle text-center">

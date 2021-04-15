@@ -43,7 +43,7 @@ class TermSerializer < ActiveModel::Serializer
     end
 
     def term_group_student_ids
-      object.term_group ? object.term_group.group_contracts.pluck(:term_student_id) : [] 
+      object.term_group ? object.term_group.group_contracts.where(is_contracted: true).pluck(:term_student_id) : [] 
     end
 
     def vacant_term_teacher_ids
