@@ -87,6 +87,7 @@ class TermSerializer < ActiveModel::Serializer
     attribute :term_student_id
     attribute :term_student_name
     attribute :term_student_school_grade
+    attribute :term_student_school_grade_i18n
     attribute :term_tutorial_id
     attribute :term_tutorial_name
     attribute :term_teacher_id
@@ -101,6 +102,10 @@ class TermSerializer < ActiveModel::Serializer
 
     def term_student_school_grade
       object.tutorial_contract.term_student.school_grade
+    end
+
+    def term_student_school_grade_i18n
+      object.tutorial_contract.term_student.school_grade_i18n
     end
 
     def term_tutorial_id

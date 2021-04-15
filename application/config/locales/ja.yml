@@ -174,19 +174,19 @@ ja:
   enums:
     student:
       school_grade:
-        e1: 小学１年
-        e2: 小学２年
-        e3: 小学３年
-        e4: 小学４年
-        e5: 小学５年
-        e6: 小学６年
-        j1: 中学１年
-        j2: 中学２年
-        j3: 中学３年
-        h1: 高校１年
-        h2: 高校２年
-        h3: 高校３年
-        other: その他
+        e1: 小1
+        e2: 小2
+        e3: 小3
+        e4: 小4
+        e5: 小5
+        e6: 小6
+        j1: 中1
+        j2: 中2
+        j3: 中3
+        h1: 高1
+        h2: 高2
+        h3: 高3
+        other: 他
     term:
       term_type:
         normal: 通常期
@@ -194,19 +194,19 @@ ja:
         exam_planning: テスト対策
     student_optimization_rule:
       school_grade:
-        e1: 小学１年
-        e2: 小学２年
-        e3: 小学３年
-        e4: 小学４年
-        e5: 小学５年
-        e6: 小学６年
-        j1: 中学１年
-        j2: 中学２年
-        j3: 中学３年
-        h1: 高校１年
-        h2: 高校２年
-        h3: 高校３年
-        other: その他
+        e1: 小1
+        e2: 小2
+        e3: 小3
+        e4: 小4
+        e5: 小5
+        e6: 小6
+        j1: 中1
+        j2: 中2
+        j3: 中3
+        h1: 高1
+        h2: 高2
+        h3: 高3
+        other: 他
     term_teacher:
       vacancy_status:
         draft: 編集中
@@ -214,19 +214,19 @@ ja:
         fixed: 確定
     term_student:
       school_grade:
-        e1: 小学１年
-        e2: 小学２年
-        e3: 小学３年
-        e4: 小学４年
-        e5: 小学５年
-        e6: 小学６年
-        j1: 中学１年
-        j2: 中学２年
-        j3: 中学３年
-        h1: 高校１年
-        h2: 高校２年
-        h3: 高校３年
-        other: その他
+        e1: 小1
+        e2: 小2
+        e3: 小3
+        e4: 小4
+        e5: 小5
+        e6: 小6
+        j1: 中1
+        j2: 中2
+        j3: 中3
+        h1: 高1
+        h2: 高2
+        h3: 高3
+        other: 他
       vacancy_status:
         draft: 編集中
         submitted: 提出済み
