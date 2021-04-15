@@ -5,24 +5,25 @@
     == render partial: 'application/pagenation',
       locals: { path: timetables_path, keyword: nil, page: @page, max_page: max_page(@term.date_count, @page_size) }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
-    table.table
-      thead.thead-dark
-        tr
-          th.align-middle 時限
-          - @term.period_index_array.each do |period_index|
-            th.align-middle #{period_index}限
-      tbody
-        tr
-          td.align-middle.bg-light 開始時刻
-          - @term.period_index_array.each do |period_index|
-            = begin_at_cell(@begin_end_times, period_index)
-        tr
-          td.align-middle.bg-light 終了時刻
-          - @term.period_index_array.each do |period_index|
-            = end_at_cell(@begin_end_times, period_index)
-        - @term.date_index_array(@page).each do |date_index|
+    .overflow-auto.w-100
+      table.table.table-sm
+        thead.thead-dark
           tr
-            td.align-middle = I18n.l(@term.date_index_to_date(date_index))
+            th.align-middle.min-width-150 時限
             - @term.period_index_array.each do |period_index|
-              = timetable_table_cell(@timetables, @term_groups, date_index, period_index)
+              th.align-middle.min-width-150 #{period_index}限
+        tbody
+          tr
+            td.align-middle.bg-light.min-width-150 開始時刻
+            - @term.period_index_array.each do |period_index|
+              = begin_at_cell(@begin_end_times, period_index)
+          tr
+            td.align-middle.bg-light.min-width-150 終了時刻
+            - @term.period_index_array.each do |period_index|
+              = end_at_cell(@begin_end_times, period_index)
+          - @term.date_index_array(@page).each do |date_index|
+            tr
+              td.align-middle.min-width-150 = I18n.l(@term.date_index_to_date(date_index))
+              - @term.period_index_array.each do |period_index|
+                = timetable_table_cell(@timetables, @term_groups, date_index, period_index)
 == javascript_pack_tag 'timetable_index.js'

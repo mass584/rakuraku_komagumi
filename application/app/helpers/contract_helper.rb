@@ -25,7 +25,7 @@ module ContractHelper
     tutorial_contract = tutorial_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_tutorial_id == term_tutorial.id
     end
-    td_class = tutorial_contract.is_active? ? 'align-middle bg-warning' : 'align-middle'
+    td_class = tutorial_contract.is_active? ? 'align-middle min-width-200 bg-warning' : 'align-middle min-width-200'
     content_tag(:td, class: td_class) do
       concat(
         content_tag(:div,
@@ -67,20 +67,13 @@ module ContractHelper
     group_contract = group_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_group_id == term_group.id
     end
-    td_class = group_contract.is_contracted ? 'align-middle bg-warning' : 'align-middle'
+    td_class = group_contract.is_contracted ? 'align-middle bg-warning min-width-150' : 'align-middle min-width-150'
     content_tag(:td, class: td_class) do
-      concat(
-        content_tag(:div,
-                    'data-id' => group_contract.id,
-                    'data-is_contracted' => group_contract.is_contracted,
-                    'class' => 'row align-items-center') do
-          concat(
-            content_tag(:div, class: 'col-9 pl-4 pr-2') do
-              concat select_tag_is_contracted(group_contract)
-            end,
-          )
-        end,
-      )
+      content_tag(:div,
+                  'data-id' => group_contract.id,
+                  'data-is_contracted' => group_contract.is_contracted) do
+        select_tag_is_contracted(group_contract)
+      end
     end
   end
 end
