@@ -1,9 +1,6 @@
 import Axios from 'axios';
-import Vue from 'vue'
-import Vuex from 'vuex'
-import Pieces from './vues/pieces.vue'
-
-Vue.use(Vuex)
+import Vue from 'vue';
+import TutorialPiecesContainer from './vues/TutorialPieces/TutorialPiecesContainer';
 
 Vue.config.productionTip = false
 
@@ -19,7 +16,7 @@ Axios.interceptors.request.use((config) => {
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
-    el: '#app',
-    render: (h) => h(Pieces, { props: { termId: 1 } }),
+    el: '#tutorial_pieces_container',
+    render: (createElement) => createElement(TutorialPiecesContainer),
   });
-})
+});

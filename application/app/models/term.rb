@@ -7,7 +7,7 @@ class Term < ApplicationRecord
   has_many :term_tutorials, dependent: :destroy
   has_many :term_groups, dependent: :destroy
   has_many :begin_end_times, dependent: :destroy
-  has_many :timetables, dependent: :destroy
+  has_many :timetables, -> { ordered }, dependent: :destroy
   has_many :seats, dependent: :destroy
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy

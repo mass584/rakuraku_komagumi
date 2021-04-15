@@ -19,6 +19,8 @@ class Timetable < ApplicationRecord
            on: :update,
            if: :will_save_change_to_term_group_id?
 
+  scope :ordered, -> { order(date_index: 'ASC', period_index: 'ASC') }
+
   before_create :set_nest_objects
 
   def self.new(attributes = {})
