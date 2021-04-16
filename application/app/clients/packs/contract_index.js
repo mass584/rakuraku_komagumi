@@ -16,8 +16,8 @@ const onChangeSelectTutorialContract = (event) => {
   const selectTermTeacherIdElement = selectWrapperElement.children('[id^=select_term_teacher_id]');
   const selectPieceCountElement = selectWrapperElement.children('[id^=select_piece_count]');
   const tutorialContractId = Number(tdInnerElement.data('id'));
-  const termTeacherId = Number(tdInnerElement.data('term_teacher_id')) || null;
-  const newTermTeacherId = Number(selectTermTeacherIdElement.val()) || null;
+  const termTeacherId = Number(tdInnerElement.data('term_teacher_id'));
+  const newTermTeacherId = Number(selectTermTeacherIdElement.val());
   const pieceCount = Number(tdInnerElement.data('piece_count'));
   const newPieceCount = Number(selectPieceCountElement.val());
   $.ajax({
@@ -25,7 +25,7 @@ const onChangeSelectTutorialContract = (event) => {
     url: `/tutorial_contracts/${tutorialContractId}`,
     data: JSON.stringify({
       tutorial_contract: {
-        term_teacher_id: newTermTeacherId,
+        term_teacher_id: newTermTeacherId === 0 ? null : newTermTeacherId,
         piece_count: newPieceCount,
       },
     }),
@@ -33,7 +33,7 @@ const onChangeSelectTutorialContract = (event) => {
   }).done(() => {
     tdInnerElement.data('term_teacher_id', newTermTeacherId);
     tdInnerElement.data('piece_count', newPieceCount);
-    if ( newPieceCount === 0 && newTermTeacherId === null ) {
+    if ( newPieceCount === 0 && newTermTeacherId === 0 ) {
       tdElement.removeClass('bg-warning');
     } else {
       tdElement.addClass('bg-warning');
@@ -73,7 +73,6 @@ const onChangeSelectGroupContract = (event) => {
     alert(responseJSON.message);
   });
 }
-
 
 const onClickDelete = (event) => {
   if (!window.confirm('削除してよろしいですか。')) return;

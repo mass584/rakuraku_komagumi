@@ -51,7 +51,7 @@ module TimetableHelper
       content_tag(:div,
                   'data-id' => timetable.id,
                   'data-is_closed' => timetable.is_closed,
-                  'data-term_group_id' => timetable.term_group_id,
+                  'data-term_group_id' => timetable.term_group_id || 0,
                   'class' => 'min-width-150') do
         select_tag_status(timetable, term_groups)
       end

@@ -27,29 +27,23 @@ module ContractHelper
     end
     td_class = tutorial_contract.is_active? ? 'align-middle min-width-200 bg-warning' : 'align-middle min-width-200'
     content_tag(:td, class: td_class) do
-      concat(
-        content_tag(:div,
-                    'data-id' => tutorial_contract.id,
-                    'data-piece_count' => tutorial_contract.piece_count,
-                    'data-term_teacher_id' => tutorial_contract.term_teacher_id,
-                    'class' => 'row align-items-center') do
-          concat(
-            content_tag(:div, class: 'col-9 pl-4 pr-2') do
-              concat select_tag_piece_count(tutorial_contract)
-              concat select_tag_term_teacher_id(tutorial_contract, term_teachers)
-            end,
-          )
-          concat(
-            content_tag(:div, class: 'col-3 pl-0 pr-4 d-flex align-items-end') do
-              concat button_tag(
-                '消',
-                id: "button_delete_#{tutorial_contract.id}",
-                class: %w[btn btn-sm btn-danger],
-              )
-            end,
-          )
-        end,
-      )
+      content_tag(:div,
+                  'data-id' => tutorial_contract.id,
+                  'data-piece_count' => tutorial_contract.piece_count,
+                  'data-term_teacher_id' => tutorial_contract.term_teacher_id || 0,
+                  'class' => 'row align-items-center') do
+        concat(
+          content_tag(:div, class: 'col-9 pr-2') do
+            concat select_tag_piece_count(tutorial_contract)
+            concat select_tag_term_teacher_id(tutorial_contract, term_teachers)
+          end,
+        )
+        concat(
+          content_tag(:div, class: 'col-3 px-0 d-flex align-items-end') do
+            button_tag('消', id: "button_delete_#{tutorial_contract.id}", class: %w[btn btn-sm btn-danger])
+          end,
+        )
+      end
     end
   end
 

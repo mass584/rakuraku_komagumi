@@ -59,17 +59,17 @@ const onChangeStatus = (event) => {
   const tdInnerElement = selectElement.parent();
   const tdElement = tdInnerElement.parent();
   const timetableId = tdInnerElement.data('id');
-  const isClosed = tdInnerElement.data('is_closed') === 'true';
-  const termGroupId = Number(tdInnerElement.data('term_group_id')) || null;
-  const status = isClosed ? -1 : (termGroupId || 0);
+  const isClosed = tdInnerElement.data('is_closed');
+  const termGroupId = Number(tdInnerElement.data('term_group_id'));
+  const status = isClosed ? -1 : termGroupId;
   const newStatus = Number(selectElement.val());
   const newIsClosed = newStatus === -1;
-  const newTermGroupId = newStatus > 0 ? newStatus : null;
+  const newTermGroupId = newStatus > 0 ? newStatus : 0;
   const url = `/timetables/${timetableId}`;
   const data = {
     timetable: {
       is_closed: newIsClosed,
-      term_group_id: newTermGroupId,
+      term_group_id: newTermGroupId === 0 ? null : newTermGroupId,
     },
   };
   $.ajax({
