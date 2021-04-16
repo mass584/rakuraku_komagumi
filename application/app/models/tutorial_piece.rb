@@ -199,14 +199,14 @@ class TutorialPiece < ApplicationRecord
   end
 
   def save_seat_in_database
-    unless (@seat_in_database.present? && @seat_in_database.save)
-      raise ActiveRecord::Rollback
+    if @seat_in_database.present?
+      raise ActiveRecord::Rollback unless @seat_in_database.save
     end
   end
 
   def save_seat
-    unless (seat.present? && seat.save)
-      raise ActiveRecord::Rollback
+    if seat.present?
+      raise ActiveRecord::Rollback unless seat.save
     end
   end
 end
