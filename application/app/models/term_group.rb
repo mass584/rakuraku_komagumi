@@ -51,7 +51,7 @@ class TermGroup < ApplicationRecord
       accu || daily_occupations(date_index) > occupation_limit
     end
     if daily_occupations_invalid
-      errors[:base] << '講師の１日の合計コマの上限を超えています'
+      errors.add(:base, '講師の１日の合計コマの上限を超えています')
     end
   end
 
@@ -69,7 +69,7 @@ class TermGroup < ApplicationRecord
       accu || term_teacher_for_creation_daily_blanks(date_index) > blank_limit
     end
     if daily_blanks_invalid
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 
@@ -87,7 +87,7 @@ class TermGroup < ApplicationRecord
       accu || term_teacher_for_deletion_daily_blanks(date_index) > blank_limit
     end
     if daily_blanks_invalid
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 

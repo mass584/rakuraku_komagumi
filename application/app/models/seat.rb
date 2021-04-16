@@ -55,18 +55,18 @@ class Seat < ApplicationRecord
   # validate
   def verify_timetable
     if term_teacher_creation? && timetable.term_group_id.present?
-      errors[:base] << '集団科目が割り当てられています'
+      errors.add(:base, '集団科目が割り当てられています')
     end
 
     if term_teacher_creation? && timetable.is_closed
-      errors[:base] << '休講に設定されています'
+      errors.add(:base, '休講に設定されています')
     end
   end
 
   def verify_teacher_vacancy
     if (term_teacher_creation? || term_teacher_updation?) &&
        !timetable.teacher_vacancies.find_by(term_teacher_id: term_teacher_id).is_vacant
-      errors[:base] << '講師の予定が空いていません'
+      errors.add(:base, '講師の予定が空いていません')
     end
   end
 
@@ -77,11 +77,11 @@ class Seat < ApplicationRecord
 
   def verify_doublebooking
     if term_teacher_creation? && position_occupations(term_teacher_id, timetable) > 1
-      errors[:base] << '講師の予定が重複しています'
+      errors.add(:base, '講師の予定が重複しています')
     end
 
     if term_teacher_updation? && position_occupations(term_teacher_id, timetable) > 1
-      errors[:base] << '講師の予定が重複しています'
+      errors.add(:base, '講師の予定が重複しています')
     end
   end
 
@@ -96,7 +96,7 @@ class Seat < ApplicationRecord
   def verify_daily_occupation_limit
     if (term_teacher_creation? || term_teacher_updation?) &&
        daily_occupations > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の１日の合計コマの上限を超えています'
+      errors.add(:base, '講師の１日の合計コマの上限を超えています')
     end
   end
 
@@ -111,7 +111,7 @@ class Seat < ApplicationRecord
   def verify_daily_blank_limit_for_creation
     if (term_teacher_creation? || term_teacher_updation?) &&
        daily_blanks_for_creation > term_teacher.optimization_rule.blank_limit
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 
@@ -126,7 +126,7 @@ class Seat < ApplicationRecord
   def verify_daily_blank_limit_for_deletion
     if (term_teacher_updation? || term_teacher_deletion?) &&
        daily_blanks_for_deletion > @term_teacher_in_database.optimization_rule.blank_limit
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 

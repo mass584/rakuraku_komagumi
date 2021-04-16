@@ -51,7 +51,7 @@ class GroupContract < ApplicationRecord
     end
 
     if contract_creation? && daily_occupations_invalid
-      errors[:base] << '生徒の１日の合計コマの上限を超えています'
+      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
     end
   end
 
@@ -69,7 +69,7 @@ class GroupContract < ApplicationRecord
     end
 
     if daily_blanks_invalid
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
   end
 

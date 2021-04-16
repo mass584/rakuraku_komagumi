@@ -60,7 +60,7 @@ class TutorialPiece < ApplicationRecord
   # validate
   def verify_seat_occupation
     if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count >= seat.position_count
-      errors[:base] << '座席の最大人数をオーバーしています'
+      errors.add(:base, '座席の最大人数をオーバーしています')
     end
   end
 
@@ -68,14 +68,14 @@ class TutorialPiece < ApplicationRecord
     if (seat_creation? || seat_updation?) &&
       seat.term_teacher_id.present? &&
       seat.term_teacher_id != tutorial_contract.term_teacher_id
-      errors[:base] << '座席に割り当てられた講師と担当講師が一致しません'
+      errors.add(:base, '座席に割り当てられた講師と担当講師が一致しません')
     end
   end
 
   def verify_student_vacancy
     if (seat_creation? || seat_updation?) &&
        !seat.timetable.student_vacancies.find_by(term_student_id: tutorial_contract.term_student_id).is_vacant
-      errors[:base] << '生徒の予定が空いていません'
+      errors.add(:base, '生徒の予定が空いていません')
     end
   end
 
@@ -85,11 +85,11 @@ class TutorialPiece < ApplicationRecord
 
   def verify_doublebooking
     if seat_creation? && position_occupations(seat.timetable) > 1
-      errors[:base] << '生徒の予定が重複しています'
+      errors.add(:base, '生徒の予定が重複しています')
     end
 
     if seat_updation? && position_occupations(seat.timetable) > 1
-      errors[:base] << '生徒の予定が重複しています'
+      errors.add(:base, '生徒の予定が重複しています')
     end
   end
 
@@ -102,11 +102,11 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_occupation_limit
     limit = tutorial_contract.term_student.optimization_rule.occupation_limit
     if seat_creation? && daily_occupations(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の合計コマの上限を超えています'
+      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
     end
 
     if seat_updation? && daily_occupations(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の合計コマの上限を超えています'
+      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
     end
   end
 
@@ -119,18 +119,18 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_blank_limit
     limit = tutorial_contract.term_student.optimization_rule.blank_limit
     if seat_creation? && daily_blanks(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
 
     if seat_updation? && (
       daily_blanks(seat.timetable.date_index) > limit ||
       daily_blanks(@seat_in_database.timetable.date_index) > limit
     )
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
 
     if seat_deletion? && daily_blanks(@seat_in_database.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
   end
 
