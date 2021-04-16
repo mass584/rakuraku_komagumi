@@ -25,7 +25,7 @@ class TutorialPiecesController < ApplicationController
               ],
             },
           ])
-          .find_by(id: current_term.id)
+          .find_by(id: @term.id)
         render json: term, serializer: TermSerializer, status: :ok
       end
       format.html do
@@ -48,7 +48,7 @@ class TutorialPiecesController < ApplicationController
   end
 
   def bulk_update
-    records = current_term.pieces.where.not(seat_id: nil)
+    records = @term.pieces.where.not(seat_id: nil)
     if records.update_all(bulk_update_params)
       head :no_content
     else
@@ -57,7 +57,7 @@ class TutorialPiecesController < ApplicationController
   end
 
   def bulk_reset
-    records = current_term.pieces
+    records = @term.pieces
     if records.update_all(seat_id: nil, is_fixed: false)
       head :no_content
     else

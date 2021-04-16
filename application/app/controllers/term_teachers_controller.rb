@@ -9,8 +9,8 @@ class TermTeachersController < ApplicationController
   def index
     @page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = INDEX_PAGE_SIZE
-    @term_teachers = current_term.term_teachers.ordered.pagenated(@page, @page_size)
-    @term_teachers_count = current_term.term_teachers.count
+    @term_teachers = @term.term_teachers.ordered.pagenated(@page, @page_size)
+    @term_teachers_count = @term.term_teachers.count
   end
 
   def create

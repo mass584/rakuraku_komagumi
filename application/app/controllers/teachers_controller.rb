@@ -9,7 +9,7 @@ class TeachersController < ApplicationController
     @keyword = sanitize_string_query_param(params[:keyword])
     @page = sanitize_integer_query_param(params[:page])
     @page_size = PAGE_SIZE
-    @teachers = current_room.teachers.active.ordered.matched(@keyword).pagenated(@page, @page_size)
+    @teachers = @room.teachers.active.ordered.matched(@keyword).pagenated(@page, @page_size)
   end
 
   def create

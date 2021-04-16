@@ -5,7 +5,7 @@ class TermsController < ApplicationController
   before_action :set_term!, only: [:show]
 
   def index
-    @terms = current_room.terms.order(begin_at: 'DESC')
+    @terms = @room.terms.order(begin_at: 'DESC')
   end
 
   def create
@@ -31,7 +31,6 @@ class TermsController < ApplicationController
   end
 
   def show
-    @term = current_term
   end
 
   protected
