@@ -25,10 +25,10 @@ class Seat < ApplicationRecord
            if: :will_save_change_to_term_teacher_id?
   validate :verify_daily_blank_limit_for_creation,
            on: :update,
-           if: :will_save_change_to_term_teacher_id?
+           if: :validate_without_intermediate_state?
   validate :verify_daily_blank_limit_for_deletion,
            on: :update,
-           if: :will_save_change_to_term_teacher_id?
+           if: :validate_without_intermediate_state?
 
   before_validation :fetch_term_teacher_in_database, on: :update
   before_validation :fetch_new_tutorials_group_by_teacher_and_timetable, on: :update
@@ -37,6 +37,9 @@ class Seat < ApplicationRecord
   scope :filter_by_occupied, lambda {
     where.not(term_teacher_id: nil)
   }
+
+  # トランザクションの途中、中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
+  attr_accessor :skip_intermediate_state_validation
 
   private
 
@@ -50,6 +53,10 @@ class Seat < ApplicationRecord
 
   def term_teacher_deletion?
     term_teacher_id_in_database.present? && term_teacher_id.nil?
+  end
+
+  def validate_without_intermediate_state?
+    will_save_change_to_term_teacher_id? && !@skip_intermediate_state_validation
   end
 
   # validate

@@ -32,6 +32,9 @@ class TutorialPiece < ApplicationRecord
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
+  # after_updateコールバックの順番を入れ替えてはいけません
+  # save_seat_in_databaseの実行後に一時的にバリデーション違反がある中間状態を経由しています
+  after_update :set_skip_intermediate_state_validation
   after_update :save_seat_in_database
   after_update :save_seat
 
@@ -188,11 +191,22 @@ class TutorialPiece < ApplicationRecord
   end
 
   # after_update
+  def set_skip_intermediate_state_validation
+    if @seat_in_database.present? && seat.present?
+      skip_intermediate_state_validation = @seat_in_database.timetable.date_index == seat.timetable.date_index
+      @seat_in_database.skip_intermediate_state_validation = skip_intermediate_state_validation
+    end
+  end
+
   def save_seat_in_database
-    raise ActiveRecord::Rollback if (@seat_in_database.present? && !@seat_in_database.save)
+    unless (@seat_in_database.present? && @seat_in_database.save)
+      raise ActiveRecord::Rollback
+    end
   end
 
   def save_seat
-    raise ActiveRecord::Rollback if (seat.present? && !seat.save)
+    unless (seat.present? && seat.save)
+      raise ActiveRecord::Rollback
+    end
   end
 end
