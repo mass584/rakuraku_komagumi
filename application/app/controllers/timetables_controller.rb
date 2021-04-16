@@ -15,7 +15,7 @@ class TimetablesController < ApplicationController
   end
 
   def update
-    record = Timetable.find(params[:id])
+    record = Timetable.find_by(id: params[:id])
     if record.update(update_params)
       render json: record.to_json, status: :ok
     else

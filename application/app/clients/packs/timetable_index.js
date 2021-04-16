@@ -56,8 +56,7 @@ const onBlurEndAt = (event) => {
 
 const onChangeStatus = (event) => {
   const selectElement = $(event.target);
-  const selectWrapperElement = selectElement.parent();
-  const tdInnerElement = selectWrapperElement.parent();
+  const tdInnerElement = selectElement.parent();
   const tdElement = tdInnerElement.parent();
   const timetableId = tdInnerElement.data('id');
   const isClosed = tdInnerElement.data('is_closed') === 'true';
@@ -83,7 +82,12 @@ const onChangeStatus = (event) => {
     tdInnerElement.data('term_group_id', newTermGroupId);
     if (newIsClosed) {
       tdElement.addClass('bg-secondary');
+      tdElement.removeClass('bg-warning');
+    } else if (newTermGroupId) {
+      tdElement.addClass('bg-warning');
+      tdElement.removeClass('bg-secondary');
     } else {
+      tdElement.removeClass('bg-warning');
       tdElement.removeClass('bg-secondary');
     }
   }).fail(({ responseJSON }) => {

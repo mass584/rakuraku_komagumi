@@ -40,7 +40,13 @@ module TimetableHelper
     timetable = timetables.find do |item|
       item.date_index == date_index && item.period_index == period_index
     end
-    td_class = timetable.is_closed ? 'align-middle bg-secondary' : 'align-middle'
+    td_class = if timetable.is_closed
+                 'align-middle bg-secondary'
+               elsif timetable.term_group_id
+                 'align-middle bg-warning'
+               else
+                 'align-middle'
+               end
     content_tag(:td, class: td_class) do
       content_tag(:div,
                   'data-id' => timetable.id,
