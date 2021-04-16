@@ -32,8 +32,8 @@ class TutorialPiece < ApplicationRecord
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
-  after_update :save_seat
   after_update :save_seat_in_database
+  after_update :save_seat
 
   scope :filter_by_placed, -> { where.not(seat_id: nil) }
   scope :filter_by_unplaced, -> { where(seat_id: nil) }
@@ -188,11 +188,11 @@ class TutorialPiece < ApplicationRecord
   end
 
   # after_update
-  def save_seat
-    raise ActiveRecord::Rollback if (seat.present? && !seat.save)
-  end
-
   def save_seat_in_database
     raise ActiveRecord::Rollback if (@seat_in_database.present? && !@seat_in_database.save)
+  end
+
+  def save_seat
+    raise ActiveRecord::Rollback if (seat.present? && !seat.save)
   end
 end
