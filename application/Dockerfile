@@ -1,8 +1,8 @@
-FROM amazonlinux:2018.03
+FROM amazonlinux:2
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN yum -y install git vim gcc gcc-c++ bzip2 readline-devel zlib-devel sqlite-devel openssl-devel postgresql-devel
+RUN yum -y install git make vim gcc gcc-c++ tar unzip bzip2 readline-devel zlib-devel sqlite-devel openssl-devel postgresql-devel GConf2
 
 RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv && \
     git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build && \
@@ -23,5 +23,17 @@ RUN echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.bash_profile && \
 RUN nodenv install 10.17.0 && nodenv global 10.17.0
 
 RUN gem install bundler
+
+WORKDIR /root/tmp
+
+RUN curl https://intoli.com/install-google-chrome.sh | bash
+
+RUN wget https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
+
+RUN unzip chromedriver_linux64.zip && mv chromedriver /usr/local/bin/
+
+RUN wget https://noto-website-2.storage.googleapis.com/pkgs/Noto-hinted.zip
+
+RUN unzip Noto-hinted.zip && mkdir -p /usr/share/fonts/opentype/noto && mv *otf *ttf /usr/share/fonts/opentype/noto
 
 EXPOSE 3000
