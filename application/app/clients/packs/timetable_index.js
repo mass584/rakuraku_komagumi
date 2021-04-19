@@ -12,8 +12,7 @@ $(() => {
 
 const onBlurBeginAt = (event) => {
   const timeElement = $(event.target);
-  const wrapperElement = timeElement.parent();
-  const tdInnerElement = wrapperElement.parent();
+  const tdInnerElement = timeElement.parent();
   const beginEndTimeId = tdInnerElement.data('id');
   const beginAt = tdInnerElement.data('begin_at');
   const newBeginAt = timeElement.val();
@@ -34,8 +33,7 @@ const onBlurBeginAt = (event) => {
 
 const onBlurEndAt = (event) => {
   const timeElement = $(event.target);
-  const wrapperElement = timeElement.parent();
-  const tdInnerElement = wrapperElement.parent();
+  const tdInnerElement = timeElement.parent();
   const beginEndTimeId = tdInnerElement.data('id');
   const endAt = tdInnerElement.data('end_at');
   const newEndAt = timeElement.val();
