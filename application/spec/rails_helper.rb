@@ -62,9 +62,28 @@ RSpec.configure do |config|
   config.include FactorySupport
   config.include StubSupport
 
-  config.before(:each) do |example|
-    if example.metadata[:type] == :system
-      driven_by :selenium, using: :headless_chrome, screen_size: [1400, 1400]
-    end
+  config.before(:each, type: :system) do
+    driven_by(:remote_chrome)
   end
+end
+
+require 'capybara'
+require 'selenium-webdriver'
+
+Capybara.register_driver :remote_chrome do |app|
+  url = 'http://chrome:4444/wd/hub'
+  capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
+    'goog:chromeOptions' => {
+      'args' => ['no-sandbox', 'headless', 'disable-gpu', 'window-size=1680,1050'],
+    },
+  )
+  Capybara::Selenium::Driver.new(app, browser: :remote, url: url, desired_capabilities: capabilities)
+end
+
+Capybara.configure do |config|
+  config.always_include_port = true
+  config.default_driver = :remote_chrome
+  config.javascript_driver = :remote_chrome
+  config.default_max_wait_time = 15
+  config.server_host = 'application'
 end

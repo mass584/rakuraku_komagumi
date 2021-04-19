@@ -24,16 +24,4 @@ RUN nodenv install 10.17.0 && nodenv global 10.17.0
 
 RUN gem install bundler
 
-WORKDIR /root/tmp
-
-RUN curl https://intoli.com/install-google-chrome.sh | bash
-
-RUN wget https://chromedriver.storage.googleapis.com/90.0.4430.24/chromedriver_linux64.zip
-
-RUN unzip chromedriver_linux64.zip && mv chromedriver /usr/local/bin/
-
-RUN wget https://noto-website-2.storage.googleapis.com/pkgs/Noto-hinted.zip
-
-RUN unzip Noto-hinted.zip && mkdir -p /usr/share/fonts/opentype/noto && mv *otf *ttf /usr/share/fonts/opentype/noto
-
 EXPOSE 3000
