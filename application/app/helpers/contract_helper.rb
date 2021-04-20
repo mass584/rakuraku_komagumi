@@ -25,7 +25,7 @@ module ContractHelper
     tutorial_contract = tutorial_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_tutorial_id == term_tutorial.id
     end
-    td_class = tutorial_contract.is_active? ? 'align-middle min-width-200 bg-warning' : 'align-middle min-width-200'
+    td_class = tutorial_contract.is_active? ? 'align-middle min-width-200 bg-warning-light' : 'align-middle min-width-200'
     content_tag(:td, class: td_class) do
       content_tag(:div,
                   'data-id' => tutorial_contract.id,
@@ -61,7 +61,7 @@ module ContractHelper
     group_contract = group_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_group_id == term_group.id
     end
-    td_class = group_contract.is_contracted ? 'align-middle bg-warning min-width-150' : 'align-middle min-width-150'
+    td_class = group_contract.is_contracted ? 'align-middle bg-warning-light min-width-150' : 'align-middle min-width-150'
     content_tag(:td, class: td_class) do
       content_tag(:div,
                   'data-id' => group_contract.id,

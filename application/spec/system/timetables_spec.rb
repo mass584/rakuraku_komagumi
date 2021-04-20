@@ -61,21 +61,21 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       expect(timetable.reload.is_closed).to eq(true)
       expect(timetable.reload.term_group_id).to eq(nil)
       expect(page).to have_selector 'td.bg-secondary'
-      expect(page).to have_no_selector 'td.bg-warning'
+      expect(page).to have_no_selector 'td.bg-warning-light'
       # 集団授業を選択
       select term_group.group.name, from: timetable_id
       expect(find_by_id(timetable_id).value).to eq(term_group.id.to_s)
       expect(timetable.reload.is_closed).to eq(false)
       expect(timetable.reload.term_group_id).to eq(term_group.id)
       expect(page).to have_no_selector 'td.bg-secondary'
-      expect(page).to have_selector 'td.bg-warning'
+      expect(page).to have_selector 'td.bg-warning-light'
       # 開講を選択
       select '開講', from: timetable_id
       expect(find_by_id(timetable_id).value).to eq('0')
       expect(timetable.reload.is_closed).to eq(false)
       expect(timetable.reload.term_group_id).to eq(nil)
       expect(page).to have_no_selector 'td.bg-secondary'
-      expect(page).to have_no_selector 'td.bg-warning'
+      expect(page).to have_no_selector 'td.bg-warning-light'
     end
   end
 

@@ -43,7 +43,7 @@ module TimetableHelper
     td_class = if timetable.is_closed
                  'align-middle bg-secondary'
                elsif timetable.term_group_id
-                 'align-middle bg-warning'
+                 'align-middle bg-warning-light'
                else
                  'align-middle'
                end

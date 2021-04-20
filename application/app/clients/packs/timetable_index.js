@@ -80,12 +80,12 @@ const onChangeStatus = (event) => {
     tdInnerElement.data('term_group_id', newTermGroupId);
     if (newIsClosed) {
       tdElement.addClass('bg-secondary');
-      tdElement.removeClass('bg-warning');
+      tdElement.removeClass('bg-warning-light');
     } else if (newTermGroupId) {
-      tdElement.addClass('bg-warning');
+      tdElement.addClass('bg-warning-light');
       tdElement.removeClass('bg-secondary');
     } else {
-      tdElement.removeClass('bg-warning');
+      tdElement.removeClass('bg-warning-light');
       tdElement.removeClass('bg-secondary');
     }
   }).fail(({ responseJSON }) => {
