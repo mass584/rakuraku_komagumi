@@ -34,32 +34,32 @@ ja:
         name: 教室名
       student:
         room: 教室
-        room_id: 教室ID
+        room_id: 教室
         name: 生徒名
         email: メールアドレス
         school_grade: 学年
         is_deleted: 削除済み
       teacher:
         room: 教室
-        room_id: 教室ID
+        room_id: 教室
         name: 講師名
         email: メールアドレス
         is_deleted: 削除済み
       tutorial:
         room: 教室
-        room_id: 教室ID
+        room_id: 教室
         name: 個別科目名
         order: 表示順
         is_deleted: 削除済み
       group:
         room: 教室
-        room_id: 教室ID
+        room_id: 教室
         name: 集団科目名
         order: 表示順
         is_deleted: 削除済み
       term:
         room: 教室
-        room_id: 教室ID
+        room_id: 教室
         name: スケジュール名
         year: 年度
         term_type: 期間種別
@@ -70,13 +70,13 @@ ja:
         position_count: 座席あたりの生徒数
       begin_end_time:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         period_index: 時限インデックス
         begin_at: 開始時刻
         end_at: 終了時刻
       teacher_optimization_rule:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         single_cost: １対１授業のコスト値
         different_pair_cost: 違う科目を同時に教える時のコスト値
         occupation_limit: １日の最大コマ数
@@ -85,7 +85,7 @@ ja:
         blank_costs: １日の空きコマ数に対するコスト値
       student_optimization_rule:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         school_grade: 学年
         occupation_limit: １日の最大コマ数
         occupation_costs: １日のコマ数に対するコスト値
@@ -95,81 +95,83 @@ ja:
         interval_costs: 科目の受講日数間隔に対するコスト値
       timetable:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         term_group: 集団科目
-        term_group_id: 集団科目ID
+        term_group_id: 集団科目
         date_index: 日付インデックス
         period_index: 時限インデックス
         is_closed: 閉室かどうか
       seat:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         timetable: 時間枠
-        timetable_id: 時間枠ID
+        timetable_id: 時間枠
         term_teacher: 講師
-        term_teacher_id: 講師ID
+        term_teacher_id: 講師
         seat_index: 座席インデックス
         position_count: 座席あたりの生徒数
       student_vacancy:
         timetable: 時間枠
-        timetable_id: 時間枠ID
+        timetable_id: 時間枠
         term_student: 生徒
-        term_student_id: 生徒ID
+        term_student_id: 生徒
         is_vacant: 空きかどうか
       teacher_vacancy:
         timetable: 時間枠
-        timetable_id: 時間枠ID
+        timetable_id: 時間枠
         term_teacher: 講師
-        term_teacher_id: 講師ID
+        term_teacher_id: 講師
         is_vacant: 空きかどうか
       term_teacher:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         teacher: 講師
-        teacher_id: 講師ID
-        vacancy_status: 空きステータス
+        teacher_id: 講師
+        vacancy_status: マルバツ表ステータス
       term_student:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         student: 生徒
-        student_id: 生徒ID
+        student_id: 生徒
         school_grade: 学年
-        vacancy_status: 空きステータス
+        vacancy_status: マルバツ表ステータス
       term_tutorial:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         tutorial: 個別科目
-        tutorial_id: 個別科目ID
+        tutorial_id: 個別科目
       term_group:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         group: 集団科目
-        group_id: 集団科目ID
+        group_id: 集団科目
+        term_teacher: 講師
+        term_teacher_id: 講師
       tutorial_contract:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         term_tutorial: 個別科目
-        term_tutorial_id: 個別科目ID
+        term_tutorial_id: 個別科目
         term_student: 生徒
-        term_student_id: 生徒ID
+        term_student_id: 生徒
         term_teacher: 講師
-        term_teacher_id: 講師ID
+        term_teacher_id: 講師
         is_contracted: 契約済みかどうか
       tutorial_piece:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         term_contract: 個別科目
-        term_contract_id: 個別科目ID
+        term_contract_id: 個別科目
         seat: 座席
-        seat_id: 座席ID
+        seat_id: 座席
         is_fixed: 固定済みかどうか
       group_contract:
         term: 期間
-        term_id: 期間ID
+        term_id: 期間
         term_group: 集団科目
-        term_group_id: 集団科目ID
+        term_group_id: 集団科目
         term_student: 生徒
-        term_student_id: 生徒ID
+        term_student_id: 生徒
         is_contracted: 契約済みかどうか
   enums:
     student:

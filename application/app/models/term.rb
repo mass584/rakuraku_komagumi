@@ -81,13 +81,13 @@ class Term < ApplicationRecord
   # validate
   def valid_context?
     if begin_at.present? && end_at.present? && (end_at - begin_at).negative?
-      errors[:base] << '開始日・終了日を正しく設定してください'
+      errors.add(:base, '開始日・終了日を正しく設定してください')
     end
   end
 
   def valid_date_count?
     if begin_at.present? && end_at.present? && (date_count > 50)
-      errors[:base] << '講習期とテスト対策の期間は最大５０日までです'
+      errors.add(:base, '講習期とテスト対策の期間は最大５０日までです')
     end
   end
 

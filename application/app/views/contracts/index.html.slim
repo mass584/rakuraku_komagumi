@@ -8,22 +8,23 @@
     == render partial: 'application/pagenation',
       locals: { path: contracts_path, keyword: nil, page: @page, max_page: max_page(@term_students_count, @page_size) }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
-    table.table
-      thead.thead-dark
-        tr
-          th.align-middle 氏名
-          th.align-middle 学年
-          - @term_tutorials.each do |term_tutorial|
-            th.align-middle = term_tutorial.name
-          - @term_groups.each do |term_group|
-            th.align-middle = term_group.name
-      tbody
-        - @term_students.each do |term_student|
+    .overflow-auto.w-100
+      table.table.table-sm
+        thead.thead-dark
           tr
-            td.align-middle = "#{term_student.name}"
-            td.align-middle = "#{term_student.school_grade_i18n}"
+            th.align-middle.min-width-100 氏名
+            th.align-middle.min-width-50 学年
             - @term_tutorials.each do |term_tutorial|
-              = tutorial_contract_table_cell(@tutorial_contracts, @term_teachers, term_student, term_tutorial)
+              th.align-middle.min-width-200 = term_tutorial.name
             - @term_groups.each do |term_group|
-              = group_contract_table_cell(@group_contracts, term_student, term_group)
+              th.align-middle.min-width-150 = term_group.name
+        tbody
+          - @term_students.each do |term_student|
+            tr
+              td.align-middle.min-width-100 = "#{term_student.name}"
+              td.align-middle.min-width-50 = "#{term_student.school_grade_i18n}"
+              - @term_tutorials.each do |term_tutorial|
+                = tutorial_contract_table_cell(@tutorial_contracts, @term_teachers, term_student, term_tutorial)
+              - @term_groups.each do |term_group|
+                = group_contract_table_cell(@group_contracts, term_student, term_group)
 == javascript_pack_tag 'contract_index.js'

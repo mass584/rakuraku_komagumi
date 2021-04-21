@@ -44,21 +44,21 @@ class Timetable < ApplicationRecord
   # validate
   def can_update_is_closed?
     if is_closed && seats.filter_by_occupied.count.positive?
-      errors[:base] << '個別授業が割り当てられているため変更できません'
+      errors.add(:base, '個別授業が割り当てられているため変更できません')
     end
 
     if is_closed && term_group_id.present?
-      errors[:base] << '集団授業が割り当てられているため変更できません'
+      errors.add(:base, '集団授業が割り当てられているため変更できません')
     end
   end
 
   def can_update_term_group_id?
-    if term_group_id.present? && seats.filter_by_occupied.count.positive?
-      errors[:base] << '個別授業が割り当てられているため変更できません'
+    if will_save_change_to_term_group_id? && term.seats.filter_by_occupied.count.positive?
+      errors.add(:base, '個別授業が１つでも割り当てられていると、集団授業の日程を変更することはできません')
     end
 
     if term_group_id.present? && is_closed
-      errors[:base] << '休講のため変更できません'
+      errors.add(:base, '休講のため変更できません')
     end
   end
 end

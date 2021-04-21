@@ -30,6 +30,10 @@ services:
       - DATABASE_NAME=development
     depends_on:
       - db
+  chrome:
+    image: selenium/standalone-chrome:latest
+    ports:
+      - '4444:4444'
   webpack-dev-server:
     build:
       context: ./application

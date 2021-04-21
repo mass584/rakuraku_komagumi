@@ -21,13 +21,13 @@ class TeacherOptimizationRule < ApplicationRecord
 
   def occupation_costs_valid?
     unless occupation_costs.length == occupation_limit + 1
-      errors[:base] << '１日の最大コマ数に対するコスト値の設定数が間違えています'
+      errors.add(:base, '１日の最大コマ数に対するコスト値の設定数が間違えています')
     end
   end
 
   def blank_costs_valid?
     unless blank_costs.length == blank_limit + 1
-      errors[:base] << '１日の空きコマ数に対するコスト値の設定数が間違えています'
+      errors.add(:base, '１日の空きコマ数に対するコスト値の設定数が間違えています')
     end
   end
 end

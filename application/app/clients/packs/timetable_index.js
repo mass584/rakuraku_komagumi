@@ -12,8 +12,7 @@ $(() => {
 
 const onBlurBeginAt = (event) => {
   const timeElement = $(event.target);
-  const wrapperElement = timeElement.parent();
-  const tdInnerElement = wrapperElement.parent();
+  const tdInnerElement = timeElement.parent();
   const beginEndTimeId = tdInnerElement.data('id');
   const beginAt = tdInnerElement.data('begin_at');
   const newBeginAt = timeElement.val();
@@ -34,8 +33,7 @@ const onBlurBeginAt = (event) => {
 
 const onBlurEndAt = (event) => {
   const timeElement = $(event.target);
-  const wrapperElement = timeElement.parent();
-  const tdInnerElement = wrapperElement.parent();
+  const tdInnerElement = timeElement.parent();
   const beginEndTimeId = tdInnerElement.data('id');
   const endAt = tdInnerElement.data('end_at');
   const newEndAt = timeElement.val();
@@ -56,21 +54,20 @@ const onBlurEndAt = (event) => {
 
 const onChangeStatus = (event) => {
   const selectElement = $(event.target);
-  const selectWrapperElement = selectElement.parent();
-  const tdInnerElement = selectWrapperElement.parent();
+  const tdInnerElement = selectElement.parent();
   const tdElement = tdInnerElement.parent();
   const timetableId = tdInnerElement.data('id');
-  const isClosed = tdInnerElement.data('is_closed') === 'true';
-  const termGroupId = Number(tdInnerElement.data('term_group_id')) || null;
-  const status = isClosed ? -1 : (termGroupId || 0);
+  const isClosed = tdInnerElement.data('is_closed');
+  const termGroupId = Number(tdInnerElement.data('term_group_id'));
+  const status = isClosed ? -1 : termGroupId;
   const newStatus = Number(selectElement.val());
   const newIsClosed = newStatus === -1;
-  const newTermGroupId = newStatus > 0 ? newStatus : null;
+  const newTermGroupId = newStatus > 0 ? newStatus : 0;
   const url = `/timetables/${timetableId}`;
   const data = {
     timetable: {
       is_closed: newIsClosed,
-      term_group_id: newTermGroupId,
+      term_group_id: newTermGroupId === 0 ? null : newTermGroupId,
     },
   };
   $.ajax({
@@ -83,7 +80,12 @@ const onChangeStatus = (event) => {
     tdInnerElement.data('term_group_id', newTermGroupId);
     if (newIsClosed) {
       tdElement.addClass('bg-secondary');
+      tdElement.removeClass('bg-warning-light');
+    } else if (newTermGroupId) {
+      tdElement.addClass('bg-warning-light');
+      tdElement.removeClass('bg-secondary');
     } else {
+      tdElement.removeClass('bg-warning-light');
       tdElement.removeClass('bg-secondary');
     }
   }).fail(({ responseJSON }) => {

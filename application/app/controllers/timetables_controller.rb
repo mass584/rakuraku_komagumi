@@ -9,13 +9,13 @@ class TimetablesController < ApplicationController
   def index
     @page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = PAGE_SIZE
-    @timetables = current_term.timetables
-    @begin_end_times = current_term.begin_end_times
-    @term_groups = current_term.term_groups.joins(:group).select('term_groups.id', 'groups.name')
+    @timetables = @term.timetables
+    @begin_end_times = @term.begin_end_times
+    @term_groups = @term.term_groups.joins(:group).select('term_groups.id', 'groups.name', 'term_teacher_id')
   end
 
   def update
-    record = Timetable.find(params[:id])
+    record = Timetable.find_by(id: params[:id])
     if record.update(update_params)
       render json: record.to_json, status: :ok
     else

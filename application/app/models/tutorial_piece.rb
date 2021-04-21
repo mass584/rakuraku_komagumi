@@ -32,8 +32,11 @@ class TutorialPiece < ApplicationRecord
                 if: :will_save_change_to_seat_id?
   before_update :unset_term_teacher_on_seat,
                 if: :will_save_change_to_seat_id?
-  after_update :save_seat
+  # after_updateコールバックの順番を入れ替えてはいけません
+  # save_seat_in_databaseの実行後に一時的にバリデーション違反がある中間状態を経由しています
+  after_update :set_skip_intermediate_state_validation
   after_update :save_seat_in_database
+  after_update :save_seat
 
   scope :filter_by_placed, -> { where.not(seat_id: nil) }
   scope :filter_by_unplaced, -> { where(seat_id: nil) }
@@ -60,7 +63,7 @@ class TutorialPiece < ApplicationRecord
   # validate
   def verify_seat_occupation
     if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count >= seat.position_count
-      errors[:base] << '座席の最大人数をオーバーしています'
+      errors.add(:base, '座席の最大人数をオーバーしています')
     end
   end
 
@@ -68,14 +71,14 @@ class TutorialPiece < ApplicationRecord
     if (seat_creation? || seat_updation?) &&
       seat.term_teacher_id.present? &&
       seat.term_teacher_id != tutorial_contract.term_teacher_id
-      errors[:base] << '座席に割り当てられた講師と担当講師が一致しません'
+      errors.add(:base, '座席に割り当てられた講師と担当講師が一致しません')
     end
   end
 
   def verify_student_vacancy
     if (seat_creation? || seat_updation?) &&
        !seat.timetable.student_vacancies.find_by(term_student_id: tutorial_contract.term_student_id).is_vacant
-      errors[:base] << '生徒の予定が空いていません'
+      errors.add(:base, '生徒の予定が空いていません')
     end
   end
 
@@ -85,11 +88,11 @@ class TutorialPiece < ApplicationRecord
 
   def verify_doublebooking
     if seat_creation? && position_occupations(seat.timetable) > 1
-      errors[:base] << '生徒の予定が重複しています'
+      errors.add(:base, '生徒の予定が重複しています')
     end
 
     if seat_updation? && position_occupations(seat.timetable) > 1
-      errors[:base] << '生徒の予定が重複しています'
+      errors.add(:base, '生徒の予定が重複しています')
     end
   end
 
@@ -102,11 +105,11 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_occupation_limit
     limit = tutorial_contract.term_student.optimization_rule.occupation_limit
     if seat_creation? && daily_occupations(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の合計コマの上限を超えています'
+      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
     end
 
     if seat_updation? && daily_occupations(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の合計コマの上限を超えています'
+      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
     end
   end
 
@@ -119,18 +122,18 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_blank_limit
     limit = tutorial_contract.term_student.optimization_rule.blank_limit
     if seat_creation? && daily_blanks(seat.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
 
     if seat_updation? && (
       daily_blanks(seat.timetable.date_index) > limit ||
       daily_blanks(@seat_in_database.timetable.date_index) > limit
     )
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
 
     if seat_deletion? && daily_blanks(@seat_in_database.timetable.date_index) > limit
-      errors[:base] << '生徒の１日の空きコマの上限を超えています'
+      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
     end
   end
 
@@ -188,11 +191,22 @@ class TutorialPiece < ApplicationRecord
   end
 
   # after_update
-  def save_seat
-    raise ActiveRecord::Rollback if (seat.present? && !seat.save)
+  def set_skip_intermediate_state_validation
+    if @seat_in_database.present? && seat.present?
+      skip_intermediate_state_validation = @seat_in_database.timetable.date_index == seat.timetable.date_index
+      @seat_in_database.skip_intermediate_state_validation = skip_intermediate_state_validation
+    end
   end
 
   def save_seat_in_database
-    raise ActiveRecord::Rollback if (@seat_in_database.present? && !@seat_in_database.save)
+    if @seat_in_database.present?
+      raise ActiveRecord::Rollback unless @seat_in_database.save
+    end
+  end
+
+  def save_seat
+    if seat.present?
+      raise ActiveRecord::Rollback unless seat.save
+    end
   end
 end

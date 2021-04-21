@@ -1,6 +1,5 @@
 class TermStudentsController < ApplicationController
   INDEX_PAGE_SIZE = 10
-  SHOW_PAGE_SIZE = 7
 
   before_action :authenticate_user!
   before_action :set_rooms!
@@ -10,8 +9,8 @@ class TermStudentsController < ApplicationController
   def index
     @page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = INDEX_PAGE_SIZE
-    @term_students = current_term.term_students.ordered.pagenated(@page, @page_size)
-    @term_students_count = current_term.term_students.count
+    @term_students = @term.term_students.ordered.pagenated(@page, @page_size)
+    @term_students_count = @term.term_students.count
   end
 
   def create
@@ -25,13 +24,6 @@ class TermStudentsController < ApplicationController
     end
   end
 
-  def show
-    @page = sanitize_integer_query_param(params[:page]) || 1
-    @page_size = SHOW_PAGE_SIZE
-    @term_student = TermStudent.find(params[:id])
-    @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
-  end
-
   def update
     record = StudentTerm.find(params[:id])
     if record.update(update_params)
@@ -41,24 +33,58 @@ class TermStudentsController < ApplicationController
     end
   end
 
-  # TODO: FIX
+  def vacancy
+    @term_student = TermStudent.joins(:student).select(:id, :name, :school_grade, :vacancy_status).find_by(id: params[:term_student_id])
+    @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
+  end
+
   def schedule
-    @student_term = StudentTerm.find(params[:id])
-    @timetables = Timetable.get_timetables(@term)
-    @student_requests = StudentRequest.get_student_requests(@student_term, @term)
-    @week = @term.week(params[:week].to_i)
-    @pieces = Piece.get_pieces_for_student(@term, @student_term)
+    @term_student = TermStudent.find(params[:term_student_id])
+    @tutorial_pieces = TutorialPiece.joins(
+      tutorial_contract: [
+        term_student: [],
+        term_tutorial: [:tutorial],
+        term_teacher: [:teacher]
+      ],
+      seat: :timetable,
+    ).select(
+      :date_index,
+      :period_index,
+      'tutorials.name AS tutorial_name',
+      'teachers.name AS teacher_name',
+    ).where('term_students.id': params[:term_student_id])
+
+    @timetables = Timetable.left_joins(
+      term_group: [:group_contracts, :group],
+      student_vacancies: [],
+    ).where(
+      term_id: @term.id,
+      'student_vacancies.term_student_id': params[:term_student_id],
+      'group_contracts.term_student_id': nil,
+    ).or(
+      Timetable.where(
+        term_id: @term.id,
+        'student_vacancies.term_student_id': params[:term_student_id],
+        'group_contracts.term_student_id': params[:term_student_id],
+      ),
+    ).select(
+      :date_index,
+      :period_index,
+      :term_group_id,
+      :is_closed,
+      'student_vacancies.is_vacant',
+      'group_contracts.is_contracted',
+      'groups.name AS group_name',
+    )
     respond_to do |format|
       format.html
-      format.pdf do
-        pdf = StudentSchedule.new(
-          @term, @student_term, @pieces, @student_requests
-        ).render
-        send_data pdf,
-                  filename: "#{@term.name}予定表#{@student_term.student.name}.pdf",
-                  type: 'application/pdf',
-                  disposition: 'inline'
-      end
+      #format.pdf do
+      #  pdf = StudentSchedule.new(@term, @student_term, @pieces, @student_requests).render
+      #  send_data pdf,
+      #            filename: "#{@term.name}予定表#{@student_term.student.name}.pdf",
+      #            type: 'application/pdf',
+      #            disposition: 'inline'
+      #end
     end
   end
 

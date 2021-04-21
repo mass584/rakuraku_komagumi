@@ -17,7 +17,7 @@ class TeacherVacancy < ApplicationRecord
 
   def verify_vacancy
     if !is_vacant && timetable.seats.exists?(term_teacher_id: term_teacher_id)
-      errors[:base] << '講師の予定がすでに埋まっています'
+      errors.add(:base, '講師の予定がすでに埋まっています')
     end
   end
 end

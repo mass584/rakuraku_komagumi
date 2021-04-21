@@ -38,19 +38,19 @@ class StudentOptimizationRule < ApplicationRecord
 
   def occupation_costs_valid?
     unless occupation_costs.length == occupation_limit + 1
-      errors[:base] << '１日の最大コマ数に対するコスト値の設定数が間違えています'
+      errors.add(:base, '１日の最大コマ数に対するコスト値の設定数が間違えています')
     end
   end
 
   def blank_costs_valid?
     unless blank_costs.length == blank_limit + 1
-      errors[:base] << '１日の空きコマ数に対するコスト値の設定数が間違えています'
+      errors.add(:base, '１日の空きコマ数に対するコスト値の設定数が間違えています')
     end
   end
 
   def interval_costs_valid?
     unless interval_costs.length == interval_cutoff + 1
-      errors[:base] << '科目の受講日数感覚に対するコスト値の設定数が間違えています'
+      errors.add(:base, '科目の受講日数感覚に対するコスト値の設定数が間違えています')
     end
   end
 end

@@ -5,7 +5,7 @@ class TermsController < ApplicationController
   before_action :set_term!, only: [:show]
 
   def index
-    @terms = current_room.terms.order(begin_at: 'DESC')
+    @terms = @room.terms.order(begin_at: 'DESC')
   end
 
   def create
@@ -31,7 +31,31 @@ class TermsController < ApplicationController
   end
 
   def show
-    @term = current_term
+    @tutorial_pieces = TutorialPiece.joins(
+      tutorial_contract: [
+        term_student: [:student],
+        term_tutorial: [:tutorial],
+        term_teacher: [:teacher]
+      ],
+      seat: :timetable,
+    ).where('term_id': @term.id).select(
+      :date_index,
+      :period_index,
+      :seat_index,
+      'students.name AS student_name',
+      'tutorials.name AS tutorial_name',
+      'teachers.name AS teacher_name',
+    )
+    @seats = Seat.left_joins(
+      timetable: [term_group: [:group]],
+    ).where(term_id: @term.id).select(
+      :date_index,
+      :period_index,
+      :seat_index,
+      :term_group_id,
+      :is_closed,
+      'groups.name AS group_name',
+    )
   end
 
   protected

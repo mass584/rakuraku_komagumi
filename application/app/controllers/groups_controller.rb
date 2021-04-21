@@ -9,7 +9,7 @@ class GroupsController < ApplicationController
     @keyword = sanitize_string_query_param(params[:keyword])
     @page = sanitize_integer_query_param(params[:page])
     @page_size = PAGE_SIZE
-    @groups = current_room.groups.active.ordered
+    @groups = @room.groups.active.ordered
   end
 
   def create

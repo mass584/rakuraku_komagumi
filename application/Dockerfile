@@ -1,8 +1,8 @@
-FROM amazonlinux:2018.03
+FROM amazonlinux:2
 
 SHELL ["/bin/bash", "--login", "-c"]
 
-RUN yum -y install git vim gcc gcc-c++ bzip2 readline-devel zlib-devel sqlite-devel openssl-devel postgresql-devel
+RUN yum -y install git make vim gcc gcc-c++ tar unzip bzip2 readline-devel zlib-devel sqlite-devel openssl-devel postgresql-devel GConf2
 
 RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv && \
     git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build && \

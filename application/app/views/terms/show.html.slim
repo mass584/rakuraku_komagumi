@@ -1,2 +1,24 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'top' }
+.container-fluid.my-5
+  .row.float-left.mx-5.mb-3
+    p.h4 = "#{@room.name} #{@term.year}年度#{@term.name} 座席表"
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+    .overflow-auto.w-100
+      table.table.table-sm
+        thead.thead-dark
+          tr
+            th.align-middle.min-width-150
+            th.align-middle.min-width-50
+            - @term.period_index_array.each do |period_index|
+              th.align-middle.min-width-150 #{period_index}限
+        tbody
+          - @term.date_index_array.each do |date_index|
+            - @term.seat_index_array.each do |seat_index|
+              tr
+                - if seat_index == 1
+                  td.align-middle.min-width-150(rowspan="#{@term.seat_count}")
+                    = I18n.l(@term.date_index_to_date(date_index))
+                td.align-middle.min-width-50 = "席#{seat_index}"
+                - @term.period_index_array.each do |period_index|
+                  = term_schedule_table_cell(@tutorial_pieces, @seats, date_index, period_index, seat_index)

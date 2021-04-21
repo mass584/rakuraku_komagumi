@@ -43,13 +43,13 @@ class TutorialContract < ApplicationRecord
   # validate
   def verify_update_term_teacher_id
     if tutorial_pieces.filter_by_placed.count.positive?
-      errors[:base] << '配置済みのコマがあるため担任を変更できません'
+      errors.add(:base, '配置済みのコマがあるため担任を変更できません')
     end
   end
 
   def verify_under_limit_of_piece_count
     if decrement_count > tutorial_pieces.filter_by_unplaced.count
-      errors[:base] << '配置済みのコマを未決定に戻す必要があります'
+      errors.add(:base, '配置済みのコマを未決定に戻す必要があります')
     end
   end
 

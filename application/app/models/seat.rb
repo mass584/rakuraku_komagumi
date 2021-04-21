@@ -25,10 +25,10 @@ class Seat < ApplicationRecord
            if: :will_save_change_to_term_teacher_id?
   validate :verify_daily_blank_limit_for_creation,
            on: :update,
-           if: :will_save_change_to_term_teacher_id?
+           if: :validate_without_intermediate_state?
   validate :verify_daily_blank_limit_for_deletion,
            on: :update,
-           if: :will_save_change_to_term_teacher_id?
+           if: :validate_without_intermediate_state?
 
   before_validation :fetch_term_teacher_in_database, on: :update
   before_validation :fetch_new_tutorials_group_by_teacher_and_timetable, on: :update
@@ -37,6 +37,9 @@ class Seat < ApplicationRecord
   scope :filter_by_occupied, lambda {
     where.not(term_teacher_id: nil)
   }
+
+  # トランザクションの途中、中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
+  attr_accessor :skip_intermediate_state_validation
 
   private
 
@@ -52,21 +55,25 @@ class Seat < ApplicationRecord
     term_teacher_id_in_database.present? && term_teacher_id.nil?
   end
 
+  def validate_without_intermediate_state?
+    will_save_change_to_term_teacher_id? && !@skip_intermediate_state_validation
+  end
+
   # validate
   def verify_timetable
     if term_teacher_creation? && timetable.term_group_id.present?
-      errors[:base] << '集団科目が割り当てられています'
+      errors.add(:base, '集団科目が割り当てられています')
     end
 
     if term_teacher_creation? && timetable.is_closed
-      errors[:base] << '休講に設定されています'
+      errors.add(:base, '休講に設定されています')
     end
   end
 
   def verify_teacher_vacancy
     if (term_teacher_creation? || term_teacher_updation?) &&
        !timetable.teacher_vacancies.find_by(term_teacher_id: term_teacher_id).is_vacant
-      errors[:base] << '講師の予定が空いていません'
+      errors.add(:base, '講師の予定が空いていません')
     end
   end
 
@@ -77,11 +84,11 @@ class Seat < ApplicationRecord
 
   def verify_doublebooking
     if term_teacher_creation? && position_occupations(term_teacher_id, timetable) > 1
-      errors[:base] << '講師の予定が重複しています'
+      errors.add(:base, '講師の予定が重複しています')
     end
 
     if term_teacher_updation? && position_occupations(term_teacher_id, timetable) > 1
-      errors[:base] << '講師の予定が重複しています'
+      errors.add(:base, '講師の予定が重複しています')
     end
   end
 
@@ -96,7 +103,7 @@ class Seat < ApplicationRecord
   def verify_daily_occupation_limit
     if (term_teacher_creation? || term_teacher_updation?) &&
        daily_occupations > term_teacher.optimization_rule.occupation_limit
-      errors[:base] << '講師の１日の合計コマの上限を超えています'
+      errors.add(:base, '講師の１日の合計コマの上限を超えています')
     end
   end
 
@@ -111,7 +118,7 @@ class Seat < ApplicationRecord
   def verify_daily_blank_limit_for_creation
     if (term_teacher_creation? || term_teacher_updation?) &&
        daily_blanks_for_creation > term_teacher.optimization_rule.blank_limit
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 
@@ -126,7 +133,7 @@ class Seat < ApplicationRecord
   def verify_daily_blank_limit_for_deletion
     if (term_teacher_updation? || term_teacher_deletion?) &&
        daily_blanks_for_deletion > @term_teacher_in_database.optimization_rule.blank_limit
-      errors[:base] << '講師の１日の空きコマの上限を超えています'
+      errors.add(:base, '講師の１日の空きコマの上限を超えています')
     end
   end
 
