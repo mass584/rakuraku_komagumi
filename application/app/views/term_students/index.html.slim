@@ -23,6 +23,6 @@
             td.align-middle = s.student.name
             td.align-middle = s.school_grade_i18n
             td.align-middle = "#{s.student_vacancies.where(is_vacant: true).count}コマ"
-            td.align-middle = link_to '開く', term_student_path(s)
+            td.align-middle = link_to '開く', term_student_vacancy_path(s)
             td.align-middle = render partial: 'term_students/edit', locals: { term_student: s }
             td.align-middle = link_to '開く', term_student_schedule_path(s)

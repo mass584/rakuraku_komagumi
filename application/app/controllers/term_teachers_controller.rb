@@ -24,11 +24,6 @@ class TermTeachersController < ApplicationController
     end
   end
 
-  def show
-    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find(params[:id])
-    @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
-  end
-
   def update
     record = TermTeacher.find_by(id: params[:id])
     respond_to do |format|
@@ -38,6 +33,11 @@ class TermTeachersController < ApplicationController
         format.js { @success = false }
       end
     end
+  end
+
+  def vacancy
+    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find(params[:term_teacher_id])
+    @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
   def schedule

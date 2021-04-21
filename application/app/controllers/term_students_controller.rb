@@ -24,11 +24,6 @@ class TermStudentsController < ApplicationController
     end
   end
 
-  def show
-    @term_student = TermStudent.joins(:student).select(:id, :name, :school_grade, :vacancy_status).find_by(id: params[:id])
-    @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
-  end
-
   def update
     record = StudentTerm.find(params[:id])
     if record.update(update_params)
@@ -36,6 +31,11 @@ class TermStudentsController < ApplicationController
     else
       render json: { message: record.errors.full_messages }, status: :bad_request
     end
+  end
+
+  def vacancy
+    @term_student = TermStudent.joins(:student).select(:id, :name, :school_grade, :vacancy_status).find_by(id: params[:term_student_id])
+    @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
   def schedule

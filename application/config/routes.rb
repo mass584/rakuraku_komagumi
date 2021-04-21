@@ -21,11 +21,13 @@ Rails.application.routes.draw do
     resources :terms, only: [:index, :show]
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
-    resources :term_students, only: [:index, :show] do
+    resources :term_students, only: [:index] do
+      get :vacancy
       get :schedule
     end
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
-    resources :term_teachers, only: [:index, :show] do
+    resources :term_teachers, only: [:index] do
+      get :vacancy
       get :schedule
     end
     resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
