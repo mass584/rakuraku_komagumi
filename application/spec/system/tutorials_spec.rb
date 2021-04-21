@@ -54,7 +54,7 @@ RSpec.describe '個別科目の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit tutorials_path
-      click_on '新規'
+      click_on '編集'
       fill_in 'tutorial_order', with: ''
       fill_in 'tutorial_name', with: ''
       fill_in 'tutorial_short_name', with: ''

@@ -54,7 +54,7 @@ RSpec.describe '集団科目の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit groups_path
-      click_on '新規'
+      click_on '編集'
       fill_in 'group_order', with: ''
       fill_in 'group_name', with: ''
       fill_in 'group_short_name', with: ''
