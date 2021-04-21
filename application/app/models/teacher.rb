@@ -5,7 +5,8 @@ class Teacher < ApplicationRecord
   validates :name,
             length: { minimum: 1, maximum: 20 }
   validates :email,
-            format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
+            presence: true,
+            format: { with: URI::MailTo::EMAIL_REGEXP }
 
   scope :active, -> { where(is_deleted: false) }
   scope :ordered, -> { order(name: 'ASC') }
