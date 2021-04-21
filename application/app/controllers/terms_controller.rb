@@ -31,6 +31,33 @@ class TermsController < ApplicationController
   end
 
   def show
+    @tutorial_pieces = TutorialPiece.joins(
+      tutorial_contract: [
+        term_student: [:student],
+        term_tutorial: [:tutorial],
+        term_teacher: [:teacher]
+      ],
+      seat: :timetable,
+    ).where(
+      'term_students.id': params[:term_student_id],
+    ).select(
+      :date_index,
+      :period_index,
+      :seat_index,
+      'students.name AS student_name',
+      'tutorials.name AS tutorial_name',
+      'teachers.name AS teacher_name',
+    )
+    @seats = Seat.joins(
+      timetable: [term_group: [:group]],
+    ).where(term_id: @term.id).select(
+      :date_index,
+      :period_index,
+      :seat_index,
+      :term_group_id,
+      :is_closed,
+      'groups.name AS group_name',
+    )
   end
 
   protected
