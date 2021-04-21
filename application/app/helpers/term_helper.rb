@@ -1,7 +1,7 @@
 module TermHelper
   def terms_table_content(terms)
     {
-      attributes: %w[スケジュール名 種別 年度 開始日 終了日 編集 選択],
+      attributes: %w[年度 スケジュール名 期間種別 開始日 終了日 時限数 座席数 座席あたりの生徒数 編集 開く],
       records: terms.map do |term|
         term_table_record(term)
       end,
@@ -12,16 +12,19 @@ module TermHelper
     {
       id: term.id,
       tds: [
+        "#{term.year}年度",
         term.name,
         term.term_type_i18n,
-        "#{term.year}年度",
         "#{l term.begin_at}",
         "#{l term.end_at}",
+        "#{term.period_count}時限",
+        "#{term.seat_count}席",
+        "1対#{term.position_count}",
         content_tag(:div) do
           render partial: 'terms/edit', locals: { term: term }
         end,
         content_tag(:div) do
-          link_to '選択', term_path(term, {term_id: term.id}), { class: 'btn btn-dark' }
+          link_to '開く', term_path(term, {term_id: term.id})
         end,
       ],
     }
