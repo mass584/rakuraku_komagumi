@@ -21,6 +21,15 @@ RSpec.describe '個別科目の編集ページ', type: :system do
       expect(page).to have_content 'T'
       expect(page).to have_content '1'
     end
+
+    it 'エラーが表示される' do
+      visit tutorials_path
+      click_on '新規'
+      click_on '保存'
+      expect(page).to have_content '個別科目名は1文字以上で入力してください'
+      expect(page).to have_content '短縮名は1文字で入力してください'
+      expect(page).to have_content '表示順は数値で入力してください'
+    end
   end
 
   describe '個別科目の編集' do
@@ -41,6 +50,18 @@ RSpec.describe '個別科目の編集ページ', type: :system do
       expect(page).to have_content '個別科目2'
       expect(page).to have_content 't'
       expect(page).to have_content '2'
+    end
+
+    it 'エラーが表示される' do
+      visit tutorials_path
+      click_on '新規'
+      fill_in 'tutorial_order', with: ''
+      fill_in 'tutorial_name', with: ''
+      fill_in 'tutorial_short_name', with: ''
+      click_on '保存'
+      expect(page).to have_content '個別科目名は1文字以上で入力してください'
+      expect(page).to have_content '短縮名は1文字で入力してください'
+      expect(page).to have_content '表示順は数値で入力してください'
     end
   end
 
