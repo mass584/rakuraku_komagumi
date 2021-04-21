@@ -38,6 +38,7 @@ package "一般データモデル" {
     --
     # room_id : 教室ID [FK]
     name : 個別科目名
+    short_name : 個別科目短縮名
     order : 表示順
     is_deleted : 削除済み
   }
@@ -47,6 +48,7 @@ package "一般データモデル" {
     --
     # room_id : 教室ID [FK]
     name : 集団科目名
+    short_name : 集団科目短縮名
     order : 表示順
     is_deleted : 削除済み
   }

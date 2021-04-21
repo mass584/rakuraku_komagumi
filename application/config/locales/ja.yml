@@ -49,12 +49,14 @@ ja:
         room: 教室
         room_id: 教室
         name: 個別科目名
+        short_name: 短縮名
         order: 表示順
         is_deleted: 削除済み
       group:
         room: 教室
         room_id: 教室
         name: 集団科目名
+        short_name: 短縮名
         order: 表示順
         is_deleted: 削除済み
       term:

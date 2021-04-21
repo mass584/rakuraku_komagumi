@@ -12,6 +12,9 @@
           .form-group
             = f.label :name
             = f.text_field :name, { class: 'form-control' }
+          .form-group
+            = f.label :short_name, '短縮名（1文字）'
+            = f.text_field :short_name, { maxlength: 1, class: 'form-control' }
           div id="tutorial_edit_alert_#{tutorial.id}"
         .modal-footer
           = f.submit '保存', { "class" => "btn btn-primary" }
