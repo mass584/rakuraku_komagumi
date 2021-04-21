@@ -53,7 +53,7 @@ RSpec.describe '生徒の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit students_path
-      click_on '新規'
+      click_on '編集'
       fill_in 'student_name', with: ''
       select '選択してください', from: 'student_school_grade'
       fill_in 'student_email', with: ''

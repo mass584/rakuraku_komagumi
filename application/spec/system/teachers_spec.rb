@@ -49,7 +49,7 @@ RSpec.describe '講師の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit teachers_path
-      click_on '新規'
+      click_on '編集'
       fill_in 'teacher_name', with: ''
       fill_in 'teacher_email', with: ''
       click_on '保存'
