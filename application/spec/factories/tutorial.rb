@@ -3,7 +3,7 @@ FactoryBot.define do
     association :room, factory: :room
     sequence(:id)    { |n| n }
     sequence(:name)  { |n| "個別科目#{n}" }
-    sequence(:short_name)  { '個' }
+    sequence(:short_name)  { 'T' }
     sequence(:order) { |n| n }
     is_deleted       { false }
   end
