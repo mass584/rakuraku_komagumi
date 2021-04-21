@@ -12,6 +12,9 @@ button.btn.btn-primary data-toggle="modal" data-target="#group_create" = '新規
           .form-group
             = f.label :name
             = f.text_field :name, { class: 'form-control' }
+          .form-group
+            = f.label :short_name, '短縮名（1文字）'
+            = f.text_field :short_name, { maxlength: 1, class: 'form-control' }
           div id="group_create_alert"
           = f.hidden_field :room_id, :value => @room.id
         .modal-footer

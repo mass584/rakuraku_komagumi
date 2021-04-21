@@ -27,7 +27,7 @@ export default Vue.component('tutorial-piece', {
     displayText() {
       const studentName = this.tutorialPiece.termStudentName;
       const studentSchoolGrade = this.tutorialPiece.termStudentSchoolGradeI18n;
-      const tutorialName = this.tutorialPiece.termTutorialName.charAt(0);
+      const tutorialName = this.tutorialPiece.termTutorialName;
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;
     },

@@ -48,10 +48,10 @@ class GroupsController < ApplicationController
   private
 
   def create_params
-    params.require(:group).permit(:room_id, :name, :order)
+    params.require(:group).permit(:room_id, :name, :short_name, :order)
   end
 
   def update_params
-    params.require(:group).permit(:name, :order)
+    params.require(:group).permit(:name, :short_name, :order)
   end
 end

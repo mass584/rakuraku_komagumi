@@ -73,7 +73,7 @@ export default Vue.component('stand-by', {
     displayText: function (tutorialPiece) {
       const studentName = tutorialPiece.termStudentName;
       const studentSchoolGrade = tutorialPiece.termStudentSchoolGrade;
-      const tutorialName = tutorialPiece.termTutorialName.charAt(0);
+      const tutorialName = tutorialPiece.termTutorialName;
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;
     },
