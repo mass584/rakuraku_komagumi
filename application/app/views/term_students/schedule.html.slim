@@ -1,23 +1,21 @@
 == render partial: 'navbar', locals: { active: 'term' }
 == render partial: 'navbar_term', locals: { active: 'student_request' }
-.container
-  = div_week_selector("/student_term/#{@student_term.id}/schedule", @term, @week)
-  .table-responsive.mt-3.mb-3
-    table.table
-      thead
-        tr
-          th.align-middle 日付
-          - @term.period_array.each do |p|
-            th.class = print_period(p)
-      tbody
-        - @term.date_array(@week).each do |d|
+.container-fluid.my-5
+  .row.float-left.mx-5.mb-3
+    p.h4 = "#{@term_student.student.name}さんの予定"
+  .row.float-right.mx-5.mb-3
+    = button_to '戻る', term_students_path, { class: 'btn btn-secondary', method: :get }
+  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+    .overflow-auto.w-100
+      table.table.table-sm
+        thead.thead-dark
           tr
-            th.align-middle = print_date(d)
-            - @term.period_array.each do |c|
-              td.align-middle
-                = schedule_cell(@pieces.dig(d, c).to_a)
-  .text-center
-    = button_to '戻る',
-      student_term_index_path,
-      {class: 'btn btn-dark', method: :get}
-== javascript_pack_tag 'piece.js'
+            th.align-middle.min-width-150 時限
+            - @term.period_index_array.each do |period_index|
+              th.align-middle.min-width-150 #{period_index}限
+        tbody
+          - @term.date_index_array(@page).each do |date_index|
+            tr
+              td.align-middle.min-width-150 = I18n.l(@term.date_index_to_date(date_index))
+              - @term.period_index_array.each do |period_index|
+                = term_student_schedule_table_cell(@tutorial_pieces, @timetables, date_index, period_index)

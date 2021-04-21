@@ -127,14 +127,14 @@ ja:
         term_id: 期間
         teacher: 講師
         teacher_id: 講師
-        vacancy_status: 空きステータス
+        vacancy_status: マルバツ表ステータス
       term_student:
         term: 期間
         term_id: 期間
         student: 生徒
         student_id: 生徒
         school_grade: 学年
-        vacancy_status: 空きステータス
+        vacancy_status: マルバツ表ステータス
       term_tutorial:
         term: 期間
         term_id: 期間

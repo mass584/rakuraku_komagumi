@@ -13,18 +13,14 @@
         tr
           th.align-middle 氏名
           th.align-middle マルの数
-          th.align-middle マルバツ表の参照
-          th.align-middle マルバツ表入力済
-          th.align-middle 予定表の参照
-          th.align-middle 予定表の出力
-          th.align-middle 予定表の送信
+          th.align-middle マルバツ表
+          th.align-middle ステータス
+          th.align-middle 予定表
       tbody
         - @term_teachers.each do |t|
           tr
             td.align-middle = t.teacher.name
             td.align-middle = "#{t.teacher_vacancies.where(is_vacant: true).count}コマ"
-            td.align-middle = link_to '編集', term_teacher_path(t), { class: 'btn btn-secondary' }
-            td.align-middle 開く
-            td.align-middle 開く
-            td.align-middle 開く
-            td.align-middle 開く
+            td.align-middle = link_to '開く', term_teacher_path(t)
+            td.align-middle = render partial: 'term_teachers/edit', locals: { term_teacher: t }
+            td.align-middle = link_to '開く', term_teacher_schedule_path(t)

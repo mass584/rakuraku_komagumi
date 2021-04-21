@@ -1,7 +1,7 @@
 module TermStudentHelper
   def options_for_select_student_id(room, term)
     plucked_students = room.students.active.pluck(:name, :id) 
-    plucked_term_students = term.term_students.ordered.joins(:student).pluck( 'students.name', :student_id)
+    plucked_term_students = term.term_students.ordered.joins(:student).pluck('students.name', :student_id)
     plucked_students - plucked_term_students
   end
 
@@ -19,13 +19,46 @@ module TermStudentHelper
     end
   end
 
-  def schedule_cell(pieces)
-    content_tag(:div) do
-      pieces.each do |piece|
+  def term_student_schedule_table_cell(tutorial_pieces, timetables, date_index, period_index)
+    timetable = timetables.find do |item|
+      item.date_index == date_index && item.period_index == period_index
+    end
+    filtered_tutorial_pieces = tutorial_pieces.filter do |tutorial_piece|
+      tutorial_piece.date_index == date_index && tutorial_piece.period_index == period_index
+    end
+    content_tag(:td, class: term_student_schedule_table_cell_class(timetable, filtered_tutorial_pieces)) do
+      content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
+        term_student_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
+      end
+    end
+  end
+
+  def term_student_schedule_table_cell_class(timetable, tutorial_pieces)
+    if timetable.is_closed
+      'align-middle bg-secondary'
+    elsif timetable.term_group_id.present? && !timetable.is_contracted
+      'align-middle bg-secondary'
+    elsif !timetable.is_vacant
+      'align-middle bg-secondary'
+    elsif timetable.term_group_id.present? && timetable.is_contracted
+      'align-middle bg-warning-light'
+    elsif tutorial_pieces.present?
+      'align-middle bg-warning-light'
+    else
+      'align-middle'
+    end
+  end
+
+  def term_student_schedule_table_cell_inner(timetable, tutorial_pieces)
+    if timetable.present? && timetable.is_closed
+      '休講'
+    elsif timetable.present? && timetable.group_name.present?
+      timetable.group_name
+    else
+      tutorial_pieces.each do |tutorial_piece|
         concat(
           content_tag(:div) do
-            "#{piece.contract.subject_term.subject.name}
-            （#{piece.seat.teacher_term.teacher.name}）"
+            "#{tutorial_piece.tutorial_name}（#{tutorial_piece.teacher_name}）"
           end,
         )
       end
