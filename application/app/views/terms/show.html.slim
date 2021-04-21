@@ -21,4 +21,4 @@
                     = I18n.l(@term.date_index_to_date(date_index))
                 td.align-middle.min-width-50 = "席#{seat_index}"
                 - @term.period_index_array.each do |period_index|
-                  td.align-middle.min-width-150 = 'hoge'
+                  = term_schedule_table_cell(@tutorial_pieces, @seats, date_index, period_index, seat_index)

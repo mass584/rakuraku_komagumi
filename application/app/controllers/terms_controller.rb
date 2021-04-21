@@ -38,9 +38,7 @@ class TermsController < ApplicationController
         term_teacher: [:teacher]
       ],
       seat: :timetable,
-    ).where(
-      'term_students.id': params[:term_student_id],
-    ).select(
+    ).where('term_id': @term.id).select(
       :date_index,
       :period_index,
       :seat_index,
@@ -48,7 +46,7 @@ class TermsController < ApplicationController
       'tutorials.name AS tutorial_name',
       'teachers.name AS teacher_name',
     )
-    @seats = Seat.joins(
+    @seats = Seat.left_joins(
       timetable: [term_group: [:group]],
     ).where(term_id: @term.id).select(
       :date_index,

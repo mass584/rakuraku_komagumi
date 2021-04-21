@@ -70,7 +70,6 @@ class TermTeachersController < ApplicationController
       'term_groups.term_teacher_id',
       'groups.name AS group_name',
     )
-    puts @timetables
     respond_to do |format|
       format.html
       #format.pdf do
