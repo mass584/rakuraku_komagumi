@@ -59,7 +59,7 @@ class OverlookSchedule < Prawn::Document
                   [
                     {
                       background_color: COLOR_ENABLE,
-                      content: seats[date][period][seat]&.teacher_term&.teacher&.name,
+                      content: seats[date][period][seat]&.term_teacher&.teacher&.name,
                     },
                     {
                       background_color: COLOR_ENABLE,

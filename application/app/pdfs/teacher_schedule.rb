@@ -1,7 +1,7 @@
 class TeacherSchedule < Prawn::Document
   include Common
 
-  def initialize(term, teacher_term, pieces, teacher_requests)
+  def initialize(term, term_teacher, pieces, teacher_requests)
     super(
       page_size: 'A4', # 595.28 x 841.89
       page_layout: rotate?(term) ? :landscape : :portrait,
@@ -9,7 +9,7 @@ class TeacherSchedule < Prawn::Document
       right_margin: 20
     )
     font Rails.root.join('vendor', 'assets', 'fonts', 'ipaexm.ttf')
-    text "#{term.name}予定表 #{teacher_term.teacher.name}", align: :center, size: 16
+    text "#{term.name}予定表 #{term_teacher.teacher.name}", align: :center, size: 16
     move_down 10
     pdf_table(term, pieces, teacher_requests)
     move_down 5

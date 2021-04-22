@@ -131,7 +131,7 @@ RSpec.describe '受講科目の編集ページ', type: :system do
       expect(page).to have_content '個別科目をこのスケジュールに追加する'
       expect(page).to have_select('term_tutorial_tutorial_id', selected: '選択してください')
       select @tutorial.name, from: 'term_tutorial_tutorial_id'
-      click_on '追加'
+      click_on '保存'
       @term.reload
       expect(page).to have_no_content '個別科目をこのスケジュールに追加する'
       expect(@term.term_tutorials.count).to eq(6)
@@ -143,7 +143,7 @@ RSpec.describe '受講科目の編集ページ', type: :system do
       expect(page).to have_content '集団科目をこのスケジュールに追加する'
       expect(page).to have_select('term_group_group_id', selected: '選択してください')
       select @group.name, from: 'term_group_group_id'
-      click_on '追加'
+      click_on '保存'
       @term.reload
       expect(page).to have_no_content '集団科目をこのスケジュールに追加する'
       expect(@term.term_groups.count).to eq(3)

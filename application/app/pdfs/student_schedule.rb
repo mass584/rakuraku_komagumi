@@ -1,7 +1,7 @@
 class StudentSchedule < Prawn::Document
   include Common
 
-  def initialize(term, student_term, pieces, student_requests)
+  def initialize(term, term_student, pieces, student_requests)
     super(
       page_size: 'A4', # 595.28 x 841.89
       page_layout: rotate?(term) ? :landscape : :portrait,
@@ -9,7 +9,7 @@ class StudentSchedule < Prawn::Document
       right_margin: 20
     )
     font Rails.root.join('vendor', 'assets', 'fonts', 'ipaexm.ttf')
-    text "#{term.name}予定表 #{student_term.student.name}", align: :center, size: 16
+    text "#{term.name}予定表 #{term_student.student.name}", align: :center, size: 16
     move_down 10
     pdf_table(term, pieces, student_requests)
     move_down 5
