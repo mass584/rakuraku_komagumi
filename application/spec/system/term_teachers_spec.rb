@@ -29,7 +29,7 @@ RSpec.describe '講師の編集ページ', type: :system do
     end
   end
 
-  describe '生徒のステータス編集' do
+  describe '講師のステータス編集' do
     before :each do
       @term = create_normal_term_with_teacher_and_student(1, 0)
       @room = @term.room
@@ -46,6 +46,47 @@ RSpec.describe '講師の編集ページ', type: :system do
       expect(page).to have_no_content '編集中'
       expect(page).to have_content '確定'
       expect(@term.term_teachers.first.reload.vacancy_status).to eq('fixed')
+    end
+  end
+
+  describe '講師のマルバツ表編集' do
+    before :each do
+      @term = create_normal_term_with_teacher_and_student(1, 0)
+      @room = @term.room
+      @teacher_vacancy =
+        TeacherVacancy.joins(:timetable).find_by(
+          'timetables.date_index': 1,
+          'timetables.period_index': 1,
+        )
+      stub_authenticate_user
+      stub_current_room @room
+      stub_current_term @term
+    end
+
+    it 'マルバツ表が更新される' do
+      visit term_teachers_path
+      find('a[href$="/vacancy"]').click
+      expect(page).to have_no_content 'NG'
+      find('#button_1_1').click
+      expect(page).to have_content 'NG'
+      expect(@teacher_vacancy.reload.is_vacant).to eq(false)
+    end
+  end
+
+  describe '講師の予定表表示' do
+    before :each do
+      @term = create_normal_term_with_schedule
+      @room = @term.room
+      stub_authenticate_user
+      stub_current_room @room
+      stub_current_term @term
+    end
+
+    it '予定表が表示される' do
+      visit term_teachers_path
+      find('a[href$="/schedule"]').click
+      expect(page).to have_content '生徒1（個別科目1）'
+      expect(page).to have_content '集団科目1'
     end
   end
 end
