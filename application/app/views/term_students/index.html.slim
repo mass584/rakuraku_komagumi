@@ -8,21 +8,23 @@
       == render partial: 'application/pagenation',
         locals: { path: term_students_path, keyword: nil, page: @page, max_page: max_page(@term_students_count, @page_size) }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
-    table.table
+    table.table.table-sm
       thead.thead-dark
         tr
+          th.align-middle ステータス
           th.align-middle 氏名
           th.align-middle 学年
           th.align-middle マルの数
           th.align-middle マルバツ表
-          th.align-middle ステータス
           th.align-middle 予定表
       tbody
         - @term_students.each do |s|
           tr
+            td.align-middle.d-flex.align-items-center
+              div.pr-2 #{s.vacancy_status_i18n}
+              = render partial: 'term_students/edit', locals: { term_student: s }
             td.align-middle = s.student.name
             td.align-middle = s.school_grade_i18n
             td.align-middle = "#{s.student_vacancies.where(is_vacant: true).count}コマ"
             td.align-middle = link_to '開く', term_student_vacancy_path(s)
-            td.align-middle = render partial: 'term_students/edit', locals: { term_student: s }
             td.align-middle = link_to '開く', term_student_schedule_path(s)
