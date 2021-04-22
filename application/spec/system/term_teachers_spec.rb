@@ -7,7 +7,7 @@ RSpec.describe '講師の編集ページ', type: :system do
     before :each do
       @term = create_normal_term
       @room = @term.room
-      @teacher = FactoryBot.create(:teacher, room: @room)
+      FactoryBot.create(:teacher, room: @room)
       stub_authenticate_user
       stub_current_room @room
       stub_current_term @term
