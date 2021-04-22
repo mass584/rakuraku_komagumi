@@ -36,12 +36,12 @@ class TermTeachersController < ApplicationController
   end
 
   def vacancy
-    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find(params[:term_teacher_id])
+    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find_by(id: params[:term_teacher_id])
     @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
   end
 
   def schedule
-    @term_teacher = TermTeacher.find(params[:term_teacher_id])
+    @term_teacher = TermTeacher.find_by(id: params[:term_teacher_id])
     @tutorial_pieces = TutorialPiece.joins(
       tutorial_contract: [
         term_student: [:student],
@@ -73,9 +73,9 @@ class TermTeachersController < ApplicationController
     respond_to do |format|
       format.html
       #format.pdf do
-      #  pdf = TeacherSchedule.new(@term, @teacher_term, @pieces, @teacher_requests).render
+      #  pdf = TeacherSchedule.new(@term, @term_teacher, @pieces, @teacher_requests).render
       #  send_data pdf,
-      #            filename: "#{@term.name}予定表#{@teacher_term.teacher.name}.pdf",
+      #            filename: "#{@term.name}予定表#{@term_teacher.teacher.name}.pdf",
       #            type: 'application/pdf',
       #            disposition: 'inline'
       #end

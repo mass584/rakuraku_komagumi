@@ -25,11 +25,13 @@ class TermStudentsController < ApplicationController
   end
 
   def update
-    record = StudentTerm.find(params[:id])
-    if record.update(update_params)
-      render json: record.to_json, status: :ok
-    else
-      render json: { message: record.errors.full_messages }, status: :bad_request
+    record = TermStudent.find_by(id: params[:id])
+    respond_to do |format|
+      if record.update(update_params)
+        format.js { @success = true }
+      else
+        format.js { @success = false }
+      end
     end
   end
 
@@ -39,7 +41,7 @@ class TermStudentsController < ApplicationController
   end
 
   def schedule
-    @term_student = TermStudent.find(params[:term_student_id])
+    @term_student = TermStudent.find_by(id: params[:term_student_id])
     @tutorial_pieces = TutorialPiece.joins(
       tutorial_contract: [
         term_student: [],
@@ -79,9 +81,9 @@ class TermStudentsController < ApplicationController
     respond_to do |format|
       format.html
       #format.pdf do
-      #  pdf = StudentSchedule.new(@term, @student_term, @pieces, @student_requests).render
+      #  pdf = StudentSchedule.new(@term, @term_student, @pieces, @student_requests).render
       #  send_data pdf,
-      #            filename: "#{@term.name}予定表#{@student_term.student.name}.pdf",
+      #            filename: "#{@term.name}予定表#{@term_student.student.name}.pdf",
       #            type: 'application/pdf',
       #            disposition: 'inline'
       #end
@@ -95,6 +97,6 @@ class TermStudentsController < ApplicationController
   end
 
   def update_params
-    params.require(:student_term).permit(:is_decided)
+    params.require(:term_student).permit(:vacancy_status)
   end
 end

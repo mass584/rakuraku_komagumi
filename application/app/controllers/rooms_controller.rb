@@ -24,7 +24,7 @@ class RoomsController < ApplicationController
   end
 
   def update
-    @room = Room.find(params[:id])
+    @room = Room.find_by(id: params[:id])
     respond_to do |format|
       if @room.update(update_params)
         format.js { @success = true }

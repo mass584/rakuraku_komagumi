@@ -24,7 +24,7 @@ class GroupsController < ApplicationController
   end
 
   def update
-    @group = Group.find(params[:id])
+    @group = Group.find_by(id: params[:id])
     respond_to do |format|
       if @group.update(update_params)
         format.js { @success = true }
@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    @group = Group.find(params[:id])
+    @group = Group.find_by(id: params[:id])
     respond_to do |format|
       if @group.update(is_deleted: true)
         format.js { @success = true }

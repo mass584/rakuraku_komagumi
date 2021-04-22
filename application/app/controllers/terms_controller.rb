@@ -20,7 +20,7 @@ class TermsController < ApplicationController
   end
 
   def update
-    @term = Term.find(params[:id])
+    @term = Term.find_by(id: params[:id])
     respond_to do |format|
       if @term.update(update_params)
         format.js { @success = true }
