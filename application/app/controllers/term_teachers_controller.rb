@@ -38,50 +38,17 @@ class TermTeachersController < ApplicationController
   end
 
   def vacancy
-    @term_teacher = TermTeacher.joins(:teacher).select(:id, :name, :vacancy_status).find_by(id: params[:term_teacher_id])
-    @teacher_vacancies = @term_teacher.teacher_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
+    @term_teacher = TermTeacher.named.find_by(id: params[:term_teacher_id])
+    @teacher_vacancies = @term_teacher.teacher_vacancies.indexed
   end
 
   def schedule
     @term_teacher = TermTeacher.find_by(id: params[:term_teacher_id])
-    @tutorial_pieces = TutorialPiece.joins(
-      tutorial_contract: [
-        term_student: [:student],
-        term_tutorial: [:tutorial],
-        term_teacher: []
-      ],
-      seat: :timetable,
-    ).select(
-      :date_index,
-      :period_index,
-      'students.name AS student_name',
-      'tutorials.name AS tutorial_name',
-    ).where('term_teachers.id': params[:term_teacher_id])
-    @timetables = Timetable.left_joins(
-      term_group: [:group],
-      teacher_vacancies: [],
-    ).where(
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where('term_teachers.id': params[:term_teacher_id])
+    @timetables = Timetable.with_group.with_teacher_vacancies.where(
       term_id: @term.id,
       'teacher_vacancies.term_teacher_id': params[:term_teacher_id],
-    ).select(
-      :date_index,
-      :period_index,
-      :term_group_id,
-      :is_closed,
-      'teacher_vacancies.is_vacant',
-      'term_groups.term_teacher_id',
-      'groups.name AS group_name',
     )
-    respond_to do |format|
-      format.html
-      #format.pdf do
-      #  pdf = TeacherSchedule.new(@term, @term_teacher, @pieces, @teacher_requests).render
-      #  send_data pdf,
-      #            filename: "#{@term.name}予定表#{@term_teacher.teacher.name}.pdf",
-      #            type: 'application/pdf',
-      #            disposition: 'inline'
-      #end
-    end
   end
 
   private

@@ -20,6 +20,12 @@ class Timetable < ApplicationRecord
            if: :will_save_change_to_term_group_id?
 
   scope :ordered, -> { order(date_index: 'ASC', period_index: 'ASC') }
+  scope :with_group, lambda {
+    left_joins(term_group: [:group]).select('timetables.*', 'term_groups.term_teacher_id', 'groups.name AS group_name')
+  }
+  scope :with_teacher_vacancies, lambda {
+    left_joins(:teacher_vacancies).select('timetables.*', 'teacher_vacancies.is_vacant')
+  }
 
   before_create :set_nest_objects
 
