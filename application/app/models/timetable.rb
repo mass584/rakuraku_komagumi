@@ -23,8 +23,14 @@ class Timetable < ApplicationRecord
   scope :with_group, lambda {
     left_joins(term_group: [:group]).select('timetables.*', 'term_groups.term_teacher_id', 'groups.name AS group_name')
   }
+  scope :with_group_contracts, lambda {
+    left_joins(term_group: [:group_contracts]).select('timetables.*', 'group_contracts.is_contracted')
+  }
   scope :with_teacher_vacancies, lambda {
     left_joins(:teacher_vacancies).select('timetables.*', 'teacher_vacancies.is_vacant')
+  }
+  scope :with_student_vacancies, lambda {
+    left_joins(:student_vacancies).select('timetables.*', 'student_vacancies.is_vacant')
   }
 
   before_create :set_nest_objects
