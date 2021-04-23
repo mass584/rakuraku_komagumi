@@ -60,6 +60,8 @@ class Term < ApplicationRecord
       (begin_at..end_at).to_a.length
     elsif exam_planning?
       (begin_at..end_at).to_a.length
+    else
+      0
     end
   end
 
