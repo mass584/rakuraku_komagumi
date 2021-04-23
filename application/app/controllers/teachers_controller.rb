@@ -24,7 +24,7 @@ class TeachersController < ApplicationController
   end
 
   def update
-    @teacher = Teacher.find(params[:id])
+    @teacher = Teacher.find_by(id: params[:id])
     respond_to do |format|
       if @teacher.update(update_params)
         format.js { @success = true }
@@ -35,7 +35,7 @@ class TeachersController < ApplicationController
   end
 
   def destroy
-    @teacher = Teacher.find(params[:id])
+    @teacher = Teacher.find_by(id: params[:id])
     respond_to do |format|
       if @teacher.update(is_deleted: true)
         format.js { @success = true }

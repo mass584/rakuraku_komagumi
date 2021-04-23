@@ -1,4 +1,4 @@
-button.btn.btn-primary.ml-1 data-toggle="modal" data-target="#term_group_create" = '新規集団'
+button.btn.btn-primary.mr-2 data-toggle="modal" data-target="#term_group_create" = '新規集団'
 .modal.fade id="term_group_create" role="dialog" area-hidden="true"
   .modal-dialog role="document"
     .modal-content
@@ -17,5 +17,5 @@ button.btn.btn-primary.ml-1 data-toggle="modal" data-target="#term_group_create"
           = f.hidden_field :term_id, :value => @term.id
           #term_group_create_alert
         .modal-footer
-          = f.submit '追加', {"class" => "btn btn-primary"}
+          = f.submit '保存', {"class" => "btn btn-primary"}
           = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

@@ -34,10 +34,10 @@ module Common
   end
 
   def print_piece_for_teacher(piece)
-    "[#{piece.contract.subject_term.subject.name}] #{piece.contract.student_term.student.name}"
+    "[#{piece.contract.subject_term.subject.name}] #{piece.contract.term_student.student.name}"
   end
 
   def print_piece_for_student(piece)
-    "[#{piece.contract.subject_term.subject.name}] #{piece.seat.teacher_term.teacher.name}"
+    "[#{piece.contract.subject_term.subject.name}] #{piece.seat.term_teacher.teacher.name}"
   end
 end

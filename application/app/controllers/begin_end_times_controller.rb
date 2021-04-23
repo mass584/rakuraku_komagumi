@@ -5,7 +5,7 @@ class BeginEndTimesController < ApplicationController
   before_action :set_term!
 
   def update
-    record = BeginEndTime.find(params[:id])
+    record = BeginEndTime.find_by(id: params[:id])
     if record.update(update_params)
       render json: record.to_json, status: :ok
     else

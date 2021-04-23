@@ -1,4 +1,4 @@
 - if @success
   | location.reload();
 - else
-  | $("#student_destroy_alert_#{@student.id}").html("#{escape_javascript(render partial: 'student/error', locals: { student: @student })}");
+  | $("#student_destroy_alert_#{@student.id}").html("#{escape_javascript(render partial: 'students/error', locals: { student: @student })}");

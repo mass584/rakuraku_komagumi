@@ -24,7 +24,7 @@ class GroupsController < ApplicationController
   end
 
   def update
-    @group = Group.find(params[:id])
+    @group = Group.find_by(id: params[:id])
     respond_to do |format|
       if @group.update(update_params)
         format.js { @success = true }
@@ -35,7 +35,7 @@ class GroupsController < ApplicationController
   end
 
   def destroy
-    @group = Group.find(params[:id])
+    @group = Group.find_by(id: params[:id])
     respond_to do |format|
       if @group.update(is_deleted: true)
         format.js { @success = true }
@@ -48,10 +48,10 @@ class GroupsController < ApplicationController
   private
 
   def create_params
-    params.require(:group).permit(:room_id, :name, :order)
+    params.require(:group).permit(:room_id, :name, :short_name, :order)
   end
 
   def update_params
-    params.require(:group).permit(:name, :order)
+    params.require(:group).permit(:name, :short_name, :order)
   end
 end

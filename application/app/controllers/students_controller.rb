@@ -24,7 +24,7 @@ class StudentsController < ApplicationController
   end
 
   def update
-    @student = Student.find(params[:id])
+    @student = Student.find_by(id: params[:id])
     respond_to do |format|
       if @student.update(update_params)
         format.js { @success = true }
@@ -35,7 +35,7 @@ class StudentsController < ApplicationController
   end
 
   def destroy
-    @student = Student.find(params[:id])
+    @student = Student.find_by(id: params[:id])
     respond_to do |format|
       if @student.update(is_deleted: true)
         format.js { @success = true }

@@ -24,7 +24,7 @@ class TutorialsController < ApplicationController
   end
 
   def update
-    @tutorial = Tutorial.find(params[:id])
+    @tutorial = Tutorial.find_by(id: params[:id])
     respond_to do |format|
       if @tutorial.update(update_params)
         format.js { @success = true }
@@ -35,7 +35,7 @@ class TutorialsController < ApplicationController
   end
 
   def destroy
-    @tutorial = Tutorial.find(params[:id])
+    @tutorial = Tutorial.find_by(id: params[:id])
     respond_to do |format|
       if @tutorial.update(is_deleted: true)
         format.js { @success = true }
@@ -48,10 +48,10 @@ class TutorialsController < ApplicationController
   private
 
   def create_params
-    params.require(:tutorial).permit(:room_id, :name, :order)
+    params.require(:tutorial).permit(:room_id, :name, :short_name, :order)
   end
 
   def update_params
-    params.require(:tutorial).permit(:name, :order)
+    params.require(:tutorial).permit(:name, :short_name, :order)
   end
 end

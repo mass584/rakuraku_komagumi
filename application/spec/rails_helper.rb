@@ -59,6 +59,7 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  config.include AjaxSupport
   config.include FactorySupport
   config.include StubSupport
 
@@ -74,10 +75,10 @@ Capybara.register_driver :remote_chrome do |app|
   url = 'http://chrome:4444/wd/hub'
   capabilities = Selenium::WebDriver::Remote::Capabilities.chrome(
     'goog:chromeOptions' => {
-      'args' => ['no-sandbox', 'headless', 'disable-gpu', 'window-size=1680,1050'],
+      'args' => ['headless', 'disable-gpu', 'window-size=1920,1080'],
     },
   )
-  Capybara::Selenium::Driver.new(app, browser: :remote, url: url, desired_capabilities: capabilities)
+  Capybara::Selenium::Driver.new(app, browser: :remote, url: url, capabilities: capabilities)
 end
 
 Capybara.configure do |config|

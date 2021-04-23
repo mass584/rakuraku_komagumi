@@ -1,4 +1,4 @@
-button.btn.btn-secondary data-toggle="modal" data-target="#term_student_update_#{term_student.id}" = '編集'
+button.btn.btn-sm.btn-outline-secondary data-toggle="modal" data-target="#term_student_update_#{term_student.id}" = '編集'
 .modal.fade id="term_student_update_#{term_student.id}" role="dialog" area-hidden="true"
   .modal-dialog role="document"
     .modal-content
@@ -16,5 +16,5 @@ button.btn.btn-secondary data-toggle="modal" data-target="#term_student_update_#
                   { class: 'form-control' }
           #term_student_update_alert
         .modal-footer
-          = f.submit '更新', {"class" => "btn btn-primary"}
+          = f.submit '保存', {"class" => "btn btn-primary"}
           = button_tag '戻る', {"data-dismiss" => "modal", "class" => "btn btn-secondary"}

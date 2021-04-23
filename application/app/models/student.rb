@@ -5,7 +5,8 @@ class Student < ApplicationRecord
   validates :name,
             length: { minimum: 1, maximum: 20 }
   validates :email,
-            format: { with: /\A([^@\s]+)@(([-a-z0-9]+\.)+[a-z]{2,})\z/ }
+            presence: true,
+            format: { with: URI::MailTo::EMAIL_REGEXP }
 
   enum school_grade: {
     e1: 11,

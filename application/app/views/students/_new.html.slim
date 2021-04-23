@@ -17,7 +17,7 @@ button.btn.btn-primary data-toggle="modal" data-target="#student_create" = '新�
                 = f.label :school_grade
                 = f.select :school_grade,
                   enum_to_select(student.class, 'school_grade'),
-                  { include_blank: '選択して下さい' },
+                  { include_blank: '選択してください' },
                   { class: 'form-control' }
           .form-group
             .form-row
@@ -27,5 +27,5 @@ button.btn.btn-primary data-toggle="modal" data-target="#student_create" = '新�
           = f.hidden_field :room_id, :value => @room.id
           #student_create_alert
         .modal-footer
-          = f.submit '追加', { "class" => "btn btn-primary" }
+          = f.submit '保存', { "class" => "btn btn-primary" }
           = button_tag '戻る', { "data-dismiss" => "modal", "class" => "btn btn-secondary" }

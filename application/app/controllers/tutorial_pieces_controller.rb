@@ -39,7 +39,7 @@ class TutorialPiecesController < ApplicationController
   end
 
   def update
-    record = TutorialPiece.find(params[:id])
+    record = TutorialPiece.find_by(id: params[:id])
     if record.update(update_params)
       render json: record.to_json, status: :ok
     else

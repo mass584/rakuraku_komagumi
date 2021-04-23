@@ -113,7 +113,7 @@ class TermSerializer < ActiveModel::Serializer
     end
 
     def term_tutorial_name
-      object.tutorial_contract.term_tutorial.tutorial.name
+      object.tutorial_contract.term_tutorial.tutorial.short_name
     end
 
     def term_teacher_id
