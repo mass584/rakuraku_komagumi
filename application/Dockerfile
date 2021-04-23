@@ -20,7 +20,7 @@ RUN git clone git://github.com/nodenv/nodenv.git ~/.nodenv && \
 RUN echo 'export PATH="$HOME/.nodenv/bin:$PATH"' >> ~/.bash_profile && \
     echo 'eval "$(nodenv init -)"' >> ~/.bash_profile
 
-RUN nodenv install 10.17.0 && nodenv global 10.17.0
+RUN nodenv install 12.16.1 && nodenv global 12.16.1
 
 RUN gem install bundler
 
