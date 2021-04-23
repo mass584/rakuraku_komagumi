@@ -21,6 +21,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       expect(find_by_id('begin_at_1').value).to eq before
       fill_in 'begin_at_1', with: after
       find_by_id('begin_at_1').native.send_keys :tab
+      wait_for_ajax
       expect(find_by_id('begin_at_1').value).to eq after
       expect(I18n.l(begin_end_time.reload.begin_at)).to eq after
     end
@@ -34,6 +35,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       expect(find_by_id('end_at_1').value).to eq before
       fill_in 'end_at_1', with: after
       find_by_id('end_at_1').native.send_keys :tab
+      wait_for_ajax
       expect(find_by_id('end_at_1').value).to eq after
       expect(I18n.l(begin_end_time.reload.end_at)).to eq after
     end
@@ -51,7 +53,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
     end
 
     it 'モーダルの表示・非表示が切り替わる' do
-      visit contracts_path
+      visit timetables_path
       expect(page).to have_no_content '個別科目をこのスケジュールに追加する'
       click_on '新規個別'
       expect(page).to have_content '個別科目をこのスケジュールに追加する'
@@ -65,7 +67,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
     end
 
     it '個別科目がスケジュールに追加される' do
-      visit contracts_path
+      visit timetables_path
       click_on '新規個別'
       expect(page).to have_content '個別科目をこのスケジュールに追加する'
       expect(page).to have_select('term_tutorial_tutorial_id', selected: '選択してください')
@@ -77,7 +79,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
     end
 
     it '集団科目がスケジュールに追加される' do
-      visit contracts_path
+      visit timetables_path
       click_on '新規集団'
       expect(page).to have_content '集団科目をこのスケジュールに追加する'
       expect(page).to have_select('term_group_group_id', selected: '選択してください')
@@ -105,22 +107,22 @@ RSpec.describe '時間割りの編集ページ', type: :system do
 
       visit timetables_path
       expect(find_by_id(timetable_id).value).to eq('0')
-      # 休講を選択
       select '休講', from: timetable_id
+      wait_for_ajax
       expect(find_by_id(timetable_id).value).to eq('-1')
       expect(timetable.reload.is_closed).to eq(true)
       expect(timetable.reload.term_group_id).to eq(nil)
       expect(page).to have_selector 'td.bg-secondary'
       expect(page).to have_no_selector 'td.bg-warning-light'
-      # 集団授業を選択
       select term_group.group.name, from: timetable_id
+      wait_for_ajax
       expect(find_by_id(timetable_id).value).to eq(term_group.id.to_s)
       expect(timetable.reload.is_closed).to eq(false)
       expect(timetable.reload.term_group_id).to eq(term_group.id)
       expect(page).to have_no_selector 'td.bg-secondary'
       expect(page).to have_selector 'td.bg-warning-light'
-      # 開講を選択
       select '開講', from: timetable_id
+      wait_for_ajax
       expect(find_by_id(timetable_id).value).to eq('0')
       expect(timetable.reload.is_closed).to eq(false)
       expect(timetable.reload.term_group_id).to eq(nil)

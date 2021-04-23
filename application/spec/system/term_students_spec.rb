@@ -7,7 +7,7 @@ RSpec.describe '生徒の編集ページ', type: :system do
     before :each do
       @term = create_normal_term
       @room = @term.room
-      FactoryBot.create(:student, room: @room)
+      @student = FactoryBot.create(:student, room: @room)
       stub_authenticate_user
       stub_current_room @room
       stub_current_term @term
@@ -16,10 +16,12 @@ RSpec.describe '生徒の編集ページ', type: :system do
     it '生徒が新規追加される' do
       visit term_students_path
       click_on '新規'
-      select '生徒1', from: 'term_student_student_id'
+      student_name = @student.name
+      student_school_grade = @student.school_grade_i18n
+      select student_name, from: 'term_student_student_id'
       click_on '保存'
-      expect(page).to have_content '生徒1'
-      expect(page).to have_content '中1'
+      expect(page).to have_content student_name
+      expect(page).to have_content student_school_grade
     end
 
     it 'エラーが表示される' do
@@ -46,7 +48,6 @@ RSpec.describe '生徒の編集ページ', type: :system do
       click_on '保存'
       expect(page).to have_no_content '編集中'
       expect(page).to have_content '確定'
-      expect(@term.term_students.first.reload.vacancy_status).to eq('fixed')
     end
   end
 

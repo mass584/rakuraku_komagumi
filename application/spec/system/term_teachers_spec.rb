@@ -7,7 +7,7 @@ RSpec.describe '講師の編集ページ', type: :system do
     before :each do
       @term = create_normal_term
       @room = @term.room
-      FactoryBot.create(:teacher, room: @room)
+      @teacher = FactoryBot.create(:teacher, room: @room)
       stub_authenticate_user
       stub_current_room @room
       stub_current_term @term
@@ -16,9 +16,10 @@ RSpec.describe '講師の編集ページ', type: :system do
     it '講師が新規追加される' do
       visit term_teachers_path
       click_on '新規'
-      select '講師1', from: 'term_teacher_teacher_id'
+      teacher_name = @teacher.name
+      select teacher_name, from: 'term_teacher_teacher_id'
       click_on '保存'
-      expect(page).to have_content '講師1'
+      expect(page).to have_content teacher_name
     end
 
     it 'エラーが表示される' do
@@ -45,7 +46,6 @@ RSpec.describe '講師の編集ページ', type: :system do
       click_on '保存'
       expect(page).to have_no_content '編集中'
       expect(page).to have_content '確定'
-      expect(@term.term_teachers.first.reload.vacancy_status).to eq('fixed')
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe '講師の編集ページ', type: :system do
       visit term_teachers_path
       find('a[href$="/schedule"]').click
       tutorial_name = @term.term_tutorials.first.tutorial.name
-      student_name = @term.term_students.first.teacher.name
+      student_name = @term.term_students.first.student.name
       group_name = @term.term_groups.first.group.name
       expect(page).to have_content "#{student_name}（#{tutorial_name}）"
       expect(page).to have_content group_name
