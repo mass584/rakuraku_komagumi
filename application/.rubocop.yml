@@ -1,6 +1,7 @@
 AllCops:
   NewCops: enable
   TargetRubyVersion: 3.0.0
+  SuggestExtensions: false
   Exclude:
     - config.ru
     - Rakefile
