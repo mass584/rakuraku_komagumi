@@ -14,7 +14,8 @@ module ContractHelper
   def select_tag_term_teacher_id(tutorial_contract, term_teachers)
     select_tag(
       :term_teacher_id,
-      options_from_collection_for_select(term_teachers, :id, :name, tutorial_contract.term_teacher_id),
+      options_from_collection_for_select(term_teachers, :id, :name,
+                                         tutorial_contract.term_teacher_id),
       include_blank: '担任を選択',
       id: "select_term_teacher_id_#{tutorial_contract.id}",
       class: 'form-control form-control-sm',
@@ -25,7 +26,11 @@ module ContractHelper
     tutorial_contract = tutorial_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_tutorial_id == term_tutorial.id
     end
-    td_class = tutorial_contract.is_active? ? 'align-middle min-width-200 bg-warning-light' : 'align-middle min-width-200'
+    td_class = if tutorial_contract.active?
+                 'align-middle min-width-200 bg-warning-light'
+               else
+                 'align-middle min-width-200'
+               end
     content_tag(:td, class: td_class) do
       content_tag(:div,
                   'data-id' => tutorial_contract.id,
@@ -40,7 +45,8 @@ module ContractHelper
         )
         concat(
           content_tag(:div, class: 'col-3 px-0 d-flex align-items-end') do
-            button_tag('消', id: "button_delete_#{tutorial_contract.id}", class: %w[btn btn-sm btn-danger])
+            button_tag('消', id: "button_delete_#{tutorial_contract.id}",
+                            class: %w[btn btn-sm btn-danger])
           end,
         )
       end
@@ -61,7 +67,11 @@ module ContractHelper
     group_contract = group_contracts.find do |item|
       item.term_student_id == term_student.id && item.term_group_id == term_group.id
     end
-    td_class = group_contract.is_contracted ? 'align-middle bg-warning-light min-width-150' : 'align-middle min-width-150'
+    td_class = if group_contract.is_contracted
+                 'align-middle bg-warning-light min-width-150'
+               else
+                 'align-middle min-width-150'
+               end
     content_tag(:td, class: td_class) do
       content_tag(:div,
                   'data-id' => group_contract.id,

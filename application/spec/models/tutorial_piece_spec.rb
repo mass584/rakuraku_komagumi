@@ -1,16 +1,22 @@
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe TutorialPiece, type: :model do
   describe 'seat.term_teacher_idの同時変更' do
     before :each do
       term = create_normal_term_with_teacher_and_student(1, 2)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       @first = tutorial_contract_first.tutorial_pieces.first
       @second = tutorial_contract_second.tutorial_pieces.first
-      @seat = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
+      @seat = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                 'timetables.period_index': 1).first
     end
 
     context '座席に１人目を割り当てた時' do
@@ -35,17 +41,25 @@ RSpec.describe TutorialPiece, type: :model do
   describe '座席の最大人数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(1, 3)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
-      tutorial_contract_third = term.tutorial_contracts.find_by(term_student_id: term.term_students.third.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
+      tutorial_contract_third = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.third.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       @first = tutorial_contract_first.tutorial_pieces.first
       @second = tutorial_contract_second.tutorial_pieces.first
       @third = tutorial_contract_third.tutorial_pieces.first
-      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 1).first
+      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 2,
+                                                        'timetables.period_index': 1).first
     end
 
     context '座席の新規設定時(seat_id : nil -> integer)' do
@@ -78,14 +92,20 @@ RSpec.describe TutorialPiece, type: :model do
   describe '担任講師バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 3)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       @first = tutorial_contract_first.tutorial_pieces.first
       @second = tutorial_contract_second.tutorial_pieces.first
-      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 1).first
+      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 2,
+                                                        'timetables.period_index': 1).first
     end
 
     context '座席の新規設定時(seat_id : nil -> integer)' do
@@ -114,15 +134,22 @@ RSpec.describe TutorialPiece, type: :model do
   describe 'ダブルブッキングバリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       @first = tutorial_contract_first.tutorial_pieces.first
       @second = tutorial_contract_second.tutorial_pieces.first
-      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).second
-      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 1).first
+      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                        'timetables.period_index': 1).second
+      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 2,
+                                                       'timetables.period_index': 1).first
     end
 
     context '座席の新規設定時(seat_id : nil -> integer)' do
@@ -151,10 +178,18 @@ RSpec.describe TutorialPiece, type: :model do
   describe '１日のコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(4, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
-      tutorial_contract_fourth = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).fourth
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
+      tutorial_contract_fourth = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).fourth
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.third.id)
@@ -163,11 +198,16 @@ RSpec.describe TutorialPiece, type: :model do
       @second = tutorial_contract_second.tutorial_pieces.first
       @third = tutorial_contract_third.tutorial_pieces.first
       @fourth = tutorial_contract_fourth.tutorial_pieces.first
-      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 2).first
-      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 3).first
-      @seat_fourth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 4).first
-      @seat_fifth = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 1).first
+      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                        'timetables.period_index': 2).first
+      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 3).first
+      @seat_fourth = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                        'timetables.period_index': 4).first
+      @seat_fifth = term.seats.joins(:timetable).where('timetables.date_index': 2,
+                                                       'timetables.period_index': 1).first
     end
 
     context '座席の新規設定時(seat_id : nil -> integer)' do
@@ -204,21 +244,33 @@ RSpec.describe TutorialPiece, type: :model do
   describe '１日の空きコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(3, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.third.id)
       @first = tutorial_contract_first.tutorial_pieces.first
       @second = tutorial_contract_second.tutorial_pieces.first
       @third = tutorial_contract_third.tutorial_pieces.first
-      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 2).first
-      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 3).first
-      @seat_fourth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 4).first
-      @seat_fifth = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 5).first
-      @seat_sixth = term.seats.joins(:timetable).where('timetables.date_index': 2, 'timetables.period_index': 1).first
+      @seat_first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 1).first
+      @seat_second = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                        'timetables.period_index': 2).first
+      @seat_third = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 3).first
+      @seat_fourth = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                        'timetables.period_index': 4).first
+      @seat_fifth = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                       'timetables.period_index': 5).first
+      @seat_sixth = term.seats.joins(:timetable).where('timetables.date_index': 2,
+                                                       'timetables.period_index': 1).first
     end
 
     context '座席の新規設定時(seat_id : nil -> integer)' do
@@ -284,7 +336,9 @@ RSpec.describe TutorialPiece, type: :model do
       @tutorial_piece = tutorial_contract.tutorial_pieces.first
       @seat = term.seats.first
       @timetable = @seat.timetable
-      student_vacancy = tutorial_contract.term_student.student_vacancies.find_by(timetable_id: @timetable.id)
+      student_vacancy = tutorial_contract.term_student.student_vacancies.find_by(
+        timetable_id: @timetable.id,
+      )
       student_vacancy.update(is_vacant: false)
     end
 
@@ -295,3 +349,4 @@ RSpec.describe TutorialPiece, type: :model do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength

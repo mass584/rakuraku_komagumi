@@ -1,7 +1,8 @@
 module TermStudentHelper
   def options_for_select_student_id(room, term)
-    plucked_students = room.students.active.pluck(:name, :id) 
-    plucked_term_students = term.term_students.ordered.joins(:student).pluck('students.name', :student_id)
+    plucked_students = room.students.active.pluck(:name, :id)
+    plucked_term_students = term.term_students.ordered.joins(:student).pluck('students.name',
+                                                                             :student_id)
     plucked_students - plucked_term_students
   end
 
@@ -26,7 +27,9 @@ module TermStudentHelper
     filtered_tutorial_pieces = tutorial_pieces.filter do |tutorial_piece|
       tutorial_piece.date_index == date_index && tutorial_piece.period_index == period_index
     end
-    content_tag(:td, class: term_student_schedule_table_cell_class(timetable, filtered_tutorial_pieces)) do
+    content_tag(:td,
+                class: term_student_schedule_table_cell_class(timetable,
+                                                              filtered_tutorial_pieces)) do
       content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
         term_student_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end

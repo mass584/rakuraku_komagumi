@@ -26,7 +26,7 @@ class TutorialContract < ApplicationRecord
     super(attributes)
   end
 
-  def is_active?
+  def active?
     term_teacher_id.present? || piece_count.positive?
   end
 

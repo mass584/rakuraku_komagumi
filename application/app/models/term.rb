@@ -35,22 +35,38 @@ class Term < ApplicationRecord
 
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
+  scope :cache_child_models, lambda {
+    preload(term_teachers: :teacher)
+      .preload(timetables: [
+                 { term_group: [:group, :group_contracts] },
+                 { seats: { tutorial_pieces: :tutorial_contract } },
+                 :teacher_vacancies,
+                 :student_vacancies
+               ])
+      .preload(tutorial_pieces: [
+                 {
+                   tutorial_contract: [
+                     { term_tutorial: :tutorial },
+                     { term_student: :student }
+                   ],
+                 }
+               ])
+  }
+
   def date_count
     if normal?
       7
-    elsif season?
+    elsif season? || exam_planning?
       (begin_at..end_at).to_a.length
-    elsif exam_planning?
-      (begin_at..end_at).to_a.length
+    else
+      0
     end
   end
 
   def display_date(date_index)
     if normal?
       %w[月曜日 火曜日 水曜日 木曜日 金曜日 土曜日 日曜日][date_index - 1]
-    elsif season?
-      I18n.l (begin_at..end_at).to_a[date_index - 1]
-    elsif exam_planning?
+    elsif season? || exam_planning?
       I18n.l (begin_at..end_at).to_a[date_index - 1]
     end
   end
@@ -146,7 +162,7 @@ class Term < ApplicationRecord
 
   def new_begin_end_times
     period_index_array.map do |index|
-      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
+      { period_index: index, begin_at: '18:00:00', end_at: '19:10:00' }
     end
   end
 

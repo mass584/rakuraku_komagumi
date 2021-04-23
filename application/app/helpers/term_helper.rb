@@ -15,8 +15,8 @@ module TermHelper
         "#{term.year}年度",
         term.name,
         term.term_type_i18n,
-        "#{l term.begin_at}",
-        "#{l term.end_at}",
+        (l term.begin_at).to_s,
+        (l term.end_at).to_s,
         "#{term.period_count}時限",
         "#{term.seat_count}席",
         "1対#{term.position_count}",
@@ -24,18 +24,22 @@ module TermHelper
           render partial: 'terms/edit', locals: { term: term }
         end,
         content_tag(:div) do
-          link_to '開く', term_path(term, {term_id: term.id})
-        end,
+          link_to '開く', term_path(term, { term_id: term.id })
+        end
       ],
     }
   end
 
   def term_schedule_table_cell(tutorial_pieces, seats, date_index, period_index, seat_index)
     seat = seats.find do |item|
-      item.date_index == date_index && item.period_index == period_index && item.seat_index == seat_index
+      item.date_index == date_index &&
+        item.period_index == period_index &&
+        item.seat_index == seat_index
     end
     filtered_tutorial_pieces = tutorial_pieces.filter do |item|
-      item.date_index == date_index && item.period_index == period_index && item.seat_index == seat_index
+      item.date_index == date_index &&
+        item.period_index == period_index &&
+        item.seat_index == seat_index
     end
     content_tag(:td, class: term_schedule_table_cell_class(seat, filtered_tutorial_pieces)) do
       content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do

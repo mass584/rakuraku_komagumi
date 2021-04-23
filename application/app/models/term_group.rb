@@ -8,14 +8,14 @@ class TermGroup < ApplicationRecord
   has_many :timetables, dependent: :nullify
 
   validate :verify_daily_occupation_limit,
-            on: :update,
-            if: :will_save_change_to_term_teacher_id?
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
   validate :verify_daily_blank_limit_for_creation,
-            on: :update,
-            if: :will_save_change_to_term_teacher_id?
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
   validate :verify_daily_blank_limit_for_deletion,
-            on: :update,
-            if: :will_save_change_to_term_teacher_id?
+           on: :update,
+           if: :will_save_change_to_term_teacher_id?
 
   before_validation :fetch_term_teacher_in_database, on: :update
   before_validation :fetch_tutorials_group_by_teacher_and_timetable, on: :update
@@ -24,6 +24,9 @@ class TermGroup < ApplicationRecord
 
   scope :ordered, lambda {
     joins(:group).order('groups.order': 'ASC')
+  }
+  scope :named, lambda {
+    joins(:group).select('term_groups.*', 'groups.name')
   }
 
   private
@@ -45,6 +48,7 @@ class TermGroup < ApplicationRecord
 
   def verify_daily_occupation_limit
     return if term_teacher_deletion?
+
     date_indexes = timetables.pluck(:date_index).uniq
     occupation_limit = term_teacher.optimization_rule.occupation_limit
     daily_occupations_invalid = date_indexes.reduce(false) do |accu, date_index|
@@ -63,6 +67,7 @@ class TermGroup < ApplicationRecord
 
   def verify_daily_blank_limit_for_creation
     return if term_teacher_deletion?
+
     date_indexes = timetables.pluck(:date_index).uniq
     blank_limit = term_teacher.optimization_rule.blank_limit
     daily_blanks_invalid = date_indexes.reduce(false) do |accu, date_index|
@@ -74,13 +79,16 @@ class TermGroup < ApplicationRecord
   end
 
   def term_teacher_for_deletion_daily_blanks(date_index)
-    tutorials = @tutorials_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
-    groups = @new_groups_group_by_teacher_and_timetable.dig(term_teacher_id_in_database, date_index).to_h
+    tutorials = @tutorials_group_by_teacher_and_timetable.dig(term_teacher_id_in_database,
+                                                              date_index).to_h
+    groups = @new_groups_group_by_teacher_and_timetable.dig(term_teacher_id_in_database,
+                                                            date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
   end
 
   def verify_daily_blank_limit_for_deletion
     return if term_teacher_creation?
+
     date_indexes = timetables.pluck(:date_index).uniq
     blank_limit = @term_teacher_in_database.optimization_rule.blank_limit
     daily_blanks_invalid = date_indexes.reduce(false) do |accu, date_index|
@@ -98,9 +106,9 @@ class TermGroup < ApplicationRecord
 
   def fetch_tutorials_group_by_teacher_and_timetable
     records = term
-      .tutorial_contracts
-      .joins(tutorial_pieces: [seat: :timetable])
-      .select(:term_teacher_id, :date_index, :period_index)
+              .tutorial_contracts
+              .joins(tutorial_pieces: [seat: :timetable])
+              .select(:term_teacher_id, :date_index, :period_index)
     @tutorials_group_by_teacher_and_timetable = records.group_by_recursive(
       proc { |item| item[:term_teacher_id] },
       proc { |item| item[:date_index] },
@@ -110,18 +118,18 @@ class TermGroup < ApplicationRecord
 
   def fetch_new_groups_group_by_teacher_and_timetable
     records = term
-      .term_groups
-      .left_joins(:timetables)
-      .select(:id, :term_teacher_id, :date_index, :period_index)
-      .map do |item|
-        {
-          id: item[:id],
-          term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
-          date_index: item[:date_index],
-          period_index: item[:period_index],
-        }
-      end
-      .select { |record| record[:term_teacher_id].present? }
+              .term_groups
+              .left_joins(:timetables)
+              .select(:id, :term_teacher_id, :date_index, :period_index)
+              .map do |item|
+                {
+                  id: item[:id],
+                  term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
+                  date_index: item[:date_index],
+                  period_index: item[:period_index],
+                }
+              end
+              .select { |record| record[:term_teacher_id].present? }
     @new_groups_group_by_teacher_and_timetable = records.group_by_recursive(
       proc { |item| item[:term_teacher_id] },
       proc { |item| item[:date_index] },
@@ -134,7 +142,7 @@ class TermGroup < ApplicationRecord
     self.group_contracts = new_group_contracts
   end
 
-  def new_group_contracts 
+  def new_group_contracts
     term.term_students.map do |term_student|
       GroupContract.new({ term_id: term.id, term_student_id: term_student.id })
     end

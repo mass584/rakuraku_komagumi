@@ -9,27 +9,10 @@ class TutorialPiecesController < ApplicationController
   def index
     respond_to do |format|
       format.json do
-        term = Term
-          .preload(term_teachers: :teacher)
-          .preload(timetables: [
-            { term_group: [:group, :group_contracts] },
-            { seats: { tutorial_pieces: :tutorial_contract } },
-            :teacher_vacancies,
-            :student_vacancies,
-          ])
-          .preload(tutorial_pieces: [
-            {
-              tutorial_contract: [
-                { term_tutorial: :tutorial },
-                { term_student: :student },
-              ],
-            },
-          ])
-          .find_by(id: @term.id)
+        term = Term.cache_child_models.find_by(id: @term.id)
         render json: term, serializer: TermSerializer, status: :ok
       end
-      format.html do
-      end
+      format.html
       format.pdf do
         pdf = OverlookSchedule.new(@term).render
         filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_全体予定表.pdf"
@@ -48,7 +31,7 @@ class TutorialPiecesController < ApplicationController
   end
 
   def bulk_update
-    records = @term.pieces.where.not(seat_id: nil)
+    records = @term.tutorial_pieces.filter_by_placed
     if records.update_all(bulk_update_params)
       head :no_content
     else
@@ -57,7 +40,7 @@ class TutorialPiecesController < ApplicationController
   end
 
   def bulk_reset
-    records = @term.pieces
+    records = @term.tutorial_pieces
     if records.update_all(seat_id: nil, is_fixed: false)
       head :no_content
     else

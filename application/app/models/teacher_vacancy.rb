@@ -8,6 +8,14 @@ class TeacherVacancy < ApplicationRecord
            on: :update,
            if: :will_save_change_to_is_vacant?
 
+  scope :indexed, lambda {
+    joins(:timetable).select(
+      'teacher_vacancies.*',
+      'timetables.date_index',
+      'timetables.period_index',
+    )
+  }
+
   def self.new(attributes = {})
     attributes[:is_vacant] ||= true
     super(attributes)

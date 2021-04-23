@@ -1,35 +1,55 @@
 AllCops:
-  TargetRubyVersion: ~
+  NewCops: enable
+  TargetRubyVersion: 3.0.0
+  SuggestExtensions: false
+  Exclude:
+    - config.ru
+    - Rakefile
+    - bin/**/*
+    - config/**/*
+    - db/**/*
+    - doc/**/*
+    - node_modules/**/*
+    - spec/rails_helper.rb
+    - spec/spec_helper.rb
+    - tmp/**/*
+    - vendor/**/*
 
 Metrics/AbcSize:
-  Max: 66
+  Max: 75
 
 Metrics/BlockLength:
-  Max: 237
+  Max: 250
 
 Metrics/ClassLength:
-  Max: 346
+  Max: 400
 
 Metrics/CyclomaticComplexity:
-  Max: 16
+  Max: 20
 
 Metrics/MethodLength:
-  Max: 53
+  Max: 75
 
 Metrics/ModuleLength:
-  Max: 101
+  Max: 400
 
 Metrics/PerceivedComplexity:
-  Max: 15
+  Max: 20
 
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/LineLength:
-  Max: 100
+  Max: 120
 
 Layout/SpaceBeforeBlockBraces:
   EnforcedStyleForEmptyBraces: no_space
+
+Lint/DuplicateBranch:
+  IgnoreLiteralBranches: true
+
+Style/AsciiComments:
+  Enabled: false
 
 Style/Documentation:
   Enabled: false
@@ -43,13 +63,11 @@ Style/FrozenStringLiteralComment:
 Style/GuardClause:
   MinBodyLength: 5
 
-Style/IfUnlessModifier:
+Style/IdenticalConditionalBranches:
   Enabled: false
 
-Style/MixinUsage:
-  Exclude:
-    - 'bin/setup'
-    - 'bin/update'
+Style/IfUnlessModifier:
+  Enabled: false
 
 Style/MultilineBlockChain:
   Enabled: false

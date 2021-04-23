@@ -35,9 +35,15 @@ RSpec.describe TermGroup, type: :model do
       seat_first = timetable_first.seats.first
       seat_second = timetable_second.seats.first
       seat_third = timetable_third.seats.first
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
@@ -81,16 +87,21 @@ RSpec.describe TermGroup, type: :model do
       @term_group_second = term.term_groups.second
       timetable_first = term.timetables.find_by(date_index: 1, period_index: 1)
       timetable_second = term.timetables.find_by(date_index: 1, period_index: 2)
-      timetable_third = term.timetables.find_by(date_index: 1, period_index: 3)
       timetable_fourth = term.timetables.find_by(date_index: 1, period_index: 4)
       timetable_fourth.update(term_group_id: @term_group_first.id)
       timetable_fifth = term.timetables.find_by(date_index: 1, period_index: 5)
       timetable_fifth.update(term_group_id: @term_group_second.id)
       seat_first = timetable_first.seats.first
       seat_second = timetable_second.seats.first
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)

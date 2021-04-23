@@ -48,4 +48,4 @@ end
 
 group :production do
   gem 'aws-sdk-s3'
-end 
+end

@@ -31,31 +31,8 @@ class TermsController < ApplicationController
   end
 
   def show
-    @tutorial_pieces = TutorialPiece.joins(
-      tutorial_contract: [
-        term_student: [:student],
-        term_tutorial: [:tutorial],
-        term_teacher: [:teacher]
-      ],
-      seat: :timetable,
-    ).where('term_id': @term.id).select(
-      :date_index,
-      :period_index,
-      :seat_index,
-      'students.name AS student_name',
-      'tutorials.name AS tutorial_name',
-      'teachers.name AS teacher_name',
-    )
-    @seats = Seat.left_joins(
-      timetable: [term_group: [:group]],
-    ).where(term_id: @term.id).select(
-      :date_index,
-      :period_index,
-      :seat_index,
-      :term_group_id,
-      :is_closed,
-      'groups.name AS group_name',
-    )
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where(term_id: @term.id)
+    @seats = Seat.with_group.with_index.where(term_id: @term.id)
   end
 
   protected

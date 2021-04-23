@@ -36,30 +36,16 @@ class TermStudentsController < ApplicationController
   end
 
   def vacancy
-    @term_student = TermStudent.joins(:student).select(:id, :name, :school_grade, :vacancy_status).find_by(id: params[:term_student_id])
-    @student_vacancies = @term_student.student_vacancies.joins(:timetable).select(:id, :date_index, :period_index, :is_vacant)
+    @term_student = TermStudent.named.find_by(id: params[:term_student_id])
+    @student_vacancies = @term_student.student_vacancies.indexed
   end
 
   def schedule
     @term_student = TermStudent.find_by(id: params[:term_student_id])
-    @tutorial_pieces = TutorialPiece.joins(
-      tutorial_contract: [
-        term_student: [],
-        term_tutorial: [:tutorial],
-        term_teacher: [:teacher]
-      ],
-      seat: :timetable,
-    ).select(
-      :date_index,
-      :period_index,
-      'tutorials.name AS tutorial_name',
-      'teachers.name AS teacher_name',
-    ).where('term_students.id': params[:term_student_id])
-
-    @timetables = Timetable.left_joins(
-      term_group: [:group_contracts, :group],
-      student_vacancies: [],
-    ).where(
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where(
+      'term_students.id': params[:term_student_id],
+    )
+    @timetables = Timetable.with_group.with_group_contracts.with_student_vacancies.where(
       term_id: @term.id,
       'student_vacancies.term_student_id': params[:term_student_id],
       'group_contracts.term_student_id': nil,
@@ -69,25 +55,7 @@ class TermStudentsController < ApplicationController
         'student_vacancies.term_student_id': params[:term_student_id],
         'group_contracts.term_student_id': params[:term_student_id],
       ),
-    ).select(
-      :date_index,
-      :period_index,
-      :term_group_id,
-      :is_closed,
-      'student_vacancies.is_vacant',
-      'group_contracts.is_contracted',
-      'groups.name AS group_name',
     )
-    respond_to do |format|
-      format.html
-      #format.pdf do
-      #  pdf = StudentSchedule.new(@term, @term_student, @pieces, @student_requests).render
-      #  send_data pdf,
-      #            filename: "#{@term.name}予定表#{@term_student.student.name}.pdf",
-      #            type: 'application/pdf',
-      #            disposition: 'inline'
-      #end
-    end
   end
 
   private

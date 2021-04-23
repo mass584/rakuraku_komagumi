@@ -37,8 +37,15 @@ class Seat < ApplicationRecord
   scope :filter_by_occupied, lambda {
     where.not(term_teacher_id: nil)
   }
+  scope :with_group, lambda {
+    left_joins(timetable: [term_group: [:group]]).select('timetables.*', 'groups.name AS group_name')
+  }
+  scope :with_index, lambda {
+    joins(:timetable).select('timetables.*', 'seats.seat_index')
+  }
 
-  # トランザクションの途中、中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
+  # トランザクションの途中、
+  # 中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
   attr_accessor :skip_intermediate_state_validation
 
   private
@@ -48,7 +55,9 @@ class Seat < ApplicationRecord
   end
 
   def term_teacher_updation?
-    term_teacher_id_in_database.present? && term_teacher_id.present? && term_teacher_id_in_database != term_teacher_id
+    term_teacher_id_in_database.present? &&
+      term_teacher_id.present? &&
+      term_teacher_id_in_database != term_teacher_id
   end
 
   def term_teacher_deletion?
@@ -94,9 +103,9 @@ class Seat < ApplicationRecord
 
   def daily_occupations
     tutorials = @new_tutorials_group_by_teacher_and_timetable
-      .dig(term_teacher_id, timetable.date_index).to_h
+                .dig(term_teacher_id, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
-      .dig(term_teacher_id, timetable.date_index).to_h
+             .dig(term_teacher_id, timetable.date_index).to_h
     self.class.daily_occupations_from(term, tutorials, groups)
   end
 
@@ -109,9 +118,9 @@ class Seat < ApplicationRecord
 
   def daily_blanks_for_creation
     tutorials = @new_tutorials_group_by_teacher_and_timetable
-      .dig(term_teacher_id, timetable.date_index).to_h
+                .dig(term_teacher_id, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
-      .dig(term_teacher_id, timetable.date_index).to_h
+             .dig(term_teacher_id, timetable.date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
   end
 
@@ -124,9 +133,9 @@ class Seat < ApplicationRecord
 
   def daily_blanks_for_deletion
     tutorials = @new_tutorials_group_by_teacher_and_timetable
-      .dig(term_teacher_id_in_database, timetable.date_index).to_h
+                .dig(term_teacher_id_in_database, timetable.date_index).to_h
     groups = @groups_group_by_teacher_and_timetable
-      .dig(term_teacher_id_in_database, timetable.date_index).to_h
+             .dig(term_teacher_id_in_database, timetable.date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
   end
 
@@ -144,16 +153,16 @@ class Seat < ApplicationRecord
 
   def fetch_new_tutorials_group_by_teacher_and_timetable
     records = term.seats.joins(:timetable)
-      .select(:id, :term_teacher_id, :date_index, :period_index)
-      .map do |item|
-        {
-          id: item[:id],
-          term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
-          date_index: item[:date_index],
-          period_index: item[:period_index],
-        }
-      end
-      .select { |item| item[:term_teacher_id].present? }
+                  .select(:id, :term_teacher_id, :date_index, :period_index)
+                  .map do |item|
+                {
+                  id: item[:id],
+                  term_teacher_id: item[:id] == id ? term_teacher_id : item[:term_teacher_id],
+                  date_index: item[:date_index],
+                  period_index: item[:period_index],
+                }
+              end
+                  .select { |item| item[:term_teacher_id].present? }
     @new_tutorials_group_by_teacher_and_timetable = records.group_by_recursive(
       proc { |item| item[:term_teacher_id] },
       proc { |item| item[:date_index] },
@@ -163,8 +172,8 @@ class Seat < ApplicationRecord
 
   def fetch_groups_group_by_teacher_and_timetable
     records = term.timetables.joins(:term_group)
-      .select(:term_teacher_id, :date_index, :period_index)
-      .select { |item| item[:term_teacher_id].present? }
+                  .select(:term_teacher_id, :date_index, :period_index)
+                  .select { |item| item[:term_teacher_id].present? }
     @groups_group_by_teacher_and_timetable = records.group_by_recursive(
       proc { |item| item[:term_teacher_id] },
       proc { |item| item[:date_index] },
