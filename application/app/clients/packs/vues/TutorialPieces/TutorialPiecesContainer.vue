@@ -47,44 +47,24 @@ export default Vue.extend({
       return response;
     },
     updateTutorialPiece: async function(tutorialPieceId: number, seatId: number | null, isFixed: boolean) {
-      const url = `/tutorial_pieces/${tutorialPieceId}`;
+      const url = `/tutorial_pieces/${tutorialPieceId}.json`;
       const reqBody = { tutorial_piece: { seat_id: seatId, is_fixed: isFixed } };
       const response = await axios.put(url, reqBody);
       return response;
     },
-    onPushLeft: function(termTeacher) {
-      const termTeachers = this.term.termTeachers;
-      const rightIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
-        return item.id === termTeacher.id;
-      });
-      const leftIndex = rightIndex > 0 ? rightIndex - 1 : 0;
-      const leftArray = _.slice(termTeachers, 0, leftIndex);
-      const centerArray = rightIndex !== leftIndex ?
-        [termTeachers[rightIndex], termTeachers[leftIndex]] :
-        [termTeachers[rightIndex]];
-      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
-      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
-      this.term = {
-        ...this.term,
-        termTeachers: newTermTeachers,
-      }
+    updateRowOrder: async function(termTeacher: TermTeacher, rowOrderPosition: 'up' | 'down') {
+      const url = `/term_teachers/${termTeacher.id}.json`;
+      const reqBody = { term_teacher: { row_order_position: rowOrderPosition } };
+      const response = await axios.put(url, reqBody);
+      return response;
     },
-    onPushRight: function(termTeacher) {
-      const termTeachers = this.term.termTeachers;
-      const leftIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
-        return item.id === termTeacher.id;
-      });
-      const rightIndex = leftIndex < termTeachers.length - 1 ? leftIndex + 1 : termTeachers.length - 1;
-      const leftArray = _.slice(termTeachers, 0, leftIndex);
-      const centerArray = rightIndex !== leftIndex ?
-        [termTeachers[rightIndex], termTeachers[leftIndex]] :
-        [termTeachers[rightIndex]];
-      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
-      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
-      this.term = {
-        ...this.term,
-        termTeachers: newTermTeachers,
-      }
+    onPushLeft: async function(termTeacher: TermTeacher) {
+      await this.updateRowOrder(termTeacher, 'up');
+      await this.fetchTutorialPieces();
+    },
+    onPushRight: async function(termTeacher: TermTeacher) {
+      await this.updateRowOrder(termTeacher, 'down');
+      await this.fetchTutorialPieces();
     },
     onClickToggle: async function(tutorialPiece) {
       await this.updateTutorialPiece(tutorialPiece.id, tutorialPiece.seatId, !tutorialPiece.isFixed);

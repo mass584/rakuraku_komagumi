@@ -2,7 +2,9 @@ class TermSerializer < ActiveModel::Serializer
   attributes :date_count, :period_count, :seat_count, :position_count, :begin_at, :end_at
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
-  has_many :term_teachers
+  has_many :term_teachers do
+    object.term_teachers.rank(:row_order)
+  end
   has_many :timetables
   has_many :tutorial_pieces
 
