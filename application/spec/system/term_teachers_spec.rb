@@ -85,8 +85,11 @@ RSpec.describe '講師の編集ページ', type: :system do
     it '予定表が表示される' do
       visit term_teachers_path
       find('a[href$="/schedule"]').click
-      expect(page).to have_content '生徒1（個別科目1）'
-      expect(page).to have_content '集団科目1'
+      tutorial_name = @term.term_tutorials.first.tutorial.name
+      student_name = @term.term_students.first.teacher.name
+      group_name = @term.term_groups.first.group.name
+      expect(page).to have_content "#{student_name}（#{tutorial_name}）"
+      expect(page).to have_content group_name
     end
   end
 end
