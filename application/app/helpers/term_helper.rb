@@ -32,10 +32,14 @@ module TermHelper
 
   def term_schedule_table_cell(tutorial_pieces, seats, date_index, period_index, seat_index)
     seat = seats.find do |item|
-      item.date_index == date_index && item.period_index == period_index && item.seat_index == seat_index
+      item.date_index == date_index &&
+        item.period_index == period_index &&
+        item.seat_index == seat_index
     end
     filtered_tutorial_pieces = tutorial_pieces.filter do |item|
-      item.date_index == date_index && item.period_index == period_index && item.seat_index == seat_index
+      item.date_index == date_index &&
+        item.period_index == period_index &&
+        item.seat_index == seat_index
     end
     content_tag(:td, class: term_schedule_table_cell_class(seat, filtered_tutorial_pieces)) do
       content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do

@@ -9,7 +9,11 @@ class StudentVacancy < ApplicationRecord
            if: :will_save_change_to_is_vacant?
 
   scope :indexed, lambda {
-    joins(:timetable).select('student_vacancies.*', 'timetables.date_index', 'timetables.period_index')
+    joins(:timetable).select(
+      'student_vacancies.*',
+      'timetables.date_index',
+      'timetables.period_index',
+    )
   }
 
   def self.new(attributes = {})
@@ -20,7 +24,9 @@ class StudentVacancy < ApplicationRecord
   private
 
   def verify_vacancy
-    term_student_ids = timetable.seats.joins(tutorial_pieces: :tutorial_contract).pluck(:term_student_id).flatten.uniq
+    term_student_ids = timetable.seats.joins(
+      tutorial_pieces: :tutorial_contract,
+    ).pluck(:term_student_id).flatten.uniq
     if !is_vacant && term_student_ids.find { |item| item == term_student_id }
       errors.add(:base, '生徒の予定がすでに埋まっています')
     end

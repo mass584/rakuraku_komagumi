@@ -21,10 +21,17 @@ class Timetable < ApplicationRecord
 
   scope :ordered, -> { order(date_index: 'ASC', period_index: 'ASC') }
   scope :with_group, lambda {
-    left_joins(term_group: [:group]).select('timetables.*', 'term_groups.term_teacher_id', 'groups.name AS group_name')
+    left_joins(term_group: [:group]).select(
+      'timetables.*',
+      'term_groups.term_teacher_id',
+      'groups.name AS group_name',
+    )
   }
   scope :with_group_contracts, lambda {
-    left_joins(term_group: [:group_contracts]).select('timetables.*', 'group_contracts.is_contracted')
+    left_joins(term_group: [:group_contracts]).select(
+      'timetables.*',
+      'group_contracts.is_contracted',
+    )
   }
   scope :with_teacher_vacancies, lambda {
     left_joins(:teacher_vacancies).select('timetables.*', 'teacher_vacancies.is_vacant')

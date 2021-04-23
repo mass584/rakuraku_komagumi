@@ -44,7 +44,9 @@ class TermTeachersController < ApplicationController
 
   def schedule
     @term_teacher = TermTeacher.find_by(id: params[:term_teacher_id])
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where('term_teachers.id': params[:term_teacher_id])
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where(
+      'term_teachers.id': params[:term_teacher_id],
+    )
     @timetables = Timetable.with_group.with_teacher_vacancies.where(
       term_id: @term.id,
       'teacher_vacancies.term_teacher_id': params[:term_teacher_id],

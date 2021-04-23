@@ -95,7 +95,9 @@ class TutorialPiece < ApplicationRecord
 
   def verify_student_vacancy
     if (seat_creation? || seat_updation?) &&
-       !seat.timetable.student_vacancies.find_by(term_student_id: tutorial_contract.term_student_id).is_vacant
+       !seat.timetable.student_vacancies.find_by(
+         term_student_id: tutorial_contract.term_student_id,
+       ).is_vacant
       errors.add(:base, '生徒の予定が空いていません')
     end
   end
@@ -211,7 +213,8 @@ class TutorialPiece < ApplicationRecord
   # after_update
   def set_skip_intermediate_state_validation
     if @seat_in_database.present? && seat.present?
-      skip_intermediate_state_validation = @seat_in_database.timetable.date_index == seat.timetable.date_index
+      skip_intermediate_state_validation =
+        @seat_in_database.timetable.date_index == seat.timetable.date_index
       @seat_in_database.skip_intermediate_state_validation = skip_intermediate_state_validation
     end
   end

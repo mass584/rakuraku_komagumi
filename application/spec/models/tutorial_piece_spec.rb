@@ -4,8 +4,12 @@ RSpec.describe TutorialPiece, type: :model do
   describe 'seat.term_teacher_idの同時変更' do
     before :each do
       term = create_normal_term_with_teacher_and_student(1, 2)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       @first = tutorial_contract_first.tutorial_pieces.first
@@ -36,9 +40,15 @@ RSpec.describe TutorialPiece, type: :model do
   describe '座席の最大人数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(1, 3)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
-      tutorial_contract_third = term.tutorial_contracts.find_by(term_student_id: term.term_students.third.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
+      tutorial_contract_third = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.third.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
@@ -81,8 +91,12 @@ RSpec.describe TutorialPiece, type: :model do
   describe '担任講師バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 3)
-      tutorial_contract_first = term.tutorial_contracts.find_by(term_student_id: term.term_students.first.id)
-      tutorial_contract_second = term.tutorial_contracts.find_by(term_student_id: term.term_students.second.id)
+      tutorial_contract_first = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.first.id,
+      )
+      tutorial_contract_second = term.tutorial_contracts.find_by(
+        term_student_id: term.term_students.second.id,
+      )
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       @first = tutorial_contract_first.tutorial_pieces.first
@@ -119,8 +133,12 @@ RSpec.describe TutorialPiece, type: :model do
   describe 'ダブルブッキングバリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       @first = tutorial_contract_first.tutorial_pieces.first
@@ -159,10 +177,18 @@ RSpec.describe TutorialPiece, type: :model do
   describe '１日のコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(4, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
-      tutorial_contract_fourth = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).fourth
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
+      tutorial_contract_fourth = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).fourth
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.third.id)
@@ -217,9 +243,15 @@ RSpec.describe TutorialPiece, type: :model do
   describe '１日の空きコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(3, 1)
-      tutorial_contract_first = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).first
-      tutorial_contract_second = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).second
-      tutorial_contract_third = term.tutorial_contracts.where(term_student_id: term.term_students.first.id).third
+      tutorial_contract_first = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).first
+      tutorial_contract_second = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).second
+      tutorial_contract_third = term.tutorial_contracts.where(
+        term_student_id: term.term_students.first.id,
+      ).third
       tutorial_contract_first.update(piece_count: 1, term_teacher_id: term.term_teachers.first.id)
       tutorial_contract_second.update(piece_count: 1, term_teacher_id: term.term_teachers.second.id)
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: term.term_teachers.third.id)
@@ -303,7 +335,9 @@ RSpec.describe TutorialPiece, type: :model do
       @tutorial_piece = tutorial_contract.tutorial_pieces.first
       @seat = term.seats.first
       @timetable = @seat.timetable
-      student_vacancy = tutorial_contract.term_student.student_vacancies.find_by(timetable_id: @timetable.id)
+      student_vacancy = tutorial_contract.term_student.student_vacancies.find_by(
+        timetable_id: @timetable.id,
+      )
       student_vacancy.update(is_vacant: false)
     end
 

@@ -12,8 +12,7 @@ class TutorialPiecesController < ApplicationController
         term = Term.cache_child_models.find_by(id: @term.id)
         render json: term, serializer: TermSerializer, status: :ok
       end
-      format.html do
-      end
+      format.html
       format.pdf do
         pdf = OverlookSchedule.new(@term).render
         filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_全体予定表.pdf"

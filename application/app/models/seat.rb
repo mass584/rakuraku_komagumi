@@ -44,7 +44,8 @@ class Seat < ApplicationRecord
     joins(:timetable).select('timetables.*', 'seats.seat_index')
   }
 
-  # トランザクションの途中、中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
+  # トランザクションの途中、
+  # 中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
   attr_accessor :skip_intermediate_state_validation
 
   private
@@ -54,7 +55,9 @@ class Seat < ApplicationRecord
   end
 
   def term_teacher_updation?
-    term_teacher_id_in_database.present? && term_teacher_id.present? && term_teacher_id_in_database != term_teacher_id
+    term_teacher_id_in_database.present? &&
+      term_teacher_id.present? &&
+      term_teacher_id_in_database != term_teacher_id
   end
 
   def term_teacher_deletion?

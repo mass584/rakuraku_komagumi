@@ -42,7 +42,9 @@ class TermStudentsController < ApplicationController
 
   def schedule
     @term_student = TermStudent.find_by(id: params[:term_student_id])
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where('term_students.id': params[:term_student_id])
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where(
+      'term_students.id': params[:term_student_id],
+    )
     @timetables = Timetable.with_group.with_group_contracts.with_student_vacancies.where(
       term_id: @term.id,
       'student_vacancies.term_student_id': params[:term_student_id],

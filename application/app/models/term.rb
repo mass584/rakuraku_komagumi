@@ -56,9 +56,7 @@ class Term < ApplicationRecord
   def date_count
     if normal?
       7
-    elsif season?
-      (begin_at..end_at).to_a.length
-    elsif exam_planning?
+    elsif season? || exam_planning?
       (begin_at..end_at).to_a.length
     else
       0
@@ -68,9 +66,7 @@ class Term < ApplicationRecord
   def display_date(date_index)
     if normal?
       %w[月曜日 火曜日 水曜日 木曜日 金曜日 土曜日 日曜日][date_index - 1]
-    elsif season?
-      I18n.l (begin_at..end_at).to_a[date_index - 1]
-    elsif exam_planning?
+    elsif season? || exam_planning?
       I18n.l (begin_at..end_at).to_a[date_index - 1]
     end
   end
