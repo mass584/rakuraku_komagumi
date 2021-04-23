@@ -11,7 +11,7 @@ class TimetablesController < ApplicationController
     @page_size = PAGE_SIZE
     @timetables = @term.timetables
     @begin_end_times = @term.begin_end_times
-    @term_groups = @term.term_groups.joins(:group).select('term_groups.id', 'groups.name', 'term_teacher_id')
+    @term_groups = @term.term_groups.named
   end
 
   def update
