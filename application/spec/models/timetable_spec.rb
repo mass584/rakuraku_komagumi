@@ -48,7 +48,7 @@ RSpec.describe Timetable, type: :model do
       end
 
       it '休講の場合updateに失敗する' do
-        @timetable.update(is_closed: true) 
+        @timetable.update(is_closed: true)
         expect(@timetable.update(term_group_id: @term_group.id)).to eq(false)
         expect(@timetable.errors.full_messages).to include('休講のため変更できません')
       end

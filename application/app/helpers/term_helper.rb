@@ -15,8 +15,8 @@ module TermHelper
         "#{term.year}年度",
         term.name,
         term.term_type_i18n,
-        "#{l term.begin_at}",
-        "#{l term.end_at}",
+        (l term.begin_at).to_s,
+        (l term.end_at).to_s,
         "#{term.period_count}時限",
         "#{term.seat_count}席",
         "1対#{term.position_count}",
@@ -24,8 +24,8 @@ module TermHelper
           render partial: 'terms/edit', locals: { term: term }
         end,
         content_tag(:div) do
-          link_to '開く', term_path(term, {term_id: term.id})
-        end,
+          link_to '開く', term_path(term, { term_id: term.id })
+        end
       ],
     }
   end

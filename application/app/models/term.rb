@@ -38,19 +38,19 @@ class Term < ApplicationRecord
   scope :cache_child_models, lambda {
     preload(term_teachers: :teacher)
       .preload(timetables: [
-        { term_group: [:group, :group_contracts] },
-        { seats: { tutorial_pieces: :tutorial_contract } },
-        :teacher_vacancies,
-        :student_vacancies,
-      ])
+                 { term_group: [:group, :group_contracts] },
+                 { seats: { tutorial_pieces: :tutorial_contract } },
+                 :teacher_vacancies,
+                 :student_vacancies
+               ])
       .preload(tutorial_pieces: [
-        {
-          tutorial_contract: [
-            { term_tutorial: :tutorial },
-            { term_student: :student },
-          ],
-        },
-      ])
+                 {
+                   tutorial_contract: [
+                     { term_tutorial: :tutorial },
+                     { term_student: :student }
+                   ],
+                 }
+               ])
   }
 
   def date_count
@@ -166,7 +166,7 @@ class Term < ApplicationRecord
 
   def new_begin_end_times
     period_index_array.map do |index|
-      { period_index: index, begin_at: "18:00:00", end_at: "19:10:00" }
+      { period_index: index, begin_at: '18:00:00', end_at: '19:10:00' }
     end
   end
 

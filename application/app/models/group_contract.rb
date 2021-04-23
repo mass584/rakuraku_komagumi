@@ -9,11 +9,11 @@ class GroupContract < ApplicationRecord
             exclusion: { in: [nil], message: 'にnilは許容されません' }
 
   validate :verify_daily_occupation_limit,
-            on: :update,
-            if: :will_save_change_to_is_contracted?
+           on: :update,
+           if: :will_save_change_to_is_contracted?
   validate :verify_daily_blank_limit,
-            on: :update,
-            if: :will_save_change_to_is_contracted?
+           on: :update,
+           if: :will_save_change_to_is_contracted?
 
   before_validation :fetch_tutorials_group_by_timetable, on: :update
   before_validation :fetch_new_groups_group_by_timetable, on: :update
@@ -38,8 +38,8 @@ class GroupContract < ApplicationRecord
 
   # validate
   def daily_occupations(date_index)
-    tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
-    groups = @new_groups_group_by_timetable.dig(date_index).to_h
+    tutorials = @tutorials_group_by_timetable[date_index].to_h
+    groups = @new_groups_group_by_timetable[date_index].to_h
     self.class.daily_occupations_from(term, tutorials, groups)
   end
 
@@ -56,8 +56,8 @@ class GroupContract < ApplicationRecord
   end
 
   def daily_blanks(date_index)
-    tutorials = @tutorials_group_by_timetable.dig(date_index).to_h
-    groups = @new_groups_group_by_timetable.dig(date_index).to_h
+    tutorials = @tutorials_group_by_timetable[date_index].to_h
+    groups = @new_groups_group_by_timetable[date_index].to_h
     self.class.daily_blanks_from(term, tutorials, groups)
   end
 
@@ -76,20 +76,20 @@ class GroupContract < ApplicationRecord
   # before_validation
   def fetch_new_groups_group_by_timetable
     records = term
-      .group_contracts
-      .filter_by_student(term_student_id)
-      .joins(term_group: :timetables)
-      .select(:id, :term_group_id, :is_contracted, :date_index, :period_index)
-      .map do |item|
-        {
-          id: item[:id],
-          term_group_id: item[:term_group_id],
-          is_contracted: item[:id] == id ? is_contracted : item[:is_contracted],
-          date_index: item[:date_index],
-          period_index: item[:period_index],
-        }
-      end
-      .select { |item| item[:is_contracted] }
+              .group_contracts
+              .filter_by_student(term_student_id)
+              .joins(term_group: :timetables)
+              .select(:id, :term_group_id, :is_contracted, :date_index, :period_index)
+              .map do |item|
+                {
+                  id: item[:id],
+                  term_group_id: item[:term_group_id],
+                  is_contracted: item[:id] == id ? is_contracted : item[:is_contracted],
+                  date_index: item[:date_index],
+                  period_index: item[:period_index],
+                }
+              end
+              .select { |item| item[:is_contracted] }
     @new_groups_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
@@ -98,10 +98,10 @@ class GroupContract < ApplicationRecord
 
   def fetch_tutorials_group_by_timetable
     records = term
-      .tutorial_contracts
-      .filter_by_student(term_student_id)
-      .joins(tutorial_pieces: [seat: :timetable])
-      .select(:date_index, :period_index)
+              .tutorial_contracts
+              .filter_by_student(term_student_id)
+              .joins(tutorial_pieces: [seat: :timetable])
+              .select(:date_index, :period_index)
     @tutorials_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },

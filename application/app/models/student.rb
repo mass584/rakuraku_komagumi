@@ -21,7 +21,7 @@ class Student < ApplicationRecord
     h1: 31,
     h2: 32,
     h3: 33,
-    other: 99
+    other: 99,
   }
 
   scope :active, -> { where(is_deleted: false) }

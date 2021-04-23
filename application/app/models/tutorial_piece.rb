@@ -87,8 +87,8 @@ class TutorialPiece < ApplicationRecord
 
   def verify_term_teacher
     if (seat_creation? || seat_updation?) &&
-      seat.term_teacher_id.present? &&
-      seat.term_teacher_id != tutorial_contract.term_teacher_id
+       seat.term_teacher_id.present? &&
+       seat.term_teacher_id != tutorial_contract.term_teacher_id
       errors.add(:base, '座席に割り当てられた講師と担当講師が一致しません')
     end
   end
@@ -115,8 +115,8 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_occupations(date_index)
-    tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
-    groups = @groups_group_by_timetable.dig(date_index).to_h
+    tutorials = @new_tutorials_group_by_timetable[date_index].to_h
+    groups = @groups_group_by_timetable[date_index].to_h
     self.class.daily_occupations_from(term, tutorials, groups)
   end
 
@@ -132,8 +132,8 @@ class TutorialPiece < ApplicationRecord
   end
 
   def daily_blanks(date_index)
-    tutorials = @new_tutorials_group_by_timetable.dig(date_index).to_h
-    groups = @groups_group_by_timetable.dig(date_index).to_h
+    tutorials = @new_tutorials_group_by_timetable[date_index].to_h
+    groups = @groups_group_by_timetable[date_index].to_h
     self.class.daily_blanks_from(term, tutorials, groups)
   end
 
@@ -162,20 +162,20 @@ class TutorialPiece < ApplicationRecord
 
   def fetch_new_tutorials_group_by_timetable
     records = term
-      .tutorial_pieces
-      .filter_by_student(tutorial_contract.term_student_id)
-      .left_joins(:tutorial_contract, seat: :timetable)
-      .select(:id, :term_student_id, :date_index, :period_index, :seat_id)
-      .map do |item|
-        {
-          id: item[:id],
-          term_student_id: item[:term_student_id],
-          date_index: item[:id] == id ? seat&.timetable&.date_index : item[:date_index],
-          period_index: item[:id] == id ? seat&.timetable&.period_index : item[:period_index],
-          seat_id: item[:id] == id ? seat_id : item[:seat_id],
-        }
-      end
-      .select { |item| item[:seat_id].present? }
+              .tutorial_pieces
+              .filter_by_student(tutorial_contract.term_student_id)
+              .left_joins(:tutorial_contract, seat: :timetable)
+              .select(:id, :term_student_id, :date_index, :period_index, :seat_id)
+              .map do |item|
+                {
+                  id: item[:id],
+                  term_student_id: item[:term_student_id],
+                  date_index: item[:id] == id ? seat&.timetable&.date_index : item[:date_index],
+                  period_index: item[:id] == id ? seat&.timetable&.period_index : item[:period_index],
+                  seat_id: item[:id] == id ? seat_id : item[:seat_id],
+                }
+              end
+              .select { |item| item[:seat_id].present? }
     @new_tutorials_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
@@ -184,11 +184,11 @@ class TutorialPiece < ApplicationRecord
 
   def fetch_groups_group_by_timetable
     records = term
-      .group_contracts
-      .filter_by_student(tutorial_contract.term_student_id)
-      .filter_by_is_contracted
-      .joins(term_group: :timetables)
-      .select(:term_student_id, :date_index, :period_index)
+              .group_contracts
+              .filter_by_student(tutorial_contract.term_student_id)
+              .filter_by_is_contracted
+              .joins(term_group: :timetables)
+              .select(:term_student_id, :date_index, :period_index)
     @groups_group_by_timetable = records.group_by_recursive(
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
@@ -197,7 +197,7 @@ class TutorialPiece < ApplicationRecord
 
   # before_update
   def set_term_teacher_on_seat
-    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count == 0 
+    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count.zero?
       seat.term_teacher_id = tutorial_contract.term_teacher_id
     end
   end
@@ -217,14 +217,14 @@ class TutorialPiece < ApplicationRecord
   end
 
   def save_seat_in_database
-    if @seat_in_database.present?
-      raise ActiveRecord::Rollback unless @seat_in_database.save
+    if @seat_in_database.present? && !@seat_in_database.save
+      raise ActiveRecord::Rollback
     end
   end
 
   def save_seat
-    if seat.present?
-      raise ActiveRecord::Rollback unless seat.save
+    if seat.present? && !seat.save
+      raise ActiveRecord::Rollback
     end
   end
 end

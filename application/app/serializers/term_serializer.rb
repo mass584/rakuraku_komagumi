@@ -1,5 +1,6 @@
 class TermSerializer < ActiveModel::Serializer
-  attributes :term_type, :date_count, :period_count, :seat_count, :position_count, :begin_at, :end_at
+  attributes :term_type, :date_count, :period_count, :seat_count, :position_count, :begin_at,
+             :end_at
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
   has_many :term_teachers do
@@ -47,32 +48,28 @@ class TermSerializer < ActiveModel::Serializer
     has_many :seats
 
     def term_group_name
-      object.term_group && object.term_group.group.name
+      object.term_group&.group&.name
     end
 
     def term_group_teacher_id
-      object.term_group && object.term_group.term_teacher_id
+      object.term_group&.term_teacher_id
     end
 
     def term_group_student_ids
-      object.term_group ? object.term_group.group_contracts.where(is_contracted: true).pluck(:term_student_id) : [] 
+      object.term_group ? object.term_group.group_contracts.where(is_contracted: true).pluck(:term_student_id) : []
     end
 
     def vacant_term_teacher_ids
-      object.teacher_vacancies.filter do |teacher_vacancy|
-        teacher_vacancy.is_vacant
-      end.pluck(:term_teacher_id)
+      object.teacher_vacancies.filter(&:is_vacant).pluck(:term_teacher_id)
     end
 
     def vacant_term_student_ids
-      object.student_vacancies.filter do |student_vacancy|
-        student_vacancy.is_vacant
-      end.pluck(:term_student_id)
+      object.student_vacancies.filter(&:is_vacant).pluck(:term_student_id)
     end
 
     def occupied_term_teacher_ids
       object.seats.pluck(:term_teacher_id).filter do |id|
-        id != nil
+        !id.nil?
       end
     end
 

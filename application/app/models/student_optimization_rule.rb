@@ -27,7 +27,7 @@ class StudentOptimizationRule < ApplicationRecord
     h1: 31,
     h2: 32,
     h3: 33,
-    other: 99
+    other: 99,
   }
 
   validate :occupation_costs_valid?

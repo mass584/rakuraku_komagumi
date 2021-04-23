@@ -28,8 +28,10 @@ RSpec.describe Seat, type: :model do
       term = create_normal_term_with_teacher_and_student(2, 0)
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
-      @first = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).first
-      @second = term.seats.joins(:timetable).where('timetables.date_index': 1, 'timetables.period_index': 1).second
+      @first = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                  'timetables.period_index': 1).first
+      @second = term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                                   'timetables.period_index': 1).second
     end
 
     context '講師の新規設定時(term_teacher_id : nil -> integer)' do
@@ -58,7 +60,8 @@ RSpec.describe Seat, type: :model do
   describe '１日のコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 0)
-      term.teacher_optimization_rules.first.update(occupation_limit: 4, occupation_costs: [0, 18, 3, 0, 6])
+      term.teacher_optimization_rules.first.update(occupation_limit: 4,
+                                                   occupation_costs: [0, 18, 3, 0, 6])
       timetables = timetables(term)
       @seats = seats(term)
       @term_teacher_first = term.term_teachers.first
@@ -164,7 +167,8 @@ RSpec.describe Seat, type: :model do
       @term_teacher = term.term_teachers.first
       @seat = term.seats.first
       @timetable = @seat.timetable
-      teacher_vacancy = @timetable.teacher_vacancies.find_by(timetable_id: @timetable.id, term_teacher_id: @term_teacher.id)
+      teacher_vacancy = @timetable.teacher_vacancies.find_by(timetable_id: @timetable.id,
+                                                             term_teacher_id: @term_teacher.id)
       teacher_vacancy.update(is_vacant: false)
     end
 

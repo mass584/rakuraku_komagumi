@@ -44,7 +44,7 @@ class Timetable < ApplicationRecord
 
   # callback
   def set_nest_objects
-    self.seats.build(new_seats)
+    seats.build(new_seats)
   end
 
   def new_seats

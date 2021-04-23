@@ -93,7 +93,8 @@ module FactorySupport
   end
 
   def seats(term)
-    term.seats.joins(:timetable).where('timetables.date_index': 1, seat_index: 1).order(period_index: 'ASC')
+    term.seats.joins(:timetable).where('timetables.date_index': 1,
+                                       seat_index: 1).order(period_index: 'ASC')
   end
 
   def student_tutorial_contracts(term, term_student)

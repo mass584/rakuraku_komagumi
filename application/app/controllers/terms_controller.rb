@@ -31,7 +31,7 @@ class TermsController < ApplicationController
   end
 
   def show
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where('term_id': @term.id)
+    @tutorial_pieces = TutorialPiece.indexed_and_named.where(term_id: @term.id)
     @seats = Seat.with_group.with_index.where(term_id: @term.id)
   end
 

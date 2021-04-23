@@ -14,7 +14,8 @@ module ContractHelper
   def select_tag_term_teacher_id(tutorial_contract, term_teachers)
     select_tag(
       :term_teacher_id,
-      options_from_collection_for_select(term_teachers, :id, :name, tutorial_contract.term_teacher_id),
+      options_from_collection_for_select(term_teachers, :id, :name,
+                                         tutorial_contract.term_teacher_id),
       include_blank: '担任を選択',
       id: "select_term_teacher_id_#{tutorial_contract.id}",
       class: 'form-control form-control-sm',
@@ -40,7 +41,8 @@ module ContractHelper
         )
         concat(
           content_tag(:div, class: 'col-3 px-0 d-flex align-items-end') do
-            button_tag('消', id: "button_delete_#{tutorial_contract.id}", class: %w[btn btn-sm btn-danger])
+            button_tag('消', id: "button_delete_#{tutorial_contract.id}",
+                            class: %w[btn btn-sm btn-danger])
           end,
         )
       end

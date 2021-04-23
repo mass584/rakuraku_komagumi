@@ -1,7 +1,8 @@
 module TermTeacherHelper
   def options_for_select_teacher_id(room, term)
-    plucked_teachers = room.teachers.active.pluck(:name, :id) 
-    plucked_term_teachers = term.term_teachers.ordered.joins(:teacher).pluck('teachers.name', :teacher_id)
+    plucked_teachers = room.teachers.active.pluck(:name, :id)
+    plucked_term_teachers = term.term_teachers.ordered.joins(:teacher).pluck('teachers.name',
+                                                                             :teacher_id)
     plucked_teachers - plucked_term_teachers
   end
 
@@ -26,7 +27,9 @@ module TermTeacherHelper
     filtered_tutorial_pieces = tutorial_pieces.filter do |tutorial_piece|
       tutorial_piece.date_index == date_index && tutorial_piece.period_index == period_index
     end
-    content_tag(:td, class: term_teacher_schedule_table_cell_class(timetable, filtered_tutorial_pieces, term_teacher)) do
+    content_tag(:td,
+                class: term_teacher_schedule_table_cell_class(timetable, filtered_tutorial_pieces,
+                                                              term_teacher)) do
       content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
         term_teacher_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end
