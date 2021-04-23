@@ -5,6 +5,7 @@ class TermSerializer < ActiveModel::Serializer
   has_many :term_teachers do
     object.term_teachers.rank(:row_order)
   end
+  has_many :term_students
   has_many :timetables
   has_many :tutorial_pieces
 
@@ -22,6 +23,15 @@ class TermSerializer < ActiveModel::Serializer
 
     def term_teacher_name
       object.teacher.name
+    end
+  end
+
+  class TermStudentSerializer < ActiveModel::Serializer
+    attributes :id, :vacancy_status
+    attribute :term_student_name
+
+    def term_student_name
+      object.student.name
     end
   end
 

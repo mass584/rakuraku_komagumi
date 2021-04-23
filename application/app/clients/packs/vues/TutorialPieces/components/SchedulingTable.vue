@@ -137,7 +137,7 @@ export default Vue.component('scheduling-table', {
 
 <style scoped lang="scss">
 .table-wrapper {
-  height: calc(100vh - 56px - 41px - 100px);
+  height: calc(100vh - 56px - 41px - 96px);
 }
 .fixed1, .fixed2 {
   position: sticky;

@@ -2,14 +2,7 @@
 .container-fluid.my-5
   == render partial: 'application/title',
     locals: { title: '教室の一覧' }
-  .row.float-left.mx-5
+  .row.float-left.mx-5.mb-3
     == render partial: 'rooms/new', locals: { room: Room.new }
-  .row.float-right.mx-5
-    .mr-1
-      == render partial: 'application/search',
-        locals: { path: rooms_path, keyword: @keyword, page: @page }
-    .ml-1
-      == render partial: 'application/pagenation',
-        locals: { path: rooms_path, keyword: @keyword, page: @page, max_page: max_page(@rooms.count, @page_size) }
   == render partial: 'application/table',
     locals: { table_content: rooms_table_content(@rooms) }
