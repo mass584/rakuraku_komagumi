@@ -15,7 +15,7 @@
       tbody
         - @term.date_index_array(@week).each do |date_index|
           tr
-            td.align-middle = I18n.l(@term.date_index_to_date(date_index))
+            td.align-middle = @term.display_date(date_index)
             - @term.period_index_array.each do |period_index|
               td.align-middle
                 = student_vacancy_button(@term_student, @student_vacancies, date_index, period_index)
