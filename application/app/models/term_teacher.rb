@@ -4,7 +4,7 @@ class TermTeacher < ApplicationRecord
   belongs_to :teacher
   has_many :term_groups, dependent: :restrict_with_exception
   has_many :tutorial_contracts, dependent: :restrict_with_exception
-  has_many :seats, dependent: :restrict_with_exception 
+  has_many :seats, dependent: :restrict_with_exception
   has_many :teacher_vacancies, dependent: :destroy
 
   enum vacancy_status: {
@@ -24,6 +24,9 @@ class TermTeacher < ApplicationRecord
     page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
       offset((page - 1) * page_size).limit(page_size) :
       itself
+  }
+  scope :named, lambda {
+    joins(:teacher).select('term_teachers.*', 'teachers.name')
   }
 
   def self.new(attributes = {})
@@ -45,6 +48,6 @@ class TermTeacher < ApplicationRecord
   def new_teacher_vacancies
     term.timetables.map do |timetable|
       TeacherVacancy.new({ timetable_id: timetable.id })
-    end 
+    end
   end
 end

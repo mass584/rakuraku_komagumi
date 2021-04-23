@@ -8,6 +8,9 @@ class TermTutorial < ApplicationRecord
   scope :ordered, lambda {
     joins(:tutorial).order('tutorials.order': 'ASC')
   }
+  scope :named, lambda {
+    joins(:tutorial).select('term_tutorials.*', 'tutorials.name')
+  }
 
   private
 
@@ -15,7 +18,7 @@ class TermTutorial < ApplicationRecord
     self.tutorial_contracts = new_tutorial_contracts
   end
 
-  def new_tutorial_contracts 
+  def new_tutorial_contracts
     term.term_students.map do |term_student|
       TutorialContract.new({ term_id: term.id, term_student_id: term_student.id })
     end

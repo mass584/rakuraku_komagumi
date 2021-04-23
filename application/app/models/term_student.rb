@@ -23,7 +23,7 @@ class TermStudent < ApplicationRecord
     h1: 31,
     h2: 32,
     h3: 33,
-    other: 99
+    other: 99,
   }
 
   before_create :set_nest_objects
@@ -35,6 +35,9 @@ class TermStudent < ApplicationRecord
     page.instance_of?(Integer) && page_size.instance_of?(Integer) ?
       offset((page - 1) * page_size).limit(page_size) :
       itself
+  }
+  scope :named, lambda {
+    joins(:student).select('term_students.*', 'students.name')
   }
 
   def self.new(attributes = {})
@@ -52,9 +55,9 @@ class TermStudent < ApplicationRecord
 
   # before_create
   def set_nest_objects
-    self.tutorial_contracts.build(new_tutorial_contracts)
-    self.group_contracts.build(new_group_contracts)
-    self.student_vacancies.build(new_student_vacancies)
+    tutorial_contracts.build(new_tutorial_contracts)
+    group_contracts.build(new_group_contracts)
+    student_vacancies.build(new_student_vacancies)
   end
 
   def new_tutorial_contracts
