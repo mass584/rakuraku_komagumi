@@ -37,6 +37,12 @@ class Seat < ApplicationRecord
   scope :filter_by_occupied, lambda {
     where.not(term_teacher_id: nil)
   }
+  scope :with_group, lambda {
+    left_joins(timetable: [term_group: [:group]]).select('timetables.*', 'groups.name AS group_name')
+  }
+  scope :with_index, lambda {
+    joins(:timetable).select('timetables.*', 'seats.seat_index')
+  }
 
   # トランザクションの途中、中間状態のバリデーションをスキップして一時的にバリデーション違反を許容させるためのフラグ
   attr_accessor :skip_intermediate_state_validation
