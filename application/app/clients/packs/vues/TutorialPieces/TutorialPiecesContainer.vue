@@ -1,24 +1,31 @@
 <template>
-  <scheduling-table
-    v-if="term"
-    :seat-count="term.seatCount"
-    :position-count="term.positionCount"
-    :begin-at="term.beginAt"
-    :term-teachers="term.termTeachers"
-    :timetables="term.timetables"
-    :tutorial-pieces="term.tutorialPieces"
-    :droppables="droppables"
-    :notVacants="notVacants"
-    :isDisables="isDisables"
-    v-on:toggle="onClickToggle($event.tutorialPiece)"
-    v-on:delete="onClickDelete($event.tutorialPiece)"
-    v-on:pushleft="onPushLeft($event.termTeacher)"
-    v-on:pushright="onPushRight($event.termTeacher)"
-    v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
-    v-on:dragend="onDragEnd()"
-    v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
-    v-on:dragover="onDragOver($event.event, $event.timetable, $event.termTeacher)"
-  />
+  <div>
+    <scheduling-table
+      v-if="term"
+      :seat-count="term.seatCount"
+      :position-count="term.positionCount"
+      :begin-at="term.beginAt"
+      :term-teachers="term.termTeachers"
+      :timetables="term.timetables"
+      :tutorial-pieces="term.tutorialPieces"
+      :droppables="droppables"
+      :notVacants="notVacants"
+      :isDisables="isDisables"
+      v-on:toggle="onClickToggle($event.tutorialPiece)"
+      v-on:delete="onClickDelete($event.tutorialPiece)"
+      v-on:pushleft="onPushLeft($event.termTeacher)"
+      v-on:pushright="onPushRight($event.termTeacher)"
+      v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
+      v-on:dragend="onDragEnd()"
+      v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
+      v-on:dragover="onDragOver($event.event, $event.timetable, $event.termTeacher)"
+    />
+    <div v-if="isLoading" class="modal modal-backdrop d-block show" tabindex="-1" role="dialog">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="spinner-border text-primary m-auto" role="status" />
+      </div>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -33,6 +40,7 @@ import { validate, isStudentVacant, isTeacherVacant } from './validator';
 export default Vue.extend({
   name: 'tutorial_pieces_container',
   data: () => ({
+    isLoading: false,
     term: null,
     droppables: [],
     notVacants: [],
@@ -47,52 +55,45 @@ export default Vue.extend({
       return response;
     },
     updateTutorialPiece: async function(tutorialPieceId: number, seatId: number | null, isFixed: boolean) {
-      const url = `/tutorial_pieces/${tutorialPieceId}`;
+      const url = `/tutorial_pieces/${tutorialPieceId}.json`;
       const reqBody = { tutorial_piece: { seat_id: seatId, is_fixed: isFixed } };
       const response = await axios.put(url, reqBody);
       return response;
     },
-    onPushLeft: function(termTeacher) {
-      const termTeachers = this.term.termTeachers;
-      const rightIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
-        return item.id === termTeacher.id;
-      });
-      const leftIndex = rightIndex > 0 ? rightIndex - 1 : 0;
-      const leftArray = _.slice(termTeachers, 0, leftIndex);
-      const centerArray = rightIndex !== leftIndex ?
-        [termTeachers[rightIndex], termTeachers[leftIndex]] :
-        [termTeachers[rightIndex]];
-      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
-      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
-      this.term = {
-        ...this.term,
-        termTeachers: newTermTeachers,
-      }
+    updateRowOrder: async function(termTeacher: TermTeacher, rowOrderPosition: 'up' | 'down') {
+      const url = `/term_teachers/${termTeacher.id}.json`;
+      const reqBody = { term_teacher: { row_order_position: rowOrderPosition } };
+      const response = await axios.put(url, reqBody);
+      return response;
     },
-    onPushRight: function(termTeacher) {
-      const termTeachers = this.term.termTeachers;
-      const leftIndex = _.findIndex(termTeachers, (item: TermTeacher) => {
-        return item.id === termTeacher.id;
-      });
-      const rightIndex = leftIndex < termTeachers.length - 1 ? leftIndex + 1 : termTeachers.length - 1;
-      const leftArray = _.slice(termTeachers, 0, leftIndex);
-      const centerArray = rightIndex !== leftIndex ?
-        [termTeachers[rightIndex], termTeachers[leftIndex]] :
-        [termTeachers[rightIndex]];
-      const rightArray = _.slice(termTeachers, rightIndex + 1, termTeachers.length);
-      const newTermTeachers = _.flatten([leftArray, centerArray, rightArray]);
-      this.term = {
-        ...this.term,
-        termTeachers: newTermTeachers,
-      }
+    onCreate: async function() {
+      this.isLoading = true;
+      await this.fetchTutorialPieces();
+      this.isLoading = false;
+    },
+    onPushLeft: async function(termTeacher: TermTeacher) {
+      this.isLoading = true;
+      await this.updateRowOrder(termTeacher, 'up');
+      await this.fetchTutorialPieces();
+      this.isLoading = false;
+    },
+    onPushRight: async function(termTeacher: TermTeacher) {
+      this.isLoading = true;
+      await this.updateRowOrder(termTeacher, 'down');
+      await this.fetchTutorialPieces();
+      this.isLoading = false;
     },
     onClickToggle: async function(tutorialPiece) {
+      this.isLoading = true;
       await this.updateTutorialPiece(tutorialPiece.id, tutorialPiece.seatId, !tutorialPiece.isFixed);
       await this.fetchTutorialPieces();
+      this.isLoading = false;
     },
     onClickDelete: async function(tutorialPiece) {
+      this.isLoading = true;
       await this.updateTutorialPiece(tutorialPiece.id, null, false);
       await this.fetchTutorialPieces();
+      this.isLoading = false;
     },
     onDragStart: function(event, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
       event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);
@@ -142,8 +143,10 @@ export default Vue.extend({
         return seat.termTeacherId === null;
       });
       const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat.id;
+      this.isLoading = true;
       await this.updateTutorialPiece(tutorialPieceId, seatId, false);
       await this.fetchTutorialPieces();
+      this.isLoading = false;
     },
     onDragOver: function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
       const isDroppable = this.droppables.some((droppable) => {
@@ -156,7 +159,7 @@ export default Vue.extend({
     },
   },
   created: async function() {
-    await this.fetchTutorialPieces();
+    await this.onCreate();
   },
 }) 
 </script>

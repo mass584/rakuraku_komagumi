@@ -1,4 +1,5 @@
 class TermTeacher < ApplicationRecord
+  include RankedModel
   belongs_to :term
   belongs_to :teacher
   has_many :term_groups, dependent: :restrict_with_exception
@@ -11,6 +12,8 @@ class TermTeacher < ApplicationRecord
     submitted: 1,
     fixed: 2,
   }
+
+  ranks :row_order
 
   before_create :set_nest_objects
 

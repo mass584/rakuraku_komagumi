@@ -29,8 +29,10 @@ class TermTeachersController < ApplicationController
     respond_to do |format|
       if record.update(update_params)
         format.js { @success = true }
+        format.json { render json: { term_teacher: record } }
       else
         format.js { @success = false }
+        format.json { render json: { term_teacher: record } }
       end
     end
   end
@@ -89,6 +91,6 @@ class TermTeachersController < ApplicationController
   end
 
   def update_params
-    params.require(:term_teacher).permit(:vacancy_status)
+    params.require(:term_teacher).permit(:vacancy_status, :row_order_position)
   end
 end
