@@ -16,6 +16,6 @@
         tbody
           - @term.date_index_array(@page).each do |date_index|
             tr
-              td.align-middle.min-width-150 = I18n.l(@term.date_index_to_date(date_index))
+              td.align-middle.min-width-150 = @term.display_date(date_index)
               - @term.period_index_array.each do |period_index|
                 = term_student_schedule_table_cell(@tutorial_pieces, @timetables, date_index, period_index)

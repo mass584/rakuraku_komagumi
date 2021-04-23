@@ -82,6 +82,7 @@ import './StandBy.vue';
 
 export default Vue.component('scheduling-table', {
   props: {
+    termType: String,
     beginAt: String,
     seatCount: Number,
     positionCount: Number,
@@ -94,7 +95,15 @@ export default Vue.component('scheduling-table', {
   },
   methods: {
     dateDisplayText: function(timetable) {
-      const date = moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+      const date = (() => {
+        if (this.termType === 'normal') {
+          return ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'][timetable.dateIndex - 1];
+        } else if (this.termType === 'season') {
+          return moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+        } else if (this.termType === 'exam_planning') {
+          return moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+        }
+      })();
 
       return `${date} ${timetable.periodIndex}限`;
     },

@@ -2,6 +2,7 @@
   <div>
     <scheduling-table
       v-if="term"
+      :term-type="term.termType"
       :seat-count="term.seatCount"
       :position-count="term.positionCount"
       :begin-at="term.beginAt"

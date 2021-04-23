@@ -42,13 +42,17 @@ class Term < ApplicationRecord
       (begin_at..end_at).to_a.length
     elsif exam_planning?
       (begin_at..end_at).to_a.length
-    else
-      0
     end
   end
 
-  def date_index_to_date(date_index)
-    (begin_at..end_at).to_a[date_index - 1]
+  def display_date(date_index)
+    if normal?
+      %w[月曜日 火曜日 水曜日 木曜日 金曜日 土曜日 日曜日][date_index - 1]
+    elsif season?
+      I18n.l (begin_at..end_at).to_a[date_index - 1]
+    elsif exam_planning?
+      I18n.l (begin_at..end_at).to_a[date_index - 1]
+    end
   end
 
   def date_index_array(*argv)
@@ -93,22 +97,22 @@ class Term < ApplicationRecord
 
   # callback
   def set_nest_objects
-    self.student_optimization_rules.build(new_student_optimization_rules)
-    self.teacher_optimization_rules.build(new_teacher_optimization_rules)
-    self.begin_end_times.build(new_begin_end_times)
-    self.timetables.build(new_timetables)
-    self.term_tutorials.build(new_term_tutorials)
-    self.term_groups.build(new_term_groups)
+    student_optimization_rules.build(new_student_optimization_rules)
+    teacher_optimization_rules.build(new_teacher_optimization_rules)
+    begin_end_times.build(new_begin_end_times)
+    timetables.build(new_timetables)
+    term_tutorials.build(new_term_tutorials)
+    term_groups.build(new_term_groups)
   end
 
   def new_term_tutorials
-    room.tutorials.select(:id).map do |tutorial|
+    room.tutorials.active.select(:id).map do |tutorial|
       { tutorial_id: tutorial.id }
     end
   end
 
   def new_term_groups
-    room.groups.select(:id).map do |group|
+    room.groups.active.select(:id).map do |group|
       { group_id: group.id }
     end
   end
