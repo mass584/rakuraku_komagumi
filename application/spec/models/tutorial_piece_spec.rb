@@ -1,5 +1,6 @@
 require 'rails_helper'
 
+# rubocop:disable Metrics/BlockLength
 RSpec.describe TutorialPiece, type: :model do
   describe 'seat.term_teacher_idの同時変更' do
     before :each do
@@ -348,3 +349,4 @@ RSpec.describe TutorialPiece, type: :model do
     end
   end
 end
+# rubocop:enable Metrics/BlockLength
