@@ -145,11 +145,11 @@ class CostAndViolation():
         if self.tableEn: self.teacherAvailableTable(exceed, schedule)
 
     # 生徒の授業パターン評価
-    def studentRuleTable(self, nStudent, nDay, violation, cost, schedule):
-        idx = np.where(schedule[nStudent,:,:,nDay,:] > 0)
+    def studentRuleTable(self, student_index, date_index, violation, cost, schedule):
+        idx = np.where(schedule[student_index,:,:,date_index,:] > 0)
         for i in range(idx[0].size):
-            self.violationTable[nStudent,idx[0][i],idx[1][i],nDay,idx[2][i]] += violation
-            self.costTable[nStudent,idx[0][i],idx[1][i],nDay,idx[2][i]] += cost
+            self.violationTable[student_index,idx[0][i],idx[1][i],date_index,idx[2][i]] += violation
+            self.costTable[student_index,idx[0][i],idx[1][i],date_index,idx[2][i]] += cost
 
     def studentRuleCheck(self, schedule):
         studentOccupation = (np.einsum('ikjml->iml', schedule) > 0 ).astype(np.int)
@@ -172,11 +172,11 @@ class CostAndViolation():
                     logger.debug(f"Student:{i} Day:{j}")
 
     # 講師の授業パターン評価
-    def teacherRuleTable(self, nTeacher, nDay, violation, cost, schedule):
-        idx = np.where(schedule[:,nTeacher,:,nDay,:] > 0)
+    def teacherRuleTable(self, teacher_index, date_index, violation, cost, schedule):
+        idx = np.where(schedule[:,teacher_index,:,date_index,:] > 0)
         for i in range(idx[0].size):
-            self.violationTable[idx[0][i],nTeacher,idx[1][i],nDay,idx[2][i]] += violation
-            self.costTable[idx[0][i],nTeacher,idx[1][i],nDay,idx[2][i]] += cost
+            self.violationTable[idx[0][i],teacher_index,idx[1][i],date_index,idx[2][i]] += violation
+            self.costTable[idx[0][i],teacher_index,idx[1][i],date_index,idx[2][i]] += cost
 
     def teacherRuleCheck(self, schedule):
         teacherOccupation = (np.einsum('ijkml->jml', schedule) > 0).astype(np.int)
@@ -196,10 +196,10 @@ class CostAndViolation():
                     logger.debug(f"Teacher:{i} Day:{j}")
 
     # 科目組み合わせ評価
-    def combinationTable(self, nTeacher, nDay, nClass, cost, schedule):
-        idx = np.where(schedule[:,nTeacher,:,nDay,nClass] > 0)
+    def combinationTable(self, teacher_index, date_index, period_index, cost, schedule):
+        idx = np.where(schedule[:,teacher_index,:,date_index,period_index] > 0)
         for i in range(idx[0].size):
-            self.costTable[idx[0][i],nTeacher,idx[1][i],nDay,nClass] += cost
+            self.costTable[idx[0][i],teacher_index,idx[1][i],date_index,period_index] += cost
 
     def combinationCheck(self, schedule):
         array = np.einsum('ijkml->jkml', schedule)
@@ -211,14 +211,14 @@ class CostAndViolation():
                     if self.tableEn: self.combinationTable(i, j, k, ret, schedule)
 
     # 授業間隔評価
-    def classIntervalTable(self, nStudent, nSubject, nDay1, nDay2, nClass, cost, schedule):
-        if nDay1 >= 0:
-            idx = np.where(schedule[nStudent,:,nSubject,nDay1,nClass] > 0)
+    def classIntervalTable(self, student_index, tutorial_indexject, date_index1, date_index2, period_index, cost, schedule):
+        if date_index1 >= 0:
+            idx = np.where(schedule[student_index,:,tutorial_indexject,date_index1,period_index] > 0)
             for i in range(idx[0].size):
-                self.costTable[nStudent,idx[0][i],nSubject,nDay1,nClass] += cost
-        idx = np.where(schedule[nStudent,:,nSubject,nDay2,nClass] > 0)
+                self.costTable[student_index,idx[0][i],tutorial_indexject,date_index1,period_index] += cost
+        idx = np.where(schedule[student_index,:,tutorial_indexject,date_index2,period_index] > 0)
         for i in range(idx[0].size):
-            self.costTable[nStudent,idx[0][i],nSubject,nDay2,nClass] += cost
+            self.costTable[student_index,idx[0][i],tutorial_indexject,date_index2,period_index] += cost
 
     def classIntervalCheck(self, schedule):
         array = np.einsum('ijkml->ikml', schedule)

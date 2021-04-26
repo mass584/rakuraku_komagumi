@@ -14,17 +14,17 @@ class InitialState():
         currentClassNumber = np.einsum('ijkml->ijk', database.schedule)
         self.addClassNumber = expectedClassNumber - currentClassNumber
 
-    def addSchedule(self, nStu, nTea, nSub):
+    def addSchedule(self, student_index, teacher_index, tutorial_index):
         array = np.full((self.database.day_count, self.database.class_count), np.inf)
         for i in range(self.database.day_count):
             for j in range(self.database.class_count):
-                if self.schedule[nStu, nTea, nSub, i, j] == 0 and self.database.timetable[i, j] == 0:
-                    self.schedule[nStu, nTea, nSub, i, j] = 1
+                if self.schedule[student_index, teacher_index, tutorial_index, i, j] == 0 and self.database.timetable[i, j] == 0:
+                    self.schedule[student_index, teacher_index, tutorial_index, i, j] = 1
                     array[i, j] = self.cv.getCostAndViolation(self.schedule)
-                    self.schedule[nStu, nTea, nSub, i, j] = 0
+                    self.schedule[student_index, teacher_index, tutorial_index, i, j] = 0
         ans = np.unravel_index(array.argmin(), array.shape)
-        self.schedule[nStu, nTea, nSub, ans[0], ans[1]] = 1
-        logger.debug(f"Add Schedule: Student:{nStu}, Teacher:{nTea}, Subject:{nSub}, Day:{ans[0]}, Class:{ans[1]}")
+        self.schedule[student_index, teacher_index, tutorial_index, ans[0], ans[1]] = 1
+        logger.debug(f"Add Schedule: Student:{student_index}, Teacher:{teacher_index}, Subject:{tutorial_index}, Day:{ans[0]}, Class:{ans[1]}")
         return 0
 
     def getNewSchedule(self):

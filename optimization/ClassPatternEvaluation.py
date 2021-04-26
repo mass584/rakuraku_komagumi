@@ -2,23 +2,23 @@ import numpy as np
 
 class ClassPatternEvaluation():
 
-    def __init__(self, nClass, totalClassMax, totalClassCost, blankClassMax, blankClassCost):
-        self.nClass = nClass
+    def __init__(self, period_index, totalClassMax, totalClassCost, blankClassMax, blankClassCost):
+        self.period_index = period_index
         self.totalClassMax = totalClassMax
         self.totalClassCost = totalClassCost
         self.blankClassMax = blankClassMax
         self.blankClassCost = blankClassCost
-        self.cost = np.zeros(2**self.nClass, dtype='int32')
-        self.violation = np.zeros(2**self.nClass, dtype='int32')
-        self.transform_array = np.logspace(0, self.nClass, num=self.nClass, endpoint=False, base=2, dtype='int32')
+        self.cost = np.zeros(2**self.period_index, dtype='int32')
+        self.violation = np.zeros(2**self.period_index, dtype='int32')
+        self.transform_array = np.logspace(0, self.period_index, num=self.period_index, endpoint=False, base=2, dtype='int32')
 
     def setViolationCost(self):
-        for i in range(2**self.nClass):
+        for i in range(2**self.period_index):
             totalClass = 0
             blankClass = 0
             blankClassTmp = 0
             classBegin = False
-            for j in range(self.nClass):
+            for j in range(self.period_index):
                 if (i>>j & 1):
                     totalClass += 1
                     if (blankClassTmp >= 1 and classBegin):

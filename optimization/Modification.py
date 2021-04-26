@@ -63,12 +63,12 @@ class Modification():
             if self.database.schedule_fixonly[candidate1Index[0],candidate1Index[1],candidate1Index[2],candidate1Index[3],candidate1Index[4]]: continue
             if schedule[candidate1Index[0],candidate1Index[1],candidate1Index[2],candidate1Index[3],candidate1Index[4]] == 0: continue
             candidateValue = np.inf
-            for nStu in range(self.database.student_count):
-                for nSub in range(self.database.personal_subject_count):
-                    if schedule[nStu,candidate1Index[1],nSub,candidate1Index[3],candidate1Index[4]] == 0: continue
-                    if self.database.schedule_fixonly[nStu,candidate1Index[1],nSub,candidate1Index[3],candidate1Index[4]]: continue
-                    if nStu == candidate1Index[0] and nSub == candidate1Index[2]: continue
-                    candidate2Index = [nStu,candidate1Index[1],nSub,candidate1Index[3],candidate1Index[4]]
+            for student_index in range(self.database.student_count):
+                for tutorial_index in range(self.database.personal_subject_count):
+                    if schedule[student_index,candidate1Index[1],tutorial_index,candidate1Index[3],candidate1Index[4]] == 0: continue
+                    if self.database.schedule_fixonly[student_index,candidate1Index[1],tutorial_index,candidate1Index[3],candidate1Index[4]]: continue
+                    if student_index == candidate1Index[0] and tutorial_index == candidate1Index[2]: continue
+                    candidate2Index = [student_index,candidate1Index[1],tutorial_index,candidate1Index[3],candidate1Index[4]]
                     candidateValue = self.getScheduleDeletedTwo(schedule, candidate1Index, candidate2Index)
             if candidateValue >= originalValue: continue
             # 削除処理が行われる場合の処理

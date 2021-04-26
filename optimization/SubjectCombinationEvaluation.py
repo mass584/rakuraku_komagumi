@@ -2,9 +2,9 @@ import numpy as np
 
 class SubjectCombinationEvaluation():
 
-    # nSubject <integer> : 科目数
-    def __init__(self, nSubject, singleCost, differentPairCost):
-        self.nSubject = nSubject
+    # tutorial_indexject <integer> : 科目数
+    def __init__(self, tutorial_indexject, singleCost, differentPairCost):
+        self.tutorial_indexject = tutorial_indexject
         self.singleCost = singleCost
         self.differentPairCost = differentPairCost
 
