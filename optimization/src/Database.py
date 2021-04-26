@@ -23,7 +23,7 @@ class Database():
 
     def cursor(self):
         if self.connection:
-            self.connection.cursor(
+            return self.connection.cursor(
                 cursor_factory=psycopg2.extras.DictCursor)
 
     def commit(self):
