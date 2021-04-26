@@ -8,18 +8,22 @@ import InitialState as init
 import Improve as impr
 import Modification as modf
 import CostAndViolation as cv
-logger = logging.getLogger('Main')
+
+logger = logging.getLogger()
+log_filename = "log_filename"
+log_format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
+logging.basicConfig(level='INFO', filename=log_filename, format=log_format)
 
 ERROR_IMPROVE = "異常終了しました。管理者に問い合わせてください。(ERROR_IMPROVE)"
 ERROR_LOOP_COUNT_OVER = "異常終了しました。管理者に問い合わせてください。(ERROR_LOOP_COUNT_OVER)"
 LOOP_COUNT_MAX = 3
 
-def main(schedulemaster_id):
-    host = os.environ['RAILS_DATABASE_HOST']
-    dbname = os.environ['RAILS_DATABASE_NAME']
-    user = os.environ['RAILS_DATABASE_USERNAME']
-    password = os.environ['RAILS_DATABASE_PASSWORD']
-    database = db.Database(host, 5432, dbname, user, password, schedulemaster_id)
+def main():
+    host = os.environ['DATABASE_HOST']
+    dbname = os.environ['DATABASE_NAME']
+    username = os.environ['DATABASE_USERNAME']
+    password = os.environ['DATABASE_PASSWORD']
+    database = db.Database(host, 5432, dbname, username, password)
     progress = pg.Progress(database)
     initial = init.InitialState(database, progress)
     schedule = initial.getNewSchedule()
@@ -40,11 +44,4 @@ def main(schedulemaster_id):
     database.write_result(ERROR_LOOP_COUNT_OVER)
     sys.exit(-1)
 
-if not len(sys.argv) == 3:
-    sys.exit(-1)
-logpath = sys.argv[1]
-fmt = "%(asctime)s %(levelname)s %(name)s :%(message)s"
-logging.basicConfig(level='DEBUG', filename=logpath, format=fmt)
-
-schedulemaster_id = sys.argv[2]
-main(schedulemaster_id)
+main()

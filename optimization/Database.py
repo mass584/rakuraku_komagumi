@@ -8,13 +8,12 @@ import logging
 logger = logging.getLogger('Database')
 
 class Database():
-    def __init__(self, host, port, dbname, user, password, schedulemaster_id):
+    def __init__(self, host, port, dbname, username, password):
         self.host = host
         self.port = port
         self.dbname = dbname
-        self.user = user
+        self.username = username
         self.password = password
-        self.id = schedulemaster_id
         self.__fetch_all()
 
     def write_progress(self, progress):
@@ -74,7 +73,7 @@ class Database():
                 host = self.host,
                 port = self.port,
                 dbname = self.dbname,
-                user = self.user,
+                user = self.username,
                 password = self.password)
 
     def __commit(self):
