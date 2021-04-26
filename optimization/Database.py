@@ -16,58 +16,6 @@ class Database():
         self.password = password
         self.__fetch_all()
 
-    def write_progress(self, progress):
-        self.__connect()
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute(f"update schedulemasters set calculation_progress = {progress} where id = {self.id}")
-        cur.close()
-        self.__commit()
-        self.__close()
-
-    def write_schedules(self, schedule):
-        self.__connect()
-        index = np.where(schedule != 0)
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        sql_update = f"update schedules set timetable_id = 0 "
-        sql_where = f"where schedulemaster_id = {self.id} and status = 0 "
-        cur.execute(sql_update + sql_where)
-        cur.close()
-        for i in range(index[0].size):
-            teacher_id = self.teachers[index[1][i]]['id']
-            student_id = self.students[index[0][i]]['id']
-            personal_subject_id = self.personal_subjects[index[2][i]]['id']
-            timetable_id = self.timetable_id[index[3][i]][index[4][i]]
-            cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            sql_select = f"select count(*) from schedules "
-            sql_where1 = f"where schedulemaster_id = {self.id} and status = 1 "
-            sql_where2 = f"and teacher_id = {teacher_id} and student_id = {student_id} "
-            sql_where3 = f"and subject_id = {personal_subject_id} and timetable_id = {timetable_id} "
-            cur.execute(sql_select + sql_where1 + sql_where2 + sql_where3)
-            select = cur.fetchone()
-            cur.close()
-            if select['count'] > 0: continue
-            cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-            sql_update = f"update schedules set timetable_id = {timetable_id}, status = 1 "
-            sql_where1 = f"where id in (select id from schedules where "
-            sql_where2 = f"schedulemaster_id = {self.id} and status = 0 "
-            sql_where3 = f"and teacher_id = {teacher_id} and student_id = {student_id} "
-            sql_where4 = f"and subject_id = {personal_subject_id} and timetable_id = 0 "
-            sql_limit = f"limit 1)"
-            cur.execute(sql_update + sql_where1 + sql_where2 + sql_where3 + sql_where4 + sql_limit)
-            update_count = cur.rowcount
-            cur.close()
-            if update_count == 0: logger.error("rewritable schedule recored is lacked.")
-        self.__commit()
-        self.__close()
-
-    def write_result(self, message):
-        self.__connect()
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        cur.execute(f"update schedulemasters set calculation_result = '{message}' where id = {self.id}")
-        cur.close()
-        self.__commit()
-        self.__close()
-
     def __connect(self):
         self.conn = psycopg2.connect(
                 host = self.host,
@@ -87,15 +35,12 @@ class Database():
         self.__schedulemaster()
         self.__cost_for_teacher()
         self.__cost_for_student()
-        self.__cost_for_student3g()
         self.__teachers()
         self.__students()
         self.__personal_subject()
         self.__group_subject()
         self.__student_group()
         self.__teacher_group()
-        self.__studentrequestmaster()
-        self.__teacherrequestmaster()
         self.__studentrequest()
         self.__teacherrequest()
         self.__schedule()
@@ -166,22 +111,6 @@ class Database():
         self.student_total_class_cost = list(map(lambda x: int(x), row["total_class_cost"].split(',')))
         self.student_interval_cost = list(map(lambda x: int(x), row["interval_cost"].split(',')))
         self.student_interval_cost_count = len(self.student_interval_cost) - 1
-        cur.close()
-        return
-
-    def __cost_for_student3g(self):
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        sql_select = "select blank_class_cost, blank_class_max, total_class_cost, total_class_max, interval_cost "
-        sql_from = "from calculation_rules "
-        sql_where = f"where schedulemaster_id = {self.id} and eval_target = 'student3g'"
-        cur.execute(sql_select + sql_from + sql_where)
-        row = cur.fetchone()
-        self.student3g_blank_class_max = row["blank_class_max"]
-        self.student3g_blank_class_cost = list(map(lambda x: int(x), row["blank_class_cost"].split(',')))
-        self.student3g_total_class_max = row["total_class_max"]
-        self.student3g_total_class_cost = list(map(lambda x: int(x), row["total_class_cost"].split(',')))
-        self.student3g_interval_cost = list(map(lambda x: int(x), row["interval_cost"].split(',')))
-        self.student3g_interval_cost_count = len(self.student3g_interval_cost) - 1
         cur.close()
         return
 
@@ -289,30 +218,6 @@ class Database():
                         if self.teacher_group[i,l] == 0: continue
                         self.teacher_group_reshaped[i,j,k] = 1
 
-    def __studentrequestmaster(self):
-        self.studentrequestmaster = np.zeros((self.student_count), dtype=int)
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        sql_select = "select student_id, status from studentrequestmasters "
-        sql_where = f"where schedulemaster_id = {self.id}"
-        cur.execute(sql_select + sql_where)
-        for row in cur:
-            student_idx = self.__get_student_idx(row['student_id'])
-            self.studentrequestmaster[student_idx] = row['status']
-        cur.close()
-        return
-
-    def __teacherrequestmaster(self):
-        self.teacherrequestmaster = np.zeros((self.student_count), dtype=int)
-        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
-        sql_select = "select teacher_id, status from teacherrequestmasters "
-        sql_where = f"where schedulemaster_id = {self.id}"
-        cur.execute(sql_select + sql_where)
-        for row in cur:
-            teacher_idx = self.__get_teacher_idx(row['teacher_id'])
-            self.teacherrequestmaster[teacher_idx] = row['status']
-        cur.close()
-        return
-
     def __studentrequest(self):
         self.studentrequest = np.zeros((self.student_count, self.day_count, self.class_count), dtype=int)
         cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
@@ -419,3 +324,57 @@ class Database():
     def __get_personal_subject_idx(self, personal_subject_id):
         personal_subject = next(subject for subject in self.personal_subjects if subject['id'] == personal_subject_id)
         return self.personal_subjects.index(personal_subject)
+
+    def write_progress(self, progress):
+        self.__connect()
+        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(f"update schedulemasters set calculation_progress = {progress} where id = {self.id}")
+        cur.close()
+        self.__commit()
+        self.__close()
+
+    def write_schedules(self, schedule):
+        self.__connect()
+        index = np.where(schedule != 0)
+        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        sql_update = f"update schedules set timetable_id = 0 "
+        sql_where = f"where schedulemaster_id = {self.id} and status = 0 "
+        cur.execute(sql_update + sql_where)
+        cur.close()
+        for i in range(index[0].size):
+            teacher_id = self.teachers[index[1][i]]['id']
+            student_id = self.students[index[0][i]]['id']
+            personal_subject_id = self.personal_subjects[index[2][i]]['id']
+            timetable_id = self.timetable_id[index[3][i]][index[4][i]]
+            cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            sql_select = f"select count(*) from schedules "
+            sql_where1 = f"where schedulemaster_id = {self.id} and status = 1 "
+            sql_where2 = f"and teacher_id = {teacher_id} and student_id = {student_id} "
+            sql_where3 = f"and subject_id = {personal_subject_id} and timetable_id = {timetable_id} "
+            cur.execute(sql_select + sql_where1 + sql_where2 + sql_where3)
+            select = cur.fetchone()
+            cur.close()
+            if select['count'] > 0: continue
+            cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+            sql_update = f"update schedules set timetable_id = {timetable_id}, status = 1 "
+            sql_where1 = f"where id in (select id from schedules where "
+            sql_where2 = f"schedulemaster_id = {self.id} and status = 0 "
+            sql_where3 = f"and teacher_id = {teacher_id} and student_id = {student_id} "
+            sql_where4 = f"and subject_id = {personal_subject_id} and timetable_id = 0 "
+            sql_limit = f"limit 1)"
+            cur.execute(sql_update + sql_where1 + sql_where2 + sql_where3 + sql_where4 + sql_limit)
+            update_count = cur.rowcount
+            cur.close()
+            if update_count == 0: logger.error("rewritable schedule recored is lacked.")
+        self.__commit()
+        self.__close()
+
+    def write_result(self, message):
+        self.__connect()
+        cur = self.conn.cursor(cursor_factory=psycopg2.extras.DictCursor)
+        cur.execute(f"update schedulemasters set calculation_result = '{message}' where id = {self.id}")
+        cur.close()
+        self.__commit()
+        self.__close()
+
+
