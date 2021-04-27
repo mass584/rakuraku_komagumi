@@ -19,10 +19,10 @@ class Term():
         self.__fetch_term_groups()
         self.__fetch_tutorial_pieces()
         self.__fetch_tutorial_contracts()
-        self.__fetch_group_contracts()
         self.__fetch_student_vacancies()
         self.__fetch_teacher_vacancies()
         self.__fetch_timetables()
+        self.__fetch_group_contracts()
         self.__fetch_seats()
         self.database.commit()
         self.database.close()
@@ -102,15 +102,6 @@ class Term():
         self.tutorial_contracts = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
-    def __fetch_group_contracts(self):
-        cur = self.database.cursor()
-        sql_select = "term_student_id, term_group_id, is_contracted"
-        sql_from = "group_contracts"
-        sql_where = f"term_id = {self.term_id}"
-        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
-        self.group_contracts = list(map(lambda record: dict(record), cur.fetchall()))
-        cur.close()
-
     def __fetch_student_vacancies(self):
         cur = self.database.cursor()
         sql_select = "timetables.date_index, timetables.period_index, term_student_id, is_vacant"
@@ -132,10 +123,19 @@ class Term():
     def __fetch_timetables(self):
         cur = self.database.cursor()
         sql_select = "date_index, period_index, is_closed, term_group_id, term_groups.term_teacher_id"
-        sql_from = "timetables left join term_groups on term_groups.term_teacher_id = timetables.term_group_id "
+        sql_from = "timetables left join term_groups on term_groups.id = timetables.term_group_id "
         sql_where = f"timetables.term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.timetables = list(map(lambda record: dict(record), cur.fetchall()))
+        cur.close()
+
+    def __fetch_group_contracts(self):
+        cur = self.database.cursor()
+        sql_select = "timetables.date_index, timetables.period_index, term_student_id, is_contracted"
+        sql_from = "group_contracts join timetables on timetables.term_group_id = group_contracts.term_group_id"
+        sql_where = f"group_contracts.term_id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        self.group_contracts = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
     def __fetch_seats(self):
