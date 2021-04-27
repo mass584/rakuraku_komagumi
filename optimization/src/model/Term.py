@@ -67,7 +67,7 @@ class Term():
 
     def __fetch_term_students(self):
         cur = self.database.cursor()
-        sql_select = "select term_students.id, students.name, term_students.vacancy_status from term_students "
+        sql_select = "select term_students.id, students.name, students.school_grade, term_students.vacancy_status from term_students "
         sql_join = "join students on students.id = term_students.student_id "
         sql_where = f"where term_students.term_id = {self.term_id}"
         cur.execute(sql_select + sql_join + sql_where)
