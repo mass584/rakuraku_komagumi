@@ -129,7 +129,7 @@ class Term():
     def __fetch_timetables(self):
         cur = self.database.cursor()
         sql_select = "date_index, period_index, is_closed, term_group_id, term_groups.term_teacher_id"
-        sql_from = "timetables join term_groups on term_groups.term_teacher_id = timetables.term_group_id "
+        sql_from = "timetables left join term_groups on term_groups.term_teacher_id = timetables.term_group_id "
         sql_where = f"timetables.term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.timetables = list(map(lambda record: dict(record), cur.fetchall()))
