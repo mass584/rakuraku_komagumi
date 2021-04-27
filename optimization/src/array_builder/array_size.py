@@ -14,3 +14,4 @@ class ArraySize():
         self.group_count = len(self.term.term_groups)
         self.date_count = (self.term.term['end_at'] - self.term.term['begin_at']).days + 1
         self.period_count = self.term.term['period_count']
+        self.seat_count = self.term.term['seat_count']
