@@ -9,12 +9,6 @@ class TutorialPiece():
         self.database = database
         self.tutorial_piece_id = tutorial_piece_id
 
-    def update_all()
-        self.database.connect()
-        self.update_seat_id()
-        self.database.commit()
-        self.database.close()
-
     def update_seat_id(self, seat_id):
         self.database.connect()
         cur = self.database.cursor()
