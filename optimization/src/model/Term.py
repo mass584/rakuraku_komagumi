@@ -27,14 +27,6 @@ class Term():
         self.database.commit()
         self.database.close()
 
-    def update_installation_progress(self, installation_progress):
-        self.database.connect()
-        cur = self.database.cursor()
-        cur.execute(f"update terms set installation_progress = {installation_progress} where id = {self.term_id}")
-        cur.close()
-        self.database.commit()
-        self.database.close()
-
     def update_exit_status(self, exit_status):
         self.database.connect()
         cur = self.database.cursor()
