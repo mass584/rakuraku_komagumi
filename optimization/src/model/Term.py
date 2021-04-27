@@ -29,22 +29,28 @@ class Term():
 
     def __fetch_term(self):
         cur = self.database.cursor()
-        sql = f"select * from terms where id = {self.term_id}"
-        cur.execute(sql)
+        sql_select = "id, name, year, term_type, begin_at, end_at, period_count, seat_count, position_count"
+        sql_from = "terms"
+        sql_where = f"id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
         self.term = dict(cur.fetchone())
         cur.close()
 
     def __fetch_teacher_optimization_rule(self):
         cur = self.database.cursor()
-        sql = f"select * from teacher_optimization_rules where term_id = {self.term_id}"
-        cur.execute(sql)
+        sql_select = "id, single_cost, different_pair_cost, occupation_limit, occupation_costs, blank_limit, blank_costs"
+        sql_from = "teacher_optimization_rules"
+        sql_where = f"term_id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
         self.teacher_optimization_rule = dict(cur.fetchone())
         cur.close()
 
     def __fetch_student_optimization_rules(self):
         cur = self.database.cursor()
-        sql = f"select * from student_optimization_rules where term_id = {self.term_id}"
-        cur.execute(sql)
+        sql_select = "id, school_grade, occupation_limit, occupation_costs, blank_limit, blank_costs, interval_cutoff, interval_costs"
+        sql_from = "student_optimization_rules"
+        sql_where = f"term_id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
         self.student_optimization_rules = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
