@@ -17,11 +17,13 @@ class Term():
         self.__fetch_term_tutorials()
         self.__fetch_term_groups()
         self.__fetch_tutorial_contracts()
+        self.__fetch_tutorial_pieces()
         self.__fetch_group_contracts()
         self.__fetch_student_vacancies()
         self.__fetch_teacher_vacancies()
         self.__fetch_timetables()
         self.__fetch_seats()
+        self.__build_counts()
         self.database.commit()
         self.database.close()
 
@@ -47,7 +49,6 @@ class Term():
         cur.execute(sql)
         self.term = dict(cur.fetchone())
         cur.close()
-        return
 
     def __fetch_teacher_optimization_rule(self):
         cur = self.database.cursor()
@@ -55,7 +56,6 @@ class Term():
         cur.execute(sql)
         self.teacher_optimization_rule = dict(cur.fetchone())
         cur.close()
-        return
 
     def __fetch_student_optimization_rules(self):
         cur = self.database.cursor()
@@ -63,7 +63,6 @@ class Term():
         cur.execute(sql)
         self.student_optimization_rules = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_term_teachers(self):
         cur = self.database.cursor()
@@ -73,7 +72,6 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.term_teachers = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_term_students(self):
         cur = self.database.cursor()
@@ -83,7 +81,6 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.term_students = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_term_tutorials(self):
         cur = self.database.cursor()
@@ -93,7 +90,6 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.term_tutorials = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_term_groups(self):
         cur = self.database.cursor()
@@ -103,7 +99,6 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.term_groups = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_tutorial_contracts(self):
         cur = self.database.cursor()
@@ -112,7 +107,6 @@ class Term():
         cur.execute(sql_select + sql_where)
         self.tutorial_contracts = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_group_contracts(self):
         cur = self.database.cursor()
@@ -121,27 +115,33 @@ class Term():
         cur.execute(sql_select + sql_where)
         self.group_contracts = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
+
+    def __fetch_tutorial_pieces(self):
+        cur = self.database.cursor()
+        sql_select = "timetables.date_index, timetables.period_index, tutorial_contracts.term_student_id, tutorial_contracts.term_teacher_id, tutorial_contracts.term_tutorial_id"
+        sql_from = "((tutorial_pieces left join seats on seats.id = tutorial_pieces.seat_id) left join timetables on timetables.id = seats.timetable_id) left join tutorial_contracts on tutorial_contracts.id = tutorial_pieces.tutorial_contract_id"
+        sql_where = f"tutorial_pieces.term_id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        self.tutorial_pieces = list(map(lambda record: dict(record), cur.fetchall()))
+        cur.close()
 
     def __fetch_student_vacancies(self):
         cur = self.database.cursor()
-        sql_select = "select timetables.date_index, timetables.period_index, term_student_id from student_vacancies "
+        sql_select = "select timetables.date_index, timetables.period_index, term_student_id, is_vacant from student_vacancies "
         sql_join = "join timetables on timetables.id = student_vacancies.timetable_id "
         sql_where = f"where timetables.term_id = {self.term_id}"
         cur.execute(sql_select + sql_join + sql_where)
         self.student_vacancies = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_teacher_vacancies(self):
         cur = self.database.cursor()
-        sql_select = "select timetables.date_index, timetables.period_index, term_teacher_id from teacher_vacancies "
+        sql_select = "select timetables.date_index, timetables.period_index, term_teacher_id, is_vacant from teacher_vacancies "
         sql_join = "join timetables on timetables.id = teacher_vacancies.timetable_id "
         sql_where = f"where timetables.term_id = {self.term_id}"
         cur.execute(sql_select + sql_join + sql_where)
         self.teacher_vacancies = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_timetables(self):
         cur = self.database.cursor()
@@ -151,7 +151,6 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.timetables = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
 
     def __fetch_seats(self):
         cur = self.database.cursor()
@@ -161,4 +160,11 @@ class Term():
         cur.execute(sql_select + sql_join + sql_where)
         self.seats = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
-        return
+
+    def __build_counts(self):
+        self.term_teacher_count = len(self.term_teachers)
+        self.term_student_count = len(self.term_students)
+        self.term_tutorial_count = len(self.term_tutorials)
+        self.term_group_count = len(self.term_groups)
+        self.date_count = (self.term['end_at'] - self.term['begin_at']).days + 1
+        self.period_count = self.term['period_count']
