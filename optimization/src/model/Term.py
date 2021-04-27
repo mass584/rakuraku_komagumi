@@ -59,7 +59,7 @@ class Term():
         sql_select = "term_teachers.id, teachers.name, term_teachers.vacancy_status"
         sql_from = "term_teachers join teachers on teachers.id = term_teachers.teacher_id"
         sql_where = f"term_teachers.term_id = {self.term_id}"
-        cur.execute(' '.joins(['select', sql_select , 'from', sql_from , 'where', sql_where]))
+        cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
         self.term_teachers = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
@@ -68,7 +68,7 @@ class Term():
         sql_select = "term_students.id, students.name, students.school_grade, term_students.vacancy_status"
         sql_from = "term_students join students on students.id = term_students.student_id "
         sql_where = f"term_students.term_id = {self.term_id}"
-        cur.execute(' '.joins(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.term_students = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
@@ -77,7 +77,7 @@ class Term():
         sql_select = "term_tutorials.id, tutorials.name"
         sql_from = "term_tutorials join tutorials on tutorials.id = term_tutorials.tutorial_id "
         sql_where = f"term_tutorials.term_id = {self.term_id}"
-        cur.execute(' '.joins(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.term_tutorials = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
@@ -86,7 +86,7 @@ class Term():
         sql_select = "term_groups.id, groups.name"
         sql_from = "term_groups join groups on groups.id = term_groups.group_id"
         sql_where = f"term_groups.term_id = {self.term_id}"
-        cur.execute(' '.joins(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.term_groups = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
