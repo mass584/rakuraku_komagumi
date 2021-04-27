@@ -6,8 +6,9 @@ class Term():
     def __init__(self, database, term_id):
         self.database = database
         self.term_id = term_id
+        self.__fetch_all()
 
-    def fetch_all(self):
+    def __fetch_all(self):
         self.database.connect()
         self.__fetch_term()
         self.__fetch_teacher_optimization_rule()
@@ -17,19 +18,12 @@ class Term():
         self.__fetch_term_tutorials()
         self.__fetch_term_groups()
         self.__fetch_tutorial_pieces()
+        self.__fetch_tutorial_contracts()
         self.__fetch_group_contracts()
         self.__fetch_student_vacancies()
         self.__fetch_teacher_vacancies()
         self.__fetch_timetables()
         self.__fetch_seats()
-        self.database.commit()
-        self.database.close()
-
-    def update_exit_status(self, exit_status):
-        self.database.connect()
-        cur = self.database.cursor()
-        cur.execute(f"update terms set exit_status = '{exit_status}' where id = {self.term_id}")
-        cur.close()
         self.database.commit()
         self.database.close()
 
@@ -97,6 +91,15 @@ class Term():
         sql_where = f"tutorial_pieces.term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
         self.tutorial_pieces = list(map(lambda record: dict(record), cur.fetchall()))
+        cur.close()
+
+    def __fetch_tutorial_contracts(self):
+        cur = self.database.cursor()
+        sql_select = "term_student_id, term_tutorial_id, term_teacher_id, piece_count"
+        sql_from = "tutorial_contracts"
+        sql_where = f"term_id = {self.term_id}"
+        cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
+        self.tutorial_contracts = list(map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
     def __fetch_group_contracts(self):

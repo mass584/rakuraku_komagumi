@@ -1,47 +1,47 @@
-import logging
 import itertools
-from array_contract import term_student_index, term_teacher_index
-
-logger = logging.getLogger('ArrayIndex')
+import numpy
 
 class Vacancy():
-    def __init__(self, term):
+    def __init__(self, term, array_size):
         self.term = term
-        self.student_vacancy = self.__student_vacancy
-        self.teacher_vacancy = self.__teacher_vacancy
+        self.array_size = array_size
+        self.__build_student_vacancy()
+        self.__build_teacher_vacancy()
 
-    def __student_vacancy(self):
-        array = np.zeros(
-            (self.term.term_student_count, self.term.date_count, self.term.period_count),
+    def __build_student_vacancy(self):
+        array = numpy.zeros(
+            (self.array_size.student_count, self.array_size.date_count, self.array_size.period_count),
             dtype=int)
-        term_student_list = list(range(self.term.term_student_count))
-        date_index_list = list(range(self.term.date_count))
-        period_index_list = list(range(self.term.period_count))
-        product = itertools.product(term_student_list, date_index_list, period_index_list)
-        for term_student_index, date_index, period_index in product:
+        student_list = list(range(self.array_size.student_count))
+        date_index_list = list(range(self.array_size.date_count))
+        period_index_list = list(range(self.array_size.period_count))
+        product = itertools.product(student_list, date_index_list, period_index_list)
+        for student_index, date_index, period_index in product:
+            term_student_id = self.term.term_students[student_index]['id']
             is_matched = (lambda student_vacancy:
-                student_vacancy['term_student_index'] == term_student_index and
-                student_vacancy['date_index'] == date_index and
-                student_vacancy['period_index'] == period_index and
+                student_vacancy['term_student_id'] == term_student_id and
+                student_vacancy['date_index'] == date_index + 1 and
+                student_vacancy['period_index'] == period_index + 1 and
                 student_vacancy['is_vacant'] == True)
-            is_vacant = True in [True for timetable in self.term.timetables if is_matched(timetable)]
-            if is_vacant: array[term_student_index, date_index, period_index] = 1
-        return array
+            is_vacant = True in [True for student_vacancy in self.term.student_vacancies if is_matched(student_vacancy)]
+            if is_vacant: array[student_index, date_index, period_index] = 1
+        self.student_vacancy_array = array
 
-    def __teacher_vacancy(self):
-        array = np.zeros(
-            (self.term.term_teacher_count, self.term.date_count, self.term.period_count)
+    def __build_teacher_vacancy(self):
+        array = numpy.zeros(
+            (self.array_size.teacher_count, self.array_size.date_count, self.array_size.period_count),
             dtype=int)
-        term_teacher_list = list(range(self.term.term_teacher_count))
-        date_index_list = list(range(self.term.date_count))
-        period_index_list = list(range(self.term.period_count))
-        product = itertools.product(term_teacher_list, date_index_list, period_index_list, term_group_index_list)
-        for term_teacher_index, date_index, period_index in product:
-            is_matched = (lambda timetable:
-                teacher_vacancy['term_teacher_index'] == term_teacher_index and
-                teacher_vacancy['date_index'] == date_index and
-                teacher_vacancy['period_index'] == period_index and
+        teacher_list = list(range(self.array_size.teacher_count))
+        date_index_list = list(range(self.array_size.date_count))
+        period_index_list = list(range(self.array_size.period_count))
+        product = itertools.product(teacher_list, date_index_list, period_index_list)
+        for teacher_index, date_index, period_index in product:
+            term_teacher_id = self.term.term_teachers[teacher_index]['id']
+            is_matched = (lambda teacher_vacancy:
+                teacher_vacancy['term_teacher_id'] == term_teacher_id and
+                teacher_vacancy['date_index'] == date_index + 1 and
+                teacher_vacancy['period_index'] == period_index + 1 and
                 teacher_vacancy['is_vacant'] == True)
-            is_vacant = True in [True for timetable in self.term.timetables if is_matched(timetable)]
-            if is_vacant: array[term_teacher_index, date_index, period_index] = 1
-        return array
+            is_vacant = True in [True for teacher_vacancy in self.term.teacher_vacancies if is_matched(teacher_vacancy)]
+            if is_vacant: array[teacher_index, date_index, period_index] = 1
+        self.teacher_vacancy_array = array
