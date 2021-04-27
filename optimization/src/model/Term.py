@@ -86,7 +86,7 @@ class Term():
 
     def __fetch_tutorial_pieces(self):
         cur = self.database.cursor()
-        sql_select = "timetables.date_index, timetables.period_index, tutorial_contracts.term_student_id, tutorial_contracts.term_teacher_id, tutorial_contracts.term_tutorial_id"
+        sql_select = "timetables.date_index, timetables.period_index, tutorial_contracts.term_student_id, tutorial_contracts.term_teacher_id, tutorial_contracts.term_tutorial_id, tutorial_pieces.is_fixed"
         sql_from = "((tutorial_pieces left join seats on seats.id = tutorial_pieces.seat_id) left join timetables on timetables.id = seats.timetable_id) left join tutorial_contracts on tutorial_contracts.id = tutorial_pieces.tutorial_contract_id"
         sql_where = f"tutorial_pieces.term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
