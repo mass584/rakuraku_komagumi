@@ -7,7 +7,6 @@ from src.array_builder.array_size import ArraySize
 class TestArraySize(TestCase):
     def test_normal_term(self):
         array_builder = ArraySize(normal_term)
-        print(array_builder.student_count())
         self.assertEqual(array_builder.student_count(), 20)
         self.assertEqual(array_builder.teacher_count(), 5)
         self.assertEqual(array_builder.tutorial_count(), 5)
