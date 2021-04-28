@@ -12,9 +12,14 @@ class ArraySize():
         self.__student_count = len(self.term['term_students'])
         self.__tutorial_count = len(self.term['term_tutorials'])
         self.__group_count = len(self.term['term_groups'])
-        self.__date_count = (self.term['term']['end_at'] - self.term['term']['begin_at']).days + 1
+        self.__date_count = self.__date_count()
         self.__period_count = self.term['term']['period_count']
         self.__seat_count = self.term['term']['seat_count']
+
+    def __date_count(self):
+        is_normal = self.term['term']['term_type'] == 0
+        date_count = (self.term['term']['end_at'] - self.term['term']['begin_at']).days + 1
+        return 7 if is_normal else date_count
 
     def teacher_count(self):
         return self.__teacher_count
