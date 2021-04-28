@@ -38,7 +38,7 @@ class Term():
 
     def __fetch_teacher_optimization_rule(self):
         cur = self.database.cursor()
-        sql_select = "id, single_cost, different_pair_cost, occupation_limit, occupation_costs, blank_limit, blank_costs"
+        sql_select = "single_cost, different_pair_cost, occupation_limit, occupation_costs, blank_limit, blank_costs"
         sql_from = "teacher_optimization_rules"
         sql_where = f"term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
@@ -47,7 +47,7 @@ class Term():
 
     def __fetch_student_optimization_rules(self):
         cur = self.database.cursor()
-        sql_select = "id, school_grade, occupation_limit, occupation_costs, blank_limit, blank_costs, interval_cutoff, interval_costs"
+        sql_select = "school_grade, occupation_limit, occupation_costs, blank_limit, blank_costs, interval_cutoff, interval_costs"
         sql_from = "student_optimization_rules"
         sql_where = f"term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select , 'from', sql_from , 'where', sql_where]))
@@ -146,7 +146,7 @@ class Term():
 
     def __fetch_seats(self):
         cur = self.database.cursor()
-        sql_select = "timetables.date_index, timetables.period_index, seat_index, term_teacher_id, position_count"
+        sql_select = "id, timetables.date_index, timetables.period_index, seat_index, term_teacher_id, position_count"
         sql_from = "seats join timetables on timetables.id = seats.timetable_id "
         sql_where = f"seats.term_id = {self.term_id}"
         cur.execute(' '.join(['select', sql_select, 'from', sql_from, 'where', sql_where]))
