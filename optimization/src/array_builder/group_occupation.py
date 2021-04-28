@@ -18,12 +18,11 @@ class GroupOccupation():
         product = itertools.product(student_index_list, date_index_list, period_index_list)
         for student_index, date_index, period_index in product:
             term_student_id = self.term.term_students[student_index]['id']
-            is_matched = (lambda group_contract:
-                group_contract['date_index'] == date_index + 1 and
-                group_contract['period_index'] == period_index + 1 and
-                group_contract['term_student_id'] == term_student_id and
-                group_contract['is_contracted'] == True)
-            is_exist = True in [True for group_contract in self.term.group_contracts if is_matched(group_contract)]
+            is_matched = (lambda item:
+                item['term_student_id'] == term_student_id and
+                item['date_index'] == date_index + 1 and
+                item['period_index'] == period_index + 1)
+            is_exist = True in [True for item in self.term.student_group_timetables if is_matched(item)]
             if is_exist: self.student_occupation_array[student_index, date_index, period_index] = 1
 
     def __build_teacher_occupation(self):
@@ -36,9 +35,9 @@ class GroupOccupation():
         product = itertools.product(teacher_index_list, date_index_list, period_index_list)
         for teacher_index, date_index, period_index in product:
             term_teacher_id = self.term.term_teachers[teacher_index]['id']
-            is_matched = (lambda timetable:
-                timetable['date_index'] == date_index + 1 and
-                timetable['period_index'] == period_index + 1 and
-                timetable['term_teacher_id'] == term_teacher_id)
-            is_exist = True in [True for timetable in self.term.timetables if is_matched(timetable)]
+            is_matched = (lambda item:
+                item['term_teacher_id'] == term_teacher_id and
+                item['date_index'] == date_index + 1 and
+                item['period_index'] == period_index + 1)
+            is_exist = True in [True for item in self.term.teacher_group_timetables if is_matched(item)]
             if is_exist: self.teacher_occupation_array[teacher_index, date_index, period_index] = 1
