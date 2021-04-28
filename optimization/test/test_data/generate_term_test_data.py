@@ -130,10 +130,10 @@ def generate_term_test_data(
       'date_index': date_index + 1,
       'period_index': period_index + 1,
       'term_group_id': group_index + 1,
-      'term_teacher_id': teacher_index + 1,
+      'term_teacher_id': 1,
     }
-    for [date_index, period_index, group_index], teacher_index
-    in itertools.product(group_timetables, range(teacher_count))
+    for date_index, period_index, group_index
+    in group_timetables
   ]
   student_group_timetables = [
     {
