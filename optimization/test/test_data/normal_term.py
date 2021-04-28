@@ -1,5 +1,5 @@
 import datetime
-from generate_term_test_data import generate_term_test_data
+from .generate_term_test_data import generate_term_test_data
 
 normal_term = generate_term_test_data(
   name='1学期',

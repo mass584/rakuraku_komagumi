@@ -1,7 +1,7 @@
 import datetime
-from generate_term_test_data import generate_term_test_data
+from .generate_term_test_data import generate_term_test_data
 
-normal_term = generate_term_test_data(
+exam_planning_term = generate_term_test_data(
   name='テスト対策',
   year=2021,
   term_type=2,
