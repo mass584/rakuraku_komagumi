@@ -85,7 +85,7 @@ def generate_term_test_data(
     {
       'date_index': date_index + 1,
       'period_index': period_index + 1,
-      'student_term_id': student_index + 1,
+      'term_student_id': student_index + 1,
       'is_vacant': True,
     }
     for student_index, date_index, period_index
@@ -95,7 +95,7 @@ def generate_term_test_data(
     {
       'date_index': date_index + 1,
       'period_index': period_index + 1,
-      'teacher_term_id': teacher_index + 1,
+      'term_teacher_id': teacher_index + 1,
       'is_vacant': True,
     }
     for teacher_index, date_index, period_index
