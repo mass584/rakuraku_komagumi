@@ -17,11 +17,14 @@ class TutorialContract():
         tutorial_index_list = list(range(self.__array_size.tutorial_count()))
         product = itertools.product(student_index_list, tutorial_index_list)
         for student_index, tutorial_index in product:
-            term_student_id = self.__term['term_students'][student_index]['id']
-            term_tutorial_id = self.__term['term_tutorials'][tutorial_index]['id']
-            is_matched = (lambda tutorial_contract:
-                          tutorial_contract['term_student_id'] == term_student_id and
-                          tutorial_contract['term_tutorial_id'] == term_tutorial_id)
+            term_student_id = \
+                self.__term['term_students'][student_index]['id']
+            term_tutorial_id = \
+                self.__term['term_tutorials'][tutorial_index]['id']
+            is_matched = (
+                lambda tutorial_contract:
+                    tutorial_contract['term_student_id'] == term_student_id and
+                    tutorial_contract['term_tutorial_id'] == term_tutorial_id)
             piece_count = next(
                 tutorial_contract['piece_count']
                 for tutorial_contract in self.__term['tutorial_contracts']

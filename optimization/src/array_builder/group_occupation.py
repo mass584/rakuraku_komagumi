@@ -26,7 +26,8 @@ class GroupOccupation():
                           item['date_index'] == date_index + 1 and
                           item['period_index'] == period_index + 1)
             is_exist = True in [
-                True for item in self.term['student_group_timetables'] if is_matched(item)]
+                True for item in self.term['student_group_timetables']
+                if is_matched(item)]
             if is_exist:
                 self.__student_occupation_array[student_index,
                                                 date_index, period_index] = 1
@@ -48,7 +49,8 @@ class GroupOccupation():
                           item['date_index'] == date_index + 1 and
                           item['period_index'] == period_index + 1)
             is_exist = True in [
-                True for item in self.term['teacher_group_timetables'] if is_matched(item)]
+                True for item in self.term['teacher_group_timetables']
+                if is_matched(item)]
             if is_exist:
                 self.__teacher_occupation_array[teacher_index,
                                                 date_index, period_index] = 1

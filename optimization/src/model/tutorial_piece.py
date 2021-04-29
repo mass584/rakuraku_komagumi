@@ -13,8 +13,9 @@ class TutorialPiece():
     def update_seat_id(self, seat_id):
         self.database.connect()
         cur = self.database.cursor()
-        cur.execute(
-            f"update tutorial_pieces set seat_id = {seat_id} where id = {self.tutorial_piece_id}")
+        sql_update = f"tutorial_pieces set seat_id = {seat_id}"
+        sql_where = f"id = {self.tutorial_piece_id}"
+        cur.execute(' '.join(['update', sql_update, 'where', sql_where]))
         cur.close()
         self.database.commit()
         self.database.close()

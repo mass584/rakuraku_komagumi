@@ -4,7 +4,8 @@ from test.test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.vacancy import Vacancy
-from src.cost_evaluator.vacancy_and_double_booking_evaluator import VacancyAndDoubleBookingEvaluator
+from src.cost_evaluator.vacancy_and_double_booking_evaluator \
+    import VacancyAndDoubleBookingEvaluator
 
 
 class TestVacancyAndDoubleBookingEvaluator(TestCase):

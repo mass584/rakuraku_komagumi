@@ -13,7 +13,8 @@ class OccupationAndBlankVectorEvaluator():
         self.__violation_vector = np.zeros(2**period_count, dtype='int32')
         self.__set_violation_vector(period_count)
         self.__exponentiation_vector = np.logspace(
-            0, period_count, num=period_count, endpoint=False, base=2, dtype='int32')
+            0, period_count, num=period_count,
+            endpoint=False, base=2, dtype='int32')
 
     def __set_cost_vector(self, period_count):
         for binary in range(2**period_count):
@@ -31,7 +32,8 @@ class OccupationAndBlankVectorEvaluator():
                 else:
                     blank_count_buf += 1
             if occupation_count <= self.__occupation_limit:
-                self.__cost_vector[binary] += self.__occupation_costs[occupation_count]
+                self.__cost_vector[binary] += \
+                    self.__occupation_costs[occupation_count]
             if blank_count <= self.__blank_limit:
                 self.__cost_vector[binary] += self.__blank_costs[blank_count]
 

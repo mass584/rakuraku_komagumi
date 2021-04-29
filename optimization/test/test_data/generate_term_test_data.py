@@ -90,7 +90,8 @@ def generate_term_test_data(
             'is_vacant': True,
         }
         for student_index, date_index, period_index
-        in itertools.product(range(student_count), range(date_count), range(period_count))
+        in itertools.product(
+            range(student_count), range(date_count), range(period_count))
     ]
     teacher_vacancies = [
         {
@@ -100,13 +101,16 @@ def generate_term_test_data(
             'is_vacant': True,
         }
         for teacher_index, date_index, period_index
-        in itertools.product(range(teacher_count), range(date_count), range(period_count))
+        in itertools.product(
+            range(teacher_count), range(date_count), range(period_count))
     ]
     tutorial_contracts = [
         {
             'term_student_id': student_index + 1,
             'term_tutorial_id': tutorial_index + 1,
-            'term_teacher_id': (student_index * tutorial_count + tutorial_index) % teacher_count + 1,
+            'term_teacher_id':
+                (student_index * tutorial_count +
+                 tutorial_index) % teacher_count + 1,
             'piece_count': piece_count if tutorial_index in tutorials else 0,
         }
         for student_index, tutorial_index
@@ -148,7 +152,8 @@ def generate_term_test_data(
     ]
     seats = [
         {
-            'id': date_index * (period_count * seat_count) + period_index * (seat_count) + seat_index + 1,
+            'id': date_index * (period_count * seat_count) +
+            period_index * (seat_count) + seat_index + 1,
             'date_index': date_index + 1,
             'period_index': period_index + 1,
             'seat_index': seat_index + 1,
@@ -156,7 +161,8 @@ def generate_term_test_data(
             'position_count': position_count,
         }
         for date_index, period_index, seat_index
-        in itertools.product(range(date_count), range(period_count), range(seat_count))
+        in itertools.product(
+            range(date_count), range(period_count), range(seat_count))
     ]
     return {
         'term': term,

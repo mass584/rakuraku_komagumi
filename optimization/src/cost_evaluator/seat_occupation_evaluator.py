@@ -8,9 +8,10 @@ class SeatOccupationEvaluator():
 
     def violation_and_cost(self, tutorial_occupation):
         occupation1 = numpy.einsum('ijkml->jml', tutorial_occupation)
-        def theta(x): return numpy.heaviside(x, 0).astype(int)
-        occupation2 = numpy.sum(numpy.apply_along_axis(
-            theta, 1, occupation1), axis=0)
+        occupation2 = numpy.sum(
+            numpy.apply_along_axis(
+                lambda x: numpy.heaviside(x, 0).astype(int),
+                1, occupation1), axis=0)
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
         product = itertools.product(date_index_list, period_index_list)

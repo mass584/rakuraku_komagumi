@@ -1,6 +1,7 @@
 import itertools
 import numpy
-from .occupation_and_blank_vector_evaluator import OccupationAndBlankVectorEvaluator
+from .occupation_and_blank_vector_evaluator \
+    import OccupationAndBlankVectorEvaluator
 
 
 class OccupationAndBlankEvaluator():
@@ -34,8 +35,8 @@ class OccupationAndBlankEvaluator():
         cost_summation = 0
         for teacher_index, date_index in product:
             vector = occupation[teacher_index, date_index, :]
-            [violation, cost] = self.__teacher_vector_evaluator.violation_and_cost(
-                vector)
+            [violation, cost] = \
+                self.__teacher_vector_evaluator.violation_and_cost(vector)
             violation_summation += violation
             cost_summation += cost
         return [violation_summation, cost_summation]
@@ -52,8 +53,8 @@ class OccupationAndBlankEvaluator():
         cost_summation = 0
         for student_index, date_index in product:
             vector = occupation[student_index, date_index, :]
-            [violation, cost] = self.__student_vector_evaluator.violation_and_cost(
-                vector)
+            [violation, cost] = \
+                self.__student_vector_evaluator.violation_and_cost(vector)
             violation_summation += violation
             cost_summation += cost
         return [violation_summation, cost_summation]
@@ -65,4 +66,6 @@ class OccupationAndBlankEvaluator():
         student_violation_and_cost = self.__student_violation_and_cost(
             tutorial_occupation, student_group_occupation)
         return [teacher + student for teacher,
-                student in zip(teacher_violation_and_cost, student_violation_and_cost)]
+                student in zip(
+                    teacher_violation_and_cost,
+                    student_violation_and_cost)]

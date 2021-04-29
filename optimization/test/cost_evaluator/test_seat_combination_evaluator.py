@@ -3,7 +3,8 @@ from unittest import TestCase
 from test.test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
-from src.cost_evaluator.seat_combination_evaluator import SeatCombinationEvaluator
+from src.cost_evaluator.seat_combination_evaluator \
+    import SeatCombinationEvaluator
 
 
 class TestSeatCombinationEvaluator(TestCase):

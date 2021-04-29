@@ -21,11 +21,12 @@ class Vacancy():
             student_list, date_index_list, period_index_list)
         for student_index, date_index, period_index in product:
             term_student_id = self.__term['term_students'][student_index]['id']
-            is_matched = (lambda student_vacancy:
-                          student_vacancy['term_student_id'] == term_student_id and
-                          student_vacancy['date_index'] == date_index + 1 and
-                          student_vacancy['period_index'] == period_index + 1 and
-                          student_vacancy['is_vacant'] == True)
+            is_matched = (
+                lambda student_vacancy:
+                    student_vacancy['term_student_id'] == term_student_id and
+                    student_vacancy['date_index'] == date_index + 1 and
+                    student_vacancy['period_index'] == period_index + 1 and
+                    student_vacancy['is_vacant'] is True)
             is_vacant = True in [
                 True for student_vacancy in self.__term['student_vacancies']
                 if is_matched(student_vacancy)]
@@ -45,11 +46,12 @@ class Vacancy():
             teacher_list, date_index_list, period_index_list)
         for teacher_index, date_index, period_index in product:
             term_teacher_id = self.__term['term_teachers'][teacher_index]['id']
-            is_matched = (lambda teacher_vacancy:
-                          teacher_vacancy['term_teacher_id'] == term_teacher_id and
-                          teacher_vacancy['date_index'] == date_index + 1 and
-                          teacher_vacancy['period_index'] == period_index + 1 and
-                          teacher_vacancy['is_vacant'] == True)
+            is_matched = (
+                lambda teacher_vacancy:
+                    teacher_vacancy['term_teacher_id'] == term_teacher_id and
+                    teacher_vacancy['date_index'] == date_index + 1 and
+                    teacher_vacancy['period_index'] == period_index + 1 and
+                    teacher_vacancy['is_vacant'] is True)
             is_vacant = True in [
                 True for teacher_vacancy in self.__term['teacher_vacancies']
                 if is_matched(teacher_vacancy)]

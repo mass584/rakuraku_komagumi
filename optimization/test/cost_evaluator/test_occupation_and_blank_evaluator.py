@@ -4,7 +4,8 @@ from test.test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.group_occupation import GroupOccupation
-from src.cost_evaluator.occupation_and_blank_evaluator import OccupationAndBlankEvaluator
+from src.cost_evaluator.occupation_and_blank_evaluator \
+    import OccupationAndBlankEvaluator
 
 
 class TestOccupationAndBlankEvaluator(TestCase):
@@ -35,4 +36,6 @@ class TestOccupationAndBlankEvaluator(TestCase):
             tutorial_occupation.tutorial_occupation(),
             group_occupation.teacher_occupation_array(),
             group_occupation.student_occupation_array(),
-        ), [teacher_violation + student_violation, teacher_cost + student_cost])
+        ), [
+            teacher_violation + student_violation,
+            teacher_cost + student_cost])

@@ -13,9 +13,10 @@ class OptimizationLog():
         self.installation_progress += 1
         self.database.connect()
         cursor = self.database.cursor()
-        sql_update = f"update terms set installation_progress = {self.installation_progress}"
-        sql_where = f"where id = {self.optimization_log_id}"
-        cursor.execute(' '.join([sql_update, sql_where]))
+        sql_update = (
+            f"terms set installation_progress = {self.installation_progress}")
+        sql_where = f"id = {self.optimization_log_id}"
+        cursor.execute(' '.join(['update', sql_update, 'where', sql_where]))
         cursor.close()
         self.database.commit()
         self.database.close()
@@ -24,7 +25,8 @@ class OptimizationLog():
         self.swapping_progress += 1
         self.database.connect()
         cursor = self.database.cursor()
-        sql_update = f"update terms set swapping_progress = {self.swapping_progress}"
+        sql_update = (
+            f"update terms set swapping_progress = {self.swapping_progress}")
         sql_where = f"where id = {self.optimization_log_id}"
         cursor.execute(' '.join([sql_update, sql_where]))
         cursor.close()
@@ -35,7 +37,8 @@ class OptimizationLog():
         self.deletion_progress += 1
         self.database.connect()
         cursor = self.database.cursor()
-        sql_update = f"update terms set deletion_progress = {self.deletion_progress}"
+        sql_update = (
+            f"update terms set deletion_progress = {self.deletion_progress}")
         sql_where = f"where id = {self.optimization_log_id}"
         cursor.execute(' '.join([sql_update, sql_where]))
         cursor.close()
