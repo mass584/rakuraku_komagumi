@@ -4,6 +4,7 @@ from test.test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.group_occupation import GroupOccupation
+from src.array_builder.school_grade import SchoolGrade
 from src.cost_evaluator.occupation_and_blank_evaluator \
     import OccupationAndBlankEvaluator
 
@@ -18,6 +19,7 @@ class TestOccupationAndBlankEvaluator(TestCase):
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
         group_occupation = GroupOccupation(term, array_size)
+        school_grade = SchoolGrade(term, array_size)
         student_optimization_rules = term['student_optimization_rules']
         teacher_optimization_rule = term['teacher_optimization_rule']
         occupation_and_blank_evaluator = OccupationAndBlankEvaluator(
@@ -36,7 +38,7 @@ class TestOccupationAndBlankEvaluator(TestCase):
             tutorial_occupation.tutorial_occupation(),
             group_occupation.teacher_occupation_array(),
             group_occupation.student_occupation_array(),
-            term['term_students']
+            school_grade.school_grade_array(),
         ), [
             teacher_violation + student_violation,
             teacher_cost + student_cost])
