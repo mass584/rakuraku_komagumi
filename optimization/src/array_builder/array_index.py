@@ -32,3 +32,8 @@ def get_date_index(date_index):
 
 def get_period_index(period_index):
     return period_index - 1
+
+
+def get_school_grade_index(school_grade):
+    school_grades = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
+    return school_grades.index(school_grade)

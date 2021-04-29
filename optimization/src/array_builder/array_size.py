@@ -16,6 +16,7 @@ class ArraySize():
         self.__date_count = self.__date_count()
         self.__period_count = self.term['term']['period_count']
         self.__seat_count = self.term['term']['seat_count']
+        self.__school_grade_count = 13
 
     def __date_count(self):
         is_normal = self.term['term']['term_type'] == 0
@@ -43,3 +44,6 @@ class ArraySize():
 
     def seat_count(self):
         return self.__seat_count
+
+    def school_grade_count(self):
+        return self.__school_grade_count

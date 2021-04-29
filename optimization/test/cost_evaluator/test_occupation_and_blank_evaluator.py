@@ -18,11 +18,11 @@ class TestOccupationAndBlankEvaluator(TestCase):
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
         group_occupation = GroupOccupation(term, array_size)
-        student_optimization_rule = term['student_optimization_rules'][0]
+        student_optimization_rules = term['student_optimization_rules']
         teacher_optimization_rule = term['teacher_optimization_rule']
         occupation_and_blank_evaluator = OccupationAndBlankEvaluator(
             array_size,
-            student_optimization_rule,
+            student_optimization_rules,
             teacher_optimization_rule)
         # 1日2コマ空きの日 teacher_index == 1 1日
         teacher_violation = 1
@@ -36,6 +36,7 @@ class TestOccupationAndBlankEvaluator(TestCase):
             tutorial_occupation.tutorial_occupation(),
             group_occupation.teacher_occupation_array(),
             group_occupation.student_occupation_array(),
+            term['term_students']
         ), [
             teacher_violation + student_violation,
             teacher_cost + student_cost])
