@@ -22,6 +22,13 @@ cd $PROJECT_ROOT/optimization
 docker exec -it rakuraku_komagumi_optimization_1 /bin/bash --login
 ```
 
+* Linter/Formatterの実行
+
+```shell
+pep8 . # チェック
+autopep8 --in-place --aggressive --recursive . # 自動修正
+```
+
 * UnitTestの実行
 
 ```shell
