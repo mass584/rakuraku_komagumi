@@ -1,0 +1,27 @@
+= form_for student_optimization_rule, url: student_optimization_rule_path(student_optimization_rule), remote: true do |f|
+  .form-group
+    .form-row
+      .col
+        = f.label :occupation_limit
+        = f.number_field :occupation_limit, { min: 0, max: @term.period_count, class: 'form-control' }
+      .col
+        = f.label :occupation_costs
+        = f.text_field :occupation_costs, { class: 'form-control' }
+  .form-group
+    .form-row
+      .col
+        = f.label :blank_limit
+        = f.number_field :blank_limit, { min: 0, max: @term.period_count, class: 'form-control' }
+      .col
+        = f.label :blank_costs
+        = f.text_field :blank_costs, { class: 'form-control' }
+  .form-group
+    .form-row
+      .col
+        = f.label :interval_cutoff
+        = f.number_field :interval_cutoff, { min: 0, max: @term.date_count, class: 'form-control' }
+      .col
+        = f.label :interval_costs
+        = f.text_field :interval_costs, { class: 'form-control' }
+  div id="student_optimization_rule_edit_alert_#{student_optimization_rule.id}"
+  = f.submit '保存', {"class" => "btn btn-primary"}
