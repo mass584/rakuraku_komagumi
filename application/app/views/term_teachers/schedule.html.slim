@@ -1,5 +1,5 @@
-== render partial: 'navbar', locals: { active: 'term' }
-== render partial: 'navbar_term', locals: { active: 'teacher_request' }
+== render partial: 'navbar', locals: { active: '' }
+== render partial: 'navbar_term', locals: { active: 'term_teacher' }
 .container-fluid.my-5
   .row.float-left.mx-5.mb-3
     p.h4 = "#{@term_teacher.teacher.name}さんの予定"
