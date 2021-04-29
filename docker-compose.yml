@@ -23,6 +23,7 @@ services:
       - BUNDLE_APP_CONFIG=/root/project/.bundle
     depends_on:
       - db
+      - webpack-dev-server
   chrome:
     image: selenium/standalone-chrome:latest
     ports:
