@@ -1,4 +1,4 @@
-= form_for @teacher_optimization_rule, url: teacher_optimization_rule_path(@teacher_optimization_rule), remote: true do |f|
+= form_for teacher_optimization_rule, url: teacher_optimization_rule_path(teacher_optimization_rule), remote: true do |f|
   .form-group
     .form-row
       .col
@@ -23,5 +23,5 @@
       .col
         = f.label :serialized_blank_costs
         = f.text_field :serialized_blank_costs, { class: 'form-control' }
-  div id="teacher_optimization_rule_edit_alert_#{@teacher_optimization_rule.id}"
+  div id="teacher_optimization_rule_edit_alert_#{teacher_optimization_rule.id}"
   = f.submit '保存', {"class" => "btn btn-primary"}
