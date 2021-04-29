@@ -45,6 +45,17 @@ package "期間の予定データモデル" {
     blank_costs : １日の空きコマ数に対するコスト値
   }
 
+  entity "optimization_logs" {
+    + id : 最適化計算の実行ログ
+    --
+    # term_id : 期間ID [FK]
+    sequence_number : シーケンス番号
+    installation_progress : 新規配置プロセスの進捗
+    swapping_progress : 入れ替えプロセスの進捗
+    deletion_progress : 違反解消プロセスの進捗
+    exit_status : 終了ステータス
+  }
+
   entity "term_students" #F0F0F0 {
     + id : 期間に紐づいた生徒ID [PK]
     --
@@ -114,6 +125,7 @@ package "期間の予定データモデル" {
 rooms ||-do-o{ terms
 terms ||-up-|{ teacher_optimization_rules
 terms ||-up-|{ student_optimization_rules 
+terms ||-up-|{ optimization_logs 
 terms ||-le-|{ begin_end_times
 terms ||-ri-|{ timetables
 terms ||-ri-|{ seats

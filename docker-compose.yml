@@ -6,9 +6,6 @@ services:
       - "5432:5432"
     volumes:
       - ./application/db/postgres:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER=username
-      - POSTGRES_PASSWORD=password
   application:
     build:
       context: ./application
@@ -24,10 +21,6 @@ services:
     environment:
       - RAILS_ENV=development
       - BUNDLE_APP_CONFIG=/root/project/.bundle
-      - DATABASE_HOST=db
-      - DATABASE_USERNAME=username
-      - DATABASE_PASSWORD=password
-      - DATABASE_NAME=development
     depends_on:
       - db
   chrome:
@@ -48,3 +41,18 @@ services:
       - ./application/node_modules:/root/project/node_modules:delegated
     environment:
       - WEBPACKER_DEV_SERVER_HOST=0.0.0.0
+  optimization:
+    build:
+      context: ./optimization
+      dockerfile: ./Dockerfile
+    working_dir: /root/project
+    tty: true
+    volumes:
+      - ./optimization:/root/project
+    environment:
+      - DATABASE_HOST=db
+      - DATABASE_NAME=development
+      - DATABASE_USERNAME=rakuraku_komagumi
+      - DATABASE_PASSWORD=password
+    depends_on:
+      - db
