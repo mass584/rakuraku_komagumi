@@ -1,3 +1,4 @@
+import copy
 import numpy
 from unittest import TestCase
 from test.test_data.normal_term import normal_term
@@ -8,14 +9,15 @@ from src.array_builder.tutorial_occupation import TutorialOccupation
 
 class TestTutorialOccupation(TestCase):
     def test_normal_term(self):
-        array_size = ArraySize(normal_term)
-        normal_term['tutorial_pieces'][0]['date_index'] = 1
-        normal_term['tutorial_pieces'][0]['period_index'] = 1
-        normal_term['tutorial_pieces'][0]['is_fixed'] = False
-        normal_term['tutorial_pieces'][1]['date_index'] = 2
-        normal_term['tutorial_pieces'][1]['period_index'] = 2
-        normal_term['tutorial_pieces'][1]['is_fixed'] = True
-        tutorial_occupation = TutorialOccupation(normal_term, array_size)
+        term = copy.deepcopy(normal_term)
+        array_size = ArraySize(term)
+        term['tutorial_pieces'][0]['date_index'] = 1
+        term['tutorial_pieces'][0]['period_index'] = 1
+        term['tutorial_pieces'][0]['is_fixed'] = False
+        term['tutorial_pieces'][1]['date_index'] = 2
+        term['tutorial_pieces'][1]['period_index'] = 2
+        term['tutorial_pieces'][1]['is_fixed'] = True
+        tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
         self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
         self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
@@ -28,14 +30,15 @@ class TestTutorialOccupation(TestCase):
         self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[0, 1, 1, 1, 1], 1)
 
     def test_season_term(self):
-        array_size = ArraySize(season_term)
-        season_term['tutorial_pieces'][0]['date_index'] = 1
-        season_term['tutorial_pieces'][0]['period_index'] = 1
-        season_term['tutorial_pieces'][0]['is_fixed'] = False
-        season_term['tutorial_pieces'][1]['date_index'] = 2
-        season_term['tutorial_pieces'][1]['period_index'] = 2
-        season_term['tutorial_pieces'][1]['is_fixed'] = True
-        tutorial_occupation = TutorialOccupation(season_term, array_size)
+        term = copy.deepcopy(season_term)
+        array_size = ArraySize(term)
+        term['tutorial_pieces'][0]['date_index'] = 1
+        term['tutorial_pieces'][0]['period_index'] = 1
+        term['tutorial_pieces'][0]['is_fixed'] = False
+        term['tutorial_pieces'][1]['date_index'] = 2
+        term['tutorial_pieces'][1]['period_index'] = 2
+        term['tutorial_pieces'][1]['is_fixed'] = True
+        tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
         self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
         self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
@@ -48,14 +51,15 @@ class TestTutorialOccupation(TestCase):
         self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[0, 0, 0, 1, 1], 1)
 
     def test_exam_planning_term(self):
-        array_size = ArraySize(exam_planning_term)
-        exam_planning_term['tutorial_pieces'][0]['date_index'] = 1
-        exam_planning_term['tutorial_pieces'][0]['period_index'] = 1
-        exam_planning_term['tutorial_pieces'][0]['is_fixed'] = False
-        exam_planning_term['tutorial_pieces'][1]['date_index'] = 2
-        exam_planning_term['tutorial_pieces'][1]['period_index'] = 2
-        exam_planning_term['tutorial_pieces'][1]['is_fixed'] = True
-        tutorial_occupation = TutorialOccupation(exam_planning_term, array_size)
+        term = copy.deepcopy(exam_planning_term)
+        array_size = ArraySize(term)
+        term['tutorial_pieces'][0]['date_index'] = 1
+        term['tutorial_pieces'][0]['period_index'] = 1
+        term['tutorial_pieces'][0]['is_fixed'] = False
+        term['tutorial_pieces'][1]['date_index'] = 2
+        term['tutorial_pieces'][1]['period_index'] = 2
+        term['tutorial_pieces'][1]['is_fixed'] = True
+        tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
         self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
         self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)

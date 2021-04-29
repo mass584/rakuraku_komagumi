@@ -1,3 +1,4 @@
+import copy
 from unittest import TestCase
 from test.test_data.normal_term import normal_term
 from test.test_data.season_term import season_term
@@ -9,15 +10,16 @@ from src.cost_evaluator.occupation_and_blank_evaluator import OccupationAndBlank
 
 class TestOccupationAndBlankEvaluator(TestCase):
     def test_occupation_and_blank_evaluator(self):
-        season_term['tutorial_pieces'][0]['date_index'] = 1
-        season_term['tutorial_pieces'][0]['period_index'] = 1
-        season_term['tutorial_pieces'][1]['date_index'] = 1
-        season_term['tutorial_pieces'][1]['period_index'] = 2
-        array_size = ArraySize(season_term)
-        tutorial_occupation = TutorialOccupation(season_term, array_size)
-        group_occupation = GroupOccupation(season_term, array_size)
-        student_optimization_rule = season_term['student_optimization_rules'][0]
-        teacher_optimization_rule = season_term['teacher_optimization_rule']
+        term = copy.deepcopy(season_term)
+        term['tutorial_pieces'][0]['date_index'] = 1
+        term['tutorial_pieces'][0]['period_index'] = 1
+        term['tutorial_pieces'][1]['date_index'] = 1
+        term['tutorial_pieces'][1]['period_index'] = 2
+        array_size = ArraySize(term)
+        tutorial_occupation = TutorialOccupation(term, array_size)
+        group_occupation = GroupOccupation(term, array_size)
+        student_optimization_rule = term['student_optimization_rules'][0]
+        teacher_optimization_rule = term['teacher_optimization_rule']
         occupation_and_blank_evaluator = OccupationAndBlankEvaluator(
             array_size,
             student_optimization_rule,
