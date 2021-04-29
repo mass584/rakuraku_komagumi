@@ -10,13 +10,16 @@ Rails.application.routes.draw do
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
+    resources :optimizations, only: [:index]
     resources :rooms, only: [:index]
     resources :rooms, only: [:create, :update], defaults: { format: 'js' }
     resources :students, only: [:index]
     resources :students, only: [:create, :update, :destroy], defaults: { format: 'js' }
+    resources :student_optimization_rules, only: [:update], defaults: { format: 'js' }
     resources :student_vacancies, only: [:update], defaults: { format: 'json' }
     resources :teachers, only: [:index]
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
+    resources :teacher_optimization_rules, only: [:update], defaults: { format: 'js' }
     resources :teacher_vacancies, only: [:update], defaults: { format: 'json' }
     resources :terms, only: [:index, :show] do
       get :schedule
