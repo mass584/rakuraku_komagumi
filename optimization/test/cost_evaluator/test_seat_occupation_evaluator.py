@@ -1,8 +1,6 @@
 import copy
 from unittest import TestCase
-from test.test_data.normal_term import normal_term
 from test.test_data.season_term import season_term
-from test.test_data.exam_planning_term import exam_planning_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.cost_evaluator.seat_occupation_evaluator import SeatOccupationEvaluator
