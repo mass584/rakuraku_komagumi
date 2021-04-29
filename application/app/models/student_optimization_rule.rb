@@ -5,14 +5,23 @@ class StudentOptimizationRule < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 1 }
   validates :occupation_costs,
             presence: true
+  validates :serialized_occupation_costs,
+            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            allow_nil: true
   validates :blank_limit,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :blank_costs,
             presence: true
+  validates :serialized_blank_costs,
+            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            allow_nil: true
   validates :interval_cutoff,
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :interval_costs,
             presence: true
+  validates :serialized_interval_costs,
+            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            allow_nil: true
 
   enum school_grade: {
     e1: 11,
@@ -34,6 +43,19 @@ class StudentOptimizationRule < ApplicationRecord
   validate :blank_costs_valid?
   validate :interval_costs_valid?
 
+  before_validation :deserialize_occupation_costs
+  before_validation :deserialize_blank_costs
+  before_validation :deserialize_interval_costs
+  after_find :serialize_occupation_costs
+  after_find :serialize_blank_costs
+  after_find :serialize_interval_costs
+
+  scope :ordered, -> { order(school_grade: 'ASC') }
+
+  attr_accessor :serialized_occupation_costs,
+                :serialized_blank_costs,
+                :serialized_interval_costs
+
   private
 
   def occupation_costs_valid?
@@ -52,5 +74,35 @@ class StudentOptimizationRule < ApplicationRecord
     unless interval_costs.length == interval_cutoff + 1
       errors.add(:base, '科目の受講日数感覚に対するコスト値の設定数が間違えています')
     end
+  end
+
+  def deserialize_occupation_costs
+    if serialized_occupation_costs.present?
+      self.occupation_costs = [0] + serialized_occupation_costs.split
+    end
+  end
+
+  def deserialize_blank_costs
+    if serialized_blank_costs.present?
+      self.blank_costs = [0] + serialized_blank_costs.split
+    end
+  end
+
+  def deserialize_interval_costs
+    if serialized_interval_costs.present?
+      self.interval_costs = serialized_interval_costs.split
+    end
+  end
+
+  def serialize_occupation_costs
+    self.serialized_occupation_costs = occupation_costs.drop(1).join(' ')
+  end
+
+  def serialize_blank_costs
+    self.serialized_blank_costs = blank_costs.drop(1).join(' ')
+  end
+
+  def serialize_interval_costs
+    self.serialized_interval_costs = interval_costs.join(' ')
   end
 end

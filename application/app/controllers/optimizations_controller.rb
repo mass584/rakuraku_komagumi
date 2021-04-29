@@ -6,6 +6,6 @@ class OptimizationsController < ApplicationController
 
   def index
     @teacher_optimization_rule = TeacherOptimizationRule.find_by(term_id: @term.id)
-    @student_optimization_rules = StudentOptimizationRule.where(term_id: @term.id)
+    @student_optimization_rules = StudentOptimizationRule.ordered.where(term_id: @term.id)
   end
 end

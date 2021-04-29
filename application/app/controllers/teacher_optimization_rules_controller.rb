@@ -22,9 +22,9 @@ class TeacherOptimizationRulesController < ApplicationController
       :single_cost,
       :different_pair_cost,
       :occupation_limit,
-      :occupation_costs,
+      :serialized_occupation_costs,
       :blank_limit,
-      :blank_costs,
+      :serialized_blank_costs,
     )
   end
 end

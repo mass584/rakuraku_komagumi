@@ -20,11 +20,11 @@ class StudentOptimizationRulesController < ApplicationController
   def update_params
     params.require(:student_optimization_rule).permit(
       :occupation_limit,
-      :occupation_costs,
+      :serialized_occupation_costs,
       :blank_limit,
-      :blank_costs,
+      :serialized_blank_costs,
       :interval_cutoff,
-      :interval_costs,
+      :serialized_interval_costs,
     )
   end
 end
