@@ -177,7 +177,7 @@ class TermObject():
         cur.close()
 
     def __fetch_teacher_vacancies(self):
-        cur = self.database.cursor()
+        cur = self.__database.cursor()
         sql_select = (', '.join([
             "timetables.date_index",
             "timetables.period_index",
@@ -274,7 +274,7 @@ class TermObject():
     def __fetch_seats(self):
         cur = self.__database.cursor()
         sql_select = (', '.join([
-            "id", "timetables.date_index", "timetables.period_index",
+            "seats.id", "timetables.date_index", "timetables.period_index",
             "seat_index", "term_teacher_id", "position_count"]))
         sql_from = (
             "seats join timetables "
