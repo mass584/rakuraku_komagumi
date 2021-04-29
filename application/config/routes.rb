@@ -18,7 +18,9 @@ Rails.application.routes.draw do
     resources :teachers, only: [:index]
     resources :teachers, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :teacher_vacancies, only: [:update], defaults: { format: 'json' }
-    resources :terms, only: [:index, :show]
+    resources :terms, only: [:index, :show] do
+      get :schedule
+    end
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_students, only: [:index] do

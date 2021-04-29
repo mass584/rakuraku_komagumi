@@ -12,5 +12,7 @@ nav.navbar-term
       = link_to '生徒予定', term_students_path, :class => "nav-link"
     li class="#{active == 'piece' ? 'nav-item active' : 'nav-item'}"
       = link_to '全体予定', tutorial_pieces_path, :class => "nav-link"
+    li class="#{active == 'seat_schedule' ? 'nav-item active' : 'nav-item'}"
+      = link_to '座席表', term_schedule_path(@term), :class => "nav-link"
     li.nav-item 
       .nav-link.disabled = "#{@term.name}　#{l @term.begin_at} 〜 #{l @term.end_at}"
