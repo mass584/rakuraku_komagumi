@@ -1,6 +1,7 @@
 import itertools
 import numpy
 
+
 class IntervalEvaluator():
     def __init__(self, array_size, interval_cutoff, interval_costs):
         self.__array_size = array_size
@@ -23,7 +24,8 @@ class IntervalEvaluator():
         for student_index, tutorial_index in product1:
             date_index_before = (-1) + (-self.__interval_cutoff)
             for date_index, period_index in product2:
-                if array[student_index, tutorial_index, date_index, period_index] > 0:
+                if array[student_index, tutorial_index,
+                         date_index, period_index] > 0:
                     diff = date_index - date_index_before
                     if (diff <= self.__interval_cutoff):
                         cost = self.__interval_costs[diff]

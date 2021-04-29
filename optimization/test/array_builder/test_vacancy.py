@@ -7,6 +7,7 @@ from test.test_data.exam_planning_term import exam_planning_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.vacancy import Vacancy
 
+
 class TestTutorialOccupation(TestCase):
     def test_normal_term(self):
         term = copy.deepcopy(normal_term)
@@ -16,8 +17,10 @@ class TestTutorialOccupation(TestCase):
         vacancy = Vacancy(term, array_size)
         self.assertEqual(numpy.sum(vacancy.student_vacancy_array()), 840 - 1)
         self.assertEqual(numpy.sum(vacancy.teacher_vacancy_array()), 210 - 1)
-        self.assertEqual(numpy.shape(vacancy.student_vacancy_array()), (20, 7, 6))
-        self.assertEqual(numpy.shape(vacancy.teacher_vacancy_array()), (5, 7, 6))
+        self.assertEqual(numpy.shape(
+            vacancy.student_vacancy_array()), (20, 7, 6))
+        self.assertEqual(numpy.shape(
+            vacancy.teacher_vacancy_array()), (5, 7, 6))
         self.assertEqual(vacancy.student_vacancy_array()[0, 0, 0], 0)
         self.assertEqual(vacancy.teacher_vacancy_array()[0, 0, 0], 0)
 
@@ -29,8 +32,10 @@ class TestTutorialOccupation(TestCase):
         vacancy = Vacancy(term, array_size)
         self.assertEqual(numpy.sum(vacancy.student_vacancy_array()), 1680 - 1)
         self.assertEqual(numpy.sum(vacancy.teacher_vacancy_array()), 420 - 1)
-        self.assertEqual(numpy.shape(vacancy.student_vacancy_array()), (20, 14, 6))
-        self.assertEqual(numpy.shape(vacancy.teacher_vacancy_array()), (5, 14, 6))
+        self.assertEqual(numpy.shape(
+            vacancy.student_vacancy_array()), (20, 14, 6))
+        self.assertEqual(numpy.shape(
+            vacancy.teacher_vacancy_array()), (5, 14, 6))
         self.assertEqual(vacancy.student_vacancy_array()[0, 0, 0], 0)
         self.assertEqual(vacancy.teacher_vacancy_array()[0, 0, 0], 0)
 
@@ -42,7 +47,9 @@ class TestTutorialOccupation(TestCase):
         vacancy = Vacancy(term, array_size)
         self.assertEqual(numpy.sum(vacancy.student_vacancy_array()), 120 - 1)
         self.assertEqual(numpy.sum(vacancy.teacher_vacancy_array()), 60 - 1)
-        self.assertEqual(numpy.shape(vacancy.student_vacancy_array()), (10, 3, 4))
-        self.assertEqual(numpy.shape(vacancy.teacher_vacancy_array()), (5, 3, 4))
+        self.assertEqual(numpy.shape(
+            vacancy.student_vacancy_array()), (10, 3, 4))
+        self.assertEqual(numpy.shape(
+            vacancy.teacher_vacancy_array()), (5, 3, 4))
         self.assertEqual(vacancy.student_vacancy_array()[0, 0, 0], 0)
         self.assertEqual(vacancy.teacher_vacancy_array()[0, 0, 0], 0)

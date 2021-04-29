@@ -1,5 +1,6 @@
 import numpy as np
 
+
 class OptimizationLog():
     def __init__(self, database, optimization_log_id):
         self.database = database

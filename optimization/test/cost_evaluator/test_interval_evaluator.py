@@ -5,6 +5,7 @@ from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.cost_evaluator.interval_evaluator import IntervalEvaluator
 
+
 class TestIntervalEvaluator(TestCase):
     def test_interval_is_zero(self):
         term = copy.deepcopy(season_term)
@@ -16,8 +17,10 @@ class TestIntervalEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         interval_cutoff = 2
         interval_costs = [70, 35, 14]
-        interval_evaluator = IntervalEvaluator(array_size, interval_cutoff, interval_costs)
-        self.assertEqual(interval_evaluator.violation_and_cost(tutorial_occupation.tutorial_occupation()), [0, 70])
+        interval_evaluator = IntervalEvaluator(
+            array_size, interval_cutoff, interval_costs)
+        self.assertEqual(interval_evaluator.violation_and_cost(
+            tutorial_occupation.tutorial_occupation()), [0, 70])
 
     def test_interval_is_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -29,8 +32,10 @@ class TestIntervalEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         interval_cutoff = 2
         interval_costs = [70, 35, 14]
-        interval_evaluator = IntervalEvaluator(array_size, interval_cutoff, interval_costs)
-        self.assertEqual(interval_evaluator.violation_and_cost(tutorial_occupation.tutorial_occupation()), [0, 14])
+        interval_evaluator = IntervalEvaluator(
+            array_size, interval_cutoff, interval_costs)
+        self.assertEqual(interval_evaluator.violation_and_cost(
+            tutorial_occupation.tutorial_occupation()), [0, 14])
 
     def test_interval_is_over_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -42,5 +47,7 @@ class TestIntervalEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         interval_cutoff = 2
         interval_costs = [70, 35, 14]
-        interval_evaluator = IntervalEvaluator(array_size, interval_cutoff, interval_costs)
-        self.assertEqual(interval_evaluator.violation_and_cost(tutorial_occupation.tutorial_occupation()), [0, 0])
+        interval_evaluator = IntervalEvaluator(
+            array_size, interval_cutoff, interval_costs)
+        self.assertEqual(interval_evaluator.violation_and_cost(
+            tutorial_occupation.tutorial_occupation()), [0, 0])

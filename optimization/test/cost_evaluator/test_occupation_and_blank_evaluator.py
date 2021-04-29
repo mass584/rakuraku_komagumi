@@ -6,6 +6,7 @@ from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.group_occupation import GroupOccupation
 from src.cost_evaluator.occupation_and_blank_evaluator import OccupationAndBlankEvaluator
 
+
 class TestOccupationAndBlankEvaluator(TestCase):
     def test_occupation_and_blank_evaluator(self):
         term = copy.deepcopy(season_term)

@@ -5,6 +5,7 @@ from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.cost_evaluator.seat_occupation_evaluator import SeatOccupationEvaluator
 
+
 class TestSeatOccupationEvaluator(TestCase):
     def test_fully_occupied_seat(self):
         term = copy.deepcopy(season_term)
@@ -20,7 +21,7 @@ class TestSeatOccupationEvaluator(TestCase):
         term['tutorial_pieces'][8]['term_teacher_id'] = 2
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        evaluator = SeatOccupationEvaluator(array_size) 
+        evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
             tutorial_occupation.tutorial_occupation()
         ), [0, 0])
@@ -39,7 +40,7 @@ class TestSeatOccupationEvaluator(TestCase):
         term['tutorial_pieces'][8]['term_teacher_id'] = 3
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        evaluator = SeatOccupationEvaluator(array_size) 
+        evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
             tutorial_occupation.tutorial_occupation()
         ), [1, 0])
@@ -61,7 +62,7 @@ class TestSeatOccupationEvaluator(TestCase):
         term['tutorial_pieces'][12]['term_teacher_id'] = 4
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        evaluator = SeatOccupationEvaluator(array_size) 
+        evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
             tutorial_occupation.tutorial_occupation()
         ), [2, 0])

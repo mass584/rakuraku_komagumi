@@ -6,6 +6,7 @@ from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.vacancy import Vacancy
 from src.cost_evaluator.vacancy_and_double_booking_evaluator import VacancyAndDoubleBookingEvaluator
 
+
 class TestVacancyAndDoubleBookingEvaluator(TestCase):
     def test_no_violation(self):
         term = copy.deepcopy(season_term)

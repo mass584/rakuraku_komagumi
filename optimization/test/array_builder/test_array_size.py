@@ -4,6 +4,7 @@ from test.test_data.season_term import season_term
 from test.test_data.exam_planning_term import exam_planning_term
 from src.array_builder.array_size import ArraySize
 
+
 class TestArraySize(TestCase):
     def test_normal_term(self):
         array_builder = ArraySize(normal_term)

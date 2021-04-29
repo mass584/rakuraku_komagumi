@@ -7,6 +7,7 @@ from test.test_data.exam_planning_term import exam_planning_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 
+
 class TestTutorialOccupation(TestCase):
     def test_normal_term(self):
         term = copy.deepcopy(normal_term)
@@ -18,16 +19,26 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 2
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
-        self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
-        self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
-        self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
-        self.assertEqual(numpy.shape(tutorial_occupation.tutorial_occupation()), (20, 5, 5, 7, 6))
-        self.assertEqual(numpy.shape(tutorial_occupation.fixed_tutorial_occupation()), (20, 5, 5, 7, 6))
-        self.assertEqual(numpy.shape(tutorial_occupation.floated_tutorial_occupation()), (20, 5, 5, 7, 6))
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 0, 0, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 1, 1, 1, 1], 1)
-        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[0, 0, 0, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[0, 1, 1, 1, 1], 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.tutorial_occupation()), (20, 5, 5, 7, 6))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.fixed_tutorial_occupation()), (20, 5, 5, 7, 6))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.floated_tutorial_occupation()), (20, 5, 5, 7, 6))
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 0, 0, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 1, 1, 1, 1], 1)
+        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[
+                         0, 0, 0, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[
+                         0, 1, 1, 1, 1], 1)
 
     def test_season_term(self):
         term = copy.deepcopy(season_term)
@@ -39,16 +50,26 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 2
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
-        self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
-        self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
-        self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
-        self.assertEqual(numpy.shape(tutorial_occupation.tutorial_occupation()), (20, 5, 5, 14, 6))
-        self.assertEqual(numpy.shape(tutorial_occupation.fixed_tutorial_occupation()), (20, 5, 5, 14, 6))
-        self.assertEqual(numpy.shape(tutorial_occupation.floated_tutorial_occupation()), (20, 5, 5, 14, 6))
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 0, 0, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 0, 0, 1, 1], 1)
-        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[0, 0, 0, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[0, 0, 0, 1, 1], 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.tutorial_occupation()), (20, 5, 5, 14, 6))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.fixed_tutorial_occupation()), (20, 5, 5, 14, 6))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.floated_tutorial_occupation()), (20, 5, 5, 14, 6))
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 0, 0, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 0, 0, 1, 1], 1)
+        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[
+                         0, 0, 0, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[
+                         0, 0, 0, 1, 1], 1)
 
     def test_exam_planning_term(self):
         term = copy.deepcopy(exam_planning_term)
@@ -60,13 +81,23 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 2
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
-        self.assertEqual(numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
-        self.assertEqual(numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
-        self.assertEqual(numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
-        self.assertEqual(numpy.shape(tutorial_occupation.tutorial_occupation()), (10, 5, 5, 3, 4))
-        self.assertEqual(numpy.shape(tutorial_occupation.fixed_tutorial_occupation()), (10, 5, 5, 3, 4))
-        self.assertEqual(numpy.shape(tutorial_occupation.floated_tutorial_occupation()), (10, 5, 5, 3, 4))
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 1, 1, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.tutorial_occupation())[0, 2, 2, 1, 1], 1)
-        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[0, 1, 1, 0, 0], 1)
-        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[0, 2, 2, 1, 1], 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+        self.assertEqual(
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.tutorial_occupation()), (10, 5, 5, 3, 4))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.fixed_tutorial_occupation()), (10, 5, 5, 3, 4))
+        self.assertEqual(numpy.shape(
+            tutorial_occupation.floated_tutorial_occupation()), (10, 5, 5, 3, 4))
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 1, 1, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.tutorial_occupation())[
+                         0, 2, 2, 1, 1], 1)
+        self.assertEqual((tutorial_occupation.floated_tutorial_occupation())[
+                         0, 1, 1, 0, 0], 1)
+        self.assertEqual((tutorial_occupation.fixed_tutorial_occupation())[
+                         0, 2, 2, 1, 1], 1)

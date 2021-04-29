@@ -1,6 +1,7 @@
 import itertools
 import numpy as np
 
+
 class SeatCombinationEvaluator():
     def __init__(self, array_size, single_cost, different_pair_cost):
         self.__array_size = array_size
@@ -12,7 +13,8 @@ class SeatCombinationEvaluator():
         teacher_index_list = range(self.__array_size.teacher_count())
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
-        product = itertools.product(teacher_index_list, date_index_list, period_index_list)
+        product = itertools.product(
+            teacher_index_list, date_index_list, period_index_list)
         cost_summation = 0
         for teacher_index, date_index, period_index in product:
             vector = occupation[teacher_index, :, date_index, period_index]
