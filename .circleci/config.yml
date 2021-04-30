@@ -6,6 +6,9 @@ jobs:
         name: application
       - image: postgres:10.6
         name: db
+        environment:
+          POSTGRES_USER: rakuraku_komagumi
+          POSTGRES_PASSWORD: password
       - image: selenium/standalone-chrome:latest
         name: chrome
     steps:
