@@ -35,8 +35,10 @@ workflows:
     jobs:
       - hold:
           type: approval
-      - test-job:
           filters:
             branches:
               ignore:
                 - master
+      - test-job:
+          requires:
+            - hold
