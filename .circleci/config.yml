@@ -1,0 +1,44 @@
+version: 2.1
+jobs:
+  test-job:
+    docker:
+      - image: circleci/ruby:3.0.0-node
+        name: application
+      - image: postgres:10.6
+        name: db
+        environment:
+          POSTGRES_USER: rakuraku_komagumi
+          POSTGRES_PASSWORD: password
+      - image: selenium/standalone-chrome:latest
+        name: chrome
+    steps:
+      - checkout
+      - run:
+          name: install library
+          command: bundle && yarn
+          working_directory: ~/project/application
+      - run:
+          name: create database
+          command: bundle exec rails db:reset
+          working_directory: ~/project/application
+      - run:
+          name: rubocop
+          command: bundle exec rubocop
+          working_directory: ~/project/application
+      - run:
+          name: rspec
+          command: bundle exec rspec
+          working_directory: ~/project/application
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      - hold:
+          type: approval
+          filters:
+            branches:
+              ignore:
+                - master
+      - test-job:
+          requires:
+            - hold

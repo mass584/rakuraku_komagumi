@@ -86,5 +86,7 @@ Capybara.configure do |config|
   config.default_driver = :remote_chrome
   config.javascript_driver = :remote_chrome
   config.default_max_wait_time = 15
-  config.server_host = 'application'
+  config.server_host = IPSocket.getaddress(Socket.gethostname)
+  config.server_port = 4444
+  config.app_host = "http://#{Capybara.server_host}:#{Capybara.server_port}"
 end
