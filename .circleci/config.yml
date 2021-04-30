@@ -1,15 +1,28 @@
 version: 2.1
-orbs:
-  ruby: circleci/ruby@0.1.2 
-
 jobs:
   build:
     docker:
-      - image: circleci/ruby:2.6.3-stretch-node
-    executor: ruby/default
+      - image: circleci/ruby:3.0.0-node
+        name: application
+      - image: postgres:10.6
+        name: db
+      - image: selenium/standalone-chrome:latest
+        name: chrome
     steps:
       - checkout
       - run:
-          name: Which bundler?
-          command: bundle -v
-      - ruby/bundle-install
+          name: install library
+          command: bundle && yarn
+          working_directory: ~/project/application
+      - run:
+          name: create database
+          command: bundle exec rails db:reset
+          working_directory: ~/project/application
+      - run:
+          name: rubocop
+          command: bundle exec rubocop
+          working_directory: ~/project/application
+      - run:
+          name: rspec
+          command: bundle exec rspec
+          working_directory: ~/project/application
