@@ -92,6 +92,10 @@ class Term < ApplicationRecord
     (1..position_count).to_a
   end
 
+  def tutorial_pieces_empty?
+    tutorial_pieces.filter_by_placed.empty?
+  end
+
   private
 
   def max_week

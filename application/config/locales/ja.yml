@@ -83,18 +83,23 @@ ja:
         different_pair_cost: 違う科目を同時に教える時のコスト値
         occupation_limit: １日の最大コマ数
         occupation_costs: １日のコマ数に対するコスト値
+        serialized_occupation_costs: １日のコマ数に対するコスト値
         blank_limit: １日の最大空きコマ数
         blank_costs: １日の空きコマ数に対するコスト値
+        serialized_blank_costs: １日の空きコマ数に対するコスト値
       student_optimization_rule:
         term: 期間
         term_id: 期間
         school_grade: 学年
         occupation_limit: １日の最大コマ数
         occupation_costs: １日のコマ数に対するコスト値
+        serialized_occupation_costs: １日のコマ数に対するコスト値
         blank_limit: １日の最大空きコマ数
         blank_costs: １日の空きコマ数に対するコスト値
-        interval_cutoff: 科目の受講日数間隔のカットオフ値
-        interval_costs: 科目の受講日数間隔に対するコスト値
+        serialized_blank_costs: １日の空きコマ数に対するコスト値
+        interval_cutoff: 受講間隔のコストが発生する最大日数
+        interval_costs: 受講間隔に対するコスト値
+        serialized_interval_costs: 受講間隔に対するコスト値
       timetable:
         term: 期間
         term_id: 期間

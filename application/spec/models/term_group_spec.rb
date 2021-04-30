@@ -20,7 +20,7 @@ RSpec.describe TermGroup, type: :model do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 1)
       teacher_optimization_rule = term.teacher_optimization_rules.first
-      teacher_optimization_rule.update(occupation_limit: 4, occupation_costs: [0, 18, 3, 0, 6])
+      teacher_optimization_rule.update(occupation_limit: 4, serialized_occupation_costs: '18 3 0 6')
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
       @term_group_first = term.term_groups.first

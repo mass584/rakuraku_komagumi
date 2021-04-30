@@ -60,8 +60,10 @@ RSpec.describe Seat, type: :model do
   describe '１日のコマ数上限バリデーションの検証' do
     before :each do
       term = create_normal_term_with_teacher_and_student(2, 0)
-      term.teacher_optimization_rules.first.update(occupation_limit: 4,
-                                                   occupation_costs: [0, 18, 3, 0, 6])
+      term.teacher_optimization_rules.first.update(
+        occupation_limit: 4,
+        serialized_occupation_costs: '18 3 0 6',
+      )
       timetables = timetables(term)
       @seats = seats(term)
       @term_teacher_first = term.term_teachers.first

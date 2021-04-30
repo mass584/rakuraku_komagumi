@@ -2,7 +2,7 @@ class TermsController < ApplicationController
   before_action :authenticate_user!
   before_action :set_rooms!
   before_action :set_room!
-  before_action :set_term!, only: [:show]
+  before_action :set_term!, only: [:show, :schedule]
 
   def index
     @terms = @room.terms.order(begin_at: 'DESC')
@@ -31,6 +31,9 @@ class TermsController < ApplicationController
   end
 
   def show
+  end
+
+  def schedule
     @tutorial_pieces = TutorialPiece.indexed_and_named.where(term_id: @term.id)
     @seats = Seat.with_group.with_index.where(term_id: @term.id)
   end

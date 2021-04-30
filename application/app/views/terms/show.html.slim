@@ -1,28 +1,6 @@
-== render partial: 'navbar', locals: { active: 'term' }
-== render partial: 'navbar_term', locals: { active: 'top' }
+== render partial: 'navbar', locals: { active: '' }
+== render partial: 'navbar_term', locals: { active: 'home' }
 .container-fluid.my-5
   .justify-content-center.ml-5.mr-5.mt-3.mb-3
     #pie_chart_container
-    .row.mt-3.mb-3
-      .col-md-12.col-lg-12
-        a.h4.btn.btn-secondary(data-toggle="collapse" href="#table" role="button") = "座席表を開く"
-        .overflow-auto.w-100
-          .collapse#table
-            table.table.table-sm
-              thead.thead-dark
-                tr
-                  th.align-middle.min-width-150
-                  th.align-middle.min-width-50
-                  - @term.period_index_array.each do |period_index|
-                    th.align-middle.min-width-150 #{period_index}限
-              tbody
-                - @term.date_index_array.each do |date_index|
-                  - @term.seat_index_array.each do |seat_index|
-                    tr
-                      - if seat_index == 1
-                        td.align-middle.min-width-150(rowspan="#{@term.seat_count}")
-                          = @term.display_date(date_index)
-                      td.align-middle.min-width-50 = "席#{seat_index}"
-                      - @term.period_index_array.each do |period_index|
-                        = term_schedule_table_cell(@tutorial_pieces, @seats, date_index, period_index, seat_index)
 == javascript_pack_tag 'term_show.js'

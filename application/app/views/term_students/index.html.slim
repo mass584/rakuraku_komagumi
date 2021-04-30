@@ -1,5 +1,5 @@
-== render partial: 'navbar', locals: { active: 'term' }
-== render partial: 'navbar_term', locals: { active: 'student_request' }
+== render partial: 'navbar', locals: { active: '' }
+== render partial: 'navbar_term', locals: { active: 'term_student' }
 .container-fluid.my-5
   .row.float-left.mx-5
     == render partial: 'term_students/new', locals: { term_student: TermStudent.new }

@@ -42,7 +42,7 @@ module TermHelper
         item.seat_index == seat_index
     end
     content_tag(:td, class: term_schedule_table_cell_class(seat, filtered_tutorial_pieces)) do
-      content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
+      content_tag(:small, class: 'min-height-40 d-flex flex-column justify-content-center') do
         term_schedule_table_cell_inner(seat, filtered_tutorial_pieces)
       end
     end

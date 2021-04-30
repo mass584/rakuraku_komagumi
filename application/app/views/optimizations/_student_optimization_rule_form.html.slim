@@ -1,0 +1,27 @@
+= form_for student_optimization_rule, url: student_optimization_rule_path(student_optimization_rule), remote: true do |f|
+  .form-group
+    .form-row
+      .col
+        = f.label :occupation_limit
+        = f.number_field :occupation_limit, { min: 0, max: 12, class: 'form-control', disabled: !student_optimization_rule.editable }
+      .col
+        = f.label :serialized_occupation_costs
+        = f.text_field :serialized_occupation_costs, { class: 'form-control', disabled: !student_optimization_rule.editable }
+  .form-group
+    .form-row
+      .col
+        = f.label :blank_limit
+        = f.number_field :blank_limit, { min: 0, max: 10, class: 'form-control', disabled: !student_optimization_rule.editable }
+      .col
+        = f.label :serialized_blank_costs
+        = f.text_field :serialized_blank_costs, { class: 'form-control', disabled: !student_optimization_rule.editable }
+  .form-group
+    .form-row
+      .col
+        = f.label :interval_cutoff
+        = f.number_field :interval_cutoff, { min: 0, max: 7, class: 'form-control', disabled: !student_optimization_rule.editable }
+      .col
+        = f.label :serialized_interval_costs
+        = f.text_field :serialized_interval_costs, { class: 'form-control', disabled: !student_optimization_rule.editable }
+  div id="student_optimization_rule_edit_alert_#{student_optimization_rule.id}"
+  = f.submit '保存', { class: "btn btn-primary", disabled: !student_optimization_rule.editable }
