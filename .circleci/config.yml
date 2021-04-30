@@ -9,7 +9,7 @@ jobs:
         environment:
           POSTGRES_USER: rakuraku_komagumi
           POSTGRES_PASSWORD: password
-      - image: selenium/standalone-chrome:latest
+      - image: selenium/standalone-chrome-debug:latest
         name: chrome
     steps:
       - checkout
