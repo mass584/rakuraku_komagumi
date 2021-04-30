@@ -34,6 +34,7 @@ workflows:
   test-workflow:
     jobs:
       - hold:
+          no_output_timeout: 5m
           type: approval
           filters:
             branches:
