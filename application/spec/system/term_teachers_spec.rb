@@ -84,7 +84,9 @@ RSpec.describe '講師の編集ページ', type: :system do
 
     it '予定表が表示される' do
       visit term_teachers_path
-      find('a[href$="/schedule"]').click
+      within('table') do
+        find('a[href$="/schedule"]').click
+      end
       tutorial_name = @term.term_tutorials.first.tutorial.name
       student_name = @term.term_students.first.student.name
       group_name = @term.term_groups.first.group.name
