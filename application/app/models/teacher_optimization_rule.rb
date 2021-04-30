@@ -20,6 +20,7 @@ class TeacherOptimizationRule < ApplicationRecord
             format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
             allow_nil: true
 
+  validate :tutorial_piece_empty?
   validate :occupation_costs_valid?
   validate :blank_costs_valid?
 
@@ -31,7 +32,17 @@ class TeacherOptimizationRule < ApplicationRecord
   attr_accessor :serialized_occupation_costs,
                 :serialized_blank_costs
 
+  def editable
+    !term.tutorial_pieces.filter_by_placed.exists?
+  end
+
   private
+
+  def tutorial_piece_empty?
+    unless editable
+      errors.add(:base, 'コマが配置されているため変更できません')
+    end
+  end
 
   def occupation_costs_valid?
     unless occupation_costs.length == occupation_limit + 1

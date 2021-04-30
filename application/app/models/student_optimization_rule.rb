@@ -39,6 +39,7 @@ class StudentOptimizationRule < ApplicationRecord
     other: 99,
   }
 
+  validate :tutorial_piece_empty?
   validate :occupation_costs_valid?
   validate :blank_costs_valid?
   validate :interval_costs_valid?
@@ -56,7 +57,17 @@ class StudentOptimizationRule < ApplicationRecord
                 :serialized_blank_costs,
                 :serialized_interval_costs
 
+  def editable
+    !term.tutorial_pieces.filter_by_placed.exists?
+  end
+
   private
+
+  def tutorial_piece_empty?
+    unless editable
+      errors.add(:base, 'コマが配置されているため変更できません')
+    end
+  end
 
   def occupation_costs_valid?
     unless occupation_costs.length == occupation_limit + 1
