@@ -2,25 +2,37 @@ class StudentOptimizationRule < ApplicationRecord
   belongs_to :term
 
   validates :occupation_limit,
-            numericality: { only_integer: true, greater_than_or_equal_to: 1 }
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 1,
+              less_than_or_equal_to: 12,
+            }
   validates :occupation_costs,
             presence: true
   validates :serialized_occupation_costs,
-            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            format: { with: /\A[0-9\s]*\Z/, message: 'は整数で入力してください' },
             allow_nil: true
   validates :blank_limit,
-            numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 10,
+            }
   validates :blank_costs,
             presence: true
   validates :serialized_blank_costs,
-            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            format: { with: /\A[0-9\s]*\Z/, message: 'は整数で入力してください' },
             allow_nil: true
   validates :interval_cutoff,
-            numericality: { only_integer: true, greater_than_or_equal_to: 0 }
+            numericality: {
+              only_integer: true,
+              greater_than_or_equal_to: 0,
+              less_than_or_equal_to: 7,
+            }
   validates :interval_costs,
             presence: true
   validates :serialized_interval_costs,
-            format: { with: /\A[0-9\s]*\Z/, message: 'の形式が誤っています' },
+            format: { with: /\A[0-9\s]*\Z/, message: 'は整数で入力してください' },
             allow_nil: true
 
   enum school_grade: {
@@ -71,19 +83,31 @@ class StudentOptimizationRule < ApplicationRecord
 
   def occupation_costs_valid?
     unless occupation_costs.length == occupation_limit + 1
-      errors.add(:base, '１日の最大コマ数に対するコスト値の設定数が間違えています')
+      errors.add(:occupation_costs, 'の設定数が間違えています')
+    end
+
+    if occupation_costs.any? { |value| value.negative? || value > 100 }
+      errors.add(:occupation_costs, 'は０〜１００を指定してください')
     end
   end
 
   def blank_costs_valid?
     unless blank_costs.length == blank_limit + 1
-      errors.add(:base, '１日の空きコマ数に対するコスト値の設定数が間違えています')
+      errors.add(:blank_costs, 'の設定数が間違えています')
+    end
+
+    if blank_costs.any? { |value| value.negative? || value > 100 }
+      errors.add(:blank_costs, 'は０〜１００を指定してください')
     end
   end
 
   def interval_costs_valid?
     unless interval_costs.length == interval_cutoff + 1
-      errors.add(:base, '科目の受講日数感覚に対するコスト値の設定数が間違えています')
+      errors.add(:interval_costs, 'の設定数が間違えています')
+    end
+
+    if interval_costs.any? { |value| value.negative? || value > 100 }
+      errors.add(:interval_costs, 'は０〜１００を指定してください')
     end
   end
 

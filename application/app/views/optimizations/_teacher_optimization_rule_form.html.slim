@@ -11,7 +11,7 @@
     .form-row
       .col
         = f.label :occupation_limit
-        = f.number_field :occupation_limit, { min: 0, max: @term.period_count, class: 'form-control', disabled: !teacher_optimization_rule.editable }
+        = f.number_field :occupation_limit, { min: 0, max: 12, class: 'form-control', disabled: !teacher_optimization_rule.editable }
       .col
         = f.label :serialized_occupation_costs
         = f.text_field :serialized_occupation_costs, { class: 'form-control', disabled: !teacher_optimization_rule.editable }
@@ -19,7 +19,7 @@
     .form-row
       .col
         = f.label :blank_limit
-        = f.number_field :blank_limit, { min: 0, max: @term.period_count, class: 'form-control', disabled: !teacher_optimization_rule.editable }
+        = f.number_field :blank_limit, { min: 0, max: 10, class: 'form-control', disabled: !teacher_optimization_rule.editable }
       .col
         = f.label :serialized_blank_costs
         = f.text_field :serialized_blank_costs, { class: 'form-control', disabled: !teacher_optimization_rule.editable }

@@ -97,8 +97,8 @@ ja:
         blank_limit: １日の最大空きコマ数
         blank_costs: １日の空きコマ数に対するコスト値
         serialized_blank_costs: １日の空きコマ数に対するコスト値
-        interval_cutoff: 科目の受講日数間隔のカットオフ値
-        interval_costs: 科目の受講日数間隔に対するコスト値
+        interval_cutoff: 受講間隔のコストが発生する最大日数
+        interval_costs: 受講間隔に対するコスト値
         serialized_interval_costs: 科目の受講日数間隔に対するコスト値
       timetable:
         term: 期間
