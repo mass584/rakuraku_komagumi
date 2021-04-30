@@ -1,6 +1,6 @@
 version: 2.1
 jobs:
-  build:
+  test-job:
     docker:
       - image: circleci/ruby:3.0.0-node
         name: application
@@ -29,3 +29,14 @@ jobs:
           name: rspec
           command: bundle exec rspec
           working_directory: ~/project/application
+workflows:
+  version: 2
+  test-workflow:
+    jobs:
+      - hold:
+          type: approval
+      - test-job:
+          filters:
+            branches:
+              ignore:
+                - master
