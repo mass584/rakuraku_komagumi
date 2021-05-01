@@ -25,6 +25,9 @@ Rails.application.routes.draw do
       get :schedule
     end
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
+    resources :terms, defaults: { format: 'json' } do
+      put :optimization
+    end
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_students, only: [:index] do
       get :vacancy
