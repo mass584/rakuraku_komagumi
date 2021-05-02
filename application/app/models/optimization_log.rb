@@ -18,7 +18,7 @@ class OptimizationLog < ApplicationRecord
   }
 
   def self.new(attr = {})
-    attr[:sequence_number] ||= 0
+    attr[:sequence_number] ||= next_sequence_number
     attr[:installation_progress] ||= 0
     attr[:swapping_progress] ||= 0
     attr[:deletion_progress] ||= 0
