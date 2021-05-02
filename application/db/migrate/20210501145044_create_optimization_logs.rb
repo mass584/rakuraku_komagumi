@@ -10,6 +10,7 @@ class CreateOptimizationLogs < ActiveRecord::Migration[6.1]
       t.datetime :end_at
       t.timestamps
     end
+    add_index :optimization_logs, [:term_id, :sequence_number], unique: true
     add_foreign_key :optimization_logs, :terms, on_update: :cascade, on_delete: :cascade
   end
 end

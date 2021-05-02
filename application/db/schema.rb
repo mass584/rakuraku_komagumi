@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2021_05_01_154329) do
     t.datetime "end_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["term_id", "sequence_number"], name: "index_optimization_logs_on_term_id_and_sequence_number", unique: true
   end
 
   create_table "rooms", force: :cascade do |t|
