@@ -11,6 +11,7 @@ Rails.application.routes.draw do
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
     resources :optimizations, only: [:index]
+    resources :optimization_logs, only: [:update], defaults: { format: 'json' }
     resources :rooms, only: [:index]
     resources :rooms, only: [:create, :update], defaults: { format: 'js' }
     resources :students, only: [:index]
