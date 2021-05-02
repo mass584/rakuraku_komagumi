@@ -12,6 +12,7 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
+  has_many :optimization_logs, dependent: :destroy
 
   validates :name,
             length: { minimum: 1, maximum: 40 }
@@ -32,6 +33,7 @@ class Term < ApplicationRecord
   validate :valid_date_count?, on: :create
 
   before_create :set_nest_objects
+  before_update :set_optimization_log, if: :set_optimization_log?
 
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
@@ -116,6 +118,10 @@ class Term < ApplicationRecord
   end
 
   # callback
+  def set_optimization_log?
+    will_save_change_to_is_optimizing? && is_optimizing
+  end
+
   def set_nest_objects
     student_optimization_rules.build(new_student_optimization_rules)
     teacher_optimization_rules.build(new_teacher_optimization_rules)
@@ -123,6 +129,10 @@ class Term < ApplicationRecord
     timetables.build(new_timetables)
     term_tutorials.build(new_term_tutorials)
     term_groups.build(new_term_groups)
+  end
+
+  def set_optimization_log
+    optimization_logs.build
   end
 
   def new_term_tutorials
