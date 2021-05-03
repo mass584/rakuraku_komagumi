@@ -55,6 +55,7 @@ package "期間の予定データモデル" {
     swapping_progress : 入れ替えプロセスの進捗
     deletion_progress : 違反解消プロセスの進捗
     exit_status : 終了ステータス
+    exit_message : 終了メッセージ
   }
 
   entity "term_students" #F0F0F0 {
