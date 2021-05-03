@@ -44,6 +44,7 @@ group :test do
   gem 'rubocop'
   gem 'selenium-webdriver', '>= 4.0.0.beta3'
   gem 'simplecov'
+  gem 'timecop'
 end
 
 group :production do

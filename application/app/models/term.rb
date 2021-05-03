@@ -12,6 +12,7 @@ class Term < ApplicationRecord
   has_many :tutorial_contracts, dependent: :destroy
   has_many :group_contracts, dependent: :destroy
   has_many :tutorial_pieces, dependent: :destroy
+  has_many :optimization_logs, dependent: :destroy
 
   validates :name,
             length: { minimum: 1, maximum: 40 }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_23_053342) do
+ActiveRecord::Schema.define(version: 2021_05_03_124514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -58,6 +58,20 @@ ActiveRecord::Schema.define(version: 2021_04_23_053342) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "short_name", null: false
+  end
+
+  create_table "optimization_logs", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "sequence_number", null: false
+    t.integer "installation_progress", null: false
+    t.integer "swapping_progress", null: false
+    t.integer "deletion_progress", null: false
+    t.integer "exit_status", null: false
+    t.datetime "end_at"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.string "exit_message"
+    t.index ["term_id", "sequence_number"], name: "index_optimization_logs_on_term_id_and_sequence_number", unique: true
   end
 
   create_table "rooms", force: :cascade do |t|
@@ -188,6 +202,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_053342) do
     t.integer "position_count", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_optimizing", default: false, null: false
   end
 
   create_table "timetables", force: :cascade do |t|
@@ -258,6 +273,7 @@ ActiveRecord::Schema.define(version: 2021_04_23_053342) do
   add_foreign_key "group_contracts", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "group_contracts", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "groups", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "optimization_logs", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "seats", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "student_optimization_rules", "terms", on_update: :cascade, on_delete: :cascade

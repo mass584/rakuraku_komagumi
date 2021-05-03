@@ -3,6 +3,14 @@ class ApplicationController < ActionController::Base
 
   private
 
+  def basic_auth
+    username = Rails.application.credentials[:basic_auth][:username]
+    password = Rails.application.credentials[:basic_auth][:password]
+    authenticate_or_request_with_http_basic do |username_in_query, password_in_query|
+      username == username_in_query && password == password_in_query
+    end
+  end
+
   def set_rooms!
     @rooms = Room.ordered.all
   end

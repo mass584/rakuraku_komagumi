@@ -1,4 +1,8 @@
 module StubSupport
+  def stub_basic_auth
+    allow_any_instance_of(ApplicationController).to receive(:basic_auth)
+  end
+
   def stub_authenticate_user
     allow_any_instance_of(ApplicationController).to receive(:authenticate_user!)
   end

@@ -18,6 +18,7 @@ package "期間の予定データモデル" {
     period_count : 時限数
     seat_count : 座席数
     position_count : 座席あたりの生徒数
+    is_optimizing : 最適化計算中フラグ
   }
 
   entity "student_optimization_rules" {
@@ -54,6 +55,7 @@ package "期間の予定データモデル" {
     swapping_progress : 入れ替えプロセスの進捗
     deletion_progress : 違反解消プロセスの進捗
     exit_status : 終了ステータス
+    exit_message : 終了メッセージ
   }
 
   entity "term_students" #F0F0F0 {
