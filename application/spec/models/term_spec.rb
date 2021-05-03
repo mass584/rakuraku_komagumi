@@ -48,15 +48,4 @@ RSpec.describe Term, type: :model do
       end
     end
   end
-
-  describe '期間（通常期）の自動最適化フラグ更新' do
-    before :each do
-      @term = FactoryBot.create(:first_term)
-      @term.update(is_optimizing: true)
-    end
-
-    it 'ログが生成される' do
-      expect(@term.optimization_logs.count).to eq(1)
-    end
-  end
 end
