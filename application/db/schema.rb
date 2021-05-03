@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_01_154329) do
+ActiveRecord::Schema.define(version: 2021_05_03_124514) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -70,6 +70,7 @@ ActiveRecord::Schema.define(version: 2021_05_01_154329) do
     t.datetime "end_at"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "exit_message"
     t.index ["term_id", "sequence_number"], name: "index_optimization_logs_on_term_id_and_sequence_number", unique: true
   end
 

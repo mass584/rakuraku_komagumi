@@ -31,6 +31,7 @@ class OptimizationLogsController < ApplicationController
       :swapping_progress,
       :deletion_progress,
       :exit_status,
+      :exit_message,
     )
   end
 end

@@ -27,6 +27,7 @@ module OptimizationLogTestData
           'swapping_progress' => 10,
           'deletion_progress' => 10,
           'exit_status' => 1,
+          'exit_message' => 'message',
         },
       }
     end
@@ -45,6 +46,7 @@ module OptimizationLogTestData
           'swapping_progress' => 0,
           'deletion_progress' => 0,
           'exit_status' => 'in_progress',
+          'exit_message' => nil,
           'end_at' => nil,
           'created_at' => res_body['created_at'],
           'updated_at' => res_body['updated_at'],
@@ -62,6 +64,7 @@ module OptimizationLogTestData
           'swapping_progress' => 10,
           'deletion_progress' => 10,
           'exit_status' => 'succeed',
+          'exit_message' => 'message',
           'end_at' => res_body['end_at'],
           'created_at' => res_body['created_at'],
           'updated_at' => res_body['updated_at'],
