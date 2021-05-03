@@ -15,7 +15,9 @@ RSpec.describe 'OptimizationLogs API', type: :request do
            params: OptimizationLogTestData::RequestBody.create_optimization_log(@term.id).to_json
       res_body = JSON.parse(response.body)
       expect(response.status).to eq(201)
-      expect(res_body).to eq(OptimizationLogTestData::ResponseBody.create_optimization_log(res_body['optimization_log']))
+      expect(res_body).to eq(
+        OptimizationLogTestData::ResponseBody.create_optimization_log(res_body['optimization_log']),
+      )
     end
   end
 
@@ -31,7 +33,9 @@ RSpec.describe 'OptimizationLogs API', type: :request do
           params: OptimizationLogTestData::RequestBody.update_optimization_log.to_json
       res_body = JSON.parse(response.body)
       expect(response.status).to eq(200)
-      expect(res_body).to eq(OptimizationLogTestData::ResponseBody.update_optimization_log(res_body['optimization_log']))
+      expect(res_body).to eq(
+        OptimizationLogTestData::ResponseBody.update_optimization_log(res_body['optimization_log']),
+      )
     end
   end
 end
