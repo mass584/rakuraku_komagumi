@@ -4,7 +4,7 @@ class OptimizationLogsController < ApplicationController
   def create
     @optimization_log = OptimizationLog.new(create_params)
     if @optimization_log.save
-      render json: @optimization_log.to_json, status: :created
+      render json: @optimization_log, root: 'optimization_log', status: :created
     else
       render json: { message: @optimization_log.errors.full_messages }, status: :bad_request
     end
@@ -13,7 +13,7 @@ class OptimizationLogsController < ApplicationController
   def update
     @optimization_log = OptimizationLog.find_by(id: params[:id])
     if @optimization_log.update(update_params)
-      render json: @optimization_log.to_json, status: :ok
+      render json: @optimization_log, root: 'optimization_log', status: :ok
     else
       render json: { message: @optimization_log.errors.full_messages }, status: :bad_request
     end
