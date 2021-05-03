@@ -1,4 +1,6 @@
 class OptimizationLogsController < ApplicationController
+  before_action :basic_auth
+
   def create
     @optimization_log = OptimizationLog.new(create_params)
     if @optimization_log.save
