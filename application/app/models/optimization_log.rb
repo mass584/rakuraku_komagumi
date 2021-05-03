@@ -11,6 +11,9 @@ class OptimizationLog < ApplicationRecord
             numericality: { only_integer: true, greater_than_or_equal_to: 0 }
   validates :exit_status, presence: true
 
+  before_create :set_is_optimizing
+  before_update :unset_is_optimizing, if: :will_save_change_to_exit_status?
+
   enum exit_status: {
     in_progress: 0,
     succeed: 1,
@@ -30,5 +33,13 @@ class OptimizationLog < ApplicationRecord
 
   def next_sequence_number
     where(term_id: term_id).maximum(:sequence_number) + 1
+  end
+
+  def set_is_optimizing
+    term.is_optimizing = true
+  end
+
+  def unset_is_optimizing
+    term.is_optimizing = false
   end
 end

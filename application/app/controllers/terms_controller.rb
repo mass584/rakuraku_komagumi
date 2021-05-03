@@ -38,15 +38,6 @@ class TermsController < ApplicationController
     @seats = Seat.with_group.with_index.where(term_id: @term.id)
   end
 
-  def optimization
-    record = Term.find_by(id: params[:id])
-    if record.update(update_optimization_params)
-      render json: record.to_json, status: :ok
-    else
-      render json: { message: record.errors.full_messages }, status: :bad_request
-    end
-  end
-
   protected
 
   def create_params
@@ -65,9 +56,5 @@ class TermsController < ApplicationController
 
   def update_params
     params.require(:term).permit(:name, :year)
-  end
-
-  def update_optimization_params
-    params.require(:term).permit(:is_optimizing)
   end
 end

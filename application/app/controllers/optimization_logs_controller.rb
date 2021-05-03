@@ -1,8 +1,12 @@
 class OptimizationLogsController < ApplicationController
-  before_action :authenticate_user!
-  before_action :set_rooms!
-  before_action :set_room!
-  before_action :set_term!
+  def create
+    @optimization_log = OptimizationLog.new(create_params)
+    if @optimization_log.save
+      render json: @optimization_log.to_json, status: :created
+    else
+      render json: { message: @optimization_log.errors.full_messages }, status: :bad_request
+    end
+  end
 
   def update
     @optimization_log = OptimizationLog.find_by(id: params[:id])
@@ -14,6 +18,10 @@ class OptimizationLogsController < ApplicationController
   end
 
   private
+
+  def create_params
+    params.require(:optimization_log).permit(:term_id)
+  end
 
   def update_params
     params.require(:optimization_log).permit(
