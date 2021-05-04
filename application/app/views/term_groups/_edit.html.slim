@@ -13,7 +13,7 @@ button.btn.btn-secondary data-toggle="modal" data-target="#term_group_edit" = '�
                 = f.select :term_teacher_ids,
                   options_for_select_term_teacher_ids(@term),
                   { selected: term_group.term_teacher_ids },
-                  { multiple: true, class: 'form-control custom-input' }
+                  { multiple: true, class: 'form-control custom-input', id: "multiselect-#{term_group.id}" }
                 .input-group-append
                   = f.submit '保存', {"class" => "btn btn-primary"}
         #term_group_update_alert
