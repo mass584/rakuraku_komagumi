@@ -72,7 +72,7 @@ class Timetable < ApplicationRecord
   end
 
   def can_update_term_group_id?
-    if will_save_change_to_term_group_id? && term.seats.filter_by_occupied.count.positive?
+    if term.seats.filter_by_occupied.count.positive?
       errors.add(:base, '個別授業が１つでも割り当てられていると、集団授業の日程を変更することはできません')
     end
 

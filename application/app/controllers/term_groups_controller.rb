@@ -33,6 +33,6 @@ class TermGroupsController < ApplicationController
   end
 
   def update_params
-    params.require(:term_group).permit(:term_teacher_id)
+    params.require(:term_group).permit(term_teacher_ids: [])
   end
 end

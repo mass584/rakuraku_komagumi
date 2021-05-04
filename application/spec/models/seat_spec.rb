@@ -69,7 +69,7 @@ RSpec.describe Seat, type: :model do
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
       term_group = term.term_groups.first
-      term_group.update(term_teacher_id: @term_teacher_first.id)
+      term_group.update(term_teachers: [@term_teacher_first])
       timetables[0].update(term_group_id: term_group.id)
     end
 
@@ -112,7 +112,7 @@ RSpec.describe Seat, type: :model do
       @term_teacher_first = term.term_teachers.first
       @term_teacher_second = term.term_teachers.second
       term_group = term.term_groups.first
-      term_group.update(term_teacher_id: @term_teacher_first.id)
+      term_group.update(term_teachers: [@term_teacher_first])
       timetables[0].update(term_group_id: term_group.id)
     end
 

@@ -171,7 +171,7 @@ class Seat < ApplicationRecord
   end
 
   def fetch_groups_group_by_teacher_and_timetable
-    records = term.timetables.joins(:term_group)
+    records = term.timetables.joins(term_group: :term_group_term_teachers)
                   .select(:term_teacher_id, :date_index, :period_index)
                   .select { |item| item[:term_teacher_id].present? }
     @groups_group_by_teacher_and_timetable = records.group_by_recursive(

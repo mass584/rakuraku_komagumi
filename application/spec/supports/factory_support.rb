@@ -57,7 +57,7 @@ module FactorySupport
     tutorial_contract = term_student.tutorial_contracts.first
     group_contract = term_student.group_contracts.first
     term_group = group_contract.term_group
-    term_group.update(term_teacher: term_teacher)
+    term_group.update(term_teachers: [term_teacher])
     group_timetable.update(term_group_id: term_group.id)
     tutorial_contract.update(term_teacher: term_teacher, piece_count: 1)
     tutorial_piece = tutorial_contract.tutorial_pieces.first
