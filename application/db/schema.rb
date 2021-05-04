@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_03_124514) do
+ActiveRecord::Schema.define(version: 2021_05_04_012407) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,10 +153,18 @@ ActiveRecord::Schema.define(version: 2021_05_03_124514) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "term_group_term_teachers", force: :cascade do |t|
+    t.bigint "term_group_id", null: false
+    t.bigint "term_teacher_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["term_group_id"], name: "index_term_group_term_teachers_on_term_group_id"
+    t.index ["term_teacher_id"], name: "index_term_group_term_teachers_on_term_teacher_id"
+  end
+
   create_table "term_groups", force: :cascade do |t|
     t.integer "term_id", null: false
     t.integer "group_id", null: false
-    t.integer "term_teacher_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "group_id"], name: "index_term_groups_on_term_id_and_group_id", unique: true
@@ -284,6 +292,8 @@ ActiveRecord::Schema.define(version: 2021_05_03_124514) do
   add_foreign_key "teacher_vacancies", "term_teachers", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teacher_vacancies", "timetables", on_update: :cascade, on_delete: :cascade
   add_foreign_key "teachers", "rooms", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "term_group_term_teachers", "term_groups"
+  add_foreign_key "term_group_term_teachers", "term_teachers"
   add_foreign_key "term_groups", "groups", on_update: :cascade, on_delete: :restrict
   add_foreign_key "term_groups", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "term_students", "students", on_update: :cascade, on_delete: :restrict

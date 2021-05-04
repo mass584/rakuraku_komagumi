@@ -3,7 +3,8 @@ class TermGroup < ApplicationRecord
 
   belongs_to :term
   belongs_to :group
-  belongs_to :term_teacher, optional: true
+  has_many :term_group_term_teachers, dependent: :destroy
+  has_many :term_teachers, through: :term_group_term_teachers
   has_many :group_contracts, dependent: :restrict_with_exception
   has_many :timetables, dependent: :nullify
 
