@@ -18,4 +18,4 @@
             tr
               td.align-middle.min-width-150 = @term.display_date(date_index)
               - @term.period_index_array.each do |period_index|
-                = term_teacher_schedule_table_cell(@tutorial_pieces, @timetables, @term_teacher, date_index, period_index)
+                = term_teacher_schedule_table_cell(@tutorial_pieces, @term_groups, @timetables, date_index, period_index)

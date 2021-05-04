@@ -17,7 +17,7 @@ export type Timetable = {
   periodIndex: number;
   termGroupId: number | null;
   termGroupName: string | null;
-  termGroupTeacherId: number | null;
+  termGroupTeacherIds: number[];
   termGroupStudentIds: number[];
   isClosed: boolean;
   vacantTermTeacherIds: number[];
