@@ -1,6 +1,3 @@
-require 'simplecov'
-SimpleCov.start 'rails'
-
 require 'spec_helper'
 
 ENV['RAILS_ENV'] = 'test'
@@ -63,14 +60,16 @@ RSpec.configure do |config|
   config.include AjaxSupport
   config.include FactorySupport
   config.include StubSupport
-
   config.before(:each, type: :system) do
     driven_by(:remote_chrome)
   end
 end
 
+require 'simplecov'
 require 'capybara'
 require 'selenium-webdriver'
+
+SimpleCov.start 'rails'
 
 Capybara.register_driver :remote_chrome do |app|
   url = 'http://chrome:4444/wd/hub'
