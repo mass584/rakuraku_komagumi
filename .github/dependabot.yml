@@ -1,0 +1,36 @@
+version: 2
+updates:
+- package-ecosystem: bundler
+  directory: "/application"
+  schedule:
+    interval: daily
+    time: "20:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: rspec-rails
+    versions:
+    - 5.0.1
+  - dependency-name: rails
+    versions:
+    - 6.0.3.5
+  - dependency-name: delayed_job_active_record
+    versions:
+    - 4.1.5
+  - dependency-name: bcrypt
+    versions:
+    - 3.1.16
+  - dependency-name: jbuilder
+    versions:
+    - 2.11.2
+  - dependency-name: rubocop
+    versions:
+    - 1.10.0
+    - 1.11.0
+    - 1.9.0
+    - 1.9.1
+  - dependency-name: listen
+    versions:
+    - 3.4.1
+  - dependency-name: nokogiri
+    versions:
+    - 1.11.1
