@@ -22,11 +22,6 @@ gem 'slim-rails'
 gem 'turbolinks', '~> 5'
 gem 'webpacker'
 
-## should import by npm
-gem 'chartkick'
-gem 'figaro'
-gem 'gon'
-
 group :development do
   gem 'byebug'
   gem 'html2slim'
