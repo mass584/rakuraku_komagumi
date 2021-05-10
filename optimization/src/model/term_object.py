@@ -236,11 +236,15 @@ class TermObject():
     def __fetch_teacher_group_timetables(self):
         cur = self.__database.cursor()
         sql_select = (', '.join([
-            "timetables.date_index", "timetables.period_index",
-            "timetables.term_group_id", "term_groups.term_teacher_id"]))
+            "timetables.date_index",
+            "timetables.period_index",
+            "timetables.term_group_id",
+            "term_group_term_teachers.term_teacher_id"]))
         sql_from = (
             "timetables join term_groups "
-            "on term_groups.id = timetables.term_group_id")
+            "on term_groups.id = timetables.term_group_id "
+            "join term_group_term_teachers "
+            "on term_group_term_teachers.term_group_id = term_groups.id")
         sql_where = f"timetables.term_id = {self.__term_id}"
         cur.execute(' '.join([
             'select', sql_select,
