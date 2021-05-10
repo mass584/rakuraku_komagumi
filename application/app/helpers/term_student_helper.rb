@@ -37,16 +37,16 @@ module TermStudentHelper
   end
 
   def term_student_schedule_table_cell_class(timetable, tutorial_pieces)
-    if timetable.is_closed
+    if tutorial_pieces.present?
+      'align-middle bg-warning-light'
+    elsif timetable.term_group_id.present? && timetable.is_contracted
+      'align-middle bg-warning-light'
+    elsif timetable.is_closed
       'align-middle bg-secondary'
     elsif timetable.term_group_id.present? && !timetable.is_contracted
       'align-middle bg-secondary'
     elsif !timetable.is_vacant
       'align-middle bg-secondary'
-    elsif timetable.term_group_id.present? && timetable.is_contracted
-      'align-middle bg-warning-light'
-    elsif tutorial_pieces.present?
-      'align-middle bg-warning-light'
     else
       'align-middle'
     end
