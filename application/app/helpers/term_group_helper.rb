@@ -5,7 +5,7 @@ module TermGroupHelper
     plucked_groups - plucked_term_groups
   end
 
-  def options_for_select_term_teacher_id(term)
+  def options_for_select_term_teacher_ids(term)
     term.term_teachers.joins(:teacher).select('teachers.name', 'term_teachers.id').pluck(:name,
                                                                                          :id)
   end

@@ -39,7 +39,7 @@ class TermSerializer < ActiveModel::Serializer
   class TimetableSerializer < ActiveModel::Serializer
     attributes :id, :date_index, :period_index, :term_group_id, :is_closed
     attribute :term_group_name
-    attribute :term_group_teacher_id
+    attribute :term_group_teacher_ids
     attribute :term_group_student_ids
     attribute :vacant_term_teacher_ids
     attribute :vacant_term_student_ids
@@ -51,8 +51,10 @@ class TermSerializer < ActiveModel::Serializer
       object.term_group&.group&.name
     end
 
-    def term_group_teacher_id
-      object.term_group&.term_teacher_id
+    def term_group_teacher_ids
+      object.term_group ?
+        object.term_group.term_group_term_teachers.pluck(:term_teacher_id) :
+        []
     end
 
     def term_group_student_ids

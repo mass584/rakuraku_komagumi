@@ -23,8 +23,13 @@ class Timetable < ApplicationRecord
   scope :with_group, lambda {
     left_joins(term_group: [:group]).select(
       'timetables.*',
-      'term_groups.term_teacher_id',
       'groups.name AS group_name',
+    )
+  }
+  scope :with_term_group_term_teachers, lambda {
+    left_joins(term_group: [:term_group_term_teachers]).select(
+      'timetables.*',
+      'term_group_term_teachers.term_teacher_id',
     )
   }
   scope :with_group_contracts, lambda {
@@ -72,7 +77,7 @@ class Timetable < ApplicationRecord
   end
 
   def can_update_term_group_id?
-    if will_save_change_to_term_group_id? && term.seats.filter_by_occupied.count.positive?
+    if term.seats.filter_by_occupied.count.positive?
       errors.add(:base, '個別授業が１つでも割り当てられていると、集団授業の日程を変更することはできません')
     end
 

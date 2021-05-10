@@ -2,6 +2,8 @@ class TermTeacher < ApplicationRecord
   include RankedModel
   belongs_to :term
   belongs_to :teacher
+  has_many :term_group_term_teachers, dependent: :destroy
+  has_many :term_teachers, through: :term_group_term_teachers
   has_many :term_groups, dependent: :restrict_with_exception
   has_many :tutorial_contracts, dependent: :restrict_with_exception
   has_many :seats, dependent: :restrict_with_exception

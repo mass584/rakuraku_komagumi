@@ -121,7 +121,7 @@ const isUnderTeacherOccupationLimit = (
       timetable.occupiedTermTeacherIds.includes(termTeacherId);
     const isGroup =
       (timetable.dateIndex === destDateIndex) &&
-      timetable.termGroupTeacherId === termTeacherId;
+      timetable.termGroupTeacherIds.includes(termTeacherId);
     return isTutorial || isGroup;
   }).length;
   const isUnderLimit = destDateOccupation < occupationLimit;
@@ -192,7 +192,7 @@ const isUnderTeacherBlankLimit = (
     const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
     const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
-    const isGroup = timetable.termGroupTeacherId === termTeacherId;
+    const isGroup = timetable.termGroupTeacherIds.includes(termTeacherId);
 
     return isTutorial || isGroup;
   }).map((item) => item.periodIndex);
@@ -204,7 +204,7 @@ const isUnderTeacherBlankLimit = (
     const isSrcTutorial = srcTimetable && timetable.id === srcTimetable.id;
     const isDestTutorial = timetable.id === destTimetable.id;
     const isTutorial = (isTutorialBefore && !isSrcTutorial) || isDestTutorial;
-    const isGroup = timetable.termGroupTeacherId === termTeacherId;
+    const isGroup = timetable.termGroupTeacherIds.includes(termTeacherId);
 
     return isTutorial || isGroup;
   }).map((item) => item.periodIndex);

@@ -55,7 +55,6 @@ package "期間の契約データモデル" {
     --
     # term_id : 期間ID [FK]
     # group_id : 集団科目ID [FK]
-    term_teacher_id : 期間に紐づいた講師ID
   }
 
   entity "tutorial_contracts" {
@@ -98,7 +97,7 @@ groups ||-do-o{ term_groups
 term_students ||-do-|{ tutorial_contracts
 term_students ||-do-|{ group_contracts
 term_teachers |o-do-o{ tutorial_contracts
-term_teachers |o-ri-o{ term_groups
+term_teachers }o-ri-o{ term_groups
 term_tutorials ||-do-|{ tutorial_contracts
 term_groups ||-do-|{ group_contracts
 tutorial_contracts ||-ri-o{ tutorial_pieces

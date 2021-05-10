@@ -2,7 +2,7 @@
   <div class="d-table">
     <div
       class="text-center d-table-cell align-middle position bg-secondary"
-      v-bind:class="{ 'bg-warning-light': timetable.termGroupTeacherId === termTeacher.id }"
+      v-bind:class="{ 'bg-warning-light': timetable.termGroupTeacherIds.includes(termTeacher.id) }"
     >
       <small>{{ timetable.termGroupName }}</small>
     </div>

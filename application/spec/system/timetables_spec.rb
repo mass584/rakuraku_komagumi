@@ -149,7 +149,7 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       expect(page).to have_no_content '集団担任を変更する'
     end
 
-    it '日程が表示・更新される' do
+    it '集団担任が更新される' do
       term_teacher = @term.term_teachers.first
       term_group = @term.term_groups.first
 
@@ -157,12 +157,12 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       click_on '集団担任'
       expect(page).to have_no_content '集団担任を変更する'
       within "#edit_term_group_#{term_group.id}" do
-        expect(page).to have_select('term_group_term_teacher_id', selected: '選択してください')
-        select term_teacher.teacher.name, from: 'term_group_term_teacher_id'
+        expect(page).to have_select("multiselect-#{term_group.id}")
+        select term_teacher.teacher.name, from: "multiselect-#{term_group.id}"
         click_on '保存'
       end
       expect(page).to have_no_content '集団担任を変更する'
-      expect(term_group.reload.term_teacher_id).to eq(term_teacher.id)
+      expect(term_group.reload.term_teacher_ids).to eq([term_teacher.id])
     end
   end
 end

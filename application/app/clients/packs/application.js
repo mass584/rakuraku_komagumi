@@ -1,8 +1,8 @@
-import '../stylesheets/application.scss';
-import 'bootstrap';
-import 'bootstrap-icons/font/bootstrap-icons.css'
-import $ from 'jquery';
-import Rails from '@rails/ujs';
+require('@rails/ujs').start();
+require('jquery');
+require('../stylesheets/application.scss');
+require('bootstrap');
+require('bootstrap-icons/font/bootstrap-icons.css');
 
-global.$ = $;
-Rails.start();
+window.jQuery = $;
+window.$ = $;

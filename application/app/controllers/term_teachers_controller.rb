@@ -47,6 +47,10 @@ class TermTeachersController < ApplicationController
     @tutorial_pieces = TutorialPiece.indexed_and_named.where(
       'term_teachers.id': params[:term_teacher_id],
     )
+    @term_groups = Timetable.with_term_group_term_teachers.where(
+      term_id: @term.id,
+      'term_group_term_teachers.term_teacher_id': params[:term_teacher_id],
+    )
     @timetables = Timetable.with_group.with_teacher_vacancies.where(
       term_id: @term.id,
       'teacher_vacancies.term_teacher_id': params[:term_teacher_id],

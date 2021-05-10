@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import 'bootstrap4-datetimepicker';
 import moment from 'moment';
 

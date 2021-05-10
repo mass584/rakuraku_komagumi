@@ -20,33 +20,35 @@ module TermTeacherHelper
     end
   end
 
-  def term_teacher_schedule_table_cell(tutorial_pieces, timetables, term_teacher, date_index, period_index)
+  def term_teacher_schedule_table_cell(tutorial_pieces, term_groups, timetables, date_index, period_index)
     timetable = timetables.find do |item|
+      item.date_index == date_index && item.period_index == period_index
+    end
+    term_group = term_groups.find do |item|
       item.date_index == date_index && item.period_index == period_index
     end
     filtered_tutorial_pieces = tutorial_pieces.filter do |tutorial_piece|
       tutorial_piece.date_index == date_index && tutorial_piece.period_index == period_index
     end
     content_tag(:td,
-                class: term_teacher_schedule_table_cell_class(timetable, filtered_tutorial_pieces,
-                                                              term_teacher)) do
+                class: term_teacher_schedule_table_cell_class(timetable, term_group, filtered_tutorial_pieces)) do
       content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
         term_teacher_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end
     end
   end
 
-  def term_teacher_schedule_table_cell_class(timetable, tutorial_pieces, term_teacher)
-    if timetable.is_closed
-      'align-middle bg-secondary'
-    elsif timetable.term_group_id.present? && timetable.term_teacher_id != term_teacher.id
+  def term_teacher_schedule_table_cell_class(timetable, term_group, tutorial_pieces)
+    if tutorial_pieces.present?
+      'align-middle bg-warning-light'
+    elsif term_group.present? && timetable.group_name.present?
+      'align-middle bg-warning-light'
+    elsif timetable.is_closed
       'align-middle bg-secondary'
     elsif !timetable.is_vacant
       'align-middle bg-secondary'
-    elsif timetable.term_group_id.present? && timetable.term_teacher_id == term_teacher.id
-      'align-middle bg-warning-light'
-    elsif tutorial_pieces.present?
-      'align-middle bg-warning-light'
+    elsif term_group.nil? && timetable.group_name.present?
+      'align-middle bg-secondary'
     else
       'align-middle'
     end
