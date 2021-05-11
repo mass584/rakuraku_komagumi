@@ -6,8 +6,14 @@ from ..array_builder.array_index import get_school_grade_index
 
 
 class OccupationAndBlankEvaluator():
-    def __init__(self, array_size, student_optimization_rules,
-                 teacher_optimization_rule):
+    def __init__(
+        self,
+        array_size,
+        student_optimization_rules,
+        teacher_optimization_rule,
+        student_group_occupation,
+        teacher_group_occupation,
+        school_grades):
         self.__array_size = array_size
         self.__student_vector_evaluators = [OccupationAndBlankVectorEvaluator(
             period_count=array_size.period_count(),
@@ -27,6 +33,9 @@ class OccupationAndBlankEvaluator():
             occupation_costs=teacher_optimization_rule['occupation_costs'],
             blank_costs=teacher_optimization_rule['blank_costs']
         )
+        self.__student_group_occupation = student_group_occupation
+        self.__teacher_group_occupation = teacher_group_occupation
+        self.__school_grades = school_grades
 
     def __teacher_violation_and_cost(
             self, tutorial_occupation, teacher_group_occupation):
@@ -67,13 +76,12 @@ class OccupationAndBlankEvaluator():
             cost_summation += cost
         return [violation_summation, cost_summation]
 
-    def violation_and_cost(
-            self, tutorial_occupation, teacher_group_occupation,
-            student_group_occupation, school_grades):
+    def violation_and_cost(self, tutorial_occupation):
         teacher_violation_and_cost = self.__teacher_violation_and_cost(
-            tutorial_occupation, teacher_group_occupation)
+            tutorial_occupation, self.__teacher_group_occupation)
         student_violation_and_cost = self.__student_violation_and_cost(
-            tutorial_occupation, student_group_occupation, school_grades)
+            tutorial_occupation, self.__student_group_occupation,
+            self.__school_grades)
         return [teacher + student for teacher,
                 student in zip(
                     teacher_violation_and_cost,

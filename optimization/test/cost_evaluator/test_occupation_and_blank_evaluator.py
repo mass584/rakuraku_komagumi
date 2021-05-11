@@ -23,9 +23,12 @@ class TestOccupationAndBlankEvaluator(TestCase):
         student_optimization_rules = term['student_optimization_rules']
         teacher_optimization_rule = term['teacher_optimization_rule']
         occupation_and_blank_evaluator = OccupationAndBlankEvaluator(
-            array_size,
-            student_optimization_rules,
-            teacher_optimization_rule)
+            array_size=array_size,
+            student_optimization_rules=student_optimization_rules,
+            teacher_optimization_rule=teacher_optimization_rule,
+            student_group_occupation=group_occupation.student_occupation_array(),
+            teacher_group_occupation=group_occupation.teacher_occupation_array(),
+            school_grades=school_grade.school_grade_array())
         # 1日2コマ空きの日 teacher_index == 1 1日
         teacher_violation = 1
         # 1日2コマ空きの日 student_index == 1 1日, 1日4コマの日 student_index == 1 1日
@@ -36,9 +39,6 @@ class TestOccupationAndBlankEvaluator(TestCase):
         student_cost = array_size.student_count() * 14 * 4 - 14
         self.assertEqual(occupation_and_blank_evaluator.violation_and_cost(
             tutorial_occupation.tutorial_occupation(),
-            group_occupation.teacher_occupation_array(),
-            group_occupation.student_occupation_array(),
-            school_grade.school_grade_array(),
         ), [
             teacher_violation + student_violation,
             teacher_cost + student_cost])
