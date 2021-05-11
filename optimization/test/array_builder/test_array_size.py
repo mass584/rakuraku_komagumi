@@ -1,7 +1,7 @@
 from unittest import TestCase
-from test.test_data.normal_term import normal_term
-from test.test_data.season_term import season_term
-from test.test_data.exam_planning_term import exam_planning_term
+from ..test_data.normal_term import normal_term
+from ..test_data.season_term import season_term
+from ..test_data.exam_planning_term import exam_planning_term
 from src.array_builder.array_size import ArraySize
 
 

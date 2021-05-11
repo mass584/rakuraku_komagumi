@@ -1,6 +1,6 @@
 import copy
 from unittest import TestCase
-from test.test_data.season_term import season_term
+from ..test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.array_builder.group_occupation import GroupOccupation
