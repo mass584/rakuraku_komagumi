@@ -1,5 +1,6 @@
 import itertools
 import numpy
+from .array_index import get_teacher_index
 
 
 class TutorialContract():
@@ -11,6 +12,7 @@ class TutorialContract():
     def __build_tutorial_contract(self):
         self.__tutorial_contract_array = numpy.zeros(
             (self.__array_size.student_count(),
+             self.__array_size.teacher_count(),
              self.__array_size.tutorial_count()),
             dtype=int)
         student_index_list = list(range(self.__array_size.student_count()))
@@ -29,8 +31,14 @@ class TutorialContract():
                 tutorial_contract['piece_count']
                 for tutorial_contract in self.__term['tutorial_contracts']
                 if is_matched(tutorial_contract))
-            self.__tutorial_contract_array[student_index,
-                                           tutorial_index] = piece_count
+            teacher_index = next(
+                get_teacher_index(
+                    self.__term['term_teachers'],
+                    tutorial_contract['term_teacher_id'])
+                for tutorial_contract in self.__term['tutorial_contracts']
+                if is_matched(tutorial_contract))
+            self.__tutorial_contract_array[
+                student_index, teacher_index, tutorial_index] = piece_count
 
     def tutorial_contract_array(self):
         return self.__tutorial_contract_array
