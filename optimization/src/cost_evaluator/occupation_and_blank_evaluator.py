@@ -2,7 +2,7 @@ import itertools
 import numpy
 from .occupation_and_blank_vector_evaluator \
     import OccupationAndBlankVectorEvaluator
-from ..array_builder.array_index import get_school_grade_index
+from array_builder.array_index import get_school_grade_index
 
 
 class OccupationAndBlankEvaluator():

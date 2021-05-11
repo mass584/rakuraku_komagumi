@@ -1,6 +1,6 @@
 import itertools
 import numpy
-from ..array_builder.array_index import get_school_grade_index
+from array_builder.array_index import get_school_grade_index
 
 
 class IntervalEvaluator():

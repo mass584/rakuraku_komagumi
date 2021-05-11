@@ -1,10 +1,10 @@
 import itertools
 import numpy
-from src.array_builder.array_index import get_student_index
-from src.array_builder.array_index import get_teacher_index
-from src.array_builder.array_index import get_tutorial_index
-from src.array_builder.array_index import get_date_index
-from src.array_builder.array_index import get_period_index
+from .array_index import get_student_index
+from .array_index import get_teacher_index
+from .array_index import get_tutorial_index
+from .array_index import get_date_index
+from .array_index import get_period_index
 
 
 class TutorialOccupation():
