@@ -5,6 +5,8 @@ from .seat_combination_evaluator import SeatCombinationEvaluator
 from .timetable_evaluator import TimetableEvaluator
 from .vacancy_and_double_booking_evaluator import VacancyAndDoubleBookingEvaluator
 
+COST_PER_VIOLATION = 1000000
+
 class CostEvaluator():
     def __init__(
         self,
@@ -40,7 +42,7 @@ class CostEvaluator():
             student_vacancy=student_vacancy,
             teacher_vacancy=teacher_vacancy)
 
-    def violation_and_cost(self, tutorial_pieces):
+    def __violation_and_cost(self, tutorial_pieces):
         a = self.__interval_evaluator.violation_and_cost(tutorial_pieces)
         b = self.__occupation_and_blank_evaluator.violation_and_cost(tutorial_pieces)
         c = self.__seat_occupation_evaluator.violation_and_cost(tutorial_pieces)
@@ -50,3 +52,7 @@ class CostEvaluator():
         violation = sum(violation_and_cost[0] for violation_and_cost in [a, b, c, d, e, f])
         cost = sum(violation_and_cost[1] for violation_and_cost in [a, b, c, d, e, f])
         return [violation, cost]
+
+    def cost(self, tutorial_pieces):
+        [violation, cost] = self.__violation_and_cost(tutorial_pieces)
+        return violation * COST_PER_VIOLATION + cost
