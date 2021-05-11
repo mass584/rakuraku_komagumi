@@ -19,8 +19,7 @@ class TestTimetableEvaluator(TestCase):
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
         timetable = Timetable(term, array_size)
-        evaluator = TimetableEvaluator(array_size)
+        evaluator = TimetableEvaluator(array_size, timetable.timetable_array())
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation=tutorial_occupation.tutorial_occupation_array(),
-            timetable=timetable.timetable_array(),
+            tutorial_occupation.tutorial_occupation_array(),
         ), [2, 0])
