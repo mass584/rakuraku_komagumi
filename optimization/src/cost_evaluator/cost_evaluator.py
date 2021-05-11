@@ -2,12 +2,14 @@ from .interval_evaluator import IntervalEvaluator
 from .occupation_and_blank_evaluator import OccupationAndBlankEvaluator
 from .seat_occupation_evaluator import SeatOccupationEvaluator
 from .seat_combination_evaluator import SeatCombinationEvaluator
+from .timetable_evaluator import TimetableEvaluator
 from .vacancy_and_double_booking_evaluator import VacancyAndDoubleBookingEvaluator
 
 class CostEvaluator():
     def __init__(
         self,
         array_size,
+        timetable,
         student_optimization_rules,
         teacher_optimization_rule,
         student_group_occupation,
@@ -29,8 +31,11 @@ class CostEvaluator():
         self.__seat_occupation_evaluator = SeatOccupationEvaluator(array_size=array_size)
         self.__seat_combination_evaluator = SeatCombinationEvaluator(
             array_size=array_size,
-            single_cost=teacher_optimization_rule.single_cost,
-            different_pair_cost=teacher_optimization_rule.different_pair_cost)
+            single_cost=teacher_optimization_rule['single_cost'],
+            different_pair_cost=teacher_optimization_rule['different_pair_cost'])
+        self.__timetable_evaluator = TimetableEvaluator(
+            array_size=array_size,
+            timetable=timetable)
         self.__vacancy_and_double_booking_evaluator = VacancyAndDoubleBookingEvaluator(
             student_vacancy=student_vacancy,
             teacher_vacancy=teacher_vacancy)
@@ -40,7 +45,8 @@ class CostEvaluator():
         b = self.__occupation_and_blank_evaluator.violation_and_cost(tutorial_pieces)
         c = self.__seat_occupation_evaluator.violation_and_cost(tutorial_pieces)
         d = self.__seat_combination_evaluator.violation_and_cost(tutorial_pieces)
-        e = self.__vacancy_and_double_booking_evaluator.violation_and_cost(tutorial_pieces)
-        violation = sum(violation_and_cost[0] for violation_and_cost in [a, b, c, d, e])
-        cost = sum(violation_and_cost[1] for violation_and_cost in [a, b, c, d, e])
+        e = self.__timetable_evaluator.violation_and_cost(tutorial_pieces)
+        f = self.__vacancy_and_double_booking_evaluator.violation_and_cost(tutorial_pieces)
+        violation = sum(violation_and_cost[0] for violation_and_cost in [a, b, c, d, e, f])
+        cost = sum(violation_and_cost[1] for violation_and_cost in [a, b, c, d, e, f])
         return [violation, cost]
