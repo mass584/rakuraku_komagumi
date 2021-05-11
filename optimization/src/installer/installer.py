@@ -83,4 +83,4 @@ class Installer():
         product = itertools.product(
             tutorial_index_list, student_index_list, teacher_index_list)
         max_tutorial_piece_count = numpy.amax(self.__uninstalled_tutorial_piece_count)
-        for _ in range(max_tutorial_piece_count): self.__execute_single_loop(self, product)
+        for _ in range(max_tutorial_piece_count): self.__execute_single_loop(product)

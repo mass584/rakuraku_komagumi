@@ -15,7 +15,7 @@ class TermObject():
         self.__fetched = True
         return {
             'term': self.__term,
-            'timetable': self.__timetable,
+            'timetables': self.__timetable,
             'teacher_optimization_rule': self.__teacher_optimization_rule,
             'student_optimization_rules': self.__student_optimization_rules,
             'term_teachers': self.__term_teachers,
@@ -75,7 +75,8 @@ class TermObject():
             'select', sql_select,
             'from', sql_from,
             'where', sql_where]))
-        self.__timetable = dict(cur.fetchone())
+        self.__timetable = list(
+            map(lambda record: dict(record), cur.fetchall()))
         cur.close()
 
     def __fetch_teacher_optimization_rule(self):
