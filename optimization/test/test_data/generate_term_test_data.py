@@ -30,6 +30,17 @@ def generate_term_test_data(
         'seat_count': seat_count,
         'position_count': position_count,
     }
+    timetables = [
+        {
+            'id': date_index * period_count + period_index + 1,
+            'date_index': date_index + 1,
+            'period_index': period_index + 1,
+            'term_group_id': None,
+            'is_closed': False,
+        }
+        for date_index, period_index
+        in itertools.product(range(date_count), range(period_count))
+    ]
     teacher_optimization_rule = {
         'single_cost': 100,
         'different_pair_cost': 15,
@@ -126,7 +137,7 @@ def generate_term_test_data(
                 'term_teacher_id': tutorial_contract['term_teacher_id'],
                 'is_fixed': False,
             }
-            for sequence in range(tutorial_contract['piece_count'])
+            for _ in range(tutorial_contract['piece_count'])
         ]
         for tutorial_contract in tutorial_contracts
     ]))
@@ -166,6 +177,7 @@ def generate_term_test_data(
     ]
     return {
         'term': term,
+        'timetables': timetables,
         'teacher_optimization_rule': teacher_optimization_rule,
         'student_optimization_rules': student_optimization_rules,
         'term_teachers': term_teachers,
