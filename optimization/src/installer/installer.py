@@ -3,33 +3,23 @@ import numpy
 from ..cost_evaluator.cost_evaluator import CostEvaluator
 
 class Installer():
-    def __init__(
-        self,
-        array_size,
-        student_optimization_rules,
-        teacher_optimization_rule,
-        student_group_occupation,
-        teacher_group_occupation,
-        student_vacancy,
-        teacher_vacancy,
-        school_grades,
-        tutorial_piece_count,
-        tutorial_occupation_array):
-        self.__array_size = array_size
+    def __init__(self, array_builder, student_optimization_rules, teacher_optimization_rule):
+        self.__array_size = array_builder.array_size()
         self.__uninstalled_tutorial_piece_count = \
             self.__get_uninstalled_tutorial_piece_count(
-                tutorial_piece_count=tutorial_piece_count,
-                tutorial_occupation_array=tutorial_occupation_array)
+                tutorial_piece_count=array_builder.tutorial_piece_count_array(),
+                tutorial_occupation_array=array_builder.tutorial_occupation_array())
         self.__cost_evaluator = CostEvaluator(
-            array_size=array_size,
+            array_size=array_builder.array_size(),
+            timetable=array_builder.timetable_array(),
             student_optimization_rules=student_optimization_rules,
             teacher_optimization_rule=teacher_optimization_rule,
-            student_group_occupation=student_group_occupation,
-            teacher_group_occupation=teacher_group_occupation,
-            student_vacancy=student_vacancy,
-            teacher_vacancy=teacher_vacancy,
-            school_grades=school_grades)
-        self.__tutorial_occupation_array = tutorial_occupation_array
+            student_group_occupation=array_builder.student_group_occupation_array(),
+            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
+            student_vacancy=array_builder.student_vacancy_array(),
+            teacher_vacancy=array_builder.teacher_vacancy_array(),
+            school_grades=array_builder.school_grade_array())
+        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
 
     def __get_uninstalled_tutorial_piece_count(self, tutorial_piece_count, tutorial_occupation_array):
         installed_tutorial_piece_count = numpy.einsum('ijkml->ijk', tutorial_occupation_array)
@@ -49,7 +39,6 @@ class Installer():
                 tutorial_index,
                 date_index,
                 period_index] == 1
-            # TODO: 休講や集団のコマは初めから埋めないようにする
             if is_tutorial_piece_occupied:
                 self.__tutorial_occupation_array[
                     student_index,

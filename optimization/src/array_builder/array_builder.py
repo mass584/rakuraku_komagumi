@@ -17,6 +17,9 @@ class ArrayBuilder():
         self.__tutorial_piece_count = TutorialPieceCount(term_object, self.__array_size)
         self.__vacancy = Vacancy(term_object, self.__array_size)
 
+    def array_size(self):
+        return self.__array_size
+
     def student_group_occupation_array(self):
         return self.__group_occupation.student_occupation_array()
 
