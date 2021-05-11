@@ -52,19 +52,19 @@ class ArrayBuilder():
 
     def get_teacher_index(self, term_teacher_id):
         term_teacher = next(
-            term_teacher for term_teacher in self.__term_teachers
+            term_teacher for term_teacher in self.__term_object['term_teachers']
             if term_teacher['id'] == term_teacher_id)
         return self.__term_object['term_teachers'].index(term_teacher)
 
     def get_tutorial_index(self, term_tutorial_id):
         term_tutorial = next(
-            term_tutorial for term_tutorial in self.__term_tutorials
+            term_tutorial for term_tutorial in self.__term_object['term_tutorials']
             if term_tutorial['id'] == term_tutorial_id)
         return self.__term_object['term_tutorials'].index(term_tutorial)
 
     def get_group_index(self, term_group_id):
         term_group = next(
-            term_group for term_group in self.__term_groups
+            term_group for term_group in self.__term_object['term_groups']
             if term_group['id'] == term_group_id)
         return self.__term_object['term_groups'].index(term_group)
 
