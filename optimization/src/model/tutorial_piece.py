@@ -1,8 +1,5 @@
 import psycopg2
 import psycopg2.extras
-import logging
-
-logger = logging.getLogger('Term')
 
 
 class TutorialPiece():

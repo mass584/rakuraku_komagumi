@@ -8,7 +8,6 @@ from .vacancy import Vacancy
 
 class ArrayBuilder():
     def __init__(self, term_object):
-        self.__term_object = term_object
         self.__array_size = ArraySize(term_object)
         self.__group_occupation = GroupOccupation(term_object, self.__array_size)
         self.__school_grade = SchoolGrade(term_object, self.__array_size)
@@ -43,37 +42,3 @@ class ArrayBuilder():
 
     def teacher_vacancy_array(self):
         return self.__vacancy.teacher_vacancy_array()
-
-    def get_student_index(self, term_student_id):
-        term_student = next(
-            term_student for term_student in self.__term_object['term_students']
-            if term_student['id'] == term_student_id)
-        return self.__term_object['term_students'].index(term_student)
-
-    def get_teacher_index(self, term_teacher_id):
-        term_teacher = next(
-            term_teacher for term_teacher in self.__term_object['term_teachers']
-            if term_teacher['id'] == term_teacher_id)
-        return self.__term_object['term_teachers'].index(term_teacher)
-
-    def get_tutorial_index(self, term_tutorial_id):
-        term_tutorial = next(
-            term_tutorial for term_tutorial in self.__term_object['term_tutorials']
-            if term_tutorial['id'] == term_tutorial_id)
-        return self.__term_object['term_tutorials'].index(term_tutorial)
-
-    def get_group_index(self, term_group_id):
-        term_group = next(
-            term_group for term_group in self.__term_object['term_groups']
-            if term_group['id'] == term_group_id)
-        return self.__term_object['term_groups'].index(term_group)
-
-    def get_date_index(self, date_index):
-        return date_index - 1
-
-    def get_period_index(self, period_index):
-        return period_index - 1
-
-    def get_school_grade_index(self, school_grade):
-        school_grades = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
-        return school_grades.index(school_grade)

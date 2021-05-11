@@ -2,7 +2,6 @@ import itertools
 import numpy
 from .occupation_and_blank_vector_evaluator \
     import OccupationAndBlankVectorEvaluator
-from array_builder.array_index import get_school_grade_index
 
 
 class OccupationAndBlankEvaluator():
@@ -68,13 +67,17 @@ class OccupationAndBlankEvaluator():
         cost_summation = 0
         for student_index, date_index in product:
             school_grade = school_grades[student_index]
-            school_grade_index = get_school_grade_index(school_grade)
+            school_grade_index = self.__get_school_grade_index(school_grade)
             vector = occupation[student_index, date_index, :]
             [violation, cost] = self.__student_vector_evaluators[
                 school_grade_index].violation_and_cost(vector)
             violation_summation += violation
             cost_summation += cost
         return [violation_summation, cost_summation]
+
+    def __get_school_grade_index(self, school_grade):
+        school_grades = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
+        return school_grades.index(school_grade)
 
     def violation_and_cost(self, tutorial_occupation):
         teacher_violation_and_cost = self.__teacher_violation_and_cost(

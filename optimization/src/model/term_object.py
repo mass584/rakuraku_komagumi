@@ -1,8 +1,3 @@
-import logging
-
-logger = logging.getLogger('Term')
-
-
 class TermObject():
     def __init__(self, database, term_id):
         self.__database = database

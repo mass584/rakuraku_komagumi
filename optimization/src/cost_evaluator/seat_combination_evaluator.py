@@ -1,5 +1,5 @@
 import itertools
-import numpy as np
+import numpy
 
 
 class SeatCombinationEvaluator():
@@ -9,7 +9,7 @@ class SeatCombinationEvaluator():
         self.__different_pair_cost = different_pair_cost
 
     def violation_and_cost(self, tutorial_occupation):
-        occupation = np.einsum('ijkml->jkml', tutorial_occupation)
+        occupation = numpy.einsum('ijkml->jkml', tutorial_occupation)
         teacher_index_list = range(self.__array_size.teacher_count())
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
