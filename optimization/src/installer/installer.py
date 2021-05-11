@@ -1,6 +1,6 @@
 import itertools
 import numpy
-from ..cost_evaluator.cost_evaluator import CostEvaluator
+from cost_evaluator.cost_evaluator import CostEvaluator
 
 class Installer():
     def __init__(self, array_builder, student_optimization_rules, teacher_optimization_rule):
@@ -29,7 +29,7 @@ class Installer():
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
         product = itertools.product(date_index_list, period_index_list)
-        violation_and_cost_array = numpy.full(
+        cost_array = numpy.full(
             (self.__array_size.date_count(), self.__array_size.period_count()),
             numpy.inf)
         for date_index, period_index in product:
@@ -46,9 +46,8 @@ class Installer():
                     tutorial_index,
                     date_index,
                     period_index] = 1
-                violation_and_cost_array[date_index, period_index] = \
-                    self.__cost_evaluator.violation_and_cost(
-                        self.__tutorial_occupation_array)
+                cost_array[date_index, period_index] = self.__cost_evaluator.cost(
+                    self.__tutorial_occupation_array)
                 self.__tutorial_occupation_array[
                     student_index,
                     teacher_index,
@@ -56,8 +55,8 @@ class Installer():
                     date_index,
                     period_index] = 0
         [date_index, period_index] = numpy.unravel_index(
-            violation_and_cost_array.argmin(),
-            violation_and_cost_array.shape)
+            cost_array.argmin(),
+            cost_array.shape)
         self.__tutorial_occupation_array[
             student_index,
             teacher_index,
