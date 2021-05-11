@@ -15,6 +15,7 @@ class TermObject():
         self.__fetched = True
         return {
             'term': self.__term,
+            'timetable': self.__timetable,
             'teacher_optimization_rule': self.__teacher_optimization_rule,
             'student_optimization_rules': self.__student_optimization_rules,
             'term_teachers': self.__term_teachers,
@@ -33,6 +34,7 @@ class TermObject():
     def __fetch_all(self):
         self.__database.connect()
         self.__fetch_term()
+        self.__fetch_timetable()
         self.__fetch_teacher_optimization_rule()
         self.__fetch_student_optimization_rules()
         self.__fetch_term_teachers()
@@ -61,6 +63,19 @@ class TermObject():
             'from', sql_from,
             'where', sql_where]))
         self.__term = dict(cur.fetchone())
+        cur.close()
+
+    def __fetch_timetable(self):
+        cur = self.__database.cursor()
+        sql_select = (', '.join([
+            "id", "date_index", "period_index", "term_group_id", "is_closed"]))
+        sql_from = "timetables"
+        sql_where = f"id = {self.__term_id}"
+        cur.execute(' '.join([
+            'select', sql_select,
+            'from', sql_from,
+            'where', sql_where]))
+        self.__timetable = dict(cur.fetchone())
         cur.close()
 
     def __fetch_teacher_optimization_rule(self):
