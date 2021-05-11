@@ -38,7 +38,7 @@ class TestOccupationAndBlankEvaluator(TestCase):
         # 1日2コマの日 student_index == 1 3日, student_index != 1 4日
         student_cost = array_size.student_count() * 14 * 4 - 14
         self.assertEqual(occupation_and_blank_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation(),
+            tutorial_occupation.tutorial_occupation_array(),
         ), [
             teacher_violation + student_violation,
             teacher_cost + student_cost])

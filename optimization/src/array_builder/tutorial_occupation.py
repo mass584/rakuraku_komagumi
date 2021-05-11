@@ -84,11 +84,11 @@ class TutorialOccupation():
                 period_index
             ] = 1
 
-    def fixed_tutorial_occupation(self):
+    def fixed_tutorial_occupation_array(self):
         return self.__fixed_tutorial_occupation
 
-    def floated_tutorial_occupation(self):
+    def floated_tutorial_occupation_array(self):
         return self.__floated_tutorial_occupation
 
-    def tutorial_occupation(self):
+    def tutorial_occupation_array(self):
         return self.__tutorial_occupation

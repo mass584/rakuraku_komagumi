@@ -20,29 +20,29 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+            numpy.sum(tutorial_occupation.tutorial_occupation_array()), 2)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.shape(tutorial_occupation.tutorial_occupation()),
+            numpy.shape(tutorial_occupation.tutorial_occupation_array()),
             (20, 5, 5, 7, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.fixed_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (20, 5, 5, 7, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
             (20, 5, 5, 7, 6))
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 0, 0, 0, 0], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 0, 0, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 1, 1, 1, 1], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 1, 1, 1, 1], 1)
         self.assertEqual(
-            (tutorial_occupation.floated_tutorial_occupation())[
+            (tutorial_occupation.floated_tutorial_occupation_array())[
                 0, 0, 0, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.fixed_tutorial_occupation())[
+            (tutorial_occupation.fixed_tutorial_occupation_array())[
                 0, 1, 1, 1, 1], 1)
 
     def test_season_term(self):
@@ -56,29 +56,29 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+            numpy.sum(tutorial_occupation.tutorial_occupation_array()), 2)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.shape(tutorial_occupation.tutorial_occupation()),
+            numpy.shape(tutorial_occupation.tutorial_occupation_array()),
             (20, 5, 5, 14, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.fixed_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (20, 5, 5, 14, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
             (20, 5, 5, 14, 6))
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 0, 0, 0, 0], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 0, 0, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 0, 0, 1, 1], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 0, 0, 1, 1], 1)
         self.assertEqual(
-            (tutorial_occupation.floated_tutorial_occupation())[
+            (tutorial_occupation.floated_tutorial_occupation_array())[
                 0, 0, 0, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.fixed_tutorial_occupation())[
+            (tutorial_occupation.fixed_tutorial_occupation_array())[
                 0, 0, 0, 1, 1], 1)
 
     def test_exam_planning_term(self):
@@ -92,27 +92,27 @@ class TestTutorialOccupation(TestCase):
         term['tutorial_pieces'][1]['is_fixed'] = True
         tutorial_occupation = TutorialOccupation(term, array_size)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.tutorial_occupation()), 2)
+            numpy.sum(tutorial_occupation.tutorial_occupation_array()), 2)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.fixed_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.fixed_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.sum(tutorial_occupation.floated_tutorial_occupation()), 1)
+            numpy.sum(tutorial_occupation.floated_tutorial_occupation_array()), 1)
         self.assertEqual(
-            numpy.shape(tutorial_occupation.tutorial_occupation()),
+            numpy.shape(tutorial_occupation.tutorial_occupation_array()),
             (10, 5, 5, 3, 4))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.fixed_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (10, 5, 5, 3, 4))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation()),
+            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
             (10, 5, 5, 3, 4))
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 1, 1, 0, 0], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 1, 1, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.tutorial_occupation())[0, 2, 2, 1, 1], 1)
+            (tutorial_occupation.tutorial_occupation_array())[0, 2, 2, 1, 1], 1)
         self.assertEqual(
-            (tutorial_occupation.floated_tutorial_occupation())[
+            (tutorial_occupation.floated_tutorial_occupation_array())[
                 0, 1, 1, 0, 0], 1)
         self.assertEqual(
-            (tutorial_occupation.fixed_tutorial_occupation())[
+            (tutorial_occupation.fixed_tutorial_occupation_array())[
                 0, 2, 2, 1, 1], 1)

@@ -20,7 +20,7 @@ class TestIntervalEvaluator(TestCase):
         interval_evaluator = IntervalEvaluator(
             array_size, interval_cutoff, interval_costs)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 70])
+            tutorial_occupation.tutorial_occupation_array()), [0, 70])
 
     def test_interval_is_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -35,7 +35,7 @@ class TestIntervalEvaluator(TestCase):
         interval_evaluator = IntervalEvaluator(
             array_size, interval_cutoff, interval_costs)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 14])
+            tutorial_occupation.tutorial_occupation_array()), [0, 14])
 
     def test_interval_is_over_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -50,4 +50,4 @@ class TestIntervalEvaluator(TestCase):
         interval_evaluator = IntervalEvaluator(
             array_size, interval_cutoff, interval_costs)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 0])
+            tutorial_occupation.tutorial_occupation_array()), [0, 0])

@@ -22,7 +22,7 @@ class TestVacancyAndDoubleBookingEvaluator(TestCase):
             teacher_vacancy=vacancy.teacher_vacancy_array(),
             student_vacancy=vacancy.student_vacancy_array())
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 0])
+            tutorial_occupation.tutorial_occupation_array()), [0, 0])
 
     def test_double_booking_violation(self):
         term = copy.deepcopy(season_term)
@@ -42,7 +42,7 @@ class TestVacancyAndDoubleBookingEvaluator(TestCase):
             teacher_vacancy=vacancy.teacher_vacancy_array(),
             student_vacancy=vacancy.student_vacancy_array())
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [3, 0])
+            tutorial_occupation.tutorial_occupation_array()), [3, 0])
 
     def test_unvacant_violation(self):
         term = copy.deepcopy(season_term)
@@ -57,4 +57,4 @@ class TestVacancyAndDoubleBookingEvaluator(TestCase):
             teacher_vacancy=vacancy.teacher_vacancy_array(),
             student_vacancy=vacancy.student_vacancy_array())
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [2, 0])
+            tutorial_occupation.tutorial_occupation_array()), [2, 0])
