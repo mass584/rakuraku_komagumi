@@ -13,4 +13,4 @@ RUN echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bash_profile && \
 RUN pyenv update && pyenv install 3.7.1 && pyenv global 3.7.1
 
 RUN pip install --upgrade pip
-RUN pip install numpy psycopg2 awscli pycodestyle autopep8
+RUN pip install numpy psycopg2 awscli pycodestyle autopep8 line_profiler
