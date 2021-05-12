@@ -1,3 +1,4 @@
+import logging
 import os
 from array_builder.array_builder import ArrayBuilder
 from database.database import Database
@@ -11,6 +12,9 @@ def main():
     username = os.environ['DATABASE_USERNAME']
     password = os.environ['DATABASE_PASSWORD']
     term_id = os.environ['OPTIMIZATION_TERM_ID']
+    format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
+    filename = f"optimization_{term_id}.log"
+    logging.basicConfig(level='DEBUG', filename=filename, format=format)
     database = Database(
         host=host,
         port=5432,

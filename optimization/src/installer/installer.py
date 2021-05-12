@@ -1,6 +1,7 @@
 from datetime import date
 import copy
 import itertools
+from logging import getLogger
 import numpy
 import math
 import threading
@@ -8,6 +9,7 @@ import time
 from cost_evaluator.cost_evaluator import CostEvaluator
 
 
+logger = getLogger(__name__)
 THREAD_NUM = 1
 
 class Installer():
@@ -115,7 +117,7 @@ class Installer():
             tutorial_index,
             date_index,
             period_index] = 1
-        print(time.time() - start)
+        logger.info(time.time() - start)
 
     def execute(self):
         student_index_list = range(self.__array_size.student_count())
