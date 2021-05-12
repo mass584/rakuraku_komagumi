@@ -80,14 +80,17 @@ class Installer():
         student_index_list = range(self.__array_size.student_count())
         teacher_index_list = range(self.__array_size.teacher_count())
         tutorial_index_list = range(self.__array_size.tutorial_count())
-        product = itertools.product(
-            tutorial_index_list, student_index_list, teacher_index_list)
         max_tutorial_piece_count = numpy.amax(self.__uninstalled_tutorial_piece_count)
         # 公平になるように各生徒、各科目のコマを１つずつ配置していく
         for _ in range(max_tutorial_piece_count):
+            product = itertools.product(
+                tutorial_index_list, student_index_list, teacher_index_list)
             # 公平になるように生徒インデックスのループを先に回す
             for tutorial_index, student_index, teacher_index in product:
                 have_uninstalled_pieces = self.__uninstalled_tutorial_piece_count[
                     student_index, teacher_index, tutorial_index] > 0
                 if have_uninstalled_pieces:
                     self.__add_tutorial_piece(student_index, teacher_index, tutorial_index)
+
+    def tutorial_occupation_array(self):
+        return self.__tutorial_occupation_array
