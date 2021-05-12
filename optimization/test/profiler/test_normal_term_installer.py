@@ -7,4 +7,5 @@ test_runner = test_installer.TestInstaller()
 profiler = line_profiler.LineProfiler()
 profiler.add_module(installer)
 profiler.runcall(test_runner.test_normal_term_installer)
-profiler.dump_stats('test/profiler/test_normal_term_installer.prof')
+with open('test/profiler/test_normal_term_installer.log', 'w') as file:
+    profiler.print_stats(stream=file)
