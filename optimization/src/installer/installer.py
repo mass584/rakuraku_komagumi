@@ -103,7 +103,7 @@ class Installer():
 
     def __add_tutorial_piece(self, student_index, teacher_index, tutorial_index):
         start = time.time()
-        [date_index, period_index] = self.__search_best_date_and_period_multi_thread(
+        [date_index, period_index] = self.__search_best_date_and_period_single_thread(
             student_index, teacher_index, tutorial_index)
         self.__uninstalled_tutorial_piece_count[
             student_index,
