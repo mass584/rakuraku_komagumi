@@ -1,8 +1,14 @@
 from datetime import date
+import copy
 import itertools
 import numpy
+import math
+import threading
+import time
 from cost_evaluator.cost_evaluator import CostEvaluator
 
+
+THREAD_NUM = 1
 
 class Installer():
     def __init__(self, array_builder, student_optimization_rules, teacher_optimization_rule):
@@ -35,7 +41,35 @@ class Installer():
         # 集団科目が配置済みか休講の所は探索しない
         if self.__timetable_array[date_index, period_index] == 0: return True
 
-    def __search_best_date_and_period(self, student_index, teacher_index, tutorial_index):
+    def __run_cost_evaluation_thread(
+        self,
+        cost_array,
+        student_index,
+        teacher_index,
+        tutorial_index,
+        date_index,
+        period_index):
+        if self.__search_guard(
+            student_index,
+            teacher_index,
+            tutorial_index,
+            date_index,
+            period_index): return numpy.inf
+        cloned_tutorial_occupation_array = numpy.copy(
+            self.__tutorial_occupation_array)
+        cloned_tutorial_occupation_array[
+            student_index,
+            teacher_index,
+            tutorial_index,
+            date_index,
+            period_index] += 1
+        cloned_cost_evaluator = copy.deepcopy(self.__cost_evaluator)
+        cost = cloned_cost_evaluator.cost(cloned_tutorial_occupation_array)
+        cost_array[date_index, period_index] = cost
+        del cloned_tutorial_occupation_array
+        del cloned_cost_evaluator
+
+    def __search_best_date_and_period_single_thread(self, student_index, teacher_index, tutorial_index):
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
         product = itertools.product(date_index_list, period_index_list)
@@ -43,27 +77,33 @@ class Installer():
             (self.__array_size.date_count(), self.__array_size.period_count()),
             numpy.inf)
         for date_index, period_index in product:
-            if self.__search_guard(
-                student_index,
-                teacher_index,
-                tutorial_index,
-                date_index,
-                period_index): continue
-            cloned_tutorial_occupation_array = numpy.copy(
-                self.__tutorial_occupation_array)
-            cloned_tutorial_occupation_array[
-                student_index,
-                teacher_index,
-                tutorial_index,
-                date_index,
-                period_index] += 1
-            cost_array[date_index, period_index] = self.__cost_evaluator.cost(
-                cloned_tutorial_occupation_array)
-            del cloned_tutorial_occupation_array
+            self.__run_cost_evaluation_thread(
+                cost_array, student_index, teacher_index, tutorial_index, date_index, period_index)
+        return numpy.unravel_index(cost_array.argmin(), cost_array.shape)
+
+    def __search_best_date_and_period_multi_thread(self, student_index, teacher_index, tutorial_index):
+        date_index_list = range(self.__array_size.date_count())
+        period_index_list = range(self.__array_size.period_count())
+        product = itertools.product(date_index_list, period_index_list)
+        cost_array = numpy.full(
+            (self.__array_size.date_count(), self.__array_size.period_count()),
+            numpy.inf)
+        thread_list = [
+            threading.Thread(
+                target=self.__run_cost_evaluation_thread,
+                args=(cost_array, student_index, teacher_index, tutorial_index, date_index, period_index))
+            for date_index, period_index in product]
+        thread_group_list = [
+            thread_list[index*THREAD_NUM:(index+1)*THREAD_NUM]
+            for index in range(math.ceil(len(thread_list) / THREAD_NUM))]
+        for thread_list in thread_group_list:
+            for thread in thread_list: thread.start()
+            for thread in thread_list: thread.join()
         return numpy.unravel_index(cost_array.argmin(), cost_array.shape)
 
     def __add_tutorial_piece(self, student_index, teacher_index, tutorial_index):
-        [date_index, period_index] = self.__search_best_date_and_period(
+        start = time.time()
+        [date_index, period_index] = self.__search_best_date_and_period_multi_thread(
             student_index, teacher_index, tutorial_index)
         self.__uninstalled_tutorial_piece_count[
             student_index,
@@ -75,6 +115,7 @@ class Installer():
             tutorial_index,
             date_index,
             period_index] = 1
+        print(time.time() - start)
 
     def execute(self):
         student_index_list = range(self.__array_size.student_count())
