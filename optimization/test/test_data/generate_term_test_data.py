@@ -35,7 +35,9 @@ def generate_term_test_data(
             'id': date_index * period_count + period_index + 1,
             'date_index': date_index + 1,
             'period_index': period_index + 1,
-            'term_group_id': None,
+            'term_group_id': next((
+                item[2] for item in group_timetables
+                if item[0] == date_index and item[1] == period_index), None),
             'is_closed': False,
         }
         for date_index, period_index
