@@ -24,6 +24,7 @@ def main():
     term_object = TermObject(database=database, term_id=term_id).fetch()
     array_builder = ArrayBuilder(term_object=term_object)
     installer = Installer(
+        term_object=term_object,
         array_builder=array_builder,
         student_optimization_rules=term_object['student_optimization_rules'],
         teacher_optimization_rule=term_object['teacher_optimization_rule'])

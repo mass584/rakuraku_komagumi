@@ -12,6 +12,7 @@ class TestInstaller(TestCase):
         term_object = copy.deepcopy(normal_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
+            term_object=term_object,
             array_builder=array_builder,
             student_optimization_rules=term_object['student_optimization_rules'],
             teacher_optimization_rule=term_object['teacher_optimization_rule'])
@@ -26,6 +27,7 @@ class TestInstaller(TestCase):
         term_object = copy.deepcopy(season_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
+            term_object=term_object,
             array_builder=array_builder,
             student_optimization_rules=term_object['student_optimization_rules'],
             teacher_optimization_rule=term_object['teacher_optimization_rule'])

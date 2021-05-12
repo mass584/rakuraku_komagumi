@@ -1,19 +1,19 @@
-from datetime import date
 import copy
 import itertools
-from logging import getLogger
-import numpy
 import math
+import numpy
 import threading
 import time
 from cost_evaluator.cost_evaluator import CostEvaluator
+from logging import getLogger
 
 
 logger = getLogger(__name__)
 THREAD_NUM = 1
 
 class Installer():
-    def __init__(self, array_builder, student_optimization_rules, teacher_optimization_rule):
+    def __init__(self, term_object, array_builder, student_optimization_rules, teacher_optimization_rule):
+        self.__term_object = term_object
         self.__array_size = array_builder.array_size()
         self.__uninstalled_tutorial_piece_count = \
             self.__get_uninstalled_tutorial_piece_count(
@@ -117,7 +117,22 @@ class Installer():
             tutorial_index,
             date_index,
             period_index] = 1
-        logger.info(time.time() - start)
+        end = time.time()
+        elapsed_sec = math.floor((end - start) * 1000000) / 1000000
+        self.__logging(student_index, teacher_index, tutorial_index, date_index, period_index, elapsed_sec)
+
+    def __logging(self, student_index, teacher_index, tutorial_index, date_index, period_index, elapsed_sec):
+        student_name =  self.__term_object['term_students'][student_index]['name']
+        student_school_grade =  self.__term_object['term_students'][student_index]['school_grade']
+        teacher_name =  self.__term_object['term_teachers'][teacher_index]['name']
+        tutorial_name = self.__term_object['term_tutorials'][tutorial_index]['name']
+        logger.info('================コマを配置しました================')
+        logger.info(f'生徒：{student_name}（{student_school_grade}）')
+        logger.info(f'講師：{teacher_name}')
+        logger.info(f'科目：{tutorial_name}')
+        logger.info(f'日時：{date_index + 1}日目{period_index + 1}限')
+        logger.info(f'経過時間：{elapsed_sec}秒')
+        logger.info('==================================================')
 
     def execute(self):
         student_index_list = range(self.__array_size.student_count())
