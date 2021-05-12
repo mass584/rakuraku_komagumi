@@ -8,7 +8,7 @@ from src.installer.installer import Installer
 
 
 class TestInstaller(TestCase):
-    def test_normal_term_cost_evaluator(self):
+    def test_normal_term_installer(self):
         term_object = copy.deepcopy(normal_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
@@ -22,7 +22,7 @@ class TestInstaller(TestCase):
         self.assertEqual(tutorial_occupation_sum, 60)
         numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(20) * 3)
 
-    def test_season_term_cost_evaluator(self):
+    def test_season_term_installer(self):
         term_object = copy.deepcopy(season_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
