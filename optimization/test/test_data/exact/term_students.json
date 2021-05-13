@@ -1,0 +1,402 @@
+[
+  {
+    "id": 30,
+    "name": "生徒30",
+    "vacancy_status": 2
+  },
+  {
+    "id": 31,
+    "name": "生徒31",
+    "vacancy_status": 2
+  },
+  {
+    "id": 32,
+    "name": "生徒32",
+    "vacancy_status": 2
+  },
+  {
+    "id": 33,
+    "name": "生徒33",
+    "vacancy_status": 2
+  },
+  {
+    "id": 34,
+    "name": "生徒34",
+    "vacancy_status": 2
+  },
+  {
+    "id": 35,
+    "name": "生徒35",
+    "vacancy_status": 2
+  },
+  {
+    "id": 36,
+    "name": "生徒36",
+    "vacancy_status": 2
+  },
+  {
+    "id": 37,
+    "name": "生徒37",
+    "vacancy_status": 2
+  },
+  {
+    "id": 38,
+    "name": "生徒38",
+    "vacancy_status": 2
+  },
+  {
+    "id": 39,
+    "name": "生徒39",
+    "vacancy_status": 2
+  },
+  {
+    "id": 40,
+    "name": "生徒40",
+    "vacancy_status": 2
+  },
+  {
+    "id": 41,
+    "name": "生徒41",
+    "vacancy_status": 2
+  },
+  {
+    "id": 42,
+    "name": "生徒42",
+    "vacancy_status": 2
+  },
+  {
+    "id": 43,
+    "name": "生徒43",
+    "vacancy_status": 2
+  },
+  {
+    "id": 44,
+    "name": "生徒44",
+    "vacancy_status": 2
+  },
+  {
+    "id": 45,
+    "name": "生徒45",
+    "vacancy_status": 2
+  },
+  {
+    "id": 46,
+    "name": "生徒46",
+    "vacancy_status": 2
+  },
+  {
+    "id": 47,
+    "name": "生徒47",
+    "vacancy_status": 2
+  },
+  {
+    "id": 48,
+    "name": "生徒48",
+    "vacancy_status": 2
+  },
+  {
+    "id": 49,
+    "name": "生徒49",
+    "vacancy_status": 2
+  },
+  {
+    "id": 50,
+    "name": "生徒50",
+    "vacancy_status": 2
+  },
+  {
+    "id": 51,
+    "name": "生徒51",
+    "vacancy_status": 2
+  },
+  {
+    "id": 52,
+    "name": "生徒52",
+    "vacancy_status": 2
+  },
+  {
+    "id": 53,
+    "name": "生徒53",
+    "vacancy_status": 2
+  },
+  {
+    "id": 54,
+    "name": "生徒54",
+    "vacancy_status": 2
+  },
+  {
+    "id": 55,
+    "name": "生徒55",
+    "vacancy_status": 2
+  },
+  {
+    "id": 56,
+    "name": "生徒56",
+    "vacancy_status": 2
+  },
+  {
+    "id": 57,
+    "name": "生徒57",
+    "vacancy_status": 2
+  },
+  {
+    "id": 58,
+    "name": "生徒58",
+    "vacancy_status": 2
+  },
+  {
+    "id": 59,
+    "name": "生徒59",
+    "vacancy_status": 2
+  },
+  {
+    "id": 60,
+    "name": "生徒60",
+    "vacancy_status": 2
+  },
+  {
+    "id": 61,
+    "name": "生徒61",
+    "vacancy_status": 2
+  },
+  {
+    "id": 62,
+    "name": "生徒62",
+    "vacancy_status": 2
+  },
+  {
+    "id": 63,
+    "name": "生徒63",
+    "vacancy_status": 2
+  },
+  {
+    "id": 64,
+    "name": "生徒64",
+    "vacancy_status": 2
+  },
+  {
+    "id": 65,
+    "name": "生徒65",
+    "vacancy_status": 2
+  },
+  {
+    "id": 66,
+    "name": "生徒66",
+    "vacancy_status": 2
+  },
+  {
+    "id": 67,
+    "name": "生徒67",
+    "vacancy_status": 2
+  },
+  {
+    "id": 72,
+    "name": "生徒72",
+    "vacancy_status": 2
+  },
+  {
+    "id": 73,
+    "name": "生徒73",
+    "vacancy_status": 2
+  },
+  {
+    "id": 74,
+    "name": "生徒74",
+    "vacancy_status": 2
+  },
+  {
+    "id": 75,
+    "name": "生徒75",
+    "vacancy_status": 2
+  },
+  {
+    "id": 77,
+    "name": "生徒77",
+    "vacancy_status": 2
+  },
+  {
+    "id": 78,
+    "name": "生徒78",
+    "vacancy_status": 2
+  },
+  {
+    "id": 79,
+    "name": "生徒79",
+    "vacancy_status": 2
+  },
+  {
+    "id": 80,
+    "name": "生徒80",
+    "vacancy_status": 2
+  },
+  {
+    "id": 81,
+    "name": "生徒81",
+    "vacancy_status": 2
+  },
+  {
+    "id": 82,
+    "name": "生徒82",
+    "vacancy_status": 2
+  },
+  {
+    "id": 84,
+    "name": "生徒84",
+    "vacancy_status": 2
+  },
+  {
+    "id": 93,
+    "name": "生徒93",
+    "vacancy_status": 2
+  },
+  {
+    "id": 94,
+    "name": "生徒94",
+    "vacancy_status": 2
+  },
+  {
+    "id": 95,
+    "name": "生徒95",
+    "vacancy_status": 2
+  },
+  {
+    "id": 96,
+    "name": "生徒96",
+    "vacancy_status": 2
+  },
+  {
+    "id": 98,
+    "name": "生徒98",
+    "vacancy_status": 2
+  },
+  {
+    "id": 200,
+    "name": "生徒200",
+    "vacancy_status": 2
+  },
+  {
+    "id": 201,
+    "name": "生徒201",
+    "vacancy_status": 2
+  },
+  {
+    "id": 202,
+    "name": "生徒202",
+    "vacancy_status": 2
+  },
+  {
+    "id": 205,
+    "name": "生徒205",
+    "vacancy_status": 2
+  },
+  {
+    "id": 225,
+    "name": "生徒225",
+    "vacancy_status": 2
+  },
+  {
+    "id": 226,
+    "name": "生徒226",
+    "vacancy_status": 2
+  },
+  {
+    "id": 258,
+    "name": "生徒258",
+    "vacancy_status": 2
+  },
+  {
+    "id": 248,
+    "name": "生徒248",
+    "vacancy_status": 2
+  },
+  {
+    "id": 262,
+    "name": "生徒262",
+    "vacancy_status": 2
+  },
+  {
+    "id": 246,
+    "name": "生徒246",
+    "vacancy_status": 2
+  },
+  {
+    "id": 250,
+    "name": "生徒250",
+    "vacancy_status": 2
+  },
+  {
+    "id": 259,
+    "name": "生徒259",
+    "vacancy_status": 2
+  },
+  {
+    "id": 263,
+    "name": "生徒263",
+    "vacancy_status": 2
+  },
+  {
+    "id": 255,
+    "name": "生徒255",
+    "vacancy_status": 2
+  },
+  {
+    "id": 252,
+    "name": "生徒252",
+    "vacancy_status": 2
+  },
+  {
+    "id": 247,
+    "name": "生徒247",
+    "vacancy_status": 2
+  },
+  {
+    "id": 253,
+    "name": "生徒253",
+    "vacancy_status": 2
+  },
+  {
+    "id": 249,
+    "name": "生徒249",
+    "vacancy_status": 2
+  },
+  {
+    "id": 245,
+    "name": "生徒245",
+    "vacancy_status": 2
+  },
+  {
+    "id": 254,
+    "name": "生徒254",
+    "vacancy_status": 2
+  },
+  {
+    "id": 256,
+    "name": "生徒256",
+    "vacancy_status": 2
+  },
+  {
+    "id": 257,
+    "name": "生徒257",
+    "vacancy_status": 2
+  },
+  {
+    "id": 251,
+    "name": "生徒251",
+    "vacancy_status": 2
+  },
+  {
+    "id": 260,
+    "name": "生徒260",
+    "vacancy_status": 2
+  },
+  {
+    "id": 261,
+    "name": "生徒261",
+    "vacancy_status": 0
+  },
+  {
+    "id": 264,
+    "name": "生徒264",
+    "vacancy_status": 2
+  }
+]
