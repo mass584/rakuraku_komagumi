@@ -19,5 +19,5 @@ def stress_test_installer():
 profiler = line_profiler.LineProfiler()
 profiler.add_module(stress_test_installer)
 profiler.runcall()
-with open('log/profiler/stress_test_installer.log', 'w') as file:
+with open('log/profiler_stress_test_installer.log', 'w') as file:
     profiler.print_stats(stream=file)
