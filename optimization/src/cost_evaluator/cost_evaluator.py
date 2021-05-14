@@ -42,7 +42,7 @@ class CostEvaluator():
             student_vacancy=student_vacancy,
             teacher_vacancy=teacher_vacancy)
 
-    def __violation_and_cost(self, tutorial_pieces):
+    def violation_and_cost(self, tutorial_pieces):
         a = self.__interval_evaluator.violation_and_cost(tutorial_pieces)
         b = self.__occupation_and_blank_evaluator.violation_and_cost(tutorial_pieces)
         c = self.__seat_occupation_evaluator.violation_and_cost(tutorial_pieces)
@@ -54,5 +54,5 @@ class CostEvaluator():
         return [violation, cost]
 
     def cost(self, tutorial_pieces):
-        [violation, cost] = self.__violation_and_cost(tutorial_pieces)
+        [violation, cost] = self.violation_and_cost(tutorial_pieces)
         return violation * COST_PER_VIOLATION + cost

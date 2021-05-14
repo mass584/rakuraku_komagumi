@@ -31,6 +31,7 @@ class Installer():
             school_grades=array_builder.school_grade_array())
         self.__timetable_array = array_builder.timetable_array()
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
+        self.__installed_count = 0
 
     def __get_uninstalled_tutorial_piece_count(self, tutorial_piece_count, tutorial_occupation_array):
         installed_tutorial_piece_count = numpy.einsum('ijkml->ijk', tutorial_occupation_array)
@@ -115,6 +116,7 @@ class Installer():
             tutorial_index,
             date_index,
             period_index] = 1
+        self.__installed_count += 1
         end = time.time()
         elapsed_sec = math.floor((end - start) * 1000000) / 1000000
         self.__logging(student_index, teacher_index, tutorial_index, date_index, period_index, elapsed_sec)
@@ -124,11 +126,15 @@ class Installer():
         student_school_grade =  self.__term_object['term_students'][student_index]['school_grade']
         teacher_name =  self.__term_object['term_teachers'][teacher_index]['name']
         tutorial_name = self.__term_object['term_tutorials'][tutorial_index]['name']
+        [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
         logger.info('================コマを配置しました================')
+        logger.info(f'配置No：{self.__installed_count}')
         logger.info(f'生徒：{student_name}（{student_school_grade}）')
         logger.info(f'講師：{teacher_name}')
         logger.info(f'科目：{tutorial_name}')
         logger.info(f'日時：{date_index + 1}日目{period_index + 1}限')
+        logger.info(f'合計違反点数：{violation}')
+        logger.info(f'合計コスト点数：{cost}')
         logger.info(f'経過時間：{elapsed_sec}秒')
         logger.info('==================================================')
 
@@ -147,6 +153,9 @@ class Installer():
                     student_index, teacher_index, tutorial_index] > 0
                 if have_uninstalled_pieces:
                     self.__add_tutorial_piece(student_index, teacher_index, tutorial_index)
+
+    def installed_count(self):
+        return self.__installed_count
 
     def tutorial_occupation_array(self):
         return self.__tutorial_occupation_array
