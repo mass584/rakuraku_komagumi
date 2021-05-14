@@ -17,7 +17,10 @@ class TutorialPieceCount():
         student_index_list = list(range(self.__array_size.student_count()))
         teacher_index_list = list(range(self.__array_size.teacher_count()))
         tutorial_index_list = list(range(self.__array_size.tutorial_count()))
-        product = itertools.product(student_index_list, teacher_index_list, tutorial_index_list)
+        product = itertools.product(
+            student_index_list,
+            teacher_index_list,
+            tutorial_index_list)
         for student_index, teacher_index, tutorial_index in product:
             term_student_id = \
                 self.__term['term_students'][student_index]['id']
@@ -32,8 +35,8 @@ class TutorialPieceCount():
                     tutorial_contract['term_tutorial_id'] == term_tutorial_id)
             piece_count = next(
                 (tutorial_contract['piece_count']
-                for tutorial_contract in self.__term['tutorial_contracts']
-                if is_matched(tutorial_contract)), 0)
+                 for tutorial_contract in self.__term['tutorial_contracts']
+                 if is_matched(tutorial_contract)), 0)
             self.__tutorial_piece_count_array[
                 student_index, teacher_index, tutorial_index] = piece_count
 

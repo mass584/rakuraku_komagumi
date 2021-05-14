@@ -19,8 +19,8 @@ class Timetable():
             is_matched = (lambda item:
                           item['date_index'] == date_index + 1 and
                           item['period_index'] == period_index + 1 and
-                          item['is_closed'] == False and
-                          item['term_group_id'] == None)
+                          item['is_closed'] is False and
+                          item['term_group_id'] is None)
             is_available = True in [
                 True for item in self.term['timetables']
                 if is_matched(item)]

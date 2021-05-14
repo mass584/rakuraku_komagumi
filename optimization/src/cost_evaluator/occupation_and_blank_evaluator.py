@@ -6,13 +6,13 @@ from .occupation_and_blank_vector_evaluator \
 
 class OccupationAndBlankEvaluator():
     def __init__(
-        self,
-        array_size,
-        student_optimization_rules,
-        teacher_optimization_rule,
-        student_group_occupation,
-        teacher_group_occupation,
-        school_grades):
+            self,
+            array_size,
+            student_optimization_rules,
+            teacher_optimization_rule,
+            student_group_occupation,
+            teacher_group_occupation,
+            school_grades):
         self.__array_size = array_size
         self.__student_vector_evaluators = [OccupationAndBlankVectorEvaluator(
             period_count=array_size.period_count(),
@@ -35,7 +35,20 @@ class OccupationAndBlankEvaluator():
         self.__student_group_occupation = student_group_occupation
         self.__teacher_group_occupation = teacher_group_occupation
         self.__student_school_grade_codes = school_grades
-        self.__school_grade_indexes = { 11:0, 12:1, 13:2, 14:3, 15:4, 16:5, 21:6, 22:7, 23:8, 31:9, 32:10, 33:11, 99:12 }
+        self.__school_grade_indexes = {
+            11: 0,
+            12: 1,
+            13: 2,
+            14: 3,
+            15: 4,
+            16: 5,
+            21: 6,
+            22: 7,
+            23: 8,
+            31: 9,
+            32: 10,
+            33: 11,
+            99: 12}
 
     def __teacher_violation_and_cost(
             self, tutorial_occupation, teacher_group_occupation):
@@ -55,7 +68,8 @@ class OccupationAndBlankEvaluator():
             cost_summation += cost
         return [violation_summation, cost_summation]
 
-    def __student_violation_and_cost( self, tutorial_occupation, student_group_occupation):
+    def __student_violation_and_cost(
+            self, tutorial_occupation, student_group_occupation):
         student_tutorial_occupation = (numpy.einsum(
             'ikjml->iml', tutorial_occupation) > 0).astype(int)
         occupation = student_tutorial_occupation + student_group_occupation

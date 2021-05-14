@@ -22,6 +22,7 @@ class TestTutorialPieceCount(TestCase):
 
     def test_exam_planning_term(self):
         array_size = ArraySize(exam_planning_term)
-        tutorial_piece_count = TutorialPieceCount(exam_planning_term, array_size)
+        tutorial_piece_count = TutorialPieceCount(
+            exam_planning_term, array_size)
         self.assertEqual(
             numpy.sum(tutorial_piece_count.tutorial_piece_count_array()), 20)

@@ -34,4 +34,6 @@ def main():
         teacher_optimization_rule=term_object['teacher_optimization_rule'])
     installer.execute()
 
-if __name__ == '__main__': main()
+
+if __name__ == '__main__':
+    main()

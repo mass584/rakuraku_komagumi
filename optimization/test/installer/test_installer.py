@@ -20,10 +20,13 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 60)
         self.assertEqual(installer.installed_count(), 60)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(20) * 3)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(20) * 3)
 
     def test_normal_term_installer_on_additional(self):
         term_object = copy.deepcopy(normal_term)
@@ -43,10 +46,13 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 60)
         self.assertEqual(installer.installed_count(), 57)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(20) * 3)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(20) * 3)
 
     def test_season_term_installer(self):
         term_object = copy.deepcopy(season_term)
@@ -59,10 +65,13 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 240)
         self.assertEqual(installer.installed_count(), 240)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(20) * 12)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(20) * 12)
 
     def test_season_term_installer_on_additional(self):
         term_object = copy.deepcopy(season_term)
@@ -84,10 +93,13 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 240)
         self.assertEqual(installer.installed_count(), 236)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(20) * 12)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(20) * 12)
 
     def test_exam_planning_term_installer(self):
         term_object = copy.deepcopy(exam_planning_term)
@@ -100,10 +112,13 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 20)
         self.assertEqual(installer.installed_count(), 20)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(10) * 2)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(10) * 2)
 
     def test_exam_planning_term_installer_on_additional(self):
         term_object = copy.deepcopy(exam_planning_term)
@@ -121,7 +136,10 @@ class TestInstaller(TestCase):
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
-        tutorial_occupation_sum_per_student = numpy.einsum('ijklm->i', tutorial_occupation_array)
+        tutorial_occupation_sum_per_student = numpy.einsum(
+            'ijklm->i', tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 20)
         self.assertEqual(installer.installed_count(), 18)
-        numpy.testing.assert_equal(tutorial_occupation_sum_per_student, numpy.ones(10) * 2)
+        numpy.testing.assert_equal(
+            tutorial_occupation_sum_per_student,
+            numpy.ones(10) * 2)

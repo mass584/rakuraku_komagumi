@@ -6,14 +6,18 @@ from .tutorial_occupation import TutorialOccupation
 from .tutorial_piece_count import TutorialPieceCount
 from .vacancy import Vacancy
 
+
 class ArrayBuilder():
     def __init__(self, term_object):
         self.__array_size = ArraySize(term_object)
-        self.__group_occupation = GroupOccupation(term_object, self.__array_size)
+        self.__group_occupation = GroupOccupation(
+            term_object, self.__array_size)
         self.__school_grade = SchoolGrade(term_object, self.__array_size)
         self.__timetable = Timetable(term_object, self.__array_size)
-        self.__tutorial_occupation = TutorialOccupation(term_object, self.__array_size)
-        self.__tutorial_piece_count = TutorialPieceCount(term_object, self.__array_size)
+        self.__tutorial_occupation = TutorialOccupation(
+            term_object, self.__array_size)
+        self.__tutorial_piece_count = TutorialPieceCount(
+            term_object, self.__array_size)
         self.__vacancy = Vacancy(term_object, self.__array_size)
 
     def array_size(self):

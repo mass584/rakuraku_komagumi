@@ -16,6 +16,7 @@ def stress_test_installer():
         teacher_optimization_rule=term_object['teacher_optimization_rule'])
     installer.execute()
 
+
 profiler = line_profiler.LineProfiler()
 profiler.add_module(stress_test_installer)
 profiler.runcall()

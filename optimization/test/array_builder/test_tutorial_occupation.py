@@ -32,7 +32,8 @@ class TestTutorialOccupation(TestCase):
             numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (20, 5, 5, 7, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
+            numpy.shape(
+                tutorial_occupation.floated_tutorial_occupation_array()),
             (20, 5, 5, 7, 6))
         self.assertEqual(
             (tutorial_occupation.tutorial_occupation_array())[0, 0, 0, 0, 0], 1)
@@ -68,7 +69,8 @@ class TestTutorialOccupation(TestCase):
             numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (20, 5, 5, 14, 6))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
+            numpy.shape(
+                tutorial_occupation.floated_tutorial_occupation_array()),
             (20, 5, 5, 14, 6))
         self.assertEqual(
             (tutorial_occupation.tutorial_occupation_array())[0, 0, 0, 0, 0], 1)
@@ -104,7 +106,8 @@ class TestTutorialOccupation(TestCase):
             numpy.shape(tutorial_occupation.fixed_tutorial_occupation_array()),
             (10, 5, 5, 3, 4))
         self.assertEqual(
-            numpy.shape(tutorial_occupation.floated_tutorial_occupation_array()),
+            numpy.shape(
+                tutorial_occupation.floated_tutorial_occupation_array()),
             (10, 5, 5, 3, 4))
         self.assertEqual(
             (tutorial_occupation.tutorial_occupation_array())[0, 1, 1, 0, 0], 1)

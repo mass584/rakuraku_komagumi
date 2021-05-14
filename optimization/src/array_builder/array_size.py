@@ -15,8 +15,7 @@ class ArraySize():
 
     def __get_date_count(self):
         is_normal = self.term['term']['term_type'] == 0
-        date_count = (self.term['term']['end_at'] -
-                      self.term['term']['begin_at']).days + 1
+        date_count = (self.term['term']['end_at'] - self.term['term']['begin_at']).days + 1
         return 7 if is_normal else date_count
 
     def teacher_count(self):

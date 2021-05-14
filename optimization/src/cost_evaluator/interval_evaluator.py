@@ -14,13 +14,28 @@ class IntervalEvaluator():
             for school_grade_index
             in range(array_size.school_grade_count())]
         self.__student_school_grade_codes = school_grades
-        self.__school_grade_indexes = { 11:0, 12:1, 13:2, 14:3, 15:4, 16:5, 21:6, 22:7, 23:8, 31:9, 32:10, 33:11, 99:12 }
+        self.__school_grade_indexes = {
+            11: 0,
+            12: 1,
+            13: 2,
+            14: 3,
+            15: 4,
+            16: 5,
+            21: 6,
+            22: 7,
+            23: 8,
+            31: 9,
+            32: 10,
+            33: 11,
+            99: 12}
 
-    def __each_interval_evaluator(self, date_and_period_array, school_grade_code):
+    def __each_interval_evaluator(
+            self, date_and_period_array, school_grade_code):
         date_and_period_index_array = numpy.where(date_and_period_array > 0)
         date_index_array = date_and_period_index_array[0]
         school_grade_index = self.__school_grade_indexes[school_grade_code]
-        date_index_before = (-1) + (-self.__interval_cutoff_array[school_grade_index])
+        date_index_before = (-1) + \
+            (-self.__interval_cutoff_array[school_grade_index])
         cost = 0
         for date_index in date_index_array:
             diff = date_index - date_index_before
@@ -33,7 +48,8 @@ class IntervalEvaluator():
         array = numpy.einsum('ijkml->ikml', tutorial_pieces)
         student_index_list = range(self.__array_size.student_count())
         tutorial_index_list = range(self.__array_size.tutorial_count())
-        student_and_tutorial = itertools.product(student_index_list, tutorial_index_list)
+        student_and_tutorial = itertools.product(
+            student_index_list, tutorial_index_list)
         cost = sum(
             self.__each_interval_evaluator(
                 array[student_index, tutorial_index, :, :],
