@@ -2,6 +2,7 @@ import copy
 from unittest import TestCase
 from test.test_data.season_term import season_term
 from src.array_builder.array_size import ArraySize
+from src.array_builder.school_grade import SchoolGrade
 from src.array_builder.tutorial_occupation import TutorialOccupation
 from src.cost_evaluator.interval_evaluator import IntervalEvaluator
 
@@ -15,12 +16,14 @@ class TestIntervalEvaluator(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 2
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        interval_cutoff = 2
-        interval_costs = [70, 35, 14]
+        school_grade = SchoolGrade(term, array_size)
+        student_optimization_rules = term['student_optimization_rules']
         interval_evaluator = IntervalEvaluator(
-            array_size, interval_cutoff, interval_costs)
+            array_size=array_size,
+            school_grades=school_grade.school_grade_array(),
+            student_optimization_rules=student_optimization_rules)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 70])
+            tutorial_occupation.tutorial_occupation_array()), [0, 70])
 
     def test_interval_is_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -30,12 +33,14 @@ class TestIntervalEvaluator(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 1
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        interval_cutoff = 2
-        interval_costs = [70, 35, 14]
+        school_grade = SchoolGrade(term, array_size)
+        student_optimization_rules = term['student_optimization_rules']
         interval_evaluator = IntervalEvaluator(
-            array_size, interval_cutoff, interval_costs)
+            array_size=array_size,
+            school_grades=school_grade.school_grade_array(),
+            student_optimization_rules=student_optimization_rules)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 14])
+            tutorial_occupation.tutorial_occupation_array()), [0, 14])
 
     def test_interval_is_over_cutoff(self):
         term = copy.deepcopy(season_term)
@@ -45,9 +50,11 @@ class TestIntervalEvaluator(TestCase):
         term['tutorial_pieces'][1]['period_index'] = 1
         array_size = ArraySize(term)
         tutorial_occupation = TutorialOccupation(term, array_size)
-        interval_cutoff = 2
-        interval_costs = [70, 35, 14]
+        school_grade = SchoolGrade(term, array_size)
+        student_optimization_rules = term['student_optimization_rules']
         interval_evaluator = IntervalEvaluator(
-            array_size, interval_cutoff, interval_costs)
+            array_size=array_size,
+            school_grades=school_grade.school_grade_array(),
+            student_optimization_rules=student_optimization_rules)
         self.assertEqual(interval_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()), [0, 0])
+            tutorial_occupation.tutorial_occupation_array()), [0, 0])

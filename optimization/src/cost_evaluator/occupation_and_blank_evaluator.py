@@ -2,12 +2,17 @@ import itertools
 import numpy
 from .occupation_and_blank_vector_evaluator \
     import OccupationAndBlankVectorEvaluator
-from ..array_builder.array_index import get_school_grade_index
 
 
 class OccupationAndBlankEvaluator():
-    def __init__(self, array_size, student_optimization_rules,
-                 teacher_optimization_rule):
+    def __init__(
+            self,
+            array_size,
+            student_optimization_rules,
+            teacher_optimization_rule,
+            student_group_occupation,
+            teacher_group_occupation,
+            school_grades):
         self.__array_size = array_size
         self.__student_vector_evaluators = [OccupationAndBlankVectorEvaluator(
             period_count=array_size.period_count(),
@@ -27,6 +32,23 @@ class OccupationAndBlankEvaluator():
             occupation_costs=teacher_optimization_rule['occupation_costs'],
             blank_costs=teacher_optimization_rule['blank_costs']
         )
+        self.__student_group_occupation = student_group_occupation
+        self.__teacher_group_occupation = teacher_group_occupation
+        self.__student_school_grade_codes = school_grades
+        self.__school_grade_indexes = {
+            11: 0,
+            12: 1,
+            13: 2,
+            14: 3,
+            15: 4,
+            16: 5,
+            21: 6,
+            22: 7,
+            23: 8,
+            31: 9,
+            32: 10,
+            33: 11,
+            99: 12}
 
     def __teacher_violation_and_cost(
             self, tutorial_occupation, teacher_group_occupation):
@@ -47,8 +69,7 @@ class OccupationAndBlankEvaluator():
         return [violation_summation, cost_summation]
 
     def __student_violation_and_cost(
-            self, tutorial_occupation,
-            student_group_occupation, school_grades):
+            self, tutorial_occupation, student_group_occupation):
         student_tutorial_occupation = (numpy.einsum(
             'ikjml->iml', tutorial_occupation) > 0).astype(int)
         occupation = student_tutorial_occupation + student_group_occupation
@@ -58,8 +79,8 @@ class OccupationAndBlankEvaluator():
         violation_summation = 0
         cost_summation = 0
         for student_index, date_index in product:
-            school_grade = school_grades[student_index]
-            school_grade_index = get_school_grade_index(school_grade)
+            school_grade_code = self.__student_school_grade_codes[student_index]
+            school_grade_index = self.__school_grade_indexes[school_grade_code]
             vector = occupation[student_index, date_index, :]
             [violation, cost] = self.__student_vector_evaluators[
                 school_grade_index].violation_and_cost(vector)
@@ -67,13 +88,11 @@ class OccupationAndBlankEvaluator():
             cost_summation += cost
         return [violation_summation, cost_summation]
 
-    def violation_and_cost(
-            self, tutorial_occupation, teacher_group_occupation,
-            student_group_occupation, school_grades):
+    def violation_and_cost(self, tutorial_occupation):
         teacher_violation_and_cost = self.__teacher_violation_and_cost(
-            tutorial_occupation, teacher_group_occupation)
+            tutorial_occupation, self.__teacher_group_occupation)
         student_violation_and_cost = self.__student_violation_and_cost(
-            tutorial_occupation, student_group_occupation, school_grades)
+            tutorial_occupation, self.__student_group_occupation)
         return [teacher + student for teacher,
                 student in zip(
                     teacher_violation_and_cost,

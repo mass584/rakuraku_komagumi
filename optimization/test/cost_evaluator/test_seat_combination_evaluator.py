@@ -17,7 +17,7 @@ class TestSeatCombinationEvaluator(TestCase):
         occupation_and_blank_evaluator = SeatCombinationEvaluator(
             array_size, 100, 15)
         self.assertEqual(occupation_and_blank_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [0, 100])
 
     def test_same_tutorial_pair(self):
@@ -31,7 +31,7 @@ class TestSeatCombinationEvaluator(TestCase):
         occupation_and_blank_evaluator = SeatCombinationEvaluator(
             array_size, 100, 15)
         self.assertEqual(occupation_and_blank_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [0, 0])
 
     def test_different_tutorial_pair(self):
@@ -47,5 +47,5 @@ class TestSeatCombinationEvaluator(TestCase):
         occupation_and_blank_evaluator = SeatCombinationEvaluator(
             array_size, 100, 15)
         self.assertEqual(occupation_and_blank_evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [0, 15])

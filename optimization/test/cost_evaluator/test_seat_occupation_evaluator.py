@@ -24,7 +24,7 @@ class TestSeatOccupationEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [0, 0])
 
     def test_lack_of_one_seat(self):
@@ -43,7 +43,7 @@ class TestSeatOccupationEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [1, 0])
 
     def test_lack_of_two_seat(self):
@@ -65,5 +65,5 @@ class TestSeatOccupationEvaluator(TestCase):
         tutorial_occupation = TutorialOccupation(term, array_size)
         evaluator = SeatOccupationEvaluator(array_size)
         self.assertEqual(evaluator.violation_and_cost(
-            tutorial_occupation.tutorial_occupation()
+            tutorial_occupation.tutorial_occupation_array()
         ), [2, 0])

@@ -1,0 +1,2402 @@
+[
+  {
+    "term_student_id": 30,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 30,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 30,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 30,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 31,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 31,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 31,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 31,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 32,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 32,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 32,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 32,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 33,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 33,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 33,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 33,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 33,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 34,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 34,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 34,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 34,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 34,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 35,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 35,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 35,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 35,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 35,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 36,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 36,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 36,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 36,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 36,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 37,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 37,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 37,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 37,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 37,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 38,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 38,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 38,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 38,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 39,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 39,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 39,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 39,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 39,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 40,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 40,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 40,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 40,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 40,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 41,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 41,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 41,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 41,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 42,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 42,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 42,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 42,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 42,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 43,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 43,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 43,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 43,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 43,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 44,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 44,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 44,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 44,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 45,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 45,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 45,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 45,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 45,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 46,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 25,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 46,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 46,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 46,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 46,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 47,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 47,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 47,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 47,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 47,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 48,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 48,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 48,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 48,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 48,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 49,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 49,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 49,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 49,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 50,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 50,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 50,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 50,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 51,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 51,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 51,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 51,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 51,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 52,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 52,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 52,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 52,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 52,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 53,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 25,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 53,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 53,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 53,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 53,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 54,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 54,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 54,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 54,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 55,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 55,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 55,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 55,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 55,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 56,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 56,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 56,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 56,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 57,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 57,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 57,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 58,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 58,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 58,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 58,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 58,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 59,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 59,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 59,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 59,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 59,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 60,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 60,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 60,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 61,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 61,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 61,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 61,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 61,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 62,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 62,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 62,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 62,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 63,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 63,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 63,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 63,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 64,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 64,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 64,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 64,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 64,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 65,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 65,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 65,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 65,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 65,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 66,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 66,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 66,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 66,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 67,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 67,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 67,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 67,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 67,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 72,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 72,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 72,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 72,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 72,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 73,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 73,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 73,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 73,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 74,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 74,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 74,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 74,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 74,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 75,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 75,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 75,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 75,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 75,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 77,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 77,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 77,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 77,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 77,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 78,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 78,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 78,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 78,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 78,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 79,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 79,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 79,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 79,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 80,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 80,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 80,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 80,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 80,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 81,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 81,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 81,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 81,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 81,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 82,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 82,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 82,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 82,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 82,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 84,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 84,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 11
+  },
+  {
+    "term_student_id": 84,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 11
+  },
+  {
+    "term_student_id": 84,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 84,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 93,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 93,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 93,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 93,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 93,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 94,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 94,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 94,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 94,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 95,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 95,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 95,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 95,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 95,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 96,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 96,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 96,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 96,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 96,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 98,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 98,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 11
+  },
+  {
+    "term_student_id": 98,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 11
+  },
+  {
+    "term_student_id": 98,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 98,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 200,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 200,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 200,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 15
+  },
+  {
+    "term_student_id": 200,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 24,
+    "piece_count": 3
+  },
+  {
+    "term_student_id": 200,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 201,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 201,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 201,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 201,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 201,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 202,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 202,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 202,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 202,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 202,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 205,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 205,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 205,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 205,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 205,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 225,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 225,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 225,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 225,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 225,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 226,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 226,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 14,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 226,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 226,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 254,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 256,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 256,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 48,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 256,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 256,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 256,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 257,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 257,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 257,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 257,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 257,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 251,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 251,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 251,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 258,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 258,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 12
+  },
+  {
+    "term_student_id": 258,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 258,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 258,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 248,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 248,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 5
+  },
+  {
+    "term_student_id": 248,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 248,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 262,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 262,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 262,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 3
+  },
+  {
+    "term_student_id": 262,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 262,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 246,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 246,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 246,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 246,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 246,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 250,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 250,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 5
+  },
+  {
+    "term_student_id": 250,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 250,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 259,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 259,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 48,
+    "piece_count": 5
+  },
+  {
+    "term_student_id": 259,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 3
+  },
+  {
+    "term_student_id": 259,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 259,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 263,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 263,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 263,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 263,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 263,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 255,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 255,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 255,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 255,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 255,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 252,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 252,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 252,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 18,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 252,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 252,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 247,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 247,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 247,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 247,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 247,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 253,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 253,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 253,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 253,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 253,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 249,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 249,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 249,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 47,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 249,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 249,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 245,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 245,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 2
+  },
+  {
+    "term_student_id": 245,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 4
+  },
+  {
+    "term_student_id": 245,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 245,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 254,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 254,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 254,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 13,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 254,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 251,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 260,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 260,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 260,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 9,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 260,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 260,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 261,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 261,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 8
+  },
+  {
+    "term_student_id": 261,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 261,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 261,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 264,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 264,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 264,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 264,
+    "term_tutorial_id": 5,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 264,
+    "term_tutorial_id": 6,
+    "term_teacher_id": 0,
+    "piece_count": 0
+  },
+  {
+    "term_student_id": 73,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 30,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 226,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 31,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 11,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 79,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 41,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 9,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 44,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 38,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 32,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 63,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 18,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 57,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 57,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 62,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 50,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 60,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 15,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 60,
+    "term_tutorial_id": 4,
+    "term_teacher_id": 24,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 54,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 49,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 50,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 19,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 94,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 26,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 56,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 12,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 66,
+    "term_tutorial_id": 1,
+    "term_teacher_id": 10,
+    "piece_count": 9
+  },
+  {
+    "term_student_id": 250,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 3
+  },
+  {
+    "term_student_id": 251,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 6
+  },
+  {
+    "term_student_id": 248,
+    "term_tutorial_id": 3,
+    "term_teacher_id": 49,
+    "piece_count": 3
+  }
+]

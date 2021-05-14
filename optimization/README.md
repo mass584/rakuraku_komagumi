@@ -25,7 +25,7 @@ docker exec -it rakuraku_komagumi_optimization_1 /bin/bash --login
 * Linter/Formatterの実行
 
 ```shell
-pycodestyle . # チェック
+pycodestyle . --ignore="E501,W504" # チェック
 autopep8 --in-place --aggressive --recursive . # 自動修正
 ```
 
@@ -33,4 +33,10 @@ autopep8 --in-place --aggressive --recursive . # 自動修正
 
 ```shell
 python -m unittest discover
+```
+
+* LineProfilerの実行
+
+```shell
+python -m unittest discover -p "profiler*.py"
 ```

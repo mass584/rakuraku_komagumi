@@ -2,6 +2,10 @@ import numpy
 
 
 class VacancyAndDoubleBookingEvaluator():
+    def __init__(self, teacher_vacancy, student_vacancy):
+        self.__teacher_vacancy = teacher_vacancy
+        self.__student_vacancy = student_vacancy
+
     def __student_violation_and_cost(
             self, tutorial_occupation, student_vacancy):
         student_occupation = numpy.einsum('ijkml->iml', tutorial_occupation)
@@ -20,12 +24,11 @@ class VacancyAndDoubleBookingEvaluator():
         violation = numpy.sum(excess)
         return [violation, 0]
 
-    def violation_and_cost(self, tutorial_occupation,
-                           teacher_vacancy, student_vacancy):
+    def violation_and_cost(self, tutorial_occupation):
         teacher_violation_and_cost = self.__teacher_violation_and_cost(
-            tutorial_occupation, teacher_vacancy)
+            tutorial_occupation, self.__teacher_vacancy)
         student_violation_and_cost = self.__student_violation_and_cost(
-            tutorial_occupation, student_vacancy)
+            tutorial_occupation, self.__student_vacancy)
         return [teacher + student for teacher,
                 student in zip(
                     teacher_violation_and_cost,

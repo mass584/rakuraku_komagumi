@@ -51,6 +51,7 @@ services:
     volumes:
       - ./optimization:/root/project
     environment:
+      - OPTIMIZATION_ENV=development
       - DATABASE_HOST=db
       - DATABASE_NAME=development
       - DATABASE_USERNAME=rakuraku_komagumi

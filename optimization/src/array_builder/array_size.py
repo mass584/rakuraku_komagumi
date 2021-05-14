@@ -1,8 +1,3 @@
-import logging
-
-logger = logging.getLogger('Term')
-
-
 class ArraySize():
     def __init__(self, term):
         self.term = term
@@ -13,15 +8,14 @@ class ArraySize():
         self.__student_count = len(self.term['term_students'])
         self.__tutorial_count = len(self.term['term_tutorials'])
         self.__group_count = len(self.term['term_groups'])
-        self.__date_count = self.__date_count()
+        self.__date_count = self.__get_date_count()
         self.__period_count = self.term['term']['period_count']
         self.__seat_count = self.term['term']['seat_count']
         self.__school_grade_count = 13
 
-    def __date_count(self):
+    def __get_date_count(self):
         is_normal = self.term['term']['term_type'] == 0
-        date_count = (self.term['term']['end_at'] -
-                      self.term['term']['begin_at']).days + 1
+        date_count = (self.term['term']['end_at'] - self.term['term']['begin_at']).days + 1
         return 7 if is_normal else date_count
 
     def teacher_count(self):
