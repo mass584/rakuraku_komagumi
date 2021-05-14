@@ -34,3 +34,9 @@ autopep8 --in-place --aggressive --recursive . # 自動修正
 ```shell
 python -m unittest discover
 ```
+
+* LineProfilerの実行
+
+```shell
+python -m unittest discover -p "profiler*.py"
+```

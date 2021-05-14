@@ -9,5 +9,5 @@ profiler = line_profiler.LineProfiler()
 profiler.add_module(installer)
 profiler.add_module(cost_evaluator)
 profiler.runcall(test_runner.test_normal_term_installer)
-with open('test/profiler/test_normal_term_installer.log', 'w') as file:
+with open('log/profiler/normal_term_installer.log', 'w') as file:
     profiler.print_stats(stream=file)
