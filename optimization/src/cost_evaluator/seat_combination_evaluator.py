@@ -16,11 +16,12 @@ class SeatCombinationEvaluator():
         product = itertools.product(
             teacher_index_list, date_index_list, period_index_list)
         cost_summation = 0
+        teacher_occupation = numpy.sum(occupation, axis=1)
         for teacher_index, date_index, period_index in product:
-            vector = occupation[teacher_index, :, date_index, period_index]
-            summation = sum(vector)
-            if summation == 1:
+            tutorials = occupation[teacher_index, :, date_index, period_index]
+            sum = teacher_occupation[teacher_index, date_index, period_index]
+            if sum == 1:
                 cost_summation += self.__single_cost
-            elif (summation == 2) and (1 in vector):
+            elif (sum == 2) and (1 in tutorials):
                 cost_summation += self.__different_pair_cost
         return [0, cost_summation]
