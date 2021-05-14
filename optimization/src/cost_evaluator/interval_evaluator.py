@@ -14,12 +14,12 @@ class IntervalEvaluator():
             for school_grade_index
             in range(array_size.school_grade_count())]
         self.__student_school_grade_codes = school_grades
-        self.__school_grade_codes = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
+        self.__school_grade_indexes = { 11:0, 12:1, 13:2, 14:3, 15:4, 16:5, 21:6, 22:7, 23:8, 31:9, 32:10, 33:11, 99:12 }
 
-    def __each_interval_evaluator(self, date_and_period_array, school_grade):
+    def __each_interval_evaluator(self, date_and_period_array, school_grade_code):
         date_and_period_index_array = numpy.where(date_and_period_array > 0)
         date_index_array = date_and_period_index_array[0]
-        school_grade_index = self.__get_school_grade_index(school_grade)
+        school_grade_index = self.__school_grade_indexes[school_grade_code]
         date_index_before = (-1) + (-self.__interval_cutoff_array[school_grade_index])
         cost = 0
         for date_index in date_index_array:
@@ -28,9 +28,6 @@ class IntervalEvaluator():
                 cost += self.__interval_costs_array[school_grade_index][diff]
             date_index_before = date_index
         return cost
-
-    def __get_school_grade_index(self, school_grade):
-        return self.__school_grade_codes.index(school_grade)
 
     def violation_and_cost(self, tutorial_pieces):
         array = numpy.einsum('ijkml->ikml', tutorial_pieces)

@@ -35,7 +35,7 @@ class OccupationAndBlankEvaluator():
         self.__student_group_occupation = student_group_occupation
         self.__teacher_group_occupation = teacher_group_occupation
         self.__student_school_grade_codes = school_grades
-        self.__school_grade_codes = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
+        self.__school_grade_indexes = { 11:0, 12:1, 13:2, 14:3, 15:4, 16:5, 21:6, 22:7, 23:8, 31:9, 32:10, 33:11, 99:12 }
 
     def __teacher_violation_and_cost(
             self, tutorial_occupation, teacher_group_occupation):
@@ -65,17 +65,14 @@ class OccupationAndBlankEvaluator():
         violation_summation = 0
         cost_summation = 0
         for student_index, date_index in product:
-            school_grade = self.__student_school_grade_codes[student_index]
-            school_grade_index = self.__get_school_grade_index(school_grade)
+            school_grade_code = self.__student_school_grade_codes[student_index]
+            school_grade_index = self.__school_grade_indexes[school_grade_code]
             vector = occupation[student_index, date_index, :]
             [violation, cost] = self.__student_vector_evaluators[
                 school_grade_index].violation_and_cost(vector)
             violation_summation += violation
             cost_summation += cost
         return [violation_summation, cost_summation]
-
-    def __get_school_grade_index(self, school_grade):
-        return self.__school_grade_codes.index(school_grade)
 
     def violation_and_cost(self, tutorial_occupation):
         teacher_violation_and_cost = self.__teacher_violation_and_cost(
