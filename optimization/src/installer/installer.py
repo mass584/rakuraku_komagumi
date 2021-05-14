@@ -65,11 +65,9 @@ class Installer():
             tutorial_index,
             date_index,
             period_index] += 1
-        cloned_cost_evaluator = copy.deepcopy(self.__cost_evaluator)
-        cost = cloned_cost_evaluator.cost(cloned_tutorial_occupation_array)
+        cost = self.__cost_evaluator.cost(cloned_tutorial_occupation_array)
         cost_array[date_index, period_index] = cost
         del cloned_tutorial_occupation_array
-        del cloned_cost_evaluator
 
     def __search_best_date_and_period_single_thread(self, student_index, teacher_index, tutorial_index):
         date_index_list = range(self.__array_size.date_count())
