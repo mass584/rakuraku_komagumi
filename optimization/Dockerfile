@@ -10,7 +10,7 @@ RUN git clone https://github.com/pyenv/pyenv.git ~/.pyenv && \
 RUN echo 'export PATH="$HOME/.pyenv/bin:$PATH"' >> ~/.bash_profile && \
     echo 'eval "$(pyenv init --path)"' >> ~/.bash_profile
 
-RUN pyenv update && pyenv install 3.7.1 && pyenv global 3.7.1
+RUN pyenv update && pyenv install 3.7.8 && pyenv global 3.7.8
 
 RUN pip install --upgrade pip
 RUN pip install numpy psycopg2 awscli pycodestyle autopep8 line_profiler
