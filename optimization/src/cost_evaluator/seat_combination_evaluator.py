@@ -18,10 +18,9 @@ class SeatCombinationEvaluator():
         cost_summation = 0
         teacher_occupation = numpy.sum(occupation, axis=1)
         for teacher_index, date_index, period_index in product:
-            tutorials = occupation[teacher_index, :, date_index, period_index]
             sum = teacher_occupation[teacher_index, date_index, period_index]
             if sum == 1:
                 cost_summation += self.__single_cost
-            elif (sum == 2) and (1 in tutorials):
+            elif (sum == 2) and (1 in occupation[teacher_index, :, date_index, period_index]):
                 cost_summation += self.__different_pair_cost
         return [0, cost_summation]
