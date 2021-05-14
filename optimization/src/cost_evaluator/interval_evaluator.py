@@ -15,19 +15,17 @@ class IntervalEvaluator():
             in range(array_size.school_grade_count())]
         self.__school_grades = school_grades
 
-    def __each_interval_evaluator(self, array, school_grade):
+    def __each_interval_evaluator(self, date_and_period_array, school_grade):
+        date_and_period_index_array = numpy.where(date_and_period_array > 0)
+        date_index_array = date_and_period_index_array[0]
         school_grade_index = self.__get_school_grade_index(school_grade)
-        date_index_list = range(self.__array_size.date_count())
-        period_index_list = range(self.__array_size.period_count())
-        date_and_period = itertools.product(date_index_list, period_index_list)
-        cost = 0
         date_index_before = (-1) + (-self.__interval_cutoff_array[school_grade_index])
-        for date_index, period_index in date_and_period:
-            if array[date_index, period_index] > 0:
-                diff = date_index - date_index_before
-                if (diff <= self.__interval_cutoff_array[school_grade_index]):
-                    cost += self.__interval_costs_array[school_grade_index][diff]
-                date_index_before = date_index
+        cost = 0
+        for date_index in date_index_array:
+            diff = date_index - date_index_before
+            if (diff <= self.__interval_cutoff_array[school_grade_index]):
+                cost += self.__interval_costs_array[school_grade_index][diff]
+            date_index_before = date_index
         return cost
 
     def __get_school_grade_index(self, school_grade):
