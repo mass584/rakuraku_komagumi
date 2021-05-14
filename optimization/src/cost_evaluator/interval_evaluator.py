@@ -13,7 +13,8 @@ class IntervalEvaluator():
             student_optimization_rules[school_grade_index]['interval_costs']
             for school_grade_index
             in range(array_size.school_grade_count())]
-        self.__school_grades = school_grades
+        self.__student_school_grade_codes = school_grades
+        self.__school_grade_codes = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
 
     def __each_interval_evaluator(self, date_and_period_array, school_grade):
         date_and_period_index_array = numpy.where(date_and_period_array > 0)
@@ -29,8 +30,7 @@ class IntervalEvaluator():
         return cost
 
     def __get_school_grade_index(self, school_grade):
-        school_grades = [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
-        return school_grades.index(school_grade)
+        return self.__school_grade_codes.index(school_grade)
 
     def violation_and_cost(self, tutorial_pieces):
         array = numpy.einsum('ijkml->ikml', tutorial_pieces)
@@ -40,7 +40,7 @@ class IntervalEvaluator():
         cost = sum(
             self.__each_interval_evaluator(
                 array[student_index, tutorial_index, :, :],
-                self.__school_grades[student_index])
+                self.__student_school_grade_codes[student_index])
             for student_index, tutorial_index
             in student_and_tutorial)
         return [0, cost]
