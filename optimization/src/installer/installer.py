@@ -54,6 +54,7 @@ class Installer():
     def __run_process(
             self,
             proc_num,
+            cost_array,
             student_index,
             teacher_index,
             tutorial_index):
@@ -73,8 +74,7 @@ class Installer():
                     teacher_index,
                     tutorial_index,
                     date_index,
-                    period_index):
-                return numpy.inf
+                    period_index): continue
             self.__tutorial_occupation_array[
                 student_index,
                 teacher_index,
@@ -82,25 +82,32 @@ class Installer():
                 date_index,
                 period_index] += 1
             cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
-            print(cost) # TODO:共有メモリに書き込む
+            self.__tutorial_occupation_array[
+                student_index,
+                teacher_index,
+                tutorial_index,
+                date_index,
+                period_index] -= 1
+            cost_array[date_index * self.__array_size.period_count() + period_index] = cost
         logger.debug(f"プロセス終了：PID{os.getpid()}")
 
     def __get_best_date_and_period(
             self, student_index, teacher_index, tutorial_index):
-        cost_array = numpy.full(
-            (self.__array_size.date_count(), self.__array_size.period_count()),
-            numpy.inf)
+        initial_cost_array = [1215752191] * (
+            self.__array_size.date_count() * self.__array_size.period_count())
+        cost_array = multiprocessing.Array('i', initial_cost_array)
         process = [None] * PROCESS_NUM
         for proc_num in range(PROCESS_NUM):
             process[proc_num] = multiprocessing.Process(
                 target=self.__run_process,
-                args=[proc_num, student_index, teacher_index, tutorial_index])
+                args=[proc_num, cost_array, student_index, teacher_index, tutorial_index])
         for proc_num in range(PROCESS_NUM): process[proc_num].start()
         for proc_num in range(PROCESS_NUM): process[proc_num].join()
-        return numpy.unravel_index(cost_array.argmin(), cost_array.shape)
+        cost_ndarray = numpy.array(cost_array).reshape([
+            self.__array_size.date_count(), self.__array_size.period_count()])
+        return numpy.unravel_index(cost_ndarray.argmin(), cost_ndarray.shape)
 
-    def __add_tutorial_piece(
-            self, student_index, teacher_index, tutorial_index):
+    def __add_tutorial_piece(self, student_index, teacher_index, tutorial_index):
         start = time.time()
         [date_index, period_index] = self.__get_best_date_and_period(
             student_index, teacher_index, tutorial_index)
