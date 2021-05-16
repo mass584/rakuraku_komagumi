@@ -18,6 +18,7 @@ def stress_test_installer():
         teacher_optimization_rule=term_object['teacher_optimization_rule'])
     installer.execute()
 
+
 format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
 logging.basicConfig(level='INFO', filename='log/test.log', format=format)
 sys.path.append('./src')

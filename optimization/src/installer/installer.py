@@ -42,8 +42,9 @@ class Installer():
             'ijkml->ijk', tutorial_occupation_array)
         return tutorial_piece_count - installed_tutorial_piece_count
 
-    def __get_best_position(self, student_index, teacher_index, tutorial_index):
-        ## TODO: INTEGERの最大値を環境からとる
+    def __get_best_position(self, student_index,
+                            teacher_index, tutorial_index):
+        # TODO: INTEGERの最大値を環境からとる
         initial_cost_array = [1215752191] * (
             self.__array_size.date_count() * self.__array_size.period_count())
         cost_array = multiprocessing.Array('i', initial_cost_array)
@@ -58,14 +59,18 @@ class Installer():
                     self.__timetable_array).run,
                 args=[cost_array, student_index, teacher_index, tutorial_index])
             for proc_num in range(PROCESS_COUNT)]
-        for proc_num in range(PROCESS_COUNT): process[proc_num].start()
-        for proc_num in range(PROCESS_COUNT): process[proc_num].join()
+        for proc_num in range(PROCESS_COUNT):
+            process[proc_num].start()
+        for proc_num in range(PROCESS_COUNT):
+            process[proc_num].join()
         cost_ndarray = numpy.array(cost_array).reshape([
             self.__array_size.date_count(), self.__array_size.period_count()])
         return numpy.unravel_index(cost_ndarray.argmin(), cost_ndarray.shape)
 
-    def __get_best_position_sequential(self, student_index, teacher_index, tutorial_index):
-        ## TODO: INTEGERの最大値を環境からとる
+    # line_profilerによるチューニングの際に使用する
+    def __get_best_position_sequential(
+            self, student_index, teacher_index, tutorial_index):
+        # TODO: INTEGERの最大値を環境からとる
         cost_array = [1215752191] * (
             self.__array_size.date_count() * self.__array_size.period_count())
         installer_process = InstallerProcess(
@@ -80,7 +85,8 @@ class Installer():
             self.__array_size.date_count(), self.__array_size.period_count()])
         return numpy.unravel_index(cost_ndarray.argmin(), cost_ndarray.shape)
 
-    def __add_tutorial_piece(self, student_index, teacher_index, tutorial_index):
+    def __add_tutorial_piece(
+            self, student_index, teacher_index, tutorial_index):
         start = time.time()
         [date_index, period_index] = self.__get_best_position(
             student_index, teacher_index, tutorial_index)
