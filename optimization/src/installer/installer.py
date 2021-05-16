@@ -5,11 +5,12 @@ import numpy
 import os
 import time
 from cost_evaluator.cost_evaluator import CostEvaluator
+from .installer_process import InstallerProcess
 from logging import getLogger
 
 
 logger = getLogger(__name__)
-PROCESS_NUM = 4
+PROCESS_COUNT = 4
 
 
 class Installer():
@@ -41,75 +42,47 @@ class Installer():
             'ijkml->ijk', tutorial_occupation_array)
         return tutorial_piece_count - installed_tutorial_piece_count
 
-    def __search_guard(self, student_index, teacher_index,
-                       tutorial_index, date_index, period_index):
-        # 個別科目が配置済みの所は探索しない
-        if self.__tutorial_occupation_array[
-                student_index, teacher_index, tutorial_index, date_index, period_index] == 1:
-            return True
-        # 集団科目が配置済みか休講の所は探索しない
-        if self.__timetable_array[date_index, period_index] == 0:
-            return True
-
-    def __run_process(
-            self,
-            proc_num,
-            cost_array,
-            student_index,
-            teacher_index,
-            tutorial_index):
-        logger.debug(f"プロセス開始：PID{os.getpid()}")
-        date_index_list = range(self.__array_size.date_count())
-        period_index_list = range(self.__array_size.period_count())
-        date_and_period_index_list = list(
-            itertools.product(date_index_list, period_index_list))
-        list_length = math.ceil(len(date_and_period_index_list) / PROCESS_NUM)
-        begin_index_for_list = proc_num * list_length
-        end_index_for_list = (proc_num  + 1) * list_length
-        date_and_period_index_list_for_proc = date_and_period_index_list[
-            begin_index_for_list:end_index_for_list]
-        for date_index, period_index in date_and_period_index_list_for_proc:
-            if self.__search_guard(
-                    student_index,
-                    teacher_index,
-                    tutorial_index,
-                    date_index,
-                    period_index): continue
-            self.__tutorial_occupation_array[
-                student_index,
-                teacher_index,
-                tutorial_index,
-                date_index,
-                period_index] += 1
-            cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
-            self.__tutorial_occupation_array[
-                student_index,
-                teacher_index,
-                tutorial_index,
-                date_index,
-                period_index] -= 1
-            cost_array[date_index * self.__array_size.period_count() + period_index] = cost
-        logger.debug(f"プロセス終了：PID{os.getpid()}")
-
-    def __get_best_date_and_period(
-            self, student_index, teacher_index, tutorial_index):
+    def __get_best_position(self, student_index, teacher_index, tutorial_index):
+        ## TODO: INTEGERの最大値を環境からとる
         initial_cost_array = [1215752191] * (
             self.__array_size.date_count() * self.__array_size.period_count())
         cost_array = multiprocessing.Array('i', initial_cost_array)
-        process = [None] * PROCESS_NUM
-        for proc_num in range(PROCESS_NUM):
-            process[proc_num] = multiprocessing.Process(
-                target=self.__run_process,
-                args=[proc_num, cost_array, student_index, teacher_index, tutorial_index])
-        for proc_num in range(PROCESS_NUM): process[proc_num].start()
-        for proc_num in range(PROCESS_NUM): process[proc_num].join()
+        process = [
+            multiprocessing.Process(
+                target=InstallerProcess(
+                    proc_num,
+                    PROCESS_COUNT,
+                    self.__array_size,
+                    self.__cost_evaluator,
+                    self.__tutorial_occupation_array,
+                    self.__timetable_array).run,
+                args=[cost_array, student_index, teacher_index, tutorial_index])
+            for proc_num in range(PROCESS_COUNT)]
+        for proc_num in range(PROCESS_COUNT): process[proc_num].start()
+        for proc_num in range(PROCESS_COUNT): process[proc_num].join()
+        cost_ndarray = numpy.array(cost_array).reshape([
+            self.__array_size.date_count(), self.__array_size.period_count()])
+        return numpy.unravel_index(cost_ndarray.argmin(), cost_ndarray.shape)
+
+    def __get_best_position_sequential(self, student_index, teacher_index, tutorial_index):
+        ## TODO: INTEGERの最大値を環境からとる
+        cost_array = [1215752191] * (
+            self.__array_size.date_count() * self.__array_size.period_count())
+        installer_process = InstallerProcess(
+            1, PROCESS_COUNT,
+            self.__array_size,
+            self.__cost_evaluator,
+            self.__tutorial_occupation_array,
+            self.__timetable_array)
+        installer_process.run(
+            cost_array, student_index, teacher_index, tutorial_index)
         cost_ndarray = numpy.array(cost_array).reshape([
             self.__array_size.date_count(), self.__array_size.period_count()])
         return numpy.unravel_index(cost_ndarray.argmin(), cost_ndarray.shape)
 
     def __add_tutorial_piece(self, student_index, teacher_index, tutorial_index):
         start = time.time()
-        [date_index, period_index] = self.__get_best_date_and_period(
+        [date_index, period_index] = self.__get_best_position(
             student_index, teacher_index, tutorial_index)
         end = time.time()
         elapsed_sec = math.floor((end - start) * 1000000) / 1000000
