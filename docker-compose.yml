@@ -52,6 +52,7 @@ services:
       - ./optimization:/root/project
     environment:
       - OPTIMIZATION_ENV=development
+      - OPENBLAS_NUM_THREADS=1
       - DATABASE_HOST=db
       - DATABASE_NAME=development
       - DATABASE_USERNAME=rakuraku_komagumi
