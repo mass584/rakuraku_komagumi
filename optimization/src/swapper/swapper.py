@@ -3,6 +3,7 @@ import math
 import numpy
 import time
 from cost_evaluator.cost_evaluator import CostEvaluator
+from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 from logging import getLogger
 
 
@@ -16,7 +17,15 @@ class Swapper():
         self.__array_size = array_builder.array_size()
         self.__cost_evaluator = CostEvaluator(
             array_size=array_builder.array_size(),
-            timetable=array_builder.timetable_array(),
+            student_optimization_rules=student_optimization_rules,
+            teacher_optimization_rule=teacher_optimization_rule,
+            student_group_occupation=array_builder.student_group_occupation_array(),
+            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
+            student_vacancy=array_builder.student_vacancy_array(),
+            teacher_vacancy=array_builder.teacher_vacancy_array(),
+            school_grades=array_builder.school_grade_array())
+        self.__tutorial_piece_evaluator = TutorialPieceEvaluator(
+            array_size=array_builder.array_size(),
             student_optimization_rules=student_optimization_rules,
             teacher_optimization_rule=teacher_optimization_rule,
             student_group_occupation=array_builder.student_group_occupation_array(),
@@ -437,10 +446,8 @@ class Swapper():
         round_robin_orders = round_robin_orders_first_half + round_robin_orders_latter_half
         is_improved = False
         for round_robin_order in round_robin_orders:
-            # TODO 全ての配置ずみコマをコストの高い順にソートし、
-            # コストがN番目に大きいコマのインデックスを取得する関数を実装する
             [student_index, teacher_index, tutorial_index, date_index, period_index] = \
-                self.__cost_evaluator.get_nth_tutorial_piece_indexes_from_worst(round_robin_order)
+                self.__tutorial_piece_evaluator.get_nth_tutorial_piece_indexes_from_worst(round_robin_order)
             if self.__guard_improvement(
                 student_index, teacher_index, tutorial_index, date_index, period_index): continue
             if self.__improve_one_time(
