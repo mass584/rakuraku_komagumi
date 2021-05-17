@@ -24,7 +24,6 @@ class Installer():
                 tutorial_occupation_array=array_builder.tutorial_occupation_array())
         self.__cost_evaluator = CostEvaluator(
             array_size=array_builder.array_size(),
-            timetable=array_builder.timetable_array(),
             student_optimization_rules=student_optimization_rules,
             teacher_optimization_rule=teacher_optimization_rule,
             student_group_occupation=array_builder.student_group_occupation_array(),
