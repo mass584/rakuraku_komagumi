@@ -1,7 +1,5 @@
-import itertools
 import multiprocessing
 from cost_evaluator.cost_evaluator import CostEvaluator
-from installer.installer import PROCESS_COUNT
 from .swapper_first_neighborhood_process import SwapperFirstNeighborhoodProcess
 from logging import getLogger
 
