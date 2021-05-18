@@ -34,11 +34,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
@@ -77,11 +79,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
@@ -113,11 +117,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
@@ -158,11 +164,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
@@ -194,11 +202,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
@@ -235,11 +245,13 @@ class TestSwapper(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         installer = Installer(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator)
         installer.execute()
         swapper = Swapper(
+            process_count=4,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,

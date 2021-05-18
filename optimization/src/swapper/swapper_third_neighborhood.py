@@ -4,11 +4,11 @@ from logging import getLogger
 
 
 logger = getLogger(__name__)
-PROCESS_COUNT = 4
 
 # 第３近傍の最適解取得クラス(対象のコマを、他の時間枠のコマと入れ替えるパターン)
 class SwapperThirdNeighborhood():
-    def __init__(self, term_object, array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object, array_builder, cost_evaluator):
+        self.__process_count = process_count
         self.__term_object = term_object
         self.__array_builder = array_builder
         self.__cost_evaluator = cost_evaluator
@@ -36,15 +36,15 @@ class SwapperThirdNeighborhood():
             multiprocessing.Process(
                 target=SwapperThirdNeighborhoodProcess(
                     proc_num,
-                    PROCESS_COUNT,
+                    self.__process_count,
                     self.__array_builder,
                     self.__cost_evaluator,
                 ).run,
                 args=[result_array, student_index, teacher_index, tutorial_index, date_index, period_index])
-            for proc_num in range(PROCESS_COUNT)]
-        for proc_num in range(PROCESS_COUNT):
+            for proc_num in range(self.__process_count)]
+        for proc_num in range(self.__process_count):
             process[proc_num].start()
-        for proc_num in range(PROCESS_COUNT):
+        for proc_num in range(self.__process_count):
             process[proc_num].join()
         min_violation_and_cost = min(result['violation_and_cost'] for result in result_array)
         self.__best_answer = next(

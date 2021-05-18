@@ -12,18 +12,21 @@ logger = getLogger(__name__)
 SWAPPING_PROCESS_MAX_COUNT = 1000
 
 class Swapper():
-    def __init__(self, term_object, array_builder, cost_evaluator, tutorial_piece_evaluator):
+    def __init__(self, process_count, term_object, array_builder, cost_evaluator, tutorial_piece_evaluator):
         self.__swapper_first_neighborhood = SwapperFirstNeighborhood(
+            process_count=process_count,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
         )
         self.__swapper_second_neighborhood = SwapperSecondNeighborhood(
+            process_count=process_count,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
         )
         self.__swapper_third_neighborhood = SwapperThirdNeighborhood(
+            process_count=process_count,
             term_object=term_object,
             array_builder=array_builder,
             cost_evaluator=cost_evaluator,
