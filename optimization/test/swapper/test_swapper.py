@@ -10,7 +10,7 @@ from src.swapper.swapper import Swapper
 
 
 class TestSwapper(TestCase):
-    def test_normal_term_installer(self):
+    def test_normal_term_swapper(self):
         term_object = copy.deepcopy(normal_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
@@ -29,7 +29,7 @@ class TestSwapper(TestCase):
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 60)
 
-    def test_normal_term_installer_on_additional(self):
+    def test_normal_term_swapper_on_additional(self):
         term_object = copy.deepcopy(normal_term)
         # 生徒1を手動で設定済み
         term_object['tutorial_pieces'][0]['date_index'] = 1
@@ -55,7 +55,7 @@ class TestSwapper(TestCase):
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 60)
 
-    def test_season_term_installer(self):
+    def test_season_term_swapper(self):
         term_object = copy.deepcopy(season_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
@@ -74,7 +74,7 @@ class TestSwapper(TestCase):
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 240)
 
-    def test_season_term_installer_on_additional(self):
+    def test_season_term_swapper_on_additional(self):
         term_object = copy.deepcopy(season_term)
         # 生徒1の国語を手動で設定済み
         term_object['tutorial_pieces'][0]['date_index'] = 1
@@ -102,7 +102,7 @@ class TestSwapper(TestCase):
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 240)
 
-    def test_exam_planning_term_installer(self):
+    def test_exam_planning_term_swapper(self):
         term_object = copy.deepcopy(exam_planning_term)
         array_builder = ArrayBuilder(term_object=term_object)
         installer = Installer(
@@ -121,7 +121,7 @@ class TestSwapper(TestCase):
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
         self.assertEqual(tutorial_occupation_sum, 20)
 
-    def test_exam_planning_term_installer_on_additional(self):
+    def test_exam_planning_term_swapper_on_additional(self):
         term_object = copy.deepcopy(exam_planning_term)
         # 生徒1を手動で設定済み
         term_object['tutorial_pieces'][0]['date_index'] = 1
