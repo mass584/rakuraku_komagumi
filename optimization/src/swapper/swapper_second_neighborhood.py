@@ -1,6 +1,5 @@
 import multiprocessing
 import numpy
-from cost_evaluator.cost_evaluator import CostEvaluator
 from .swapper_second_neighborhood_process import SwapperSecondNeighborhoodProcess
 from logging import getLogger
 
@@ -10,19 +9,10 @@ PROCESS_COUNT = 4
 
 # 第２近傍の最適解取得クラス(対象のコマを、対になるコマと一緒に空いている時間枠に移動するパターン)
 class SwapperSecondNeighborhood():
-    def __init__(self, term_object, array_builder,
-                 student_optimization_rules, teacher_optimization_rule):
+    def __init__(self, term_object, array_builder, cost_evaluator):
         self.__term_object = term_object
         self.__array_builder = array_builder
-        self.__cost_evaluator = CostEvaluator(
-            array_size=array_builder.array_size(),
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
-            student_group_occupation=array_builder.student_group_occupation_array(),
-            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
-            student_vacancy=array_builder.student_vacancy_array(),
-            teacher_vacancy=array_builder.teacher_vacancy_array(),
-            school_grades=array_builder.school_grade_array())
+        self.__cost_evaluator = cost_evaluator
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
         self.__best_answer = self.__initial_best_answer()

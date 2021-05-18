@@ -1,6 +1,7 @@
 import logging
 import os
 from array_builder.array_builder import ArrayBuilder
+from cost_evaluator.cost_evaluator import CostEvaluator
 from database.database import Database
 from installer.installer import Installer
 from model.term_object import TermObject
@@ -27,11 +28,19 @@ def main():
         password=password)
     term_object = TermObject(database=database, term_id=term_id).fetch()
     array_builder = ArrayBuilder(term_object=term_object)
+    cost_evaluator = CostEvaluator(
+        array_size=array_builder.array_size(),
+        student_optimization_rules=term_object['student_optimization_rules'],
+        teacher_optimization_rule=term_object['teacher_optimization_rule'],
+        student_group_occupation=array_builder.student_group_occupation_array(),
+        teacher_group_occupation=array_builder.teacher_group_occupation_array(),
+        student_vacancy=array_builder.student_vacancy_array(),
+        teacher_vacancy=array_builder.teacher_vacancy_array(),
+        school_grades=array_builder.school_grade_array())
     installer = Installer(
         term_object=term_object,
         array_builder=array_builder,
-        student_optimization_rules=term_object['student_optimization_rules'],
-        teacher_optimization_rule=term_object['teacher_optimization_rule'])
+        cost_evaluator=cost_evaluator)
     installer.execute()
 
 

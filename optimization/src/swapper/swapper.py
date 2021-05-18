@@ -1,11 +1,9 @@
-import itertools
 import math
 import numpy
 import time
 from .swapper_first_neighborhood import SwapperFirstNeighborhood
 from .swapper_second_neighborhood import SwapperSecondNeighborhood
 from .swapper_third_neighborhood import SwapperThirdNeighborhood
-from cost_evaluator.cost_evaluator import CostEvaluator
 from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 from logging import getLogger
 
@@ -14,44 +12,24 @@ logger = getLogger(__name__)
 SWAPPING_PROCESS_MAX_COUNT = 1000
 
 class Swapper():
-    def __init__(self, term_object, array_builder,
-                 student_optimization_rules, teacher_optimization_rule):
+    def __init__(self, term_object, array_builder, cost_evaluator, tutorial_piece_evaluator):
         self.__swapper_first_neighborhood = SwapperFirstNeighborhood(
             term_object=term_object,
             array_builder=array_builder,
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
+            cost_evaluator=cost_evaluator,
         )
         self.__swapper_second_neighborhood = SwapperSecondNeighborhood(
             term_object=term_object,
             array_builder=array_builder,
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
+            cost_evaluator=cost_evaluator,
         )
         self.__swapper_third_neighborhood = SwapperThirdNeighborhood(
             term_object=term_object,
             array_builder=array_builder,
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
+            cost_evaluator=cost_evaluator,
         )
-        self.__cost_evaluator = CostEvaluator(
-            array_size=array_builder.array_size(),
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
-            student_group_occupation=array_builder.student_group_occupation_array(),
-            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
-            student_vacancy=array_builder.student_vacancy_array(),
-            teacher_vacancy=array_builder.teacher_vacancy_array(),
-            school_grades=array_builder.school_grade_array())
-        self.__tutorial_piece_evaluator = TutorialPieceEvaluator(
-            array_size=array_builder.array_size(),
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
-            student_group_occupation=array_builder.student_group_occupation_array(),
-            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
-            student_vacancy=array_builder.student_vacancy_array(),
-            teacher_vacancy=array_builder.teacher_vacancy_array(),
-            school_grades=array_builder.school_grade_array())
+        self.__cost_evaluator = cost_evaluator
+        self.__tutorial_piece_evaluator = tutorial_piece_evaluator
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
         self.__round_robin_order_before = 0
