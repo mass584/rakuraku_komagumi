@@ -18,7 +18,8 @@ class VacancyAndDoubleBookingEvaluator():
             teacher_and_tutorial_indexes = numpy.array(numpy.where(
                 tutorial_occupation[student_index, :, :, date_index, period_index] > 0)).transpose()
             for teacher_index, tutorial_index in teacher_and_tutorial_indexes:
-                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += 1
+                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += \
+                    excess[student_index, date_index, period_index]
 
     def __teacher_violation_and_cost(
             self, tutorial_occupation, violation_array):
@@ -31,7 +32,8 @@ class VacancyAndDoubleBookingEvaluator():
             student_and_tutorial_indexes = numpy.array(numpy.where(
                 tutorial_occupation[:, teacher_index, :, date_index, period_index] > 0)).transpose()
             for student_index, tutorial_index in student_and_tutorial_indexes:
-                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += 1
+                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += \
+                    excess[teacher_index, date_index, period_index]
 
     def get_violation_and_cost_array(self, tutorial_occupation, violation_array):
         self.__teacher_violation_and_cost(tutorial_occupation, violation_array)

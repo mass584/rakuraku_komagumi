@@ -78,5 +78,5 @@ class TestVacancyAndDoubleBookingEvaluator(TestCase):
             dtype=int)
         evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), violation_array)
-        self.assertEqual(violation_array[0, 0, 0, 0, 0], 1)
-        self.assertEqual(numpy.sum(violation_array), 1)
+        self.assertEqual(violation_array[0, 0, 0, 0, 0], 2)
+        self.assertEqual(numpy.sum(violation_array), 2)
