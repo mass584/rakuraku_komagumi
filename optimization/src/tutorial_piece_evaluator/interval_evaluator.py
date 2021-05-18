@@ -57,4 +57,5 @@ class IntervalEvaluator():
             teacher_and_date_and_period_index = numpy.array(numpy.where(
                 tutorial_occupation[student_index, :, tutorial_index, :, :] > 0)).transpose()
             for teacher_index, date_index, period_index in teacher_and_date_and_period_index:
-                cost_array[student_index, teacher_index, tutorial_index, date_index, period_index] = cost
+                cost_array[student_index, teacher_index,
+                           tutorial_index, date_index, period_index] = cost

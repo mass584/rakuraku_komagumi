@@ -44,6 +44,7 @@ def stress_test_swapper():
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
 
+
 format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
 logging.basicConfig(level='INFO', filename='log/test.log', format=format)
 sys.path.append('./src')

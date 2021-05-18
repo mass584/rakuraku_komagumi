@@ -6,8 +6,11 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 # 第２近傍の最適解取得クラス(対象のコマを、対になるコマと一緒に空いている時間枠に移動するパターン)
+
+
 class SwapperSecondNeighborhoodProcess():
-    def __init__(self, process_num, process_count, array_builder, cost_evaluator):
+    def __init__(self, process_num, process_count,
+                 array_builder, cost_evaluator):
         self.__process_num = process_num
         self.__process_count = process_count
         self.__array_size = array_builder.array_size()
@@ -28,18 +31,21 @@ class SwapperSecondNeighborhoodProcess():
         return date_and_period_index_list[begin_index:end_index]
 
     def run(self, result_array,
-        student_index, teacher_index, tutorial_index, date_index, period_index,
-        pair_student_index, pair_tutorial_index):
+            student_index, teacher_index, tutorial_index, date_index, period_index,
+            pair_student_index, pair_tutorial_index):
         for new_date_index, new_period_index in self.__date_and_period_index():
             # 集団科目が配置済みか休講の所は探索しない
-            if self.__timetable_array[new_date_index, new_period_index] == 0: continue
+            if self.__timetable_array[new_date_index, new_period_index] == 0:
+                continue
             # 同種のコマが配置済みの所は探索しない
             if self.__tutorial_occupation_array[
-                student_index, teacher_index, tutorial_index,
-                new_date_index, new_period_index] == 1: continue
+                    student_index, teacher_index, tutorial_index,
+                    new_date_index, new_period_index] == 1:
+                continue
             if self.__tutorial_occupation_array[
-                pair_student_index, teacher_index, pair_tutorial_index,
-                new_date_index, new_period_index] == 1: continue
+                    pair_student_index, teacher_index, pair_tutorial_index,
+                    new_date_index, new_period_index] == 1:
+                continue
             # 配置を変更する
             self.__tutorial_occupation_array[
                 student_index, teacher_index, tutorial_index,
@@ -54,7 +60,8 @@ class SwapperSecondNeighborhoodProcess():
                 pair_student_index, teacher_index, pair_tutorial_index,
                 new_date_index, new_period_index] = 1
             # 違反+コストが最小値を下回れば、更新する
-            violation_and_cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
+            violation_and_cost = self.__cost_evaluator.cost(
+                self.__tutorial_occupation_array)
             result_array.append({
                 'violation_and_cost': violation_and_cost,
                 'student_1_index': student_index,

@@ -29,10 +29,23 @@ class TestCostEvaluator(TestCase):
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
         tutorial_occupation = TutorialOccupation(term, array_size)
-        evaluator.get_violation_and_cost_array(tutorial_occupation.tutorial_occupation_array())
-        self.assertEqual(evaluator.get_nth_tutorial_piece_indexes_from_worst(0), [0, 0, 0, 2, 0])
-        self.assertEqual(evaluator.get_nth_tutorial_piece_indexes_from_worst(1), [0, 0, 0, 2, 3])
-        self.assertEqual(evaluator.get_nth_tutorial_piece_indexes_from_worst(2), [0, 0, 0, 1, 0])
-        self.assertEqual(evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(0), [3, 100 + 18 + 14 + 105])
-        self.assertEqual(evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(1), [2, 100 + 18 + 14 + 105])
-        self.assertEqual(evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(2), [0, 100 + 30 + 105])
+        evaluator.get_violation_and_cost_array(
+            tutorial_occupation.tutorial_occupation_array())
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_indexes_from_worst(0), [
+                0, 0, 0, 2, 0])
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_indexes_from_worst(1), [
+                0, 0, 0, 2, 3])
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_indexes_from_worst(2), [
+                0, 0, 0, 1, 0])
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(0), [
+                3, 100 + 18 + 14 + 105])
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(1), [
+                2, 100 + 18 + 14 + 105])
+        self.assertEqual(
+            evaluator.get_nth_tutorial_piece_violation_and_cost_from_worst(2), [
+                0, 100 + 30 + 105])

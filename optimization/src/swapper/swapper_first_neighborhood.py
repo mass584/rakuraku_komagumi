@@ -6,8 +6,11 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 # 第１近傍の最適解取得クラス(対象のコマを、空いている時間枠に移動するパターン)
+
+
 class SwapperFirstNeighborhood():
-    def __init__(self, process_count, term_object, array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object,
+                 array_builder, cost_evaluator):
         self.__process_count = process_count
         self.__term_object = term_object
         self.__array_builder = array_builder
@@ -28,7 +31,7 @@ class SwapperFirstNeighborhood():
         }
 
     def get_best_answer(
-        self, student_index, teacher_index, tutorial_index, date_index, period_index):
+            self, student_index, teacher_index, tutorial_index, date_index, period_index):
         result_array = multiprocessing.Manager().list([])
         process = [
             multiprocessing.Process(
@@ -44,7 +47,8 @@ class SwapperFirstNeighborhood():
             process[proc_num].start()
         for proc_num in range(self.__process_count):
             process[proc_num].join()
-        min_violation_and_cost = min(result['violation_and_cost'] for result in result_array)
+        min_violation_and_cost = min(
+            result['violation_and_cost'] for result in result_array)
         self.__best_answer = next(
             result for result in result_array
             if result['violation_and_cost'] == min_violation_and_cost)
@@ -76,12 +80,14 @@ class SwapperFirstNeighborhood():
         new_date_index = self.__best_answer['new_date_index']
         period_index = self.__best_answer['period_index']
         new_period_index = self.__best_answer['new_period_index']
-        [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
+        [violation, cost] = self.__cost_evaluator.violation_and_cost(
+            self.__tutorial_occupation_array)
         logger.info('================コマを移動しました================')
         logger.info(f'移動No：{swap_count}')
         logger.info(f'選択方式：ラウンドロビン シーケンス番号{round_robin_order}')
         logger.info(f'探索方式：第１近傍探索')
-        logger.info(f'生徒/科目：{student_name}（{student_school_grade}）{tutorial_name}')
+        logger.info(
+            f'生徒/科目：{student_name}（{student_school_grade}）{tutorial_name}')
         logger.info(f'講師：{teacher_name}')
         logger.info(f'変更元日時：{date_index + 1}日目{period_index + 1}限')
         logger.info(f'変更先日時：{new_date_index + 1}日目{new_period_index + 1}限')

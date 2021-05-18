@@ -65,8 +65,13 @@ class OccupationAndBlankEvaluator():
             student_and_tutorial_period_index = numpy.array(numpy.where(
                 tutorial_occupation[:, teacher_index, :, date_index, :] > 0)).transpose()
             for student_index, tutorial_index, period_index in student_and_tutorial_period_index:
-                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += violation
-                cost_array[student_index, teacher_index, tutorial_index, date_index, period_index] += cost
+                violation_array[student_index,
+                                teacher_index,
+                                tutorial_index,
+                                date_index,
+                                period_index] += violation
+                cost_array[student_index, teacher_index,
+                           tutorial_index, date_index, period_index] += cost
 
     def __student_violation_and_cost(
             self, tutorial_occupation, violation_array, cost_array):
@@ -85,9 +90,17 @@ class OccupationAndBlankEvaluator():
             teacher_and_tutorial_period_index = numpy.array(numpy.where(
                 tutorial_occupation[student_index, :, :, date_index, :] > 0)).transpose()
             for teacher_index, tutorial_index, period_index in teacher_and_tutorial_period_index:
-                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += violation
-                cost_array[student_index, teacher_index, tutorial_index, date_index, period_index] += cost
+                violation_array[student_index,
+                                teacher_index,
+                                tutorial_index,
+                                date_index,
+                                period_index] += violation
+                cost_array[student_index, teacher_index,
+                           tutorial_index, date_index, period_index] += cost
 
-    def get_violation_and_cost_array(self, tutorial_occupation, violation_array, cost_array):
-        self.__teacher_violation_and_cost(tutorial_occupation, violation_array, cost_array)
-        self.__student_violation_and_cost(tutorial_occupation, violation_array, cost_array)
+    def get_violation_and_cost_array(
+            self, tutorial_occupation, violation_array, cost_array):
+        self.__teacher_violation_and_cost(
+            tutorial_occupation, violation_array, cost_array)
+        self.__student_violation_and_cost(
+            tutorial_occupation, violation_array, cost_array)

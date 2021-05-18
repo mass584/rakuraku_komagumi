@@ -19,7 +19,7 @@ class TestSeatCombinationEvaluator(TestCase):
             array_size, 100, 15)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         occupation_and_blank_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(),
@@ -39,7 +39,7 @@ class TestSeatCombinationEvaluator(TestCase):
             array_size, 100, 15)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         occupation_and_blank_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(),
@@ -62,7 +62,7 @@ class TestSeatCombinationEvaluator(TestCase):
             array_size, 100, 15)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         occupation_and_blank_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(),

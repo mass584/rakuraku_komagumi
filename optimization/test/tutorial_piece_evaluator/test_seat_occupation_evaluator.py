@@ -26,7 +26,7 @@ class TestSeatOccupationEvaluator(TestCase):
         evaluator = SeatOccupationEvaluator(array_size)
         violation_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), violation_array)
@@ -52,7 +52,7 @@ class TestSeatOccupationEvaluator(TestCase):
         evaluator = SeatOccupationEvaluator(array_size)
         violation_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), violation_array)
@@ -81,7 +81,7 @@ class TestSeatOccupationEvaluator(TestCase):
         evaluator = SeatOccupationEvaluator(array_size)
         violation_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), violation_array)

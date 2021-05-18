@@ -25,12 +25,12 @@ class TestIntervalEvaluator(TestCase):
             student_optimization_rules=student_optimization_rules)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         interval_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), cost_array)
-        self.assertEqual(cost_array[0,0,0,0,0], 70)
-        self.assertEqual(cost_array[0,0,0,0,1], 70)
+        self.assertEqual(cost_array[0, 0, 0, 0, 0], 70)
+        self.assertEqual(cost_array[0, 0, 0, 0, 1], 70)
         self.assertEqual(numpy.sum(cost_array), 140)
 
     def test_interval_is_cutoff(self):
@@ -49,12 +49,12 @@ class TestIntervalEvaluator(TestCase):
             student_optimization_rules=student_optimization_rules)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         interval_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), cost_array)
-        self.assertEqual(cost_array[0,0,0,0,0], 14)
-        self.assertEqual(cost_array[0,0,0,2,0], 14)
+        self.assertEqual(cost_array[0, 0, 0, 0, 0], 14)
+        self.assertEqual(cost_array[0, 0, 0, 2, 0], 14)
         self.assertEqual(numpy.sum(cost_array), 28)
 
     def test_interval_is_over_cutoff(self):
@@ -73,10 +73,10 @@ class TestIntervalEvaluator(TestCase):
             student_optimization_rules=student_optimization_rules)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         interval_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(), cost_array)
-        self.assertEqual(cost_array[0,0,0,0,0], 0)
-        self.assertEqual(cost_array[0,0,0,3,0], 0)
+        self.assertEqual(cost_array[0, 0, 0, 0, 0], 0)
+        self.assertEqual(cost_array[0, 0, 0, 3, 0], 0)
         self.assertEqual(numpy.sum(cost_array), 0)

@@ -32,11 +32,11 @@ class TestOccupationAndBlankEvaluator(TestCase):
             school_grades=school_grade.school_grade_array())
         violation_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         cost_array = numpy.zeros(
             (array_size.student_count(), array_size.teacher_count(), array_size.tutorial_count(),
-            array_size.date_count(), array_size.period_count()),
+             array_size.date_count(), array_size.period_count()),
             dtype=int)
         occupation_and_blank_evaluator.get_violation_and_cost_array(
             tutorial_occupation.tutorial_occupation_array(),
@@ -45,9 +45,13 @@ class TestOccupationAndBlankEvaluator(TestCase):
         teacher_violation = 1
         # 1日2コマ空きの日 student_index == 1 1日, 1日4コマの日 student_index == 1 1日
         student_violation = 2
-        self.assertEqual(violation_array[0, 0, 0, 0, 0], teacher_violation + student_violation)
-        self.assertEqual(violation_array[0, 0, 0, 0, 1], teacher_violation + student_violation)
-        self.assertEqual(numpy.sum(violation_array), (teacher_violation + student_violation) * 2)
+        self.assertEqual(
+            violation_array[0, 0, 0, 0, 0], teacher_violation + student_violation)
+        self.assertEqual(
+            violation_array[0, 0, 0, 0, 1], teacher_violation + student_violation)
+        self.assertEqual(
+            numpy.sum(violation_array),
+            (teacher_violation + student_violation) * 2)
         self.assertEqual(cost_array[0, 0, 0, 0, 0], 0)
         self.assertEqual(cost_array[0, 0, 0, 0, 1], 0)
         self.assertEqual(numpy.sum(cost_array), 0)

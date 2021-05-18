@@ -35,6 +35,7 @@ class VacancyAndDoubleBookingEvaluator():
                 violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += \
                     excess[teacher_index, date_index, period_index]
 
-    def get_violation_and_cost_array(self, tutorial_occupation, violation_array):
+    def get_violation_and_cost_array(
+            self, tutorial_occupation, violation_array):
         self.__teacher_violation_and_cost(tutorial_occupation, violation_array)
         self.__student_violation_and_cost(tutorial_occupation, violation_array)

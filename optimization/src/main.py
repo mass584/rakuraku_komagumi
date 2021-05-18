@@ -63,5 +63,6 @@ def main():
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
 
+
 if __name__ == '__main__':
     main()

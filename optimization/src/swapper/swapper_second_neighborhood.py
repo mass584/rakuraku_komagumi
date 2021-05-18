@@ -7,8 +7,11 @@ from logging import getLogger
 logger = getLogger(__name__)
 
 # 第２近傍の最適解取得クラス(対象のコマを、対になるコマと一緒に空いている時間枠に移動するパターン)
+
+
 class SwapperSecondNeighborhood():
-    def __init__(self, process_count, term_object, array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object,
+                 array_builder, cost_evaluator):
         self.__process_count = process_count
         self.__term_object = term_object
         self.__array_builder = array_builder
@@ -32,7 +35,7 @@ class SwapperSecondNeighborhood():
         }
 
     def get_best_answer(
-        self, student_index, teacher_index, tutorial_index, date_index, period_index):
+            self, student_index, teacher_index, tutorial_index, date_index, period_index):
         self.__best_answer = self.__initial_best_answer()
         # 対になるコマのインデックスを探す
         [pair_student_index, pair_tutorial_index] = next((
@@ -42,12 +45,12 @@ class SwapperSecondNeighborhood():
                 :, teacher_index, :, date_index, period_index] == 1)).transpose()
             if not (pair_student_index == student_index and pair_tutorial_index == tutorial_index)), [None, None])
         # 対になるコマが存在しない場合は探索しない
-        if pair_student_index == None or pair_tutorial_index == None:
+        if pair_student_index is None or pair_tutorial_index is None:
             return self.__best_answer['min_violation_and_cost']
         # 対になるコマがロック中の場合は探索しない
         if self.__fixed_tutorial_occupation_array[
-            pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]:
-                return self.__best_answer['min_violation_and_cost']
+                pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]:
+            return self.__best_answer['min_violation_and_cost']
         result_array = multiprocessing.Manager().list([])
         process = [
             multiprocessing.Process(
@@ -58,13 +61,14 @@ class SwapperSecondNeighborhood():
                     self.__cost_evaluator,
                 ).run,
                 args=[result_array, student_index, teacher_index, tutorial_index,
-                    date_index, period_index, pair_student_index, pair_tutorial_index])
+                      date_index, period_index, pair_student_index, pair_tutorial_index])
             for proc_num in range(self.__process_count)]
         for proc_num in range(self.__process_count):
             process[proc_num].start()
         for proc_num in range(self.__process_count):
             process[proc_num].join()
-        min_violation_and_cost = min(result['violation_and_cost'] for result in result_array)
+        min_violation_and_cost = min(
+            result['violation_and_cost'] for result in result_array)
         self.__best_answer = next(
             result for result in result_array
             if result['violation_and_cost'] == min_violation_and_cost)
@@ -113,13 +117,16 @@ class SwapperSecondNeighborhood():
         new_date_index = self.__best_answer['new_date_index']
         period_index = self.__best_answer['period_index']
         new_period_index = self.__best_answer['new_period_index']
-        [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
+        [violation, cost] = self.__cost_evaluator.violation_and_cost(
+            self.__tutorial_occupation_array)
         logger.info('================コマを移動しました================')
         logger.info(f'移動No：{swap_count}')
         logger.info(f'選択方式：ラウンドロビン シーケンス番号{round_robin_order}')
         logger.info(f'探索方式：第２近傍探索')
-        logger.info(f'生徒/科目１：{student_1_name}（{student_1_school_grade}）{tutorial_1_name}')
-        logger.info(f'生徒/科目２：{student_2_name}（{student_2_school_grade}）{tutorial_2_name}')
+        logger.info(
+            f'生徒/科目１：{student_1_name}（{student_1_school_grade}）{tutorial_1_name}')
+        logger.info(
+            f'生徒/科目２：{student_2_name}（{student_2_school_grade}）{tutorial_2_name}')
         logger.info(f'講師：{teacher_name}')
         logger.info(f'変更元日時：{date_index + 1}日目{period_index + 1}限')
         logger.info(f'変更先日時：{new_date_index + 1}日目{new_period_index + 1}限')

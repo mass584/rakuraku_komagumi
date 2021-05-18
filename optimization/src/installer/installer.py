@@ -9,8 +9,10 @@ from logging import getLogger
 
 logger = getLogger(__name__)
 
+
 class Installer():
-    def __init__(self, process_count, term_object, array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object,
+                 array_builder, cost_evaluator):
         self.__process_count = process_count
         self.__term_object = term_object
         self.__array_size = array_builder.array_size()
