@@ -63,7 +63,7 @@ class OccupationAndBlankEvaluator():
             [violation, cost] = \
                 self.__teacher_vector_evaluator.violation_and_cost(vector)
             student_and_tutorial_period_index = numpy.array(numpy.where(
-                tutorial_occupation[:, teacher_index, :, date_index, :])).transpose()
+                tutorial_occupation[:, teacher_index, :, date_index, :] > 0)).transpose()
             for student_index, tutorial_index, period_index in student_and_tutorial_period_index:
                 violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += violation
                 cost_array[student_index, teacher_index, tutorial_index, date_index, period_index] += cost
@@ -83,7 +83,7 @@ class OccupationAndBlankEvaluator():
             [violation, cost] = self.__student_vector_evaluators[
                 school_grade_index].violation_and_cost(vector)
             teacher_and_tutorial_period_index = numpy.array(numpy.where(
-                tutorial_occupation[student_index, :, :, date_index, :])).transpose()
+                tutorial_occupation[student_index, :, :, date_index, :] > 0)).transpose()
             for teacher_index, tutorial_index, period_index in teacher_and_tutorial_period_index:
                 violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += violation
                 cost_array[student_index, teacher_index, tutorial_index, date_index, period_index] += cost

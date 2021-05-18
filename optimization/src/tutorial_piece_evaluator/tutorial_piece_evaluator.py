@@ -61,9 +61,9 @@ class TutorialPieceEvaluator():
             tutorial_pieces, self.__violation_array)
         violation_and_cost_array = self.__violation_array * COST_PER_VIOLATION + self.__cost_array
         flattened_violation_and_cost_array = violation_and_cost_array.flatten()
-        flattened_and_sorted_violation_and_cost_array = numpy.argsort(-flattened_violation_and_cost_array)
+        flattened_and_sorted_violation_and_cost_index_array = numpy.argsort(-flattened_violation_and_cost_array)
         self.__sort_result = numpy.unravel_index(
-            flattened_and_sorted_violation_and_cost_array,
+            flattened_and_sorted_violation_and_cost_index_array,
             violation_and_cost_array.shape)
 
     def get_nth_tutorial_piece_indexes_from_worst(self, nth):
@@ -73,3 +73,13 @@ class TutorialPieceEvaluator():
             self.__sort_result[2][nth],
             self.__sort_result[3][nth],
             self.__sort_result[4][nth]]
+
+    def get_nth_tutorial_piece_violation_and_cost_from_worst(self, nth):
+        student_index = self.__sort_result[0][nth]
+        teacher_index = self.__sort_result[1][nth]
+        tutorial_index = self.__sort_result[2][nth]
+        date_index = self.__sort_result[3][nth]
+        period_index = self.__sort_result[4][nth]
+        violation = self.__violation_array[student_index, teacher_index, tutorial_index, date_index, period_index]
+        cost = self.__cost_array[student_index, teacher_index, tutorial_index, date_index, period_index]
+        return [violation, cost]

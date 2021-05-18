@@ -1,4 +1,3 @@
-import itertools
 import numpy
 
 
@@ -18,4 +17,5 @@ class SeatOccupationEvaluator():
             student_and_teacher_and_tutorial_indexes = numpy.array(numpy.where(
                 tutorial_occupation[:, :, :, date_index, period_index] > 0)).transpose()
             for student_index, teacher_index, tutorial_index in student_and_teacher_and_tutorial_indexes:
-                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += 1
+                excess = seat_occupation[date_index, period_index] - self.__array_size.seat_count()
+                violation_array[student_index, teacher_index, tutorial_index, date_index, period_index] += excess
