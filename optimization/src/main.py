@@ -5,6 +5,8 @@ from cost_evaluator.cost_evaluator import CostEvaluator
 from database.database import Database
 from installer.installer import Installer
 from model.term_object import TermObject
+from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
+from swapper.swapper import Swapper
 
 
 def main():
@@ -37,12 +39,26 @@ def main():
         student_vacancy=array_builder.student_vacancy_array(),
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
+    tutorial_piece_evaluator = TutorialPieceEvaluator(
+        array_size=array_builder.array_size(),
+        student_optimization_rules=term_object['student_optimization_rules'],
+        teacher_optimization_rule=term_object['teacher_optimization_rule'],
+        student_group_occupation=array_builder.student_group_occupation_array(),
+        teacher_group_occupation=array_builder.teacher_group_occupation_array(),
+        student_vacancy=array_builder.student_vacancy_array(),
+        teacher_vacancy=array_builder.teacher_vacancy_array(),
+        school_grades=array_builder.school_grade_array())
     installer = Installer(
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator)
     installer.execute()
-
+    swapper = Swapper(
+        term_object=term_object,
+        array_builder=array_builder,
+        cost_evaluator=cost_evaluator,
+        tutorial_piece_evaluator=tutorial_piece_evaluator)
+    swapper.execute()
 
 if __name__ == '__main__':
     main()
