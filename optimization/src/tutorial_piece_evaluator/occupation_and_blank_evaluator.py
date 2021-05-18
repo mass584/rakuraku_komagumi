@@ -1,6 +1,6 @@
 import itertools
 import numpy
-from ..cost_evaluator.occupation_and_blank_vector_evaluator \
+from cost_evaluator.occupation_and_blank_vector_evaluator \
     import OccupationAndBlankVectorEvaluator
 
 

@@ -8,7 +8,7 @@ from logging import getLogger
 
 
 logger = getLogger(__name__)
-
+SWAPPING_PROCESS_MAX_COUNT = 1000
 
 class Swapper():
     def __init__(self, term_object, array_builder,
@@ -37,6 +37,7 @@ class Swapper():
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
         self.__round_robin_order_before = 0
+        self.__swap_count = 0
         self.__total_tutorial_piece_count = numpy.sum(
             array_builder.tutorial_piece_count_array())
         self.__reset_best_nth_neighborhood()
@@ -109,7 +110,7 @@ class Swapper():
             violation_and_cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
             if violation_and_cost < self.__best_first_neighborhood['min_violation_and_cost']:
                 self.__best_first_neighborhood = {
-                    'violation_and_cost': violation_and_cost,
+                    'min_violation_and_cost': violation_and_cost,
                     'student_index': student_index,
                     'teacher_index': teacher_index,
                     'tutorial_index': tutorial_index,
@@ -165,7 +166,7 @@ class Swapper():
             violation_and_cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
             if violation_and_cost < self.__best_second_neighborhood['min_violation_and_cost']:
                 self.__best_second_neighborhood = {
-                    'violation_and_cost': violation_and_cost,
+                    'min_violation_and_cost': violation_and_cost,
                     'student_1_index': student_index,
                     'student_2_index': pair_student_index,
                     'teacher_index': teacher_index,
@@ -230,7 +231,7 @@ class Swapper():
                 violation_and_cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
                 if violation_and_cost < self.__best_third_neighborhood['min_violation_and_cost']:
                     self.__best_third_neighborhood = {
-                        'violation_and_cost': violation_and_cost,
+                        'min_violation_and_cost': violation_and_cost,
                         'student_1_index': student_index,
                         'student_2_index': pair_student_index,
                         'teacher_index': teacher_index,
@@ -267,71 +268,72 @@ class Swapper():
 
     def __improve_one_time_by_second_neighborhoods(self):
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_1_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_1_index'],
-            self.__best_first_neighborhood['date_index'],
-            self.__best_first_neighborhood['period_index']] = 0
+            self.__best_second_neighborhood['student_1_index'],
+            self.__best_second_neighborhood['teacher_index'],
+            self.__best_second_neighborhood['tutorial_1_index'],
+            self.__best_second_neighborhood['date_index'],
+            self.__best_second_neighborhood['period_index']] = 0
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_2_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_2_index'],
-            self.__best_first_neighborhood['date_index'],
-            self.__best_first_neighborhood['period_index']] = 0
+            self.__best_second_neighborhood['student_2_index'],
+            self.__best_second_neighborhood['teacher_index'],
+            self.__best_second_neighborhood['tutorial_2_index'],
+            self.__best_second_neighborhood['date_index'],
+            self.__best_second_neighborhood['period_index']] = 0
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_1_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_1_index'],
-            self.__best_first_neighborhood['new_date_index'],
-            self.__best_first_neighborhood['new_period_index']] = 1
+            self.__best_second_neighborhood['student_1_index'],
+            self.__best_second_neighborhood['teacher_index'],
+            self.__best_second_neighborhood['tutorial_1_index'],
+            self.__best_second_neighborhood['new_date_index'],
+            self.__best_second_neighborhood['new_period_index']] = 1
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_2_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_2_index'],
-            self.__best_first_neighborhood['new_date_index'],
-            self.__best_first_neighborhood['new_period_index']] = 1
+            self.__best_second_neighborhood['student_2_index'],
+            self.__best_second_neighborhood['teacher_index'],
+            self.__best_second_neighborhood['tutorial_2_index'],
+            self.__best_second_neighborhood['new_date_index'],
+            self.__best_second_neighborhood['new_period_index']] = 1
 
     def __improve_one_time_by_third_neighborhoods(self):
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_1_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_1_index'],
-            self.__best_first_neighborhood['date_index'],
-            self.__best_first_neighborhood['period_index']] = 0
+            self.__best_third_neighborhood['student_1_index'],
+            self.__best_third_neighborhood['teacher_index'],
+            self.__best_third_neighborhood['tutorial_1_index'],
+            self.__best_third_neighborhood['date_index'],
+            self.__best_third_neighborhood['period_index']] = 0
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_2_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_2_index'],
-            self.__best_first_neighborhood['new_date_index'],
-            self.__best_first_neighborhood['new_period_index']] = 0
+            self.__best_third_neighborhood['student_2_index'],
+            self.__best_third_neighborhood['teacher_index'],
+            self.__best_third_neighborhood['tutorial_2_index'],
+            self.__best_third_neighborhood['new_date_index'],
+            self.__best_third_neighborhood['new_period_index']] = 0
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_1_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_1_index'],
-            self.__best_first_neighborhood['new_date_index'],
-            self.__best_first_neighborhood['new_period_index']] = 1
+            self.__best_third_neighborhood['student_1_index'],
+            self.__best_third_neighborhood['teacher_index'],
+            self.__best_third_neighborhood['tutorial_1_index'],
+            self.__best_third_neighborhood['new_date_index'],
+            self.__best_third_neighborhood['new_period_index']] = 1
         self.__tutorial_occupation_array[
-            self.__best_first_neighborhood['student_2_index'],
-            self.__best_first_neighborhood['teacher_index'],
-            self.__best_first_neighborhood['tutorial_2_index'],
-            self.__best_first_neighborhood['date_index'],
-            self.__best_first_neighborhood['period_index']] = 1
+            self.__best_third_neighborhood['student_2_index'],
+            self.__best_third_neighborhood['teacher_index'],
+            self.__best_third_neighborhood['tutorial_2_index'],
+            self.__best_third_neighborhood['date_index'],
+            self.__best_third_neighborhood['period_index']] = 1
 
     def __logging_by_first_neighborhoods(self, elapsed_sec):
-        student_index = self.__best_third_neighborhood['student_index']
+        student_index = self.__best_first_neighborhood['student_index']
         student_name = self.__term_object['term_students'][student_index]['name']
         student_school_grade = self.__term_object['term_students'][student_index]['school_grade']
-        teacher_index = self.__best_third_neighborhood['teacher_index']
+        teacher_index = self.__best_first_neighborhood['teacher_index']
         teacher_name = self.__term_object['term_teachers'][teacher_index]['name']
-        tutorial_index = self.__best_third_neighborhood['tutorial_index']
+        tutorial_index = self.__best_first_neighborhood['tutorial_index']
         tutorial_name = self.__term_object['term_tutorials'][tutorial_index]['name']
-        date_index = self.__best_third_neighborhood['date_index']
-        new_date_index = self.__best_third_neighborhood['new_date_index']
-        period_index = self.__best_third_neighborhood['period_index']
-        new_period_index = self.__best_third_neighborhood['new_period_index']
+        date_index = self.__best_first_neighborhood['date_index']
+        new_date_index = self.__best_first_neighborhood['new_date_index']
+        period_index = self.__best_first_neighborhood['period_index']
+        new_period_index = self.__best_first_neighborhood['new_period_index']
         [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
         logger.info('================コマを移動しました================')
-        logger.info(f'改善方式：第１近傍')
+        logger.info(f'選択方式：ラウンドロビン シーケンス番号{self.__round_robin_order_before + 1}')
+        logger.info(f'探索方式：第１近傍探索')
         logger.info(f'生徒/科目：{student_name}（{student_school_grade}）{tutorial_name}')
         logger.info(f'講師：{teacher_name}')
         logger.info(f'変更元日時：{date_index + 1}日目{period_index + 1}限')
@@ -342,25 +344,26 @@ class Swapper():
         logger.info('==================================================')
 
     def __logging_by_second_neighborhoods(self, elapsed_sec):
-        student_1_index = self.__best_third_neighborhood['student_1_index']
+        student_1_index = self.__best_second_neighborhood['student_1_index']
         student_1_name = self.__term_object['term_students'][student_1_index]['name']
         student_1_school_grade = self.__term_object['term_students'][student_1_index]['school_grade']
-        student_2_index = self.__best_third_neighborhood['student_2_index']
+        student_2_index = self.__best_second_neighborhood['student_2_index']
         student_2_name = self.__term_object['term_students'][student_2_index]['name']
         student_2_school_grade = self.__term_object['term_students'][student_2_index]['school_grade']
-        teacher_index = self.__best_third_neighborhood['teacher_index']
+        teacher_index = self.__best_second_neighborhood['teacher_index']
         teacher_name = self.__term_object['term_teachers'][teacher_index]['name']
-        tutorial_1_index = self.__best_third_neighborhood['tutorial_1_index']
+        tutorial_1_index = self.__best_second_neighborhood['tutorial_1_index']
         tutorial_1_name = self.__term_object['term_tutorials'][tutorial_1_index]['name']
-        tutorial_2_index = self.__best_third_neighborhood['tutorial_2_index']
+        tutorial_2_index = self.__best_second_neighborhood['tutorial_2_index']
         tutorial_2_name = self.__term_object['term_tutorials'][tutorial_2_index]['name']
-        date_index = self.__best_third_neighborhood['date_index']
-        new_date_index = self.__best_third_neighborhood['new_date_index']
-        period_index = self.__best_third_neighborhood['period_index']
-        new_period_index = self.__best_third_neighborhood['new_period_index']
+        date_index = self.__best_second_neighborhood['date_index']
+        new_date_index = self.__best_second_neighborhood['new_date_index']
+        period_index = self.__best_second_neighborhood['period_index']
+        new_period_index = self.__best_second_neighborhood['new_period_index']
         [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
         logger.info('================コマを移動しました================')
-        logger.info(f'改善方式：第２近傍')
+        logger.info(f'選択方式：ラウンドロビン シーケンス番号{self.__round_robin_order_before + 1}')
+        logger.info(f'探索方式：第２近傍探索')
         logger.info(f'生徒/科目１：{student_1_name}（{student_1_school_grade}）{tutorial_1_name}')
         logger.info(f'生徒/科目２：{student_2_name}（{student_2_school_grade}）{tutorial_2_name}')
         logger.info(f'講師：{teacher_name}')
@@ -390,7 +393,8 @@ class Swapper():
         new_period_index = self.__best_third_neighborhood['new_period_index']
         [violation, cost] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
         logger.info('================コマを移動しました================')
-        logger.info(f'改善方式：第３近傍')
+        logger.info(f'選択方式：ラウンドロビン シーケンス番号{self.__round_robin_order_before + 1}')
+        logger.info(f'探索方式：第３近傍探索')
         logger.info(f'生徒/科目１：{student_1_name}（{student_1_school_grade}）{tutorial_1_name}')
         logger.info(f'生徒/科目２：{student_2_name}（{student_2_school_grade}）{tutorial_2_name}')
         logger.info(f'講師：{teacher_name}')
@@ -402,8 +406,10 @@ class Swapper():
         logger.info('==================================================')
 
     def __improve_one_time(
-        self, student_index, teacher_index, tutorial_index, date_index, period_index):
+        self, student_index, teacher_index, tutorial_index,
+        date_index, period_index, round_robin_order):
         start = time.time()
+        cost_before = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
         self.__get_best_first_neighborhood(
             student_index, teacher_index, tutorial_index, date_index, period_index)
         self.__get_best_second_neighborhood(
@@ -414,10 +420,12 @@ class Swapper():
             self.__best_first_neighborhood['min_violation_and_cost'],
             self.__best_second_neighborhood['min_violation_and_cost'],
             self.__best_third_neighborhood['min_violation_and_cost']]
-        best_nth_neighborhood = violation_and_cost_for_nth_neighborhoods.index(
-            min(violation_and_cost_for_nth_neighborhoods))
+        cost_after = min(violation_and_cost_for_nth_neighborhoods)
         end = time.time()
         elapsed_sec = math.floor((end - start) * 1000000) / 1000000
+        if cost_after >= cost_before: return False
+        self.__round_robin_order_before = round_robin_order
+        best_nth_neighborhood = violation_and_cost_for_nth_neighborhoods.index(cost_after)
         if best_nth_neighborhood == 0:
             self.__improve_one_time_by_first_neighborhoods()
             self.__logging_by_first_neighborhoods(elapsed_sec)
@@ -428,15 +436,16 @@ class Swapper():
             self.__improve_one_time_by_third_neighborhoods()
             self.__logging_by_third_neighborhoods(elapsed_sec)
         self.__reset_best_nth_neighborhood()
+        return True
 
     def __guard_improvement(
         self, student_index, teacher_index, tutorial_index, date_index, period_index):
         # コマが配置されていない場合は探索対象外
         if self.__tutorial_occupation_array[
-            student_index, teacher_index, tutorial_index, date_index, period_index] == 1: return True
+            student_index, teacher_index, tutorial_index, date_index, period_index] == 0: return True
         # ロック中のコマは探索対象外
         if self.__fixed_tutorial_occupation_array[
-            student_index, teacher_index, tutorial_index, date_index, period_index]: return True
+            student_index, teacher_index, tutorial_index, date_index, period_index] == 1: return True
 
     def __improve_by_round_robin(self):
         round_robin_orders_first_half = list(
@@ -445,17 +454,29 @@ class Swapper():
             range(0, self.__round_robin_order_before))
         round_robin_orders = round_robin_orders_first_half + round_robin_orders_latter_half
         is_improved = False
+        self.__tutorial_piece_evaluator.get_violation_and_cost_array(self.__tutorial_occupation_array)
         for round_robin_order in round_robin_orders:
             [student_index, teacher_index, tutorial_index, date_index, period_index] = \
                 self.__tutorial_piece_evaluator.get_nth_tutorial_piece_indexes_from_worst(round_robin_order)
             if self.__guard_improvement(
                 student_index, teacher_index, tutorial_index, date_index, period_index): continue
             if self.__improve_one_time(
-                student_index, teacher_index, tutorial_index, date_index, period_index):
-                self.__round_robin_order_before = round_robin_order
+                student_index, teacher_index, tutorial_index, date_index, period_index, round_robin_order):
                 is_improved = True
                 break
         return is_improved
                 
     def execute(self):
-        print('TODO')
+        while True:
+            self.__swap_count += 1
+            logger.info(f"{self.__swap_count}回目の入れ替えプロセスを開始します。")
+            is_improved = self.__improve_by_round_robin()
+            if not is_improved:
+                logger.info("入れ替えが終了したため、改善プロセスを終了します。")
+                break
+            if self.__swap_count == SWAPPING_PROCESS_MAX_COUNT:
+                logger.info("入れ替えプロセスの上限回数に達したため、改善プロセスを終了します。")
+                break
+
+    def tutorial_occupation_array(self):
+        return self.__tutorial_occupation_array
