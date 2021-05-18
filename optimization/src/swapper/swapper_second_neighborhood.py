@@ -51,10 +51,10 @@ class SwapperSecondNeighborhood():
                 :, teacher_index, :, date_index, period_index] == 1)).transpose()
             if not (pair_student_index == student_index and pair_tutorial_index == tutorial_index)), [None, None])
         # 対になるコマが存在しない場合は探索しない
-        if pair_student_index == None or pair_tutorial_index == None: return
+        if pair_student_index == None or pair_tutorial_index == None: return self.__best_answer
         # 対になるコマがロック中の場合は探索しない
         if self.__fixed_tutorial_occupation_array[
-            pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]: return
+            pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]: return self.__best_answer
         # 日付と時限の探索
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
