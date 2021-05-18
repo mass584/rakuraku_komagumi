@@ -1,6 +1,5 @@
 import itertools
 import math
-from cost_evaluator.cost_evaluator import CostEvaluator
 from logging import getLogger
 
 

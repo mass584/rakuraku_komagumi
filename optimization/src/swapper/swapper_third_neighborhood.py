@@ -1,17 +1,18 @@
-import itertools
-import numpy
+import multiprocessing
 from cost_evaluator.cost_evaluator import CostEvaluator
+from .swapper_third_neighborhood_process import SwapperThirdNeighborhoodProcess
 from logging import getLogger
 
 
 logger = getLogger(__name__)
+PROCESS_COUNT = 4
 
 # 第３近傍の最適解取得クラス(対象のコマを、他の時間枠のコマと入れ替えるパターン)
 class SwapperThirdNeighborhood():
     def __init__(self, term_object, array_builder,
                  student_optimization_rules, teacher_optimization_rule):
         self.__term_object = term_object
-        self.__array_size = array_builder.array_size()
+        self.__array_builder = array_builder
         self.__cost_evaluator = CostEvaluator(
             array_size=array_builder.array_size(),
             student_optimization_rules=student_optimization_rules,
@@ -21,9 +22,7 @@ class SwapperThirdNeighborhood():
             student_vacancy=array_builder.student_vacancy_array(),
             teacher_vacancy=array_builder.teacher_vacancy_array(),
             school_grades=array_builder.school_grade_array())
-        self.__timetable_array = array_builder.timetable_array()
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
-        self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
         self.__best_answer = self.__initial_best_answer()
 
     def __initial_best_answer(self):
@@ -42,69 +41,26 @@ class SwapperThirdNeighborhood():
 
     def get_best_answer(
         self, student_index, teacher_index, tutorial_index, date_index, period_index):
-        self.__best_answer = self.__initial_best_answer()
-        # 日付と時限の探索
-        date_index_list = range(self.__array_size.date_count())
-        period_index_list = range(self.__array_size.period_count())
-        date_and_period_index_list = list(
-            itertools.product(date_index_list, period_index_list))
-        for new_date_index, new_period_index in date_and_period_index_list:
-            # 入れ替える相手となるコマのインデックスを探す
-            pair_student_and_tutorial_index_list = [
-                [pair_student_index, pair_tutorial_index]
-                for [pair_student_index, pair_tutorial_index]
-                in numpy.array(numpy.where(self.__tutorial_occupation_array[
-                    :, teacher_index, :, new_date_index, new_period_index] == 1)).transpose()
-                if not (pair_student_index == student_index and pair_tutorial_index == tutorial_index)]
-            # 集団科目が配置済みか休講の所は探索しない
-            if self.__timetable_array[new_date_index, new_period_index] == 0: continue
-            # 同種のコマが配置済みの所は探索しない
-            if self.__tutorial_occupation_array[
-                student_index, teacher_index, tutorial_index, new_date_index, new_period_index] == 1: continue
-            for pair_student_index, pair_tutorial_index in pair_student_and_tutorial_index_list:
-                # 入れ替える相手となるコマがロック中の場合は探索しない
-                if self.__fixed_tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index] == 1: continue
-                # 入れ替える相手のコマと同種のコマが、入れ替える元のコマの日時にすでに割り当て済みの場合は探索しない
-                if self.__tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index] == 1: continue
-                # 入れ替える元のコマと同種のコマが、入れ替える相手のコマの日時にすでに割り当て済みの場合は探索しない
-                if self.__tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, new_date_index, new_period_index] == 1: continue
-                # 配置を変更する
-                self.__tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, date_index, period_index] = 0
-                self.__tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, new_date_index, new_period_index] = 0
-                self.__tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index] = 1
-                self.__tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, new_date_index, new_period_index] = 1
-                # 違反+コストが最小値を下回れば、更新する
-                violation_and_cost = self.__cost_evaluator.cost(self.__tutorial_occupation_array)
-                if violation_and_cost < self.__best_answer['min_violation_and_cost']:
-                    self.__best_answer = {
-                        'min_violation_and_cost': violation_and_cost,
-                        'student_1_index': student_index,
-                        'student_2_index': pair_student_index,
-                        'teacher_index': teacher_index,
-                        'tutorial_1_index': tutorial_index,
-                        'tutorial_2_index': pair_tutorial_index,
-                        'date_index': date_index,
-                        'new_date_index': new_date_index,
-                        'period_index': period_index,
-                        'new_period_index': new_period_index,
-                    }
-                # 配置の変更を元に戻す
-                self.__tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, date_index, period_index] = 1
-                self.__tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, new_date_index, new_period_index] = 1
-                self.__tutorial_occupation_array[
-                    pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index] = 0
-                self.__tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, new_date_index, new_period_index] = 0
-        return self.__best_answer['min_violation_and_cost']
+        result_array = multiprocessing.Manager().list([])
+        process = [
+            multiprocessing.Process(
+                target=SwapperThirdNeighborhoodProcess(
+                    proc_num,
+                    PROCESS_COUNT,
+                    self.__array_builder,
+                    self.__cost_evaluator,
+                ).run,
+                args=[result_array, student_index, teacher_index, tutorial_index, date_index, period_index])
+            for proc_num in range(PROCESS_COUNT)]
+        for proc_num in range(PROCESS_COUNT):
+            process[proc_num].start()
+        for proc_num in range(PROCESS_COUNT):
+            process[proc_num].join()
+        min_violation_and_cost = min(result['violation_and_cost'] for result in result_array)
+        self.__best_answer = next(
+            result for result in result_array
+            if result['violation_and_cost'] == min_violation_and_cost)
+        return min_violation_and_cost
 
     def execute(self):
         self.__tutorial_occupation_array[
