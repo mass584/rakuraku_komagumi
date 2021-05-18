@@ -16,6 +16,7 @@ def main():
     password = os.environ['DATABASE_PASSWORD']
     term_id = os.environ['OPTIMIZATION_TERM_ID']
     optimization_env = os.environ['OPTIMIZATION_ENV']
+    process_count = os.environ['OPTIMIZATION_PROCESS_COUNT']
 
     format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
     level = 'DEBUG' if optimization_env == 'development' else 'INFO'
@@ -49,11 +50,13 @@ def main():
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
     installer = Installer(
+        process_count=process_count,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator)
     installer.execute()
     swapper = Swapper(
+        process_count=process_count,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator,
