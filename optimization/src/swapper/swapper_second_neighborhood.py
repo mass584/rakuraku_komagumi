@@ -51,10 +51,12 @@ class SwapperSecondNeighborhood():
                 :, teacher_index, :, date_index, period_index] == 1)).transpose()
             if not (pair_student_index == student_index and pair_tutorial_index == tutorial_index)), [None, None])
         # 対になるコマが存在しない場合は探索しない
-        if pair_student_index == None or pair_tutorial_index == None: return self.__best_answer
+        if pair_student_index == None or pair_tutorial_index == None:
+            return self.__best_answer['min_violation_and_cost']
         # 対になるコマがロック中の場合は探索しない
         if self.__fixed_tutorial_occupation_array[
-            pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]: return self.__best_answer
+            pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]:
+                return self.__best_answer['min_violation_and_cost']
         # 日付と時限の探索
         date_index_list = range(self.__array_size.date_count())
         period_index_list = range(self.__array_size.period_count())
@@ -101,7 +103,7 @@ class SwapperSecondNeighborhood():
                 student_index, teacher_index, tutorial_index, new_date_index, new_period_index] = 0
             self.__tutorial_occupation_array[
                 pair_student_index, teacher_index, pair_tutorial_index, new_date_index, new_period_index] = 0
-        return self.__best_answer
+        return self.__best_answer['min_violation_and_cost']
 
     def execute(self):
         self.__tutorial_occupation_array[

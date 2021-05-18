@@ -104,7 +104,7 @@ class SwapperThirdNeighborhood():
                     pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index] = 0
                 self.__tutorial_occupation_array[
                     student_index, teacher_index, tutorial_index, new_date_index, new_period_index] = 0
-        return self.__best_answer
+        return self.__best_answer['min_violation_and_cost']
 
     def execute(self):
         self.__tutorial_occupation_array[

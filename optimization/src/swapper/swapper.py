@@ -71,9 +71,9 @@ class Swapper():
         third_neighborhood_best_answer = self.__swapper_third_neighborhood.get_best_answer(
             student_index, teacher_index, tutorial_index, date_index, period_index)
         violation_and_cost_for_nth_neighborhoods = [
-            first_neighborhood_best_answer['min_violation_and_cost'],
-            second_neighborhood_best_answer['min_violation_and_cost'],
-            third_neighborhood_best_answer['min_violation_and_cost']]
+            first_neighborhood_best_answer,
+            second_neighborhood_best_answer,
+            third_neighborhood_best_answer]
         cost_after = min(violation_and_cost_for_nth_neighborhoods)
         end = time.time()
         elapsed_sec = math.floor((end - start) * 1000000) / 1000000
