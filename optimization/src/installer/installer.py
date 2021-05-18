@@ -12,7 +12,6 @@ from logging import getLogger
 logger = getLogger(__name__)
 PROCESS_COUNT = 4
 
-
 class Installer():
     def __init__(self, term_object, array_builder,
                  student_optimization_rules, teacher_optimization_rule):
