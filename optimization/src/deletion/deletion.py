@@ -6,15 +6,14 @@ logger = getLogger(__name__)
 
 
 class Deletion():
-    def __init__(self, term_object, array_builder,
-                 cost_evaluator, tutorial_piece_evaluator):
+    def __init__(self, term_object, tutorial_occupation_array, fixed_tutorial_occupation_array,
+                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator):
         self.__term_object = term_object
         self.__cost_evaluator = cost_evaluator
         self.__tutorial_piece_evaluator = tutorial_piece_evaluator
-        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
-        self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
-        self.__total_tutorial_piece_count = numpy.sum(
-            array_builder.tutorial_piece_count_array())
+        self.__tutorial_occupation_array = tutorial_occupation_array
+        self.__fixed_tutorial_occupation_array = fixed_tutorial_occupation_array
+        self.__total_tutorial_piece_count = numpy.sum(tutorial_piece_count_array)
         self.__deleted_count = 0
 
     def __guard(
