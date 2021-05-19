@@ -1,7 +1,6 @@
 import logging
 import os
 
-from numpy import array
 from array_builder.array_builder import ArrayBuilder
 from cost_evaluator.cost_evaluator import CostEvaluator
 from database.database import Database
@@ -64,7 +63,11 @@ def main():
     swapper = Swapper(
         process_count=process_count,
         term_object=term_object,
-        array_builder=array_builder,
+        array_size=array_builder.array_size(),
+        timetable_array=array_builder.timetable_array(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
+        fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()

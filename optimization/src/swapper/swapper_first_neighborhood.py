@@ -9,13 +9,14 @@ logger = getLogger(__name__)
 
 
 class SwapperFirstNeighborhood():
-    def __init__(self, process_count, term_object,
-                 array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object, array_size,
+                 timetable_array, tutorial_occupation_array, cost_evaluator):
         self.__process_count = process_count
         self.__term_object = term_object
-        self.__array_builder = array_builder
+        self.__array_size = array_size
+        self.__timetable_array = timetable_array
+        self.__tutorial_occupation_array = tutorial_occupation_array
         self.__cost_evaluator = cost_evaluator
-        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__best_answer = self.__initial_best_answer()
 
     def __initial_best_answer(self):
@@ -39,7 +40,9 @@ class SwapperFirstNeighborhood():
                 target=SwapperFirstNeighborhoodProcess(
                     proc_num,
                     self.__process_count,
-                    self.__array_builder,
+                    self.__array_size,
+                    self.__timetable_array,
+                    self.__tutorial_occupation_array,
                     self.__cost_evaluator,
                 ).run,
                 args=[result_array, student_index, teacher_index, tutorial_index, date_index, period_index])

@@ -47,7 +47,11 @@ def stress_test_swapper():
     swapper = Swapper(
         process_count=PROCESS_COUNT,
         term_object=term_object,
-        array_builder=array_builder,
+        array_size=array_builder.array_size(),
+        timetable_array=array_builder.timetable_array(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
+        fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
