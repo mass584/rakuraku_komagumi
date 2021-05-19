@@ -51,7 +51,7 @@ class SwapperSecondNeighborhood():
         if self.__fixed_tutorial_occupation_array[
                 pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]:
             return self.__best_answer['min_violation_and_cost']
-        result_array = multiprocessing.Manager().list([])
+        result_array = multiprocessing.Manager().list([self.__initial_best_answer()])
         process = [
             multiprocessing.Process(
                 target=SwapperSecondNeighborhoodProcess(

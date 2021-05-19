@@ -8,7 +8,9 @@ from src.tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceE
 from src.installer.installer import Installer
 from src.swapper.swapper import Swapper
 from test.test_data.generate_stress_test_data import generate_stress_test_data
-import tutorial_piece_evaluator
+
+
+PROCESS_COUNT=4
 
 
 def stress_test_swapper():
@@ -34,13 +36,16 @@ def stress_test_swapper():
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
     installer = Installer(
+        process_count=PROCESS_COUNT,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator)
     installer.execute()
     swapper = Swapper(
+        process_count=PROCESS_COUNT,
         term_object=term_object,
         array_builder=array_builder,
+        cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
 

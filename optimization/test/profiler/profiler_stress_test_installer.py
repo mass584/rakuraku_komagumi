@@ -8,6 +8,9 @@ from src.installer.installer import Installer
 from test.test_data.generate_stress_test_data import generate_stress_test_data
 
 
+PROCESS_COUNT=4
+
+
 def stress_test_installer():
     stress_test_term_data = generate_stress_test_data()
     term_object = copy.deepcopy(stress_test_term_data)
@@ -22,6 +25,7 @@ def stress_test_installer():
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
     installer = Installer(
+        process_count=PROCESS_COUNT,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator)
