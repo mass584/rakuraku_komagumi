@@ -80,5 +80,6 @@ def main():
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     deletion.execute()
 
+
 if __name__ == '__main__':
     main()

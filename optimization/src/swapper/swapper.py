@@ -43,7 +43,8 @@ class Swapper():
         )
         self.__tutorial_occupation_array = tutorial_occupation_array
         self.__fixed_tutorial_occupation_array = fixed_tutorial_occupation_array
-        self.__total_tutorial_piece_count = numpy.sum(tutorial_piece_count_array)
+        self.__total_tutorial_piece_count = numpy.sum(
+            tutorial_piece_count_array)
         self.__cost_evaluator = cost_evaluator
         self.__tutorial_piece_evaluator = tutorial_piece_evaluator
         self.__round_robin_order_before = 0
