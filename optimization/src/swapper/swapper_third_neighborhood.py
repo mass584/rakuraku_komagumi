@@ -20,7 +20,7 @@ class SwapperThirdNeighborhood():
 
     def __initial_best_answer(self):
         return {
-            'min_violation_and_cost': 1215752191,
+            'violation_and_cost': 1215752191,
             'student1_index': None,
             'student2_index': None,
             'teacher_index': None,

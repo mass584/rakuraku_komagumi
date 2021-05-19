@@ -22,7 +22,7 @@ class SwapperSecondNeighborhood():
 
     def __initial_best_answer(self):
         return {
-            'min_violation_and_cost': 1215752191,
+            'violation_and_cost': 1215752191,
             'student_1_index': None,
             'student_2_index': None,
             'teacher_index': None,
