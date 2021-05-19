@@ -7,6 +7,7 @@ from installer.installer import Installer
 from model.term_object import TermObject
 from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 from swapper.swapper import Swapper
+from deletion.deletion import Deletion
 
 
 def main():
@@ -62,7 +63,12 @@ def main():
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
-
+    deletion = Deletion(
+        term_object=term_object,
+        array_builder=array_builder,
+        cost_evaluator=cost_evaluator,
+        tutorial_piece_evaluator=tutorial_piece_evaluator)
+    deletion.execute()
 
 if __name__ == '__main__':
     main()

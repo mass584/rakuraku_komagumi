@@ -107,4 +107,6 @@ class Deletion():
             if self.__delete_one_tutorial_piece_if_improved(): continue
             # どのコマを削除したとしても違反が減らない場合、
             # 違反の増減に関わらず最も大きい違反ウェイトをもつコマを削除する。
-            self.__delete_one_tutorial_piece_forcibly()
+            if self.__delete_one_tutorial_piece_forcibly(): continue
+            # 以下の処理は異常系
+            logger.error('違反ウェイトをもつコマを削除できませんでした。')
