@@ -32,7 +32,8 @@ class SwapperFirstNeighborhood():
 
     def get_best_answer(
             self, student_index, teacher_index, tutorial_index, date_index, period_index):
-        result_array = multiprocessing.Manager().list([self.__initial_best_answer()])
+        result_array = multiprocessing.Manager().list(
+            [self.__initial_best_answer()])
         process = [
             multiprocessing.Process(
                 target=SwapperFirstNeighborhoodProcess(

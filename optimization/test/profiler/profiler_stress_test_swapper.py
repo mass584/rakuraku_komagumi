@@ -10,7 +10,7 @@ from src.swapper.swapper import Swapper
 from test.test_data.generate_stress_test_data import generate_stress_test_data
 
 
-PROCESS_COUNT=4
+PROCESS_COUNT = 4
 
 
 def stress_test_swapper():
