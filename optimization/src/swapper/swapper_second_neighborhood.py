@@ -46,11 +46,11 @@ class SwapperSecondNeighborhood():
             if not (pair_student_index == student_index and pair_tutorial_index == tutorial_index)), [None, None])
         # 対になるコマが存在しない場合は探索しない
         if pair_student_index is None or pair_tutorial_index is None:
-            return self.__best_answer['min_violation_and_cost']
+            return self.__best_answer['violation_and_cost']
         # 対になるコマがロック中の場合は探索しない
         if self.__fixed_tutorial_occupation_array[
                 pair_student_index, teacher_index, pair_tutorial_index, date_index, period_index]:
-            return self.__best_answer['min_violation_and_cost']
+            return self.__best_answer['violation_and_cost']
         result_array = multiprocessing.Manager().list([self.__initial_best_answer()])
         process = [
             multiprocessing.Process(
