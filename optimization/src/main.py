@@ -1,5 +1,7 @@
 import logging
 import os
+
+from numpy import array
 from array_builder.array_builder import ArrayBuilder
 from cost_evaluator.cost_evaluator import CostEvaluator
 from database.database import Database
@@ -53,7 +55,10 @@ def main():
     installer = Installer(
         process_count=process_count,
         term_object=term_object,
-        array_builder=array_builder,
+        array_size=array_builder.array_size(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+        timetable_array=array_builder.timetable_array(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
         cost_evaluator=cost_evaluator)
     installer.execute()
     swapper = Swapper(

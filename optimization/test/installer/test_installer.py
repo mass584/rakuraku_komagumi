@@ -25,7 +25,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
@@ -60,7 +63,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
@@ -88,7 +94,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
@@ -125,7 +134,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
@@ -153,7 +165,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
@@ -186,7 +201,10 @@ class TestInstaller(TestCase):
         installer = Installer(
             process_count=4,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_builder.array_size(),
+            tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+            timetable_array=array_builder.timetable_array(),
+            tutorial_occupation_array=array_builder.tutorial_occupation_array(),
             cost_evaluator=cost_evaluator)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
