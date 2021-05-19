@@ -52,6 +52,7 @@ services:
       - ./optimization:/root/project
     environment:
       - OPTIMIZATION_ENV=development
+      - OPTIMIZATION_PROCESS_COUNT=4
       - OPENBLAS_NUM_THREADS=1
       - DATABASE_HOST=db
       - DATABASE_NAME=development

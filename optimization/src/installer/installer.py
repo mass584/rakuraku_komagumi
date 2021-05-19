@@ -2,36 +2,25 @@ import itertools
 import math
 import multiprocessing
 import numpy
-import os
 import time
-from cost_evaluator.cost_evaluator import CostEvaluator
 from .installer_process import InstallerProcess
 from logging import getLogger
 
 
 logger = getLogger(__name__)
-PROCESS_COUNT = 4
 
 
 class Installer():
-    def __init__(self, term_object, array_builder,
-                 student_optimization_rules, teacher_optimization_rule):
+    def __init__(self, process_count, term_object,
+                 array_builder, cost_evaluator):
+        self.__process_count = process_count
         self.__term_object = term_object
         self.__array_size = array_builder.array_size()
         self.__uninstalled_tutorial_piece_count = \
             self.__get_uninstalled_tutorial_piece_count(
                 tutorial_piece_count=array_builder.tutorial_piece_count_array(),
                 tutorial_occupation_array=array_builder.tutorial_occupation_array())
-        self.__cost_evaluator = CostEvaluator(
-            array_size=array_builder.array_size(),
-            timetable=array_builder.timetable_array(),
-            student_optimization_rules=student_optimization_rules,
-            teacher_optimization_rule=teacher_optimization_rule,
-            student_group_occupation=array_builder.student_group_occupation_array(),
-            teacher_group_occupation=array_builder.teacher_group_occupation_array(),
-            student_vacancy=array_builder.student_vacancy_array(),
-            teacher_vacancy=array_builder.teacher_vacancy_array(),
-            school_grades=array_builder.school_grade_array())
+        self.__cost_evaluator = cost_evaluator
         self.__timetable_array = array_builder.timetable_array()
         self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__installed_count = 0
@@ -52,16 +41,16 @@ class Installer():
             multiprocessing.Process(
                 target=InstallerProcess(
                     proc_num,
-                    PROCESS_COUNT,
+                    self.__process_count,
                     self.__array_size,
                     self.__cost_evaluator,
                     self.__tutorial_occupation_array,
                     self.__timetable_array).run,
                 args=[cost_array, student_index, teacher_index, tutorial_index])
-            for proc_num in range(PROCESS_COUNT)]
-        for proc_num in range(PROCESS_COUNT):
+            for proc_num in range(self.__process_count)]
+        for proc_num in range(self.__process_count):
             process[proc_num].start()
-        for proc_num in range(PROCESS_COUNT):
+        for proc_num in range(self.__process_count):
             process[proc_num].join()
         cost_ndarray = numpy.array(cost_array).reshape([
             self.__array_size.date_count(), self.__array_size.period_count()])
@@ -74,7 +63,7 @@ class Installer():
         cost_array = [1215752191] * (
             self.__array_size.date_count() * self.__array_size.period_count())
         installer_process = InstallerProcess(
-            1, PROCESS_COUNT,
+            1, self.__process_count,
             self.__array_size,
             self.__cost_evaluator,
             self.__tutorial_occupation_array,
