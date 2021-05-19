@@ -63,7 +63,7 @@ class Deletion():
             student_index, teacher_index, tutorial_index, date_index, period_index)
 
     def __delete_one_tutorial_piece_if_improved(self):
-        [violation_before, _] = self.__cost_evaluator.violation_and_cost()
+        [violation_before, _] = self.__cost_evaluator.violation_and_cost(self.__tutorial_occupation_array)
         self.__tutorial_piece_evaluator.get_violation_and_cost_array(self.__tutorial_occupation_array)
         is_deleted = False
         for order in range(self.__total_tutorial_piece_count):
@@ -101,7 +101,8 @@ class Deletion():
 
     def execute(self):
         while True:
-            [violation, _] = self.__cost_evaluator.violation_and_cost()
+            [violation, _] = self.__cost_evaluator.violation_and_cost(
+                self.__tutorial_occupation_array)
             if violation == 0: break
             # 違反ウェイトをもつコマを削除して、違反を減少させる。
             if self.__delete_one_tutorial_piece_if_improved(): continue
@@ -110,3 +111,6 @@ class Deletion():
             if self.__delete_one_tutorial_piece_forcibly(): continue
             # 以下の処理は異常系
             logger.error('違反ウェイトをもつコマを削除できませんでした。')
+
+    def deleted_count(self):
+        return self.__deleted_count
