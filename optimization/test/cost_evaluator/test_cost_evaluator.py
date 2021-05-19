@@ -11,7 +11,6 @@ class TestCostEvaluator(TestCase):
         array_builder = ArrayBuilder(term_object=term)
         cost_evaluator = CostEvaluator(
             array_size=array_builder.array_size(),
-            timetable=array_builder.timetable_array(),
             student_optimization_rules=term['student_optimization_rules'],
             teacher_optimization_rule=term['teacher_optimization_rule'],
             student_group_occupation=array_builder.student_group_occupation_array(),

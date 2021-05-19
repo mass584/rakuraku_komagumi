@@ -1,35 +1,21 @@
+import copy
+import line_profiler
 import logging
-import os
-from array_builder.array_builder import ArrayBuilder
-from cost_evaluator.cost_evaluator import CostEvaluator
-from database.database import Database
-from installer.installer import Installer
-from model.term_object import TermObject
-from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
-from swapper.swapper import Swapper
+import sys
+from src.array_builder.array_builder import ArrayBuilder
+from src.cost_evaluator.cost_evaluator import CostEvaluator
+from src.tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
+from src.installer.installer import Installer
+from src.swapper.swapper import Swapper
+from test.test_data.generate_stress_test_data import generate_stress_test_data
 
 
-def main():
-    host = os.environ['DATABASE_HOST']
-    dbname = os.environ['DATABASE_NAME']
-    username = os.environ['DATABASE_USERNAME']
-    password = os.environ['DATABASE_PASSWORD']
-    term_id = os.environ['OPTIMIZATION_TERM_ID']
-    optimization_env = os.environ['OPTIMIZATION_ENV']
-    process_count = os.environ['OPTIMIZATION_PROCESS_COUNT']
+PROCESS_COUNT = 4
 
-    format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
-    level = 'DEBUG' if optimization_env == 'development' else 'INFO'
-    filename = f"log/{optimization_env}.log"
-    logging.basicConfig(level=level, filename=filename, format=format)
 
-    database = Database(
-        host=host,
-        port=5432,
-        dbname=dbname,
-        username=username,
-        password=password)
-    term_object = TermObject(database=database, term_id=term_id).fetch()
+def stress_test_swapper():
+    stress_test_term_data = generate_stress_test_data()
+    term_object = copy.deepcopy(stress_test_term_data)
     array_builder = ArrayBuilder(term_object=term_object)
     cost_evaluator = CostEvaluator(
         array_size=array_builder.array_size(),
@@ -50,13 +36,13 @@ def main():
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
     installer = Installer(
-        process_count=process_count,
+        process_count=PROCESS_COUNT,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator)
     installer.execute()
     swapper = Swapper(
-        process_count=process_count,
+        process_count=PROCESS_COUNT,
         term_object=term_object,
         array_builder=array_builder,
         cost_evaluator=cost_evaluator,
@@ -64,5 +50,12 @@ def main():
     swapper.execute()
 
 
-if __name__ == '__main__':
-    main()
+format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
+logging.basicConfig(level='INFO', filename='log/test.log', format=format)
+sys.path.append('./src')
+
+profiler = line_profiler.LineProfiler()
+profiler.add_module(stress_test_swapper)
+profiler.runcall(stress_test_swapper)
+with open('log/profiler_stress_test_swapper.log', 'w') as file:
+    profiler.print_stats(stream=file)

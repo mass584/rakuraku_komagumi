@@ -38,6 +38,9 @@ class ArrayBuilder():
     def tutorial_occupation_array(self):
         return self.__tutorial_occupation.tutorial_occupation_array()
 
+    def fixed_tutorial_occupation_array(self):
+        return self.__tutorial_occupation.fixed_tutorial_occupation_array()
+
     def tutorial_piece_count_array(self):
         return self.__tutorial_piece_count.tutorial_piece_count_array()
 
