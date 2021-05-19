@@ -9,14 +9,14 @@ logger = getLogger(__name__)
 
 
 class SwapperFirstNeighborhoodProcess():
-    def __init__(self, process_num, process_count,
-                 array_builder, cost_evaluator):
+    def __init__(self, process_num, process_count, array_size, timetable_array,
+                 tutorial_occupation_array, cost_evaluator):
         self.__process_num = process_num
         self.__process_count = process_count
-        self.__array_size = array_builder.array_size()
+        self.__array_size = array_size
         self.__cost_evaluator = cost_evaluator
-        self.__timetable_array = array_builder.timetable_array()
-        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
+        self.__timetable_array = timetable_array
+        self.__tutorial_occupation_array = tutorial_occupation_array
 
     def __date_and_period_index(self):
         date_index_list = range(self.__array_size.date_count())

@@ -4,7 +4,6 @@ import time
 from .swapper_first_neighborhood import SwapperFirstNeighborhood
 from .swapper_second_neighborhood import SwapperSecondNeighborhood
 from .swapper_third_neighborhood import SwapperThirdNeighborhood
-from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 from logging import getLogger
 
 
@@ -13,34 +12,43 @@ SWAPPING_PROCESS_MAX_COUNT = 1000
 
 
 class Swapper():
-    def __init__(self, process_count, term_object, array_builder,
-                 cost_evaluator, tutorial_piece_evaluator):
+    def __init__(self, process_count, term_object, array_size, timetable_array,
+                 tutorial_occupation_array, fixed_tutorial_occupation_array,
+                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator):
         self.__swapper_first_neighborhood = SwapperFirstNeighborhood(
             process_count=process_count,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_size,
+            timetable_array=timetable_array,
+            tutorial_occupation_array=tutorial_occupation_array,
             cost_evaluator=cost_evaluator,
         )
         self.__swapper_second_neighborhood = SwapperSecondNeighborhood(
             process_count=process_count,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_size,
+            timetable_array=timetable_array,
+            tutorial_occupation_array=tutorial_occupation_array,
+            fixed_tutorial_occupation_array=fixed_tutorial_occupation_array,
             cost_evaluator=cost_evaluator,
         )
         self.__swapper_third_neighborhood = SwapperThirdNeighborhood(
             process_count=process_count,
             term_object=term_object,
-            array_builder=array_builder,
+            array_size=array_size,
+            timetable_array=timetable_array,
+            tutorial_occupation_array=tutorial_occupation_array,
+            fixed_tutorial_occupation_array=fixed_tutorial_occupation_array,
             cost_evaluator=cost_evaluator,
         )
+        self.__tutorial_occupation_array = tutorial_occupation_array
+        self.__fixed_tutorial_occupation_array = fixed_tutorial_occupation_array
+        self.__total_tutorial_piece_count = numpy.sum(
+            tutorial_piece_count_array)
         self.__cost_evaluator = cost_evaluator
         self.__tutorial_piece_evaluator = tutorial_piece_evaluator
-        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
-        self.__fixed_tutorial_occupation_array = array_builder.fixed_tutorial_occupation_array()
         self.__round_robin_order_before = 0
         self.__swap_count = 0
-        self.__total_tutorial_piece_count = numpy.sum(
-            array_builder.tutorial_piece_count_array())
 
     def __improve_one_time(
             self, student_index, teacher_index, tutorial_index,

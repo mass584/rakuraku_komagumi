@@ -11,18 +11,18 @@ logger = getLogger(__name__)
 
 
 class Installer():
-    def __init__(self, process_count, term_object,
-                 array_builder, cost_evaluator):
+    def __init__(self, process_count, term_object, array_size, tutorial_piece_count_array,
+                 timetable_array, tutorial_occupation_array, cost_evaluator):
         self.__process_count = process_count
         self.__term_object = term_object
-        self.__array_size = array_builder.array_size()
+        self.__array_size = array_size
+        self.__timetable_array = timetable_array
+        self.__tutorial_occupation_array = tutorial_occupation_array
         self.__uninstalled_tutorial_piece_count = \
             self.__get_uninstalled_tutorial_piece_count(
-                tutorial_piece_count=array_builder.tutorial_piece_count_array(),
-                tutorial_occupation_array=array_builder.tutorial_occupation_array())
+                tutorial_piece_count=tutorial_piece_count_array,
+                tutorial_occupation_array=tutorial_occupation_array)
         self.__cost_evaluator = cost_evaluator
-        self.__timetable_array = array_builder.timetable_array()
-        self.__tutorial_occupation_array = array_builder.tutorial_occupation_array()
         self.__installed_count = 0
 
     def __get_uninstalled_tutorial_piece_count(

@@ -1,5 +1,6 @@
 import logging
 import os
+
 from array_builder.array_builder import ArrayBuilder
 from cost_evaluator.cost_evaluator import CostEvaluator
 from database.database import Database
@@ -7,6 +8,7 @@ from installer.installer import Installer
 from model.term_object import TermObject
 from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 from swapper.swapper import Swapper
+from deletion.deletion import Deletion
 
 
 def main():
@@ -52,16 +54,31 @@ def main():
     installer = Installer(
         process_count=process_count,
         term_object=term_object,
-        array_builder=array_builder,
+        array_size=array_builder.array_size(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+        timetable_array=array_builder.timetable_array(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
         cost_evaluator=cost_evaluator)
     installer.execute()
     swapper = Swapper(
         process_count=process_count,
         term_object=term_object,
-        array_builder=array_builder,
+        array_size=array_builder.array_size(),
+        timetable_array=array_builder.timetable_array(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
+        fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
+    deletion = Deletion(
+        term_object=term_object,
+        tutorial_occupation_array=array_builder.tutorial_occupation_array(),
+        fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
+        tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
+        cost_evaluator=cost_evaluator,
+        tutorial_piece_evaluator=tutorial_piece_evaluator)
+    deletion.execute()
 
 
 if __name__ == '__main__':
