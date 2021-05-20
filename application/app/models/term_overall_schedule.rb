@@ -2,7 +2,7 @@ class TermOverallSchedule
   include ActiveModel::Model
   extend OccupationsBlanks
 
-  attr_accessor :term, :tutorial_pieces, :seats
+  attr_accessor :term_id, :tutorial_pieces, :seats
 
   validate :verify_daily_blank_limit_for_teacher
   validate :verify_daily_blank_limit_for_student
@@ -28,6 +28,11 @@ class TermOverallSchedule
   end
 
   private
+
+  def term
+    @term ||= Term.find_by(id: term_id)
+    @term
+  end
 
   # validation
   def daily_blanks_for_teacher_on_one_day(seats_in_term, term_teacher_id, date_index)
