@@ -1,5 +1,7 @@
 class TermSchedule
   include ActiveModel::Model
+  include ActiveModel::Validations
+  include ActiveModel::Validations::Callbacks
   extend OccupationsBlanks
 
   attr_accessor :tutorial_piece_id, :seat_id
@@ -19,6 +21,8 @@ class TermSchedule
       updation_transaction
     elsif deletion?
       deletion_transaction
+    else
+      true
     end
   end
 
@@ -30,7 +34,7 @@ class TermSchedule
   end
 
   def before_seat
-    @before_seat ||= @tutorial_piece.seat
+    @before_seat ||= tutorial_piece.seat
     @before_seat
   end
 
