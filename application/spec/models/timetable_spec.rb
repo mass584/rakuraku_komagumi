@@ -15,6 +15,7 @@ RSpec.describe Timetable, type: :model do
 
     context '休講に変更した時' do
       it '個別授業が設定済みの場合updateに失敗する' do
+        @seat.update(term_teacher: @term_teacher)
         @piece.update(seat_id: @seat.id)
         expect(@timetable.update(is_closed: true)).to eq(false)
         expect(@timetable.errors.full_messages).to include('個別授業が割り当てられているため変更できません')
@@ -42,6 +43,7 @@ RSpec.describe Timetable, type: :model do
 
     context '集団授業有りに変更した時' do
       it '個別授業が設定済みの場合updateに失敗する' do
+        @seat.update(term_teacher: @term_teacher)
         @piece.update(seat_id: @seat.id)
         expect(@timetable.update(term_group_id: @term_group.id)).to eq(false)
         expect(@timetable.errors.full_messages).to include(

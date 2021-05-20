@@ -47,21 +47,21 @@ module FactorySupport
   end
 
   def create_normal_term_with_schedule
-    term = create_normal_term
+    term = create_normal_term_with_teacher_and_student(1, 1)
     tutorial_timetable = term.timetables.find_by(date_index: 1, period_index: 1)
     group_timetable = term.timetables.find_by(date_index: 1, period_index: 2)
-    teacher = FactoryBot.create(:teacher, room: term.room)
-    term_teacher = FactoryBot.create(:term_teacher, term: term, teacher: teacher)
-    student = FactoryBot.create(:student, room: term.room)
-    term_student = FactoryBot.create(:term_student, term: term, student: student)
+    term_teacher = term.term_teachers.first
+    term_student = term.term_students.first
     tutorial_contract = term_student.tutorial_contracts.first
     group_contract = term_student.group_contracts.first
     term_group = group_contract.term_group
     term_group.update(term_teachers: [term_teacher])
     group_timetable.update(term_group_id: term_group.id)
     tutorial_contract.update(term_teacher: term_teacher, piece_count: 1)
+    seat = tutorial_timetable.seats.first
     tutorial_piece = tutorial_contract.tutorial_pieces.first
-    tutorial_piece.update(seat: tutorial_timetable.seats.first)
+    seat.update(term_teacher: term_teacher)
+    tutorial_piece.update(seat: seat)
     group_contract.update(is_contracted: true)
     term.reload
   end

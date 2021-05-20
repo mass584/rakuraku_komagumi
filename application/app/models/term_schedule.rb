@@ -15,6 +15,8 @@ class TermSchedule
   before_validation :fetch_groups_group_by_student_and_timetable
 
   def save
+    return false if !valid?
+
     if creation?
       creation_transaction
     elsif updation?
@@ -31,6 +33,11 @@ class TermSchedule
   def tutorial_piece
     @tutorial_piece ||= TutorialPiece.find_by(id: tutorial_piece_id)
     @tutorial_piece
+  end
+
+  def term
+    @term ||= Term.find_by(id: tutorial_piece.term_id)
+    @term
   end
 
   def before_seat
@@ -107,6 +114,9 @@ class TermSchedule
     tutorials = @tutorials_group_by_teacher_and_timetable
                 .dig(term_teacher.id, date_index).to_h
     tutorials.delete(period_index) if empty_before_seat?
+    if after_seat.present? && date_index == after_seat.timetable.date_index
+      tutorials.merge!({ after_seat.timetable.period_index => [tutorial_piece] })
+    end
     groups = @groups_group_by_teacher_and_timetable
              .dig(term_teacher.id, date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
@@ -117,7 +127,10 @@ class TermSchedule
     period_index = after_seat.timetable.period_index
     tutorials = @tutorials_group_by_teacher_and_timetable
                 .dig(term_teacher.id, date_index).to_h
-    tutorials.merge!({ period_index => true })
+    tutorials.merge!({ period_index => [tutorial_piece] })
+    if before_seat.present? && date_index == before_seat.timetable.date_index && empty_before_seat?
+      tutorials.delete(before_seat.timetable.period_index)
+    end
     groups = @groups_group_by_teacher_and_timetable
              .dig(term_teacher.id, date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
@@ -129,6 +142,9 @@ class TermSchedule
     tutorials = @tutorials_group_by_student_and_timetable
                 .dig(term_student.id, date_index).to_h
     tutorials.delete(period_index)
+    if after_seat.present? && date_index == after_seat.timetable.date_index
+      tutorials.merge!({ after_seat.timetable.period_index => [tutorial_piece] })
+    end
     groups = @groups_group_by_student_and_timetable
              .dig(term_student.id, date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)
@@ -139,7 +155,10 @@ class TermSchedule
     period_index = after_seat.timetable.period_index
     tutorials = @tutorials_group_by_student_and_timetable
                 .dig(term_student.id, date_index).to_h
-    tutorials.merge!({ period_index => true })
+    tutorials.merge!({ period_index => [tutorial_piece] })
+    if before_seat.present? && date_index == before_seat.timetable.date_index
+      tutorials.delete(before_seat.timetable.period_index)
+    end
     groups = @groups_group_by_student_and_timetable
              .dig(term_student.id, date_index).to_h
     self.class.daily_blanks_from(term, tutorials, groups)

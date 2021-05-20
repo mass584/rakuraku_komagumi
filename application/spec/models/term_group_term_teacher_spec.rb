@@ -50,6 +50,9 @@ RSpec.describe TermGroup, type: :model do
       piece_first = tutorial_contract_first.tutorial_pieces.first
       piece_second = tutorial_contract_second.tutorial_pieces.first
       piece_third = tutorial_contract_third.tutorial_pieces.first
+      seat_first.update(term_teacher: @term_teacher_first)
+      seat_second.update(term_teacher: @term_teacher_first)
+      seat_third.update(term_teacher: @term_teacher_first)
       piece_first.update(seat_id: seat_first.id)
       piece_second.update(seat_id: seat_second.id)
       piece_third.update(seat_id: seat_third.id)
@@ -101,6 +104,8 @@ RSpec.describe TermGroup, type: :model do
       tutorial_contract_third.update(piece_count: 1, term_teacher_id: @term_teacher_first.id)
       piece_first = tutorial_contract_first.tutorial_pieces.first
       piece_second = tutorial_contract_second.tutorial_pieces.first
+      seat_first.update(term_teacher: @term_teacher_first)
+      seat_second.update(term_teacher: @term_teacher_first)
       piece_first.update(seat_id: seat_first.id)
       piece_second.update(seat_id: seat_second.id)
     end
