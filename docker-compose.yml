@@ -51,12 +51,10 @@ services:
     volumes:
       - ./optimization:/root/project
     environment:
+      - API_TOKEN=a91AsxzP:3Jdm43mQ
+      - API_DOMAIN=application
       - OPTIMIZATION_ENV=development
       - OPTIMIZATION_PROCESS_COUNT=4
       - OPENBLAS_NUM_THREADS=1
-      - DATABASE_HOST=db
-      - DATABASE_NAME=development
-      - DATABASE_USERNAME=rakuraku_komagumi
-      - DATABASE_PASSWORD=password
     depends_on:
       - db
