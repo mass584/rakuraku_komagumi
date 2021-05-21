@@ -1,0 +1,51 @@
+put:
+  tags:
+  - term
+  summary: ログの更新
+  operationId: updateLog
+  security:
+  - basicAuth: []
+  parameters:
+  - name: termId
+    in: path
+    description: 期間ID
+    required: true
+    schema:
+      type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            log:
+              $ref: '../schemas/logs/UpdateLog.yml'
+          required:
+          - log
+  responses:
+    204:
+      description: 'no_content'
+    400:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/BadRequest.yml'
+      description: 'bad_request'
+    401:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/Unauthorized.yml'
+      description: 'unauthorized'
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/ResourceNotFound.yml'
+      description: 'resource_not_found'
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/InternalServerError.yml'
+      description: 'internal_server_error'
