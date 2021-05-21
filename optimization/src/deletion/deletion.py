@@ -7,14 +7,15 @@ logger = getLogger(__name__)
 
 class Deletion():
     def __init__(self, term_object, tutorial_occupation_array, fixed_tutorial_occupation_array,
-                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator):
+                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator, optimization_log):
         self.__term_object = term_object
-        self.__cost_evaluator = cost_evaluator
-        self.__tutorial_piece_evaluator = tutorial_piece_evaluator
         self.__tutorial_occupation_array = tutorial_occupation_array
         self.__fixed_tutorial_occupation_array = fixed_tutorial_occupation_array
         self.__total_tutorial_piece_count = numpy.sum(
             tutorial_piece_count_array)
+        self.__cost_evaluator = cost_evaluator
+        self.__tutorial_piece_evaluator = tutorial_piece_evaluator
+        self.__optimization_log = optimization_log
         self.__deleted_count = 0
 
     def __guard(
@@ -63,6 +64,8 @@ class Deletion():
         self.__deleted_count += 1
         self.__logging_when_delete_one_tutorial_piece(
             student_index, teacher_index, tutorial_index, date_index, period_index)
+        if self.__optimization_log:
+            self.__optimization_log.increment_deletion_progress()
 
     def __delete_one_tutorial_piece_if_improved(self):
         [violation_before, _] = self.__cost_evaluator.violation_and_cost(

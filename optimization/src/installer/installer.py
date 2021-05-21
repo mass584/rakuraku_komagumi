@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 
 class Installer():
     def __init__(self, process_count, term_object, array_size, tutorial_piece_count_array,
-                 timetable_array, tutorial_occupation_array, cost_evaluator):
+                 timetable_array, tutorial_occupation_array, cost_evaluator, optimization_log):
         self.__process_count = process_count
         self.__term_object = term_object
         self.__array_size = array_size
@@ -23,6 +23,7 @@ class Installer():
                 tutorial_piece_count=tutorial_piece_count_array,
                 tutorial_occupation_array=tutorial_occupation_array)
         self.__cost_evaluator = cost_evaluator
+        self.__optimization_log = optimization_log
         self.__installed_count = 0
 
     def __get_uninstalled_tutorial_piece_count(
@@ -99,6 +100,8 @@ class Installer():
             date_index,
             period_index,
             elapsed_sec)
+        if self.__optimization_log:
+            self.__optimization_log.increment_installation_progress()
 
     def __logging(self, student_index, teacher_index,
                   tutorial_index, date_index, period_index, elapsed_sec):
