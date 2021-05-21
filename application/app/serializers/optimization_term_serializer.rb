@@ -1,6 +1,8 @@
 class OptimizationTermSerializer < ActiveModel::Serializer
   attribute :term
   has_many :timetables
+  attribute :teacher_group_timetables
+  attribute :student_group_timetables
   has_many :seats
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
@@ -12,27 +14,23 @@ class OptimizationTermSerializer < ActiveModel::Serializer
   attribute :teacher_vacancies
   has_many :tutorial_contracts
   has_many :tutorial_pieces
-  attribute :teacher_group_timetables
-  attribute :student_group_timetables
 
   def term
     {
-      term_type: object.term_type,
       date_count: object.date_count,
       period_count: object.period_count,
       seat_count: object.seat_count,
-      position_count: object.position_count,
       begin_at: object.begin_at,
       end_at: object.end_at,
     }
   end
 
   class TimetableSerializer < ActiveModel::Serializer
-    attributes :id, :date_index, :period_index, :term_group_id, :is_closed
+    attributes :date_index, :period_index, :term_group_id, :is_closed
   end
 
   class SeatSerializer < ActiveModel::Serializer
-    attributes :id, :date_index, :period_index, :seat_index, :term_teacher_id, :position_count
+    attributes :id, :date_index, :period_index, :seat_index, :term_teacher_id
 
     def date_index
       object.timetable.date_index
@@ -121,7 +119,7 @@ class OptimizationTermSerializer < ActiveModel::Serializer
   end
 
   class TutorialPieceSerializer < ActiveModel::Serializer
-    attributes :seat_id, :is_fixed
+    attributes :id, :seat_id, :is_fixed
     attribute :date_index
     attribute :period_index
     attribute :term_student_id
