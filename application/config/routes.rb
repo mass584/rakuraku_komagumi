@@ -4,6 +4,13 @@ Rails.application.routes.draw do
     registrations: 'users/registrations',
     sessions: 'users/sessions',
   }
+
+  namespace :optimization, defaults: { format: 'json' } do
+    resources :terms, only: [:show, :update] do
+      put :log
+    end
+  end
+
   defaults format: :html do
     resources :begin_end_times, only: [:update], defaults: { format: 'json' }
     resources :contracts, only: [:index]
