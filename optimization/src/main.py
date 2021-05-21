@@ -5,9 +5,11 @@ from array_builder.array_builder import ArrayBuilder
 from cost_evaluator.cost_evaluator import CostEvaluator
 from deletion.deletion import Deletion
 from http.fetch_optimization_term import FetchOptimizationTerm
+from http.update_optimization_log import UpdateOptimizationLog
 from http.update_optimization_result import UpdateOptimizationResult
 from installer.installer import Installer
 from model.optimization_result import OptimizationResult
+from model.optimization_log import OptimizationLog
 from swapper.swapper import Swapper
 from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvaluator
 
@@ -24,6 +26,12 @@ def main():
     filename = f"log/{optimization_env}.log"
     logging.basicConfig(level=level, filename=filename, format=format)
 
+    update_optimization_log = UpdateOptimizationLog(
+        token=api_token,
+        domain=api_domain,
+        term_id=term_id)
+    optimization_log = OptimizationLog(
+        update_optimization_log=update_optimization_log)
     fetch_optimization_term = FetchOptimizationTerm(
         token=api_token,
         domain=api_domain,
@@ -48,6 +56,8 @@ def main():
         student_vacancy=array_builder.student_vacancy_array(),
         teacher_vacancy=array_builder.teacher_vacancy_array(),
         school_grades=array_builder.school_grade_array())
+
+    optimization_log.start_installation()
     installer = Installer(
         process_count=process_count,
         term_object=term_object,
@@ -57,6 +67,8 @@ def main():
         tutorial_occupation_array=array_builder.tutorial_occupation_array(),
         cost_evaluator=cost_evaluator)
     installer.execute()
+
+    optimization_log.start_swapping()
     swapper = Swapper(
         process_count=process_count,
         term_object=term_object,
@@ -68,6 +80,8 @@ def main():
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     swapper.execute()
+
+    optimization_log.start_deletion()
     deletion = Deletion(
         term_object=term_object,
         tutorial_occupation_array=array_builder.tutorial_occupation_array(),
@@ -76,15 +90,18 @@ def main():
         cost_evaluator=cost_evaluator,
         tutorial_piece_evaluator=tutorial_piece_evaluator)
     deletion.execute()
-    optimization_result = OptimizationResult(
-        term_object=term_object,
-        array_size=array_builder.array_size(),
-        tutorial_occupation_array=array_builder.tutorial_occupation_array())
+
+    optimization_log.start_finalize()
     update_optimization_result = UpdateOptimizationResult(
         token=api_token,
         domain=api_domain,
-        optimization_result=optimization_result.get())
-    update_optimization_result.execute()
+        term_id=term_id)
+    optimization_result = OptimizationResult(
+        update_optimization_result=update_optimization_result,
+        term_object=term_object,
+        array_size=array_builder.array_size(),
+        tutorial_occupation_array=array_builder.tutorial_occupation_array())
+    optimization_result.write()
 
 if __name__ == '__main__':
     main()

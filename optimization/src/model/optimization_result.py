@@ -3,7 +3,8 @@ import numpy
 
 
 class OptimizationResult():
-    def __init__(self, term_object, array_size, tutorial_occupation_array):
+    def __init__(self, update_optimization_result, term_object, array_size, tutorial_occupation_array):
+        self.__update_optimization_result = update_optimization_result
         self.__term_object = term_object
         self.__array_size = array_size
         self.__seat_indexes_list = self.__get_seat_indexes_list()
@@ -107,8 +108,7 @@ class OptimizationResult():
             for date_index, period_index, seat_index
             in self.__seat_indexes_list]
 
-    def get(self):
-        return {
+    def write(self):
+        self.__update_optimization_result.execute({
             'tutorial_pieces': self.__tutorial_pieces(),
-            'seats': self.__seats(),
-        }
+            'seats': self.__seats()})
