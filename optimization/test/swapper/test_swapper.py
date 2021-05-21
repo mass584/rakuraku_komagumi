@@ -40,7 +40,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -51,7 +52,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -92,7 +94,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -103,7 +106,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -137,7 +141,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -148,7 +153,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -191,7 +197,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -202,7 +209,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -236,7 +244,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -247,7 +256,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -286,7 +296,8 @@ class TestSwapper(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         swapper = Swapper(
             process_count=4,
@@ -297,7 +308,8 @@ class TestSwapper(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         swapper.execute()
         tutorial_occupation_array = swapper.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)

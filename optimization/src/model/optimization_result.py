@@ -26,16 +26,15 @@ class OptimizationResult():
             range(self.__array_size.date_count()),
             range(self.__array_size.period_count()))
         return list(filter(
-            lambda student_index, teacher_index, tutorial_index, date_index, period_index: 
-                tutorial_occupation_array[
-                    student_index, teacher_index, tutorial_index, date_index, period_index] == 1,
+            lambda indexes: tutorial_occupation_array[
+                indexes[0], indexes[1], indexes[2], indexes[3], indexes[4]] == 1,
             indexes_list))
 
     def __get_term_teacher_id_array(self):
         term_teacher_id_array = numpy.zeros(
-            self.__array_size.date_count(),
+            (self.__array_size.date_count(),
             self.__array_size.period_count(),
-            self.__term_object['term']['seat_count'])
+            self.__term_object['term']['seat_count']), dtype=int)
         for _, teacher_index, _, date_index, period_index in self.__occupied_indexes_list:
             term_teacher_id = self.__term_object['term_teachers'][teacher_index]['id']
             term_teacher_ids = term_teacher_id_array[date_index, period_index, :]
@@ -47,14 +46,14 @@ class OptimizationResult():
 
     def __get_tutorial_piece_id_array(self):
         counter = numpy.zeros(
-            self.__array_size.student_count(),
-            self.__array_size.tutorial_count())
+            (self.__array_size.student_count(),
+            self.__array_size.tutorial_count()), dtype=int)
         tutorial_piece_id_array = numpy.zeros(
-            self.__array_size.student_count(),
+            (self.__array_size.student_count(),
             self.__array_size.teacher_count(),
             self.__array_size.tutorial_count(),
             self.__array_size.date_count(),
-            self.__array_size.period_count())
+            self.__array_size.period_count()), dtype=int)
         for student_index, teacher_index, tutorial_index, date_index, period_index in self.__occupied_indexes_list:
             term_student_id = self.__term_object['term_students'][student_index]['id']
             term_teacher_id = self.__term_object['term_teachers'][teacher_index]['id']
@@ -62,8 +61,8 @@ class OptimizationResult():
             tutorial_pieces = list(filter(
                 lambda tutorial_piece: tutorial_piece['term_student_id'] == term_student_id and
                     tutorial_piece['term_teacher_id'] == term_teacher_id and
-                    tutorial_piece['term_tutorial_id'] == term_tutorial_id),
-                self.__term_object['tutorial_pieces'])
+                    tutorial_piece['term_tutorial_id'] == term_tutorial_id,
+                self.__term_object['tutorial_pieces']))
             tutorial_piece_index = counter[student_index, tutorial_index]
             tutorial_piece_id_array[
                 student_index, teacher_index, tutorial_index, date_index, period_index] = \
@@ -79,15 +78,15 @@ class OptimizationResult():
         seat = next(
             seat
             for seat in self.__term_object['seats']
-            if seat['date_index'] == date_index and
-                seat['period_index'] == period_index and
-                seat['seat_index'] == seat_index)
+            if seat['date_index'] == date_index + 1 and
+                seat['period_index'] == period_index + 1 and
+                seat['seat_index'] == seat_index + 1)
         return seat['id']
 
     def __find_term_teacher_id(self, date_index, period_index, seat_index):
         return self.__term_teacher_id_array[date_index, period_index, seat_index] or None
 
-    def __tutorial_pieces(self):
+    def tutorial_pieces(self):
         return [
             {
                 'tutorial_piece_id': self.__find_tutorial_piece_id(
@@ -99,7 +98,7 @@ class OptimizationResult():
             for student_index, teacher_index, tutorial_index, date_index, period_index
             in self.__occupied_indexes_list]
 
-    def __seats(self):
+    def seats(self):
         return [
             {
                 'seat_id': self.__find_seat_id(date_index, period_index, seat_index),
@@ -110,5 +109,5 @@ class OptimizationResult():
 
     def write(self):
         self.__update_optimization_result.execute({
-            'tutorial_pieces': self.__tutorial_pieces(),
-            'seats': self.__seats()})
+            'tutorial_pieces': self.tutorial_pieces(),
+            'seats': self.seats()})

@@ -40,7 +40,8 @@ class TestDeletion(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         deletion.execute()
         self.assertEqual(deletion.deleted_count(), 1)
 
@@ -78,7 +79,8 @@ class TestDeletion(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         deletion.execute()
         self.assertEqual(deletion.deleted_count(), 1)
 
@@ -114,6 +116,7 @@ class TestDeletion(TestCase):
             fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             cost_evaluator=cost_evaluator,
-            tutorial_piece_evaluator=tutorial_piece_evaluator)
+            tutorial_piece_evaluator=tutorial_piece_evaluator,
+            optimization_log=None)
         deletion.execute()
         self.assertEqual(deletion.deleted_count(), 1)

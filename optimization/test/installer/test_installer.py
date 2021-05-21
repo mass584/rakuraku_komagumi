@@ -29,7 +29,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -67,7 +68,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -98,7 +100,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -138,7 +141,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -169,7 +173,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)
@@ -205,7 +210,8 @@ class TestInstaller(TestCase):
             tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
             timetable_array=array_builder.timetable_array(),
             tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-            cost_evaluator=cost_evaluator)
+            cost_evaluator=cost_evaluator,
+            optimization_log=None)
         installer.execute()
         tutorial_occupation_array = installer.tutorial_occupation_array()
         tutorial_occupation_sum = numpy.sum(tutorial_occupation_array)

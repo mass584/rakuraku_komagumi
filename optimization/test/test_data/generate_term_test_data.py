@@ -132,6 +132,9 @@ def generate_term_test_data(
     tutorial_pieces = list(itertools.chain.from_iterable([
         [
             {
+                'id': (tutorial_contract['term_student_id'] - 1) * tutorial_count * tutorial_contract['piece_count'] \
+                    + (tutorial_contract['term_tutorial_id'] - 1) * tutorial_contract['piece_count'] \
+                    + piece_number + 1,
                 'date_index': None,
                 'period_index': None,
                 'term_student_id': tutorial_contract['term_student_id'],
@@ -139,7 +142,7 @@ def generate_term_test_data(
                 'term_teacher_id': tutorial_contract['term_teacher_id'],
                 'is_fixed': False,
             }
-            for _ in range(tutorial_contract['piece_count'])
+            for piece_number in range(tutorial_contract['piece_count'])
         ]
         for tutorial_contract in tutorial_contracts
     ]))
