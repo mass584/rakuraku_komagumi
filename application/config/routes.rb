@@ -6,9 +6,8 @@ Rails.application.routes.draw do
   }
 
   namespace :optimization, defaults: { format: 'json' } do
-    resources :terms, only: [:show, :update] do
-      put :log
-    end
+    resources :terms, only: [:show, :update]
+    resources :logs, only: [:update]
   end
 
   defaults format: :html do

@@ -1,5 +1,6 @@
 module Optimization
   class OptimizationController < ApplicationController
+    include ErrorResponse
     skip_before_action :verify_authenticity_token
     rescue_from Exception, with: :handle_internal_server_error
     before_action :basic_auth

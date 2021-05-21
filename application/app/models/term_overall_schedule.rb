@@ -1,5 +1,7 @@
 class TermOverallSchedule
   include ActiveModel::Model
+  include ActiveModel::Validations
+  include ActiveModel::Validations::Callbacks
   extend OccupationsBlanks
 
   attr_accessor :term_id, :tutorial_pieces, :seats
