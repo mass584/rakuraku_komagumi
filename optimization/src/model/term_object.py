@@ -209,11 +209,11 @@ class TermObject():
     def __fetch_tutorial_pieces(self):
         cur = self.__database.cursor()
         sql_select = (', '.join([
+            "tutorial_pieces.id", "tutorial_pieces.is_fixed"
             "timetables.date_index", "timetables.period_index",
             "tutorial_contracts.term_student_id",
             "tutorial_contracts.term_teacher_id",
-            "tutorial_contracts.term_tutorial_id",
-            "tutorial_pieces.is_fixed"]))
+            "tutorial_contracts.term_tutorial_id"]))
         sql_from = (
             "((tutorial_pieces left join seats "
             "on seats.id = tutorial_pieces.seat_id) "
