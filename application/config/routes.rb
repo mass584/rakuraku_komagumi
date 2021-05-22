@@ -4,6 +4,12 @@ Rails.application.routes.draw do
     registrations: 'users/registrations',
     sessions: 'users/sessions',
   }
+
+  namespace :optimization, defaults: { format: 'json' } do
+    resources :terms, only: [:show, :update]
+    resources :logs, only: [:update]
+  end
+
   defaults format: :html do
     resources :begin_end_times, only: [:update], defaults: { format: 'json' }
     resources :contracts, only: [:index]
@@ -27,6 +33,8 @@ Rails.application.routes.draw do
     end
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
+    resources :term_overall_schedules, only: [:create], defaults: { format: 'json' }
+    resources :term_schedules, only: [:create], defaults: { format: 'json' }
     resources :term_students, only: [:index] do
       get :vacancy
       get :schedule

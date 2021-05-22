@@ -1,0 +1,14 @@
+type: object
+properties:
+  code:
+    type: integer
+    example: 401
+  messages:
+    type: array
+    items:
+      type: string
+    example: 
+    - 認証トークンの形式が無効です
+    - セッションの有効期限が切れています
+    - メールアドレスもしくはパスワードが間違えています
+    - ログインしてください

@@ -1,3 +1,6 @@
+import datetime
+
+
 class ArraySize():
     def __init__(self, term):
         self.term = term
@@ -14,9 +17,12 @@ class ArraySize():
         self.__school_grade_count = 13
 
     def __get_date_count(self):
-        is_normal = self.term['term']['term_type'] == 0
-        date_count = (self.term['term']['end_at'] -
-                      self.term['term']['begin_at']).days + 1
+        is_normal = self.term['term']['term_type'] == 'normal'
+        begin_at = datetime.datetime.strptime(
+            self.term['term']['begin_at'], '%Y-%m-%d')
+        end_at = datetime.datetime.strptime(
+            self.term['term']['end_at'], '%Y-%m-%d')
+        date_count = (end_at - begin_at).days + 1
         return 7 if is_normal else date_count
 
     def teacher_count(self):

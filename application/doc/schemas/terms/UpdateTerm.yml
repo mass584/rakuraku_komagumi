@@ -1,0 +1,42 @@
+type: object
+properties:
+  tutorial_pieces:
+    type: array
+    items:
+      type: object
+      properties:
+        tutorial_piece_id:
+          type: integer
+          example: 1
+          description: 個別科目のコマID
+        seat_id:
+          type: integer
+          example: 1
+          description: 座席ID
+        is_fixed:
+          type: boolean
+          example: false
+          description: ロック済みかどうか
+      required:
+      - tutorial_piece_id
+      - seat_id
+      - is_fixed
+  seats:
+    type: array
+    items:
+      type: object
+      properties:
+        seat_id:
+          type: integer
+          example: 1
+          description: 座席ID
+        term_teacher_id:
+          type: integer
+          example: 1
+          description: 講師ID
+      required:
+      - seat_id
+      - term_teacher_id
+required:
+- tutorial_pieces
+- seats

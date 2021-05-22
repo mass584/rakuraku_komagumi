@@ -15,19 +15,19 @@ class IntervalEvaluator():
             in range(array_size.school_grade_count())]
         self.__student_school_grade_codes = school_grades
         self.__school_grade_indexes = {
-            11: 0,
-            12: 1,
-            13: 2,
-            14: 3,
-            15: 4,
-            16: 5,
-            21: 6,
-            22: 7,
-            23: 8,
-            31: 9,
-            32: 10,
-            33: 11,
-            99: 12}
+            'e1': 0,
+            'e2': 1,
+            'e3': 2,
+            'e4': 3,
+            'e5': 4,
+            'e6': 5,
+            'j1': 6,
+            'j2': 7,
+            'j3': 8,
+            'h1': 9,
+            'h2': 10,
+            'h3': 11,
+            'other': 12}
 
     def __each_interval_evaluator(
             self, date_and_period_array, school_grade_code):

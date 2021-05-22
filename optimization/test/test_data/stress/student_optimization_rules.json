@@ -1,6 +1,6 @@
 [
   {
-    "school_grade": 11,
+    "school_grade": "e1",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -21,7 +21,7 @@
     ]
   },
   {
-    "school_grade": 12,
+    "school_grade": "e2",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -42,7 +42,7 @@
     ]
   },
   {
-    "school_grade": 13,
+    "school_grade": "e3",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -63,7 +63,7 @@
     ]
   },
   {
-    "school_grade": 14,
+    "school_grade": "e4",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -84,7 +84,7 @@
     ]
   },
   {
-    "school_grade": 15,
+    "school_grade": "e5",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -105,7 +105,7 @@
     ]
   },
   {
-    "school_grade": 16,
+    "school_grade": "e6",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -126,7 +126,7 @@
     ]
   },
   {
-    "school_grade": 21,
+    "school_grade": "j1",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -147,7 +147,7 @@
     ]
   },
   {
-    "school_grade": 22,
+    "school_grade": "j2",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -168,7 +168,7 @@
     ]
   },
   {
-    "school_grade": 23,
+    "school_grade": "j3",
     "occupation_limit": 4,
     "occupation_costs": [
       0,
@@ -191,7 +191,7 @@
     ]
   },
   {
-    "school_grade": 31,
+    "school_grade": "h1",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -212,7 +212,7 @@
     ]
   },
   {
-    "school_grade": 32,
+    "school_grade": "h2",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -233,7 +233,7 @@
     ]
   },
   {
-    "school_grade": 33,
+    "school_grade": "h3",
     "occupation_limit": 3,
     "occupation_costs": [
       0,
@@ -254,7 +254,7 @@
     ]
   },
   {
-    "school_grade": 99,
+    "school_grade": "other",
     "occupation_limit": 3,
     "occupation_costs": [
       0,

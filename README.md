@@ -9,4 +9,4 @@
 # ドキュメント一覧
 * [アプリケーション開発者向けREADME](./application/README.md)
 * [組み合わせ最適化モジュール開発向けREADME](./optimization/README.md)
-* [データモデル設計](./application/doc/README.md)
+* [API/データモデル設計書README](./application/doc/README.md)

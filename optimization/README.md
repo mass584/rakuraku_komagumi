@@ -25,7 +25,7 @@ docker exec -it rakuraku_komagumi_optimization_1 /bin/bash --login
 * Linter/Formatterの実行
 
 ```shell
-pycodestyle . --ignore="E501,W504" # チェック
+pycodestyle . --ignore="E501,W503,W504" # チェック
 autopep8 --in-place --aggressive --recursive . # 自動修正
 ```
 

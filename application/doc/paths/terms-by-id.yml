@@ -1,0 +1,97 @@
+get:
+  tags:
+  - term
+  summary: 期間の取得
+  operationId: getTerm
+  description: 対象期間のスケジュールオブジェクトを取得します。
+    オブジェクト内には、最適化計算に必要な全ての情報が含まれます。
+  security:
+  - basicAuth: []
+  parameters:
+  - name: termId
+    in: path
+    description: 期間ID
+    required: true
+    schema:
+      type: integer
+  responses:
+    200:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              term:
+                $ref: '../schemas/terms/Term.yml'
+            required:
+            - term
+      description: 'ok'
+    401:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/Unauthorized.yml'
+      description: 'unauthorized'
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/ResourceNotFound.yml'
+      description: 'resource_not_found'
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/InternalServerError.yml'
+      description: 'internal_server_error'
+put:
+  tags:
+  - term
+  summary: 期間の更新
+  operationId: updateTerm
+  security:
+  - basicAuth: []
+  parameters:
+  - name: termId
+    in: path
+    description: 期間ID
+    required: true
+    schema:
+      type: string
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            business_owner:
+              $ref: '../schemas/terms/UpdateTerm.yml'
+          required:
+          - business_owner
+  responses:
+    204:
+      description: 'no_content'
+    400:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/BadRequest.yml'
+      description: 'bad_request'
+    401:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/Unauthorized.yml'
+      description: 'unauthorized'
+    404:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/ResourceNotFound.yml'
+      description: 'resource_not_found'
+    500:
+      content:
+        application/json:
+          schema:
+            $ref: '../schemas/errors/InternalServerError.yml'
+      description: 'internal_server_error'

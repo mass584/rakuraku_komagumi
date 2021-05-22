@@ -20,23 +20,9 @@ class TutorialPiece < ApplicationRecord
   validate :verify_daily_occupation_limit,
            on: :update,
            if: :will_save_change_to_seat_id?
-  validate :verify_daily_blank_limit,
-           on: :update,
-           if: :will_save_change_to_seat_id?
-  accepts_nested_attributes_for :seat
 
-  before_validation :fetch_seat_in_database, on: :update
   before_validation :fetch_new_tutorials_group_by_timetable, on: :update
   before_validation :fetch_groups_group_by_timetable, on: :update
-  before_update :set_term_teacher_on_seat,
-                if: :will_save_change_to_seat_id?
-  before_update :unset_term_teacher_on_seat,
-                if: :will_save_change_to_seat_id?
-  # after_updateコールバックの順番を入れ替えてはいけません
-  # save_seat_in_databaseの実行後に一時的にバリデーション違反がある中間状態を経由しています
-  after_update :set_skip_intermediate_state_validation
-  after_update :save_seat_in_database
-  after_update :save_seat
 
   scope :filter_by_placed, -> { where.not(seat_id: nil) }
   scope :filter_by_unplaced, -> { where(seat_id: nil) }
@@ -72,10 +58,6 @@ class TutorialPiece < ApplicationRecord
 
   def seat_updation?
     seat_id_in_database.present? && seat_id.present? && seat_id_in_database != seat_id
-  end
-
-  def seat_deletion?
-    seat_id_in_database.present? && seat_id.nil?
   end
 
   # validate
@@ -133,35 +115,7 @@ class TutorialPiece < ApplicationRecord
     end
   end
 
-  def daily_blanks(date_index)
-    tutorials = @new_tutorials_group_by_timetable[date_index].to_h
-    groups = @groups_group_by_timetable[date_index].to_h
-    self.class.daily_blanks_from(term, tutorials, groups)
-  end
-
-  def verify_daily_blank_limit
-    limit = tutorial_contract.term_student.optimization_rule.blank_limit
-    if seat_creation? && daily_blanks(seat.timetable.date_index) > limit
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
-    end
-
-    if seat_updation? && (
-      daily_blanks(seat.timetable.date_index) > limit ||
-      daily_blanks(@seat_in_database.timetable.date_index) > limit
-    )
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
-    end
-
-    if seat_deletion? && daily_blanks(@seat_in_database.timetable.date_index) > limit
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
-    end
-  end
-
   # before_validation
-  def fetch_seat_in_database
-    @seat_in_database = Seat.find_by(id: seat_id_in_database)
-  end
-
   def fetch_new_tutorials_group_by_timetable
     records = term
               .tutorial_pieces
@@ -195,39 +149,5 @@ class TutorialPiece < ApplicationRecord
       proc { |item| item[:date_index] },
       proc { |item| item[:period_index] },
     )
-  end
-
-  # before_update
-  def set_term_teacher_on_seat
-    if (seat_creation? || seat_updation?) && seat.tutorial_pieces.count.zero?
-      seat.term_teacher_id = tutorial_contract.term_teacher_id
-    end
-  end
-
-  def unset_term_teacher_on_seat
-    if (seat_updation? || seat_deletion?) && @seat_in_database.tutorial_pieces.count == 1
-      @seat_in_database.term_teacher_id = nil
-    end
-  end
-
-  # after_update
-  def set_skip_intermediate_state_validation
-    if @seat_in_database.present? && seat.present?
-      skip_intermediate_state_validation =
-        @seat_in_database.timetable.date_index == seat.timetable.date_index
-      @seat_in_database.skip_intermediate_state_validation = skip_intermediate_state_validation
-    end
-  end
-
-  def save_seat_in_database
-    if @seat_in_database.present? && !@seat_in_database.save
-      raise ActiveRecord::Rollback
-    end
-  end
-
-  def save_seat
-    if seat.present? && !seat.save
-      raise ActiveRecord::Rollback
-    end
   end
 end

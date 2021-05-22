@@ -14,7 +14,7 @@ SWAPPING_PROCESS_MAX_COUNT = 1000
 class Swapper():
     def __init__(self, process_count, term_object, array_size, timetable_array,
                  tutorial_occupation_array, fixed_tutorial_occupation_array,
-                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator):
+                 tutorial_piece_count_array, cost_evaluator, tutorial_piece_evaluator, optimization_log):
         self.__swapper_first_neighborhood = SwapperFirstNeighborhood(
             process_count=process_count,
             term_object=term_object,
@@ -47,6 +47,7 @@ class Swapper():
             tutorial_piece_count_array)
         self.__cost_evaluator = cost_evaluator
         self.__tutorial_piece_evaluator = tutorial_piece_evaluator
+        self.__optimization_log = optimization_log
         self.__round_robin_order_before = 0
         self.__swap_count = 0
 
@@ -86,6 +87,8 @@ class Swapper():
             self.__swapper_third_neighborhood.logging(
                 elapsed_sec, round_robin_order, self.__swap_count)
         self.__round_robin_order_before = round_robin_order
+        if self.__optimization_log:
+            self.__optimization_log.increment_swapping_progress()
         return True
 
     def __guard_improvement(
@@ -132,3 +135,6 @@ class Swapper():
 
     def tutorial_occupation_array(self):
         return self.__tutorial_occupation_array
+
+    def swap_count(self):
+        return self.__swap_count

@@ -22,7 +22,7 @@ class TestOccupationAndBlankEvaluator(TestCase):
         group_occupation = GroupOccupation(term, array_size)
         school_grade = SchoolGrade(term, array_size)
         student_optimization_rules = term['student_optimization_rules']
-        teacher_optimization_rule = term['teacher_optimization_rule']
+        teacher_optimization_rule = term['teacher_optimization_rules'][0]
         occupation_and_blank_evaluator = OccupationAndBlankEvaluator(
             array_size=array_size,
             student_optimization_rules=student_optimization_rules,

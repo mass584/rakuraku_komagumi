@@ -1,15 +1,11 @@
-import datetime
 from .generate_term_test_data import generate_term_test_data
 
 season_term = generate_term_test_data(
-    name='春期講習',
-    year=2021,
-    term_type=1,
-    begin_at=datetime.date(2021, 3, 30),
-    end_at=datetime.date(2021, 4, 12),
+    term_type='season',
+    begin_at='2021-03-30',
+    end_at='2021-04-12',
     period_count=6,
     seat_count=7,
-    position_count=2,
     student_count=20,
     teacher_count=5,
     tutorial_count=5,

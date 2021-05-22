@@ -45,7 +45,7 @@ jobs:
           working_directory: ~/project/optimization
       - run:
           name: pycodestyle
-          command: pycodestyle . --ignore="E501,W504"
+          command: pycodestyle . --ignore="E501,W503,W504"
           working_directory: ~/project/optimization
       - run:
           name: unittest

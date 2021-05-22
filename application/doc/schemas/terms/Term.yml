@@ -1,0 +1,464 @@
+type: object
+properties:
+  term:
+    type: object
+    properties:
+      term_type:
+        type: string
+        enum:
+          - normal
+          - season
+          - exam_planning
+        description: 期間の種類
+      date_count:
+        type: integer
+        example: 40
+        description: 期間の日数
+      period_count:
+        type: integer
+        example: 6
+        description: 期間の時限数
+      seat_count:
+        type: integer
+        example: 8
+        description: 座席数
+      begin_at:
+        type: string
+        example: '2020-07-23'
+        description: 開始日（YYYY-MM-DD）
+      end_at:
+        type: string
+        example: '2020-08-31'
+        description: 終了日（YYYY-MM-DD）
+    required:
+    - term_type
+    - date_count
+    - period_count
+    - seat_count
+    - begin_at
+    - end_at
+  timetables:
+    type: array
+    items:
+      type: object
+      properties:
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        term_group_id:
+          type: integer
+          example: null
+          nullable: true 
+          description: 集団授業ID
+        is_closed:
+          type: boolean
+          example: false
+          description: 休講かどうか
+      required:
+      - date_index
+      - period_index
+      - term_group_id
+      - is_closed
+  student_group_timetables: 
+    type: array
+    items:
+      type: object
+      properties:
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        term_student_id:
+          type: integer
+          example: 1
+          description: 生徒ID
+        term_group_id:
+          type: integer
+          example: 1
+          description: 集団授業ID
+      required:
+      - date_index
+      - period_index
+      - term_student_id
+      - term_group_id
+  teacher_group_timetables: 
+    type: array
+    items:
+      type: object
+      properties:
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        term_teacher_id:
+          type: integer
+          example: 1
+          description: 講師ID
+        term_group_id:
+          type: integer
+          example: 1
+          description: 集団授業ID
+      required:
+      - date_index
+      - period_index
+      - term_teacher_id
+      - term_group_id
+  seats:
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 座席ID
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        seat_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 座席インデックス
+        term_teacher_id:
+          type: integer
+          example: null
+          nullable: true 
+          description: 講師ID
+      required:
+      - id
+      - date_index
+      - period_index
+      - seat_index
+      - term_teacher_id
+  teacher_optimization_rules:
+    type: array
+    items:
+      type: object
+      properties:
+        single_cost:
+          type: integer
+          example: 100
+          description: １対１のコスト
+        different_pair_cost:
+          type: integer
+          example: 10
+          description: 違う科目を教えるコスト
+        occupation_limit:
+          type: integer
+          example: 5
+          description: １日の授業数の上限
+        occupation_costs:
+          type: integer[]
+          example: [0, 50, 15, 0, 0, 20]
+          description: 1日の授業数のコスト
+        blank_limit:
+          type: integer
+          example: 1
+          description: １日の空きコマの上限
+        blank_costs:
+          type: integer[]
+          example: [0, 100]
+          description: 1日の空きコマのコスト
+      required:
+      - single_cost
+      - different_pair_cost
+      - occupation_limit
+      - occupation_costs
+      - blank_limit
+      - blank_costs
+  student_optimization_rules:
+    type: array
+    items:
+      type: object
+      properties:
+        school_grade:
+          type: integer
+          example: 21
+          description: 学年コード
+        occupation_limit:
+          type: integer
+          example: 5
+          description: １日の授業数の上限
+        occupation_costs:
+          type: integer[]
+          example: [0, 50, 15, 0, 0, 20]
+          description: 1日の授業数のコスト
+        blank_limit:
+          type: integer
+          example: 1
+          description: １日の空きコマの上限
+        blank_costs:
+          type: integer[]
+          example: [0, 100]
+          description: 1日の空きコマのコスト
+        interval_cutoff:
+          type: integer
+          example: 1
+          description: 授業間隔コストのカットオフ値
+        interval_costs:
+          type: integer[]
+          example: [0, 100]
+          description: 授業間隔コスト
+      required:
+      - school_grade
+      - occupation_limit
+      - occupation_costs
+      - blank_limit
+      - blank_costs
+      - interval_cutoff
+      - interval_costs
+  term_teachers: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 講師ID
+        name:
+          type: string
+          example: 氏名
+          description: 氏名
+        vacancy_status:
+          type: integer
+          example: 1
+          description: ステータス
+      required:
+      - id
+      - name
+      - vacancy_status
+  term_students: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 生徒ID
+        name:
+          type: string
+          example: 氏名
+          description: 氏名
+        school_grade:
+          type: integer
+          example: 21
+          description: 学年コード
+        vacancy_status:
+          type: integer
+          example: 1
+          description: ステータス
+      required:
+      - id
+      - name
+      - school_grade
+      - vacancy_status
+  term_tutorials: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 個別科目ID
+        name:
+          type: string
+          example: 科目名
+          description: 科目名
+      required:
+      - id
+      - name
+  term_groups: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 集団科目ID
+        name:
+          type: string
+          example: 科目名
+          description: 科目名
+      required:
+      - id
+      - name
+  teacher_vacancies: 
+    type: array
+    items:
+      type: object
+      properties:
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        term_teacher_id:
+          type: integer
+          example: 1
+          description: 講師ID
+        is_vacant:
+          type: boolean
+          example: false
+          description: 空きかどうか
+      required:
+      - date_index
+      - period_index
+      - term_teacher_id
+      - is_vacant
+  student_vacancies: 
+    type: array
+    items:
+      type: object
+      properties:
+        date_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          example: 1
+          minimum: 1
+          description: 時限インデックス
+        term_student_id:
+          type: integer
+          example: 1
+          description: 生徒ID
+        is_vacant:
+          type: boolean
+          example: false
+          description: 空きかどうか
+      required:
+      - date_index
+      - period_index
+      - term_student_id
+      - is_vacant
+  tutorial_contracts: 
+    type: array
+    items:
+      type: object
+      properties:
+        term_student_id:
+          type: integer
+          example: 1
+          description: 生徒ID
+        term_teacher_id:
+          type: integer
+          example: 1
+          description: 講師ID
+        term_tutorial_id:
+          type: integer
+          example: 1
+          description: 個別科目ID
+        piece_count:
+          type: integer
+          example: 1
+          description: コマ数
+      required:
+      - term_student_id
+      - term_teacher_id
+      - term_tutorial_id
+      - piece_count
+  tutorial_pieces: 
+    type: array
+    items:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+          description: 個別科目のコマID
+        seat_id:
+          type: integer
+          nullable: true
+          example: null
+          description: 座席ID
+        date_index:
+          type: integer
+          nullable: true
+          example: null
+          minimum: 1
+          description: 日付インデックス
+        period_index:
+          type: integer
+          nullable: true
+          example: null
+          minimum: 1
+          description: 時限インデックス
+        term_student_id:
+          type: integer
+          example: 1
+          description: 生徒ID
+        term_teacher_id:
+          type: integer
+          example: 1
+          description: 講師ID
+        term_tutorial_id:
+          type: integer
+          example: 1
+          description: 個別科目ID
+        is_fixed:
+          type: boolean
+          example: false
+          description: 固定されているかどうか
+      required:
+      - id
+      - seat_id
+      - date_index
+      - period_index
+      - term_student_id
+      - term_teacher_id
+      - term_tutorial_id
+      - is_fixed
+required:
+- term
+- timetables
+- teacher_group_timetables
+- student_group_timetables
+- seats
+- teacher_optimization_rules
+- student_optimization_rules
+- term_teachers
+- term_students
+- term_tutorials
+- term_groups
+- teacher_vacancies
+- student_vacancies
+- tutorial_contracts
+- tutorial_pieces

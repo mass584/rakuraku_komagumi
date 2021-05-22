@@ -56,10 +56,12 @@ export default Vue.extend({
       return response;
     },
     updateTutorialPiece: async function(tutorialPieceId: number, seatId: number | null, isFixed: boolean) {
-      const url = `/tutorial_pieces/${tutorialPieceId}.json`;
-      const reqBody = { tutorial_piece: { seat_id: seatId, is_fixed: isFixed } };
-      const response = await axios.put(url, reqBody);
-      return response;
+      const url1 = "/term_schedules";
+      const reqBody1 = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
+      await axios.post(url1, reqBody1);
+      const url2 = `/tutorial_pieces/${tutorialPieceId}.json`;
+      const reqBody2 = { tutorial_piece: { is_fixed: isFixed } };
+      await axios.put(url2, reqBody2);
     },
     updateRowOrder: async function(termTeacher: TermTeacher, rowOrderPosition: 'up' | 'down') {
       const url = `/term_teachers/${termTeacher.id}.json`;
