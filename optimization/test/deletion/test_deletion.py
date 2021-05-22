@@ -47,9 +47,11 @@ class TestDeletion(TestCase):
             cost_evaluator=cost_evaluator,
             tutorial_piece_evaluator=tutorial_piece_evaluator,
             optimization_log=None)
-        tutorial_pieces_count_before = numpy.sum(array_builder.tutorial_occupation_array())
+        tutorial_pieces_count_before = numpy.sum(
+            array_builder.tutorial_occupation_array())
         deletion.execute()
-        tutorial_pieces_count_after = numpy.sum(array_builder.tutorial_occupation_array())
+        tutorial_pieces_count_after = numpy.sum(
+            array_builder.tutorial_occupation_array())
         self.assertEqual(deletion.deleted_count(), 1)
         self.assertEqual(tutorial_pieces_count_before, 3)
         self.assertEqual(tutorial_pieces_count_after, 2)

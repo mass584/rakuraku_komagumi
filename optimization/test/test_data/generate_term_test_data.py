@@ -18,7 +18,8 @@ def generate_term_test_data(
 ):
     begin_at_datetime = datetime.datetime.strptime(begin_at, '%Y-%m-%d')
     end_at_datetime = datetime.datetime.strptime(end_at, '%Y-%m-%d')
-    date_count = 7 if term_type == 0 else (end_at_datetime - begin_at_datetime).days + 1
+    date_count = 7 if term_type == 0 else (
+        end_at_datetime - begin_at_datetime).days + 1
     term = {
         'term_type': term_type,
         'date_count': date_count,
@@ -141,9 +142,9 @@ def generate_term_test_data(
     tutorial_pieces = list(itertools.chain.from_iterable([
         [
             {
-                'id': (tutorial_contract['term_student_id'] - 1) * tutorial_count * tutorial_contract['piece_count'] \
-                    + (tutorial_contract['term_tutorial_id'] - 1) * tutorial_contract['piece_count'] \
-                    + piece_number + 1,
+                'id': (tutorial_contract['term_student_id'] - 1) * tutorial_count * tutorial_contract['piece_count']
+                + (tutorial_contract['term_tutorial_id'] - 1) * tutorial_contract['piece_count']
+                + piece_number + 1,
                 'seat_id': None,
                 'date_index': None,
                 'period_index': None,

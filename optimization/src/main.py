@@ -107,5 +107,6 @@ def main():
         tutorial_occupation_array=array_builder.tutorial_occupation_array())
     optimization_result.write()
 
+
 if __name__ == '__main__':
     main()

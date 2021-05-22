@@ -18,8 +18,10 @@ class ArraySize():
 
     def __get_date_count(self):
         is_normal = self.term['term']['term_type'] == 'normal'
-        begin_at = datetime.datetime.strptime(self.term['term']['begin_at'], '%Y-%m-%d')
-        end_at = datetime.datetime.strptime(self.term['term']['end_at'], '%Y-%m-%d')
+        begin_at = datetime.datetime.strptime(
+            self.term['term']['begin_at'], '%Y-%m-%d')
+        end_at = datetime.datetime.strptime(
+            self.term['term']['end_at'], '%Y-%m-%d')
         date_count = (end_at - begin_at).days + 1
         return 7 if is_normal else date_count
 

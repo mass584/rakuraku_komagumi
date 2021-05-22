@@ -25,10 +25,10 @@ class TestOptimizationResult(TestCase):
         seats = optimization_result.seats()
         installed_tutorial_pieces = [
             tutorial_piece for tutorial_piece in tutorial_pieces
-            if tutorial_piece['is_fixed'] != None]
+            if tutorial_piece['is_fixed'] is not None]
         installed_seats = [
             seat for seat in seats
-            if seat['term_teacher_id'] != None]
+            if seat['term_teacher_id'] is not None]
         self.assertEqual(len(installed_tutorial_pieces), 1)
         self.assertEqual(installed_tutorial_pieces[0], {
             'tutorial_piece_id': 1,
