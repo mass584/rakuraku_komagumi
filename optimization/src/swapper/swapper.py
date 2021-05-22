@@ -135,3 +135,6 @@ class Swapper():
 
     def tutorial_occupation_array(self):
         return self.__tutorial_occupation_array
+
+    def swap_count(self):
+        return self.__swap_count

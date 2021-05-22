@@ -9,7 +9,7 @@ class SchoolGrade():
 
     def __build_school_grade_array(self):
         self.__school_grade_array = numpy.zeros(
-            (self.__array_size.student_count()), dtype=int)
+            (self.__array_size.student_count()), dtype=object)
         for student_index in range(self.__array_size.student_count()):
             school_grade = \
                 self.__term['term_students'][student_index]['school_grade']

@@ -4,9 +4,9 @@ import os
 from array_builder.array_builder import ArrayBuilder
 from cost_evaluator.cost_evaluator import CostEvaluator
 from deletion.deletion import Deletion
-from http.fetch_optimization_term import FetchOptimizationTerm
-from http.update_optimization_log import UpdateOptimizationLog
-from http.update_optimization_result import UpdateOptimizationResult
+from api.fetch_optimization_term import FetchOptimizationTerm
+from api.update_optimization_log import UpdateOptimizationLog
+from api.update_optimization_result import UpdateOptimizationResult
 from installer.installer import Installer
 from model.optimization_result import OptimizationResult
 from model.optimization_log import OptimizationLog
@@ -17,9 +17,10 @@ from tutorial_piece_evaluator.tutorial_piece_evaluator import TutorialPieceEvalu
 def main():
     api_token = os.environ['API_TOKEN']
     api_domain = os.environ['API_DOMAIN']
-    term_id = os.environ['OPTIMIZATION_TERM_ID']
+    term_id = int(os.environ['OPTIMIZATION_TERM_ID'])
+    log_id = int(os.environ['OPTIMIZATION_LOG_ID'])
     optimization_env = os.environ['OPTIMIZATION_ENV']
-    process_count = os.environ['OPTIMIZATION_PROCESS_COUNT']
+    process_count = int(os.environ['OPTIMIZATION_PROCESS_COUNT'])
 
     format = "%(asctime)s %(levelname)s %(name)s :%(message)s"
     level = 'DEBUG' if optimization_env == 'development' else 'INFO'
@@ -29,19 +30,19 @@ def main():
     update_optimization_log = UpdateOptimizationLog(
         token=api_token,
         domain=api_domain,
-        term_id=term_id)
+        log_id=log_id)
     optimization_log = OptimizationLog(
         update_optimization_log=update_optimization_log)
     fetch_optimization_term = FetchOptimizationTerm(
         token=api_token,
         domain=api_domain,
         term_id=term_id)
-    term_object = fetch_optimization_term.fetch()
+    term_object = fetch_optimization_term.fetch()['term']
     array_builder = ArrayBuilder(term_object=term_object)
     cost_evaluator = CostEvaluator(
         array_size=array_builder.array_size(),
         student_optimization_rules=term_object['student_optimization_rules'],
-        teacher_optimization_rule=term_object['teacher_optimization_rule'],
+        teacher_optimization_rule=term_object['teacher_optimization_rules'][0],
         student_group_occupation=array_builder.student_group_occupation_array(),
         teacher_group_occupation=array_builder.teacher_group_occupation_array(),
         student_vacancy=array_builder.student_vacancy_array(),
@@ -50,7 +51,7 @@ def main():
     tutorial_piece_evaluator = TutorialPieceEvaluator(
         array_size=array_builder.array_size(),
         student_optimization_rules=term_object['student_optimization_rules'],
-        teacher_optimization_rule=term_object['teacher_optimization_rule'],
+        teacher_optimization_rule=term_object['teacher_optimization_rules'][0],
         student_group_occupation=array_builder.student_group_occupation_array(),
         teacher_group_occupation=array_builder.teacher_group_occupation_array(),
         student_vacancy=array_builder.student_vacancy_array(),
@@ -65,7 +66,8 @@ def main():
         tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         timetable_array=array_builder.timetable_array(),
         tutorial_occupation_array=array_builder.tutorial_occupation_array(),
-        cost_evaluator=cost_evaluator)
+        cost_evaluator=cost_evaluator,
+        optimization_log=optimization_log)
     installer.execute()
 
     optimization_log.start_swapping()
@@ -78,7 +80,8 @@ def main():
         fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
         tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         cost_evaluator=cost_evaluator,
-        tutorial_piece_evaluator=tutorial_piece_evaluator)
+        tutorial_piece_evaluator=tutorial_piece_evaluator,
+        optimization_log=optimization_log)
     swapper.execute()
 
     optimization_log.start_deletion()
@@ -88,7 +91,8 @@ def main():
         fixed_tutorial_occupation_array=array_builder.fixed_tutorial_occupation_array(),
         tutorial_piece_count_array=array_builder.tutorial_piece_count_array(),
         cost_evaluator=cost_evaluator,
-        tutorial_piece_evaluator=tutorial_piece_evaluator)
+        tutorial_piece_evaluator=tutorial_piece_evaluator,
+        optimization_log=optimization_log)
     deletion.execute()
 
     optimization_log.start_finalize()

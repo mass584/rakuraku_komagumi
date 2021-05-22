@@ -1,15 +1,13 @@
+import datetime
 import itertools
 
 
 def generate_term_test_data(
-    name,
-    year,
     term_type,
     begin_at,
     end_at,
     period_count,
     seat_count,
-    position_count,
     student_count,
     teacher_count,
     tutorial_count,
@@ -18,21 +16,19 @@ def generate_term_test_data(
     group_timetables,
     piece_count,
 ):
-    date_count = 7 if term_type == 0 else (end_at - begin_at).days + 1
+    begin_at_datetime = datetime.datetime.strptime(begin_at, '%Y-%m-%d')
+    end_at_datetime = datetime.datetime.strptime(end_at, '%Y-%m-%d')
+    date_count = 7 if term_type == 0 else (end_at_datetime - begin_at_datetime).days + 1
     term = {
-        'id': 1,
-        'name': name,
-        'year': year,
         'term_type': term_type,
-        'begin_at': begin_at,
-        'end_at': end_at,
+        'date_count': date_count,
         'period_count': period_count,
         'seat_count': seat_count,
-        'position_count': position_count,
+        'begin_at': begin_at,
+        'end_at': end_at,
     }
     timetables = [
         {
-            'id': date_index * period_count + period_index + 1,
             'date_index': date_index + 1,
             'period_index': period_index + 1,
             'term_group_id': next((
@@ -42,6 +38,19 @@ def generate_term_test_data(
         }
         for date_index, period_index
         in itertools.product(range(date_count), range(period_count))
+    ]
+    seats = [
+        {
+            'id': date_index * (period_count * seat_count) +
+            period_index * (seat_count) + seat_index + 1,
+            'date_index': date_index + 1,
+            'period_index': period_index + 1,
+            'seat_index': seat_index + 1,
+            'term_teacher_id': None,
+        }
+        for date_index, period_index, seat_index
+        in itertools.product(
+            range(date_count), range(period_count), range(seat_count))
     ]
     teacher_optimization_rule = {
         'single_cost': 100,
@@ -62,7 +71,7 @@ def generate_term_test_data(
             'interval_costs': [70, 35, 14],
         }
         for school_grade
-        in [11, 12, 13, 14, 15, 16, 21, 22, 23, 31, 32, 33, 99]
+        in ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'j1', 'j2', 'j3', 'h1', 'h2', 'h3', 'other']
     ]
     term_teachers = [
         {
@@ -76,7 +85,7 @@ def generate_term_test_data(
         {
             'id': student_index + 1,
             'name': f"生徒{student_index + 1}",
-            'school_grade': 23,
+            'school_grade': 'j3',
             'vacancy_status': 2
         }
         for student_index in range(student_count)
@@ -135,6 +144,7 @@ def generate_term_test_data(
                 'id': (tutorial_contract['term_student_id'] - 1) * tutorial_count * tutorial_contract['piece_count'] \
                     + (tutorial_contract['term_tutorial_id'] - 1) * tutorial_contract['piece_count'] \
                     + piece_number + 1,
+                'seat_id': None,
                 'date_index': None,
                 'period_index': None,
                 'term_student_id': tutorial_contract['term_student_id'],
@@ -166,24 +176,11 @@ def generate_term_test_data(
         for [date_index, period_index, group_index], student_index
         in itertools.product(group_timetables, range(student_count))
     ]
-    seats = [
-        {
-            'id': date_index * (period_count * seat_count) +
-            period_index * (seat_count) + seat_index + 1,
-            'date_index': date_index + 1,
-            'period_index': period_index + 1,
-            'seat_index': seat_index + 1,
-            'term_teacher_id': None,
-            'position_count': position_count,
-        }
-        for date_index, period_index, seat_index
-        in itertools.product(
-            range(date_count), range(period_count), range(seat_count))
-    ]
     return {
         'term': term,
         'timetables': timetables,
-        'teacher_optimization_rule': teacher_optimization_rule,
+        'seats': seats,
+        'teacher_optimization_rules': [teacher_optimization_rule],
         'student_optimization_rules': student_optimization_rules,
         'term_teachers': term_teachers,
         'term_students': term_students,
@@ -195,5 +192,4 @@ def generate_term_test_data(
         'tutorial_pieces': tutorial_pieces,
         'teacher_group_timetables': teacher_group_timetables,
         'student_group_timetables': student_group_timetables,
-        'seats': seats,
     }

@@ -3,11 +3,10 @@ import urllib.request
 
 
 class UpdateOptimizationLog():
-    def __init__(self, token, domain, term_id):
+    def __init__(self, token, domain, log_id):
         self.__token = token
         self.__domain = domain
-        self.__path = '/optimization/log'
-        self.__query = f"?term_id={term_id}"
+        self.__path = f"/optimization/logs/{log_id}"
 
     def __request_header(self):
         return {
@@ -16,11 +15,14 @@ class UpdateOptimizationLog():
         }
 
     def __request_body(self, optimization_log):
-        return json.dumps(optimization_log).encode()
+        return json.dumps({'optimization_log': optimization_log}).encode()
 
     def execute(self, optimization_log):
-        url = self.__domain + self.__path + self.__query
+        url = self.__domain + self.__path
         request = urllib.request.Request(
-            url, self.__request_body(optimization_log), self.__request_header())
+            url,
+            self.__request_body(optimization_log),
+            self.__request_header(),
+            method='PUT')
         response = urllib.request.urlopen(request)
         return response

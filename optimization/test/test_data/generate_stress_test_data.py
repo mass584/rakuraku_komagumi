@@ -48,7 +48,7 @@ def generate_stress_test_data():
     return {
         'term': term,
         'timetables': json.load(timetables_json),
-        'teacher_optimization_rule': json.load(teacher_optimization_rule_json),
+        'teacher_optimization_rules': [json.load(teacher_optimization_rule_json)],
         'student_optimization_rules': json.load(student_optimization_rules_json),
         'term_teachers': json.load(term_teachers_json),
         'term_students': json.load(term_students_json),
