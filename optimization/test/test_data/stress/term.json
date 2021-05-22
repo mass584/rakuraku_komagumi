@@ -1,11 +1,8 @@
 {
-  "id": 47,
-  "name": "夏期講習",
-  "year": 2019,
-  "term_type": 1,
+  "term_type": "season",
   "begin_at": "2019-07-24",
   "end_at": "2019-09-01",
+  "date_count": 40,
   "period_count": 6,
-  "seat_count": 8,
-  "position_count": 2
+  "seat_count": 8
 }
