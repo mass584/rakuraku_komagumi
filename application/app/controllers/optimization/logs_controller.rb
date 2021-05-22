@@ -13,6 +13,7 @@ module Optimization
 
     def update_params
       params.require(:optimization_log).permit(
+        :sequence_number,
         :installation_progress,
         :swapping_progress,
         :deletion_progress,

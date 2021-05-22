@@ -17,7 +17,17 @@ module Optimization
     private
 
     def update_params
-      params.require(:term).permit(tutorial_pieces: [], seats: []).merge(term_id: params[:id])
+      params.require(:term).permit(
+        tutorial_pieces: [
+          :tutorial_piece_id,
+          :seat_id,
+          :is_fixed
+        ],
+        seats: [
+          :seat_id,
+          :term_teacher_id
+        ],
+      ).merge(term_id: params[:id])
     end
   end
 end

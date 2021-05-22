@@ -16,11 +16,11 @@ class TermOverallSchedule
       term.tutorial_pieces.update_all(seat_id: nil, is_fixed: false)
       term.seats.update_all(term_teacher_id: nil)
       seats.each do |seat|
-        record = term.seats.find_by(id: seat[:id])
+        record = term.seats.find_by(id: seat[:seat_id])
         record.update(term_teacher_id: seat[:term_teacher_id])
       end
       tutorial_pieces.each do |tutorial_piece|
-        record = term.tutorial_pieces.find_by(id: tutorial_piece[:id])
+        record = term.tutorial_pieces.find_by(id: tutorial_piece[:tutorial_piece_id])
         record.update(
           seat_id: tutorial_piece[:seat_id],
           is_fixed: tutorial_piece[:is_fixed],

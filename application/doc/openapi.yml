@@ -41,6 +41,13 @@ paths:
                       term:
                         type: object
                         properties:
+                          term_type:
+                            type: string
+                            enum:
+                              - normal
+                              - season
+                              - exam_planning
+                            description: 期間の種類
                           date_count:
                             type: integer
                             example: 40
@@ -62,6 +69,7 @@ paths:
                             example: '2020-08-31'
                             description: 終了日（YYYY-MM-DD）
                         required:
+                          - term_type
                           - date_count
                           - period_count
                           - seat_count

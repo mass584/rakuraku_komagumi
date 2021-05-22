@@ -17,6 +17,7 @@ class OptimizationTermSerializer < ActiveModel::Serializer
 
   def term
     {
+      term_type: object.term_type,
       date_count: object.date_count,
       period_count: object.period_count,
       seat_count: object.seat_count,
@@ -127,11 +128,11 @@ class OptimizationTermSerializer < ActiveModel::Serializer
     attribute :term_tutorial_id
 
     def date_index
-      object.timetable&.date_index
+      object.seat&.timetable&.date_index
     end
 
     def period_index
-      object.timetable&.period_index
+      object.seat&.timetable&.period_index
     end
 
     def term_student_id
