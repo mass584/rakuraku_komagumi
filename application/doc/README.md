@@ -5,6 +5,9 @@
 ![](./term_contract_data_model.png "期間の契約データモデル")
 ![](./term_schedule_data_model.png "期間の予定データモデル")
 
+## API設計書
+[最適化モジュール向けAPI](./openapi.yml)
+
 ## Swaggger（OepnAPI）について
 
 * APIドキュメントは[OpenAPI3](https://swagger.io/specification/)のフォーマットに従って作成する。作成時は、次のプラグインを用いるとドキュメントのプレビューが可能。
