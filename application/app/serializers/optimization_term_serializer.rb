@@ -47,7 +47,8 @@ class OptimizationTermSerializer < ActiveModel::Serializer
   end
 
   class StudentOptimizationRuleSerializer < ActiveModel::Serializer
-    attributes :school_grade, :occupation_limit, :occupation_costs, :blank_limit, :blank_costs, :interval_cutoff, :interval_costs
+    attributes :school_grade, :occupation_limit, :occupation_costs, :blank_limit, :blank_costs, :interval_cutoff,
+               :interval_costs
   end
 
   class TermTeacherSerializer < ActiveModel::Serializer
@@ -94,7 +95,7 @@ class OptimizationTermSerializer < ActiveModel::Serializer
   def student_vacancies
     object.timetables.joins(:student_vacancies).select(
       'timetables.date_index', 'timetables.period_index',
-      'student_vacancies.term_student_id', 'student_vacancies.is_vacant',
+      'student_vacancies.term_student_id', 'student_vacancies.is_vacant'
     ).map do |timetable|
       {
         date_index: timetable.date_index,
@@ -108,7 +109,7 @@ class OptimizationTermSerializer < ActiveModel::Serializer
   def teacher_vacancies
     object.timetables.joins(:teacher_vacancies).select(
       'timetables.date_index', 'timetables.period_index',
-      'teacher_vacancies.term_teacher_id', 'teacher_vacancies.is_vacant',
+      'teacher_vacancies.term_teacher_id', 'teacher_vacancies.is_vacant'
     ).map do |timetable|
       {
         date_index: timetable.date_index,
