@@ -30,23 +30,8 @@ def generate_stress_test_data():
         './test/test_data/stress/student_group_timetables.json', 'r')
     seats_json = open('./test/test_data/stress/seats.json', 'r')
 
-    term = json.load(term_json)
-    begin_at_datetime = datetime.datetime.strptime(
-        term['begin_at'], '%Y-%m-%d')
-    begin_at_date = datetime.date(
-        begin_at_datetime.year,
-        begin_at_datetime.month,
-        begin_at_datetime.day)
-    end_at_datetime = datetime.datetime.strptime(term['end_at'], '%Y-%m-%d')
-    end_at_date = datetime.date(
-        end_at_datetime.year,
-        end_at_datetime.month,
-        end_at_datetime.day)
-    term['begin_at'] = begin_at_date
-    term['end_at'] = end_at_date
-
     return {
-        'term': term,
+        'term': json.load(term_json),
         'timetables': json.load(timetables_json),
         'teacher_optimization_rules': [json.load(teacher_optimization_rule_json)],
         'student_optimization_rules': json.load(student_optimization_rules_json),
