@@ -6,7 +6,12 @@
           <td class="nospace fixed1">
             <div class="d-flex">
               <div class="border w-150px h-60px d-table">
-                <div class="d-table-cell align-middle text-center">日時</div>
+                <div class="d-table-cell align-middle text-center">
+                  <div class="d-flex justify-content-around align-items-center text-center">
+                    <div>日時</div>
+                    <dropdown-menu-container />
+                  </div>
+                </div>
               </div>
               <div class="border w-50px h-60px d-table">
                 <div class="d-table-cell align-middle text-center">残席</div>
@@ -78,6 +83,7 @@
 import moment from 'moment';
 import Vue, { PropType } from 'vue';
 
+import '../containers/DropdownMenu';
 import './Seat.vue';
 import './StandBy.vue';
 import { TutorialPiece, Timetable, TermTeacher, TermStudent } from '../model/Term';
