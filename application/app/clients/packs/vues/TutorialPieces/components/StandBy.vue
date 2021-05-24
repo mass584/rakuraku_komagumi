@@ -3,7 +3,7 @@
     <div class="d-flex justify-content-around align-items-center text-center w-100">
       <button
         type="button"
-        class="btn btn-outline-secondary btn-sm"
+        class="btn btn-light btn-sm"
         v-on:click="$emit('pushleft', { termTeacher })"
       >
         ◀︎
@@ -11,7 +11,7 @@
       <div>{{ termTeacher.termTeacherName }}</div>
       <button
         type="button"
-        class="btn btn-outline-secondary btn-sm"
+        class="btn btn-light btn-sm"
         v-on:click="$emit('pushright', { termTeacher })"
       >
         ▶

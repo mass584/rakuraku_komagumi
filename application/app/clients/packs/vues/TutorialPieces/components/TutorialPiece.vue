@@ -10,8 +10,8 @@
       <small>{{ displayText }}</small>
     </div>
     <div>
-      <i v-on:click="$emit('toggle', { event: $event })" class="bi bi-key"></i>
-      <i v-on:click="$emit('delete', { event: $event })" class="bi bi-x-circle"></i>
+      <i v-on:click="$emit('toggle', { event: $event })" class="icon bi bi-key"></i>
+      <i v-on:click="$emit('delete', { event: $event })" class="icon bi bi-x-circle"></i>
     </div>
   </div>
 </template>
@@ -43,5 +43,8 @@ export default Vue.component('tutorial-piece', {
   height: 100%;
   width: 100%;
   min-width: 100%;
+}
+.icon:hover {
+  background-color: rgba(255, 255, 255, 0.6);
 }
 </style>

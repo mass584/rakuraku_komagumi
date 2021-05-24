@@ -18,16 +18,19 @@ export default Vue.component('dropdown-menu-container', {
       const url = '/tutorial_pieces/bulk_update.json';
       const reqBody = { tutorial_piece: { is_fixed: false } };
       await axios.post(url, reqBody);
+      location.reload();
     },
     async lockAll() {
       const url = '/tutorial_pieces/bulk_update.json';
       const reqBody = { tutorial_piece: { is_fixed: true } };
       await axios.post(url, reqBody);
+      location.reload();
     },
     async resetAll() {
       const url = '/tutorial_pieces/bulk_update.json';
-      const reqBody = { tutorial_piece: { seat_id: null } };
+      const reqBody = { tutorial_piece: { seat_id: null, is_fixed: false } };
       await axios.post(url, reqBody);
+      location.reload();
     },
   },
 }) 

@@ -115,6 +115,7 @@ export default Vue.extend({
     },
     onClickDelete: async function(tutorialPiece: TutorialPiece) {
       if (!this.term) return;
+      if (tutorialPiece.isFixed) return;
       // srcの取得
       const srcTimetable = this.term.timetables.find((timetable) => {
         return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
