@@ -32,16 +32,7 @@ class TutorialPiecesController < ApplicationController
 
   def bulk_update
     records = @term.tutorial_pieces.filter_by_placed
-    if records.update_all(bulk_update_params)
-      head :no_content
-    else
-      render json: { message: records.errors.full_messages }, status: :bad_request
-    end
-  end
-
-  def bulk_reset
-    records = @term.tutorial_pieces
-    if records.update_all(seat_id: nil, is_fixed: false)
+    if records.update_all(bulk_update_params.to_h)
       head :no_content
     else
       render json: { message: records.errors.full_messages }, status: :bad_request
@@ -51,10 +42,10 @@ class TutorialPiecesController < ApplicationController
   private
 
   def update_params
-    params.require(:tutorial_piece).permit(:is_fixed)
+    params.require(:tutorial_piece).permit(:is_fixed, :seat_id)
   end
 
   def bulk_update_params
-    params.require(:tutorial_piece).permit(:is_fixed)
+    params.require(:tutorial_piece).permit(:is_fixed, :seat_id)
   end
 end
