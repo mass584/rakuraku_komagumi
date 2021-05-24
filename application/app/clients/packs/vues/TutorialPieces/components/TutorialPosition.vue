@@ -18,15 +18,17 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+
 import './TutorialPiece.vue';
+import { TutorialPiece } from '../model/Term';
 
 export default Vue.component('tutorial-position', {
   props: {
     isDroppable: Boolean,
     isNotVacant: Boolean,
     isDisabled: Boolean,
-    tutorialPiece: Object,
+    tutorialPiece: Object as PropType<TutorialPiece>,
   },
 }) 
 </script>

@@ -17,11 +17,13 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+
+import { TutorialPiece } from '../model/Term';
 
 export default Vue.component('tutorial-piece', {
   props: {
-    tutorialPiece: Object,
+    tutorialPiece: Object as PropType<TutorialPiece>,
   },
   computed: {
     displayText() {

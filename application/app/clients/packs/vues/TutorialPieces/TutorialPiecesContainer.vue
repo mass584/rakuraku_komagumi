@@ -6,13 +6,13 @@
       :seat-count="term.seatCount"
       :position-count="term.positionCount"
       :begin-at="term.beginAt"
+      :selected-term-teacher-id="selectedTermTeacherId"
       :term-teachers="term.termTeachers"
       :term-students="term.termStudents"
       :timetables="term.timetables"
       :tutorial-pieces="term.tutorialPieces"
       :droppables="droppables"
       :notVacants="notVacants"
-      :isDisables="isDisables"
       v-on:toggle="onClickToggle($event.tutorialPiece)"
       v-on:delete="onClickDelete($event.tutorialPiece)"
       v-on:pushleft="onPushLeft($event.termTeacher)"
@@ -36,18 +36,27 @@ import _ from 'lodash';
 import Vue from 'vue';
 
 import './components/SchedulingTable.vue';
-import { Timetable, TermTeacher, TutorialPiece } from './types';
+import { Timetable, TermTeacher, TutorialPiece, Term } from './model/Term';
+import { Position } from './model/Position';
 import { validate, isStudentVacant, isTeacherVacant } from './validator';
 
 export default Vue.extend({
   name: 'tutorial_pieces_container',
-  data: () => ({
-    isLoading: false,
-    term: null,
-    droppables: [],
-    notVacants: [],
-    isDisables: [],
-  }),
+  data(): {
+    isLoading: boolean;
+    selectedTermTeacherId: number | null;
+    term: Term | null;
+    droppables: Position[];
+    notVacants: Position[];
+  } {
+    return {
+      isLoading: false,
+      term: null,
+      selectedTermTeacherId: null,
+      droppables: [],
+      notVacants: [],
+    }
+  },
   methods: {
     fetchTutorialPieces: async function() {
       const url = '/tutorial_pieces.json';
@@ -87,27 +96,29 @@ export default Vue.extend({
       await this.fetchTutorialPieces();
       this.isLoading = false;
     },
-    onClickToggle: async function(tutorialPiece) {
+    onClickToggle: async function(tutorialPiece: TutorialPiece) {
       this.isLoading = true;
       await this.updateTutorialPiece(tutorialPiece.id, tutorialPiece.seatId, !tutorialPiece.isFixed);
       await this.fetchTutorialPieces();
       this.isLoading = false;
     },
-    onClickDelete: async function(tutorialPiece) {
+    onClickDelete: async function(tutorialPiece: TutorialPiece) {
       this.isLoading = true;
       await this.updateTutorialPiece(tutorialPiece.id, null, false);
       await this.fetchTutorialPieces();
       this.isLoading = false;
     },
-    onDragStart: function(event, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
-      event.dataTransfer.setData('tutorialPieceId', tutorialPiece.id);
+    onDragStart: function(event: DragEvent, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
+      if (!this.term || !event.dataTransfer) return;
+      event.dataTransfer.setData('tutorialPieceId', String(tutorialPiece.id));
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.dropEffect = 'move';
       const termTeacher = this.term.termTeachers.find((termTeacher) => {
         return termTeacher.id === tutorialPiece.termTeacherId;
       });
+      if (!termTeacher) return;
       this.droppables = this.term.timetables.filter((timetable) => {
-        return validate(
+        return this.term && validate(
           this.term.periodCount,
           this.term.seatCount,
           this.term.positionCount,
@@ -127,18 +138,15 @@ export default Vue.extend({
       }).map((timetable) => {
         return { timetableId: timetable.id, termTeacherId: termTeacher.id };
       });
-      this.isDisables = this.term.termTeachers.filter((item) => {
-        return item.id !== termTeacher.id;
-      }).map((item) => {
-        return { termTeacherId: item.id };
-      });
+      this.selectedTermTeacherId = termTeacher.id;
     },
     onDragEnd: function() {
       this.droppables = [];
       this.notVacants = [];
-      this.isDisables = [];
+      this.selectedTermTeacherId = null;
     },
-    onDrop: async function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
+    onDrop: async function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
+      if (!this.term || !event.dataTransfer) return;
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));
       const termTeacherSeat = destTimetable.seats.find((seat) => {
         return seat.termTeacherId === termTeacher.id;
@@ -146,13 +154,13 @@ export default Vue.extend({
       const emptySeat = destTimetable.seats.find((seat) => {
         return seat.termTeacherId === null;
       });
-      const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat.id;
+      const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat ? emptySeat.id : null;
       this.isLoading = true;
       await this.updateTutorialPiece(tutorialPieceId, seatId, false);
       await this.fetchTutorialPieces();
       this.isLoading = false;
     },
-    onDragOver: function(event, destTimetable: Timetable, termTeacher: TermTeacher) {
+    onDragOver: function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
       const isDroppable = this.droppables.some((droppable) => {
         return droppable.timetableId === destTimetable.id &&
           droppable.termTeacherId === termTeacher.id;
@@ -167,6 +175,3 @@ export default Vue.extend({
   },
 }) 
 </script>
-
-<style scoped lang="scss">
-</style>

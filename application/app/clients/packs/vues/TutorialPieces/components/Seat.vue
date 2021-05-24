@@ -40,12 +40,13 @@
 
 <script lang="ts">
 import _ from 'lodash';
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 
 import './ClosedPosition.vue';
 import './GroupPosition.vue';
 import './TutorialPosition.vue';
 import './UnfixedPosition.vue';
+import { TutorialPiece, Timetable, TermTeacher } from '../model/Term';
 
 export default Vue.component('seat', {
   props: {
@@ -53,9 +54,9 @@ export default Vue.component('seat', {
     isNotVacant: Boolean,
     isDisabled: Boolean,
     positionCount: Number,
-    tutorialPieces: Array,
-    timetable: Object,
-    termTeacher: Object,
+    termTeacher: Object as PropType<TermTeacher>,
+    timetable: Object as PropType<Timetable>,
+    tutorialPieces: Array as PropType<TutorialPiece[]>,
   },
   computed: {
     positionIndexes() {
@@ -63,7 +64,7 @@ export default Vue.component('seat', {
     },
   },
   methods: {
-    tutorialPiece: function(positionIndex) {
+    tutorialPiece(positionIndex: number) {
       return this.tutorialPieces[positionIndex - 1];
     },
   },

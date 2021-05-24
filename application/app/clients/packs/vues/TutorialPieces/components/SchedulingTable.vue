@@ -55,7 +55,7 @@
             <seat
               :is-droppable="isDroppable(timetable, termTeacher)"
               :is-not-vacant="isNotVacant(timetable, termTeacher)"
-              :is-disabled="isDisabled(termTeacher)"
+              :is-disabled="isDifferentTermTeacher(termTeacher)"
               :position-count="positionCount"
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
@@ -76,10 +76,12 @@
 
 <script lang="ts">
 import moment from 'moment';
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 
 import './Seat.vue';
 import './StandBy.vue';
+import { TutorialPiece, Timetable, TermTeacher, TermStudent } from '../model/Term';
+import { Position } from '../model/Position';
 
 export default Vue.component('scheduling-table', {
   props: {
@@ -87,16 +89,16 @@ export default Vue.component('scheduling-table', {
     beginAt: String,
     seatCount: Number,
     positionCount: Number,
-    termTeachers: Array,
-    termStudents: Array,
-    timetables: Array,
-    tutorialPieces: Array,
-    droppables: Array,
-    notVacants: Array,
-    isDisables: Array,
+    selectedTermTeacherId: Number,
+    termTeachers: Array as PropType<TermTeacher[]>,
+    termStudents: Array as PropType<TermStudent[]>,
+    timetables: Array as PropType<Timetable[]>,
+    tutorialPieces: Array as PropType<TutorialPiece[]>,
+    droppables: Array as PropType<Position[]>,
+    notVacants: Array as PropType<Position[]>,
   },
   methods: {
-    dateDisplayText: function(timetable) {
+    dateDisplayText: function(timetable: Timetable) {
       const date = (() => {
         if (this.termType === 'normal') {
           return ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'][timetable.dateIndex - 1];
@@ -109,14 +111,14 @@ export default Vue.component('scheduling-table', {
 
       return `${date} ${timetable.periodIndex}限`;
     },
-    seatDisplayText: function(timetable) {
+    seatDisplayText: function(timetable: Timetable) {
       const maxSeat = this.seatCount;
       const occupiedSeat = timetable.occupiedTermTeacherIds.length;
       const unoccupiedSeat = maxSeat - occupiedSeat;
 
       return `${unoccupiedSeat}席`;
     },
-    tutorialPiecesPerSeat: function(timetable, termTeacher) {
+    tutorialPiecesPerSeat: function(timetable: Timetable, termTeacher: TermTeacher) {
       const seat = timetable.seats.find((seat) => seat.termTeacherId === termTeacher.id);
       const tutorialPieceIds = seat ? seat.tutorialPieceIds : [];
       const tutorialPiece = this.tutorialPieces.filter(
@@ -125,22 +127,20 @@ export default Vue.component('scheduling-table', {
 
       return tutorialPiece;
     },
-    isDroppable: function(timetable, termTeacher) {
+    isDroppable: function(timetable: Timetable, termTeacher: TermTeacher) {
       return this.droppables.some((droppable) => {
         return droppable.timetableId === timetable.id &&
           droppable.termTeacherId === termTeacher.id;
       });
     },
-    isNotVacant: function(timetable, termTeacher) {
+    isNotVacant: function(timetable: Timetable, termTeacher: TermTeacher) {
       return this.notVacants.some((vacant) => {
         return vacant.timetableId === timetable.id &&
           vacant.termTeacherId === termTeacher.id;
       });
     },
-    isDisabled: function(termTeacher) {
-      return this.isDisables.some((isDisable) => {
-        return isDisable.termTeacherId === termTeacher.id;
-      });
+    isDifferentTermTeacher: function(termTeacher: TermTeacher) {
+      return this.selectedTermTeacherId === termTeacher.id;
     },
   },
 }) 

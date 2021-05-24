@@ -1,11 +1,12 @@
 import _ from 'lodash';
+
 import {
   StudentOptimizationRule,
   TeacherOptimizationRule,
   Timetable,
   TermTeacher,
   TutorialPiece,
-} from './types';
+} from './model/Term';
 
 export const validate = (
   periodCount: number,

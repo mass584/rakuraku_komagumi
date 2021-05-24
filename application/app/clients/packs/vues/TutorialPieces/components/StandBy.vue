@@ -23,11 +23,11 @@
           class="form-select form-select-sm w-100"
           v-model="selectedId"
         >
-          <option value="">
+          <option value="null">
             配置コマを選択
           </option>
           <option
-            v-for="tutorialPiece in filteredTutorialPieces"
+            v-for="tutorialPiece in uninstalledTutorialPieces"
             v-bind:key="tutorialPiece.id"
             v-bind:value="tutorialPiece.id"
             v-bind:disabled="isDisabledTutorialPiece(tutorialPiece)"
@@ -47,45 +47,48 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+
 import './TutorialPosition';
+import { TutorialPiece, TermTeacher, TermStudent } from '../model/Term';
 
 export default Vue.component('stand-by', {
   props: {
-    tutorialPieces: Array,
-    termTeacher: Object,
-    termStudents: Array,
+    termTeacher: Object as PropType<TermTeacher>,
+    termStudents: Array as PropType<TermStudent[]>,
+    tutorialPieces: Array as PropType<TutorialPiece[]>,
   },
-  data: function() {
+  data(): { selectedId: null | number } {
     return {
-      selectedId: '',
+      selectedId: null,
     }
   },
   computed: {
-    tutorialPiece: function() {
-      return this.filteredTutorialPieces.find((tutorialPiece) => {
-        return tutorialPiece.id === this.selectedId;
-      });
-    },
-    filteredTutorialPieces: function() {
+    uninstalledTutorialPieces(): TutorialPiece[] {
       return this.tutorialPieces.filter((tutorialPiece) => {
         return tutorialPiece.termTeacherId === this.termTeacher.id &&
           tutorialPiece.seatId === null;
       });
     },
+    tutorialPiece(): TutorialPiece | undefined {
+      return this.uninstalledTutorialPieces.find((tutorialPiece) => {
+        return tutorialPiece.id === this.selectedId;
+      });
+    },
   },
   methods: {
-    displayText: function (tutorialPiece) {
+    displayText(tutorialPiece: TutorialPiece) {
       const studentName = tutorialPiece.termStudentName;
       const studentSchoolGrade = tutorialPiece.termStudentSchoolGradeI18n;
       const tutorialName = tutorialPiece.termTutorialName;
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;
     },
-    isDisabledTutorialPiece: function(tutorialPiece) {
+    isDisabledTutorialPiece(tutorialPiece: TutorialPiece) {
       const isUnfixedTeacher = this.termTeacher.vacancyStatus !== 'fixed';
       const isUnfixedStudent = this.termStudents.find((termStudent) => {
-        return termStudent.vacancyStatus !== 'fixed' && termStudent.id === tutorialPiece.termStudentId;
+        return termStudent.vacancyStatus !== 'fixed' &&
+          termStudent.id === tutorialPiece.termStudentId;
       });
 
       return isUnfixedTeacher || isUnfixedStudent;

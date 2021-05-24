@@ -10,12 +10,14 @@
 </template>
 
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+
+import { Timetable, TermTeacher } from '../model/Term';
 
 export default Vue.component('group-position', {
   props: {
-    timetable: Object,
-    termTeacher: Object,
+    timetable: Object as PropType<Timetable>,
+    termTeacher: Object as PropType<TermTeacher>,
   },
 }) 
 </script>
