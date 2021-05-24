@@ -102,7 +102,6 @@ class TermSchedule
       if empty_before_seat?
         before_seat.update(term_teacher_id: nil)
       end
-      after_seat.update(term_teacher_id: term_teacher.id)
       tutorial_piece.update(seat_id: nil)
     end
   end
