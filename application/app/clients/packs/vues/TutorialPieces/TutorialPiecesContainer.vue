@@ -12,8 +12,6 @@
       :selected-term-teacher-id="selectedTermTeacherId"
       v-on:toggle="onClickToggle($event.tutorialPiece)"
       v-on:delete="onClickDelete($event.tutorialPiece)"
-      v-on:pushleft="onPushLeft($event.termTeacher)"
-      v-on:pushright="onPushRight($event.termTeacher)"
       v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
       v-on:dragend="onDragEnd()"
       v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -95,33 +93,7 @@ export default Vue.extend({
       const reqBody = { tutorial_piece: { is_fixed: isFixed } };
       await axios.put(url, reqBody);
     },
-    updateRowOrder: async function(termTeacher: TermTeacher, rowOrderPosition: 'up' | 'down') {
-      const url = `/term_teachers/${termTeacher.id}.json`;
-      const reqBody = { term_teacher: { row_order_position: rowOrderPosition } };
-      await axios.put(url, reqBody);
-    },
     // コンポーネントのコールバック
-    onPushLeft: async function(termTeacher: TermTeacher) {
-      const termTeacherIndex = this.termTeachers.findIndex((item) => item.id === termTeacher.id);
-      if (termTeacherIndex === 0) return;
-      store.commit('setIsLoading', true);
-      await this.updateRowOrder(termTeacher, 'up');
-      const nextTermTeacherIndex = termTeacherIndex - 1;
-      const newTermTeachers = this.swapTermTeachers(this.termTeachers, termTeacherIndex, nextTermTeacherIndex);
-      const term = { ...this.term, termTeachers: newTermTeachers };
-      store.commit('setTimetables', term);
-      store.commit('setIsLoading', false);
-    },
-    onPushRight: async function(termTeacher: TermTeacher) {
-      const termTeacherIndex = this.termTeachers.findIndex((item) => item.id === termTeacher.id);
-      if (termTeacherIndex === this.termTeachers.length - 1) return;
-      store.commit('setIsLoading', true);
-      await this.updateRowOrder(termTeacher, 'down');
-      const nextTermTeacherIndex = termTeacherIndex + 1;
-      const newTermTeachers = this.swapTermTeachers(this.termTeachers, termTeacherIndex, nextTermTeacherIndex);
-      store.commit('setTermTeachers', newTermTeachers);
-      store.commit('setIsLoading', false);
-    },
     onClickToggle: async function(tutorialPiece: TutorialPiece) {
       store.commit('setIsLoading', true);
       await this.updateTutorialPieceIsFixed(tutorialPiece.id, !tutorialPiece.isFixed);
@@ -226,19 +198,6 @@ export default Vue.extend({
       }
     },
     // ヘルパー関数
-    swapTermTeachers: function(termTeachers: TermTeacher[], index1: number, index2: number) {
-      return termTeachers.reduce(
-        (resultArray, item, currentIndex, originalArray) => {
-          return [
-            ...resultArray,
-            currentIndex === index1 ? originalArray[index2] :
-            currentIndex === index2 ? originalArray[index1] :
-            item,
-          ]
-        },
-        [] as TermTeacher[]
-      );
-    },
     getNewTimetables: function(
       tutorialPiece: TutorialPiece,
       srcTimetable?: Timetable,

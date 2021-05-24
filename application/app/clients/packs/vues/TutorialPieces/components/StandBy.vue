@@ -4,7 +4,7 @@
       <button
         type="button"
         class="btn btn-light btn-sm"
-        v-on:click="$emit('pushleft', { termTeacher })"
+        v-on:click="$emit('pushleft', { ...$event, termTeacher })"
       >
         ◀︎
       </button>
@@ -12,7 +12,7 @@
       <button
         type="button"
         class="btn btn-light btn-sm"
-        v-on:click="$emit('pushright', { termTeacher })"
+        v-on:click="$emit('pushright', { ...$event, termTeacher })"
       >
         ▶
       </button>

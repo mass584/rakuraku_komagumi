@@ -20,12 +20,8 @@
           </td>
           <td class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
             <div class="border h-60px">
-              <stand-by
-                :tutorialPieces="tutorialPieces"
+              <stand-by-container
                 :termTeacher="termTeacher"
-                :termStudents="termStudents"
-                v-on:pushleft="$emit('pushleft', $event)"
-                v-on:pushright="$emit('pushright', $event)"
                 v-on:dragstart="$emit('dragstart', { ...$event, timetable: null, termTeacher })"
                 v-on:dragend="$emit('dragend', { ...$event, timetable: null, termTeacher })"
               />
@@ -83,9 +79,9 @@
 import moment from 'moment';
 import Vue, { PropType } from 'vue';
 
-import '../containers/DropdownMenu';
+import '../containers/DropdownMenu.vue';
+import '../containers/StandBy.vue';
 import './Seat.vue';
-import './StandBy.vue';
 import { TutorialPiece, Timetable, Term, TermTeacher, TermStudent } from '../model/Term';
 import { Position } from '../model/Position';
 
