@@ -28,8 +28,6 @@
       :is-not-vacant="isNotVacant"
       :is-disabled="isDisabled"
       :tutorial-piece="tutorialPiece(positionIndex)"
-      v-on:toggle="$emit('toggle', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
-      v-on:delete="$emit('delete', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
       v-on:dragstart="$emit('dragstart', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
       v-on:dragend="$emit('dragend', { ...$event, tutorialPiece: tutorialPiece(positionIndex) })"
       v-on:drop="$emit('drop', { event: $event })"

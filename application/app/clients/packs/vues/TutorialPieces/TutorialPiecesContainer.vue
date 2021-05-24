@@ -10,8 +10,6 @@
       :droppables="droppables"
       :notVacants="notVacants"
       :selected-term-teacher-id="selectedTermTeacherId"
-      v-on:toggle="onClickToggle($event.tutorialPiece)"
-      v-on:delete="onClickDelete($event.tutorialPiece)"
       v-on:dragstart="onDragStart($event.event, $event.timetable, $event.tutorialPiece)"
       v-on:dragend="onDragEnd()"
       v-on:drop="onDrop($event.event, $event.timetable, $event.termTeacher)"
@@ -88,42 +86,7 @@ export default Vue.extend({
       const reqBody = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
       await axios.post(url, reqBody);
     },
-    updateTutorialPieceIsFixed: async function(tutorialPieceId: number, isFixed: boolean) {
-      const url = `/tutorial_pieces/${tutorialPieceId}.json`;
-      const reqBody = { tutorial_piece: { is_fixed: isFixed } };
-      await axios.put(url, reqBody);
-    },
     // コンポーネントのコールバック
-    onClickToggle: async function(tutorialPiece: TutorialPiece) {
-      store.commit('setIsLoading', true);
-      await this.updateTutorialPieceIsFixed(tutorialPiece.id, !tutorialPiece.isFixed);
-      const newTutorialPieces = this.tutorialPieces.map((item) => {
-        return item.id === tutorialPiece.id ? { ...item, isFixed: !item.isFixed } : item;
-      });
-      store.commit('setTutorialPieces', newTutorialPieces);
-      store.commit('setIsLoading', false);
-    },
-    onClickDelete: async function(tutorialPiece: TutorialPiece) {
-      if (tutorialPiece.isFixed) return;
-      // srcの取得
-      const srcTimetable = this.timetables.find((timetable) => {
-        return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
-      });
-      const srcSeat = srcTimetable && srcTimetable.seats.find(
-        item => item.termTeacherId === tutorialPiece.termTeacherId,
-      );
-      store.commit('setIsLoading', true);
-      // apiコール
-      await this.updateTutorialPieceSeatId(tutorialPiece.id, null);
-      // this.termの更新
-      const newTutorialPieces = this.tutorialPieces.map((item) => {
-        return item.id === tutorialPiece.id ? { ...item, seatId: null, isFixed: false } : item;
-      });
-      const newTimetables = this.getNewTimetables(tutorialPiece, srcTimetable, undefined, srcSeat, undefined); 
-      store.commit('setTimetables', newTimetables);
-      store.commit('setTutorialPieces', newTutorialPieces);
-      store.commit('setIsLoading', false);
-    },
     onDragStart: function(event: DragEvent, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
       if (!event.dataTransfer) return;
       event.dataTransfer.setData('tutorialPieceId', String(tutorialPiece.id));

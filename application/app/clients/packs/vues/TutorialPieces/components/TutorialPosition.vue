@@ -6,13 +6,11 @@
     v-on:dragover="$emit('dragover', $event)"
     v-on:dragenter.prevent
   >
-    <tutorial-piece
+    <tutorial-piece-container
       :tutorial-piece="tutorialPiece"
       v-if="tutorialPiece"
       v-on:dragstart="$emit('dragstart', $event)"
       v-on:dragend="$emit('dragend', $event)"
-      v-on:toggle="$emit('toggle', $event)"
-      v-on:delete="$emit('delete', $event)"
     />
   </div>
 </template>
@@ -20,7 +18,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 
-import './TutorialPiece.vue';
+import '../containers/TutorialPiece.vue';
 import { TutorialPiece } from '../model/Term';
 
 export default Vue.component('tutorial-position', {
