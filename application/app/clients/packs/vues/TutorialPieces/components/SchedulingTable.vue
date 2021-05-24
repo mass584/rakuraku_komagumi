@@ -61,7 +61,7 @@
               :is-droppable="isDroppable(timetable, termTeacher)"
               :is-not-vacant="isNotVacant(timetable, termTeacher)"
               :is-disabled="isDifferentTermTeacher(termTeacher)"
-              :position-count="positionCount"
+              :position-count="term.positionCount"
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
               :term-teacher="termTeacher"
@@ -86,15 +86,12 @@ import Vue, { PropType } from 'vue';
 import '../containers/DropdownMenu';
 import './Seat.vue';
 import './StandBy.vue';
-import { TutorialPiece, Timetable, TermTeacher, TermStudent } from '../model/Term';
+import { TutorialPiece, Timetable, Term, TermTeacher, TermStudent } from '../model/Term';
 import { Position } from '../model/Position';
 
 export default Vue.component('scheduling-table', {
   props: {
-    termType: String,
-    beginAt: String,
-    seatCount: Number,
-    positionCount: Number,
+    term: Object as PropType<Term>,
     selectedTermTeacherId: Number,
     termTeachers: Array as PropType<TermTeacher[]>,
     termStudents: Array as PropType<TermStudent[]>,
@@ -106,19 +103,19 @@ export default Vue.component('scheduling-table', {
   methods: {
     dateDisplayText: function(timetable: Timetable) {
       const date = (() => {
-        if (this.termType === 'normal') {
+        if (this.term.termType === 'normal') {
           return ['月曜日', '火曜日', '水曜日', '木曜日', '金曜日', '土曜日', '日曜日'][timetable.dateIndex - 1];
-        } else if (this.termType === 'season') {
-          return moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
-        } else if (this.termType === 'exam_planning') {
-          return moment(this.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+        } else if (this.term.termType === 'season') {
+          return moment(this.term.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
+        } else if (this.term.termType === 'exam_planning') {
+          return moment(this.term.beginAt).add(timetable.dateIndex - 1, 'day').locale('ja').format('MM/DD（ddd）');
         }
       })();
 
       return `${date} ${timetable.periodIndex}限`;
     },
     seatDisplayText: function(timetable: Timetable) {
-      const maxSeat = this.seatCount;
+      const maxSeat = this.term.seatCount;
       const occupiedSeat = timetable.occupiedTermTeacherIds.length;
       const unoccupiedSeat = maxSeat - occupiedSeat;
 

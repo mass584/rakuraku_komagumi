@@ -1,6 +1,5 @@
 class TermSerializer < ActiveModel::Serializer
-  attributes :term_type, :date_count, :period_count, :seat_count, :position_count, :begin_at,
-             :end_at
+  attribute :term
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
   has_many :term_teachers do
@@ -9,6 +8,18 @@ class TermSerializer < ActiveModel::Serializer
   has_many :term_students
   has_many :timetables
   has_many :tutorial_pieces
+
+  def term
+    {
+      term_type: object.term_type,
+      date_count: object.date_count,
+      period_count: object.period_count,
+      seat_count: object.seat_count,
+      position_count: object.position_count,
+      begin_at: object.begin_at,
+      end_at: object.end_at,
+    }
+  end
 
   class TeacherOptimizationRuleSerializer < ActiveModel::Serializer
     attributes :id, :occupation_limit, :blank_limit

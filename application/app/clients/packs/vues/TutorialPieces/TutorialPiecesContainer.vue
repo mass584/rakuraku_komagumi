@@ -1,18 +1,15 @@
 <template>
   <div>
     <scheduling-table
-      v-if="term"
-      :term-type="term.termType"
-      :seat-count="term.seatCount"
-      :position-count="term.positionCount"
-      :begin-at="term.beginAt"
-      :selected-term-teacher-id="selectedTermTeacherId"
-      :term-teachers="term.termTeachers"
-      :term-students="term.termStudents"
-      :timetables="term.timetables"
-      :tutorial-pieces="term.tutorialPieces"
+      v-if="isLoaded"
+      :term="term"
+      :term-teachers="termTeachers"
+      :term-students="termStudents"
+      :timetables="timetables"
+      :tutorial-pieces="tutorialPieces"
       :droppables="droppables"
       :notVacants="notVacants"
+      :selected-term-teacher-id="selectedTermTeacherId"
       v-on:toggle="onClickToggle($event.tutorialPiece)"
       v-on:delete="onClickDelete($event.tutorialPiece)"
       v-on:pushleft="onPushLeft($event.termTeacher)"
@@ -36,26 +33,49 @@ import _ from 'lodash';
 import Vue from 'vue';
 
 import './components/SchedulingTable.vue';
-import { Timetable, TermTeacher, TutorialPiece, Term, Seat } from './model/Term';
-import { Position } from './model/Position';
+import { Timetable, TermTeacher, TutorialPiece, Seat } from './model/Term';
 import { validate, isStudentVacant, isTeacherVacant } from './validator';
+import { store } from './store';
 
 export default Vue.extend({
   name: 'tutorial_pieces_container',
-  data(): {
-    isLoading: boolean;
-    selectedTermTeacherId: number | null;
-    term: Term | null;
-    droppables: Position[];
-    notVacants: Position[];
-  } {
-    return {
-      isLoading: false,
-      term: null,
-      selectedTermTeacherId: null,
-      droppables: [],
-      notVacants: [],
-    }
+  computed: {
+    term() {
+      return store.state.term;
+    },
+    termTeachers() {
+      return store.state.termTeachers;
+    },
+    termStudents() {
+      return store.state.termStudents;
+    },
+    timetables() {
+      return store.state.timetables;
+    },
+    tutorialPieces() {
+      return store.state.tutorialPieces;
+    },
+    teacherOptimizationRules() {
+      return store.state.teacherOptimizationRules;
+    },
+    studentOptimizationRules() {
+      return store.state.studentOptimizationRules;
+    },
+    isLoading() {
+      return store.state.isLoading;
+    },
+    isLoaded() {
+      return store.state.isLoaded;
+    },
+    selectedTermTeacherId() {
+      return store.state.selectedTermTeacherId;
+    },
+    droppables() {
+      return store.state.droppables;
+    },
+    notVacants() {
+      return store.state.notVacants;
+    },
   },
   methods: {
     // API呼び出し関数
@@ -63,7 +83,7 @@ export default Vue.extend({
       const url = '/tutorial_pieces.json';
       const response = await axios.get(url);
       const { term } = response.data;
-      this.term = term;
+      store.commit('setTermObject', term);
     },
     updateTutorialPieceSeatId: async function(tutorialPieceId: number, seatId: number | null) {
       const url = "/term_schedules.json";
@@ -82,75 +102,73 @@ export default Vue.extend({
     },
     // コンポーネントのコールバック
     onPushLeft: async function(termTeacher: TermTeacher) {
-      if (!this.term) return;
-      const termTeacherIndex = this.term.termTeachers.findIndex((item) => item.id === termTeacher.id);
+      const termTeacherIndex = this.termTeachers.findIndex((item) => item.id === termTeacher.id);
       if (termTeacherIndex === 0) return;
-      this.isLoading = true;
+      store.commit('setIsLoading', true);
       await this.updateRowOrder(termTeacher, 'up');
       const nextTermTeacherIndex = termTeacherIndex - 1;
-      const newTermTeachers = this.swapTermTeachers(this.term.termTeachers, termTeacherIndex, nextTermTeacherIndex);
-      this.term = { ...this.term, termTeachers: newTermTeachers };
-      this.isLoading = false;
+      const newTermTeachers = this.swapTermTeachers(this.termTeachers, termTeacherIndex, nextTermTeacherIndex);
+      const term = { ...this.term, termTeachers: newTermTeachers };
+      store.commit('setTimetables', term);
+      store.commit('setIsLoading', false);
     },
     onPushRight: async function(termTeacher: TermTeacher) {
-      if (!this.term) return;
-      const termTeacherIndex = this.term.termTeachers.findIndex((item) => item.id === termTeacher.id);
-      if (termTeacherIndex === this.term.termTeachers.length - 1) return;
-      this.isLoading = true;
+      const termTeacherIndex = this.termTeachers.findIndex((item) => item.id === termTeacher.id);
+      if (termTeacherIndex === this.termTeachers.length - 1) return;
+      store.commit('setIsLoading', true);
       await this.updateRowOrder(termTeacher, 'down');
       const nextTermTeacherIndex = termTeacherIndex + 1;
-      const newTermTeachers = this.swapTermTeachers(this.term.termTeachers, termTeacherIndex, nextTermTeacherIndex);
-      this.term = { ...this.term, termTeachers: newTermTeachers };
-      this.isLoading = false;
+      const newTermTeachers = this.swapTermTeachers(this.termTeachers, termTeacherIndex, nextTermTeacherIndex);
+      store.commit('setTermTeachers', newTermTeachers);
+      store.commit('setIsLoading', false);
     },
     onClickToggle: async function(tutorialPiece: TutorialPiece) {
-      if (!this.term) return;
-      this.isLoading = true;
+      store.commit('setIsLoading', true);
       await this.updateTutorialPieceIsFixed(tutorialPiece.id, !tutorialPiece.isFixed);
-      const newTutorialPieces = this.term.tutorialPieces.map((item) => {
+      const newTutorialPieces = this.tutorialPieces.map((item) => {
         return item.id === tutorialPiece.id ? { ...item, isFixed: !item.isFixed } : item;
       });
-      this.term = { ...this.term, tutorialPieces: newTutorialPieces };
-      this.isLoading = false;
+      store.commit('setTutorialPieces', newTutorialPieces);
+      store.commit('setIsLoading', false);
     },
     onClickDelete: async function(tutorialPiece: TutorialPiece) {
-      if (!this.term) return;
       if (tutorialPiece.isFixed) return;
       // srcの取得
-      const srcTimetable = this.term.timetables.find((timetable) => {
+      const srcTimetable = this.timetables.find((timetable) => {
         return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
       });
       const srcSeat = srcTimetable && srcTimetable.seats.find(
         item => item.termTeacherId === tutorialPiece.termTeacherId,
       );
-      this.isLoading = true;
+      store.commit('setIsLoading', true);
       // apiコール
       await this.updateTutorialPieceSeatId(tutorialPiece.id, null);
       // this.termの更新
-      const newTutorialPieces = this.term.tutorialPieces.map((item) => {
+      const newTutorialPieces = this.tutorialPieces.map((item) => {
         return item.id === tutorialPiece.id ? { ...item, seatId: null, isFixed: false } : item;
       });
       const newTimetables = this.getNewTimetables(tutorialPiece, srcTimetable, undefined, srcSeat, undefined); 
-      this.term = { ...this.term, tutorialPieces: newTutorialPieces, timetables: newTimetables };
-      this.isLoading = false;
+      store.commit('setTimetables', newTimetables);
+      store.commit('setTutorialPieces', newTutorialPieces);
+      store.commit('setIsLoading', false);
     },
     onDragStart: function(event: DragEvent, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
-      if (!this.term || !event.dataTransfer) return;
+      if (!event.dataTransfer) return;
       event.dataTransfer.setData('tutorialPieceId', String(tutorialPiece.id));
       event.dataTransfer.effectAllowed = 'move';
       event.dataTransfer.dropEffect = 'move';
-      const termTeacher = this.term.termTeachers.find((termTeacher) => {
+      const termTeacher = this.termTeachers.find((termTeacher) => {
         return termTeacher.id === tutorialPiece.termTeacherId;
       });
       if (!termTeacher) return;
-      this.droppables = this.term.timetables.filter((timetable) => {
+      store.commit('setDroppables', this.timetables.filter((timetable) => {
         return this.term && validate(
           this.term.periodCount,
           this.term.seatCount,
           this.term.positionCount,
-          this.term.studentOptimizationRules,
-          this.term.teacherOptimizationRules,
-          this.term.timetables,
+          this.studentOptimizationRules,
+          this.teacherOptimizationRules,
+          this.timetables,
           srcTimetable,
           timetable,
           termTeacher,
@@ -158,24 +176,21 @@ export default Vue.extend({
         );
       }).map((timetable) => {
         return { timetableId: timetable.id, termTeacherId: termTeacher.id };
-      });;
-      this.notVacants = this.term.timetables.filter((timetable) => {
+      }));
+      store.commit('setNotVacants', this.timetables.filter((timetable) => {
         return !isStudentVacant(timetable, tutorialPiece) || !isTeacherVacant(timetable, termTeacher);
       }).map((timetable) => {
         return { timetableId: timetable.id, termTeacherId: termTeacher.id };
-      });
-      this.selectedTermTeacherId = termTeacher.id;
+      }));
+      store.commit('setSelectedTermTeacherId', termTeacher.id);
     },
     onDragEnd: function() {
-      this.droppables = [];
-      this.notVacants = [];
-      this.selectedTermTeacherId = null;
+      store.commit('resetDragState');
     },
     onDrop: async function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
       if (!event.dataTransfer) return;
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));
-      if (!this.term) return;
-      const tutorialPiece = this.term.tutorialPieces.find(item => item.id === tutorialPieceId);
+      const tutorialPiece = this.tutorialPieces.find(item => item.id === tutorialPieceId);
       if (!tutorialPiece) return;
       const termTeacherSeat = destTimetable.seats.find((seat) => {
         return seat.termTeacherId === termTeacher.id;
@@ -184,21 +199,22 @@ export default Vue.extend({
         return seat.termTeacherId === null;
       });
       // srcとdestの取得
-      const srcTimetable = this.term.timetables.find((timetable) => {
+      const srcTimetable = this.timetables.find((timetable) => {
         return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
       });
       const srcSeat = srcTimetable && srcTimetable.seats.find(item => item.termTeacherId === termTeacher.id);
       const destSeat = termTeacherSeat || emptySeat;
-      this.isLoading = true;
+      store.commit('setIsLoading', true);
       // apiコール
       await this.updateTutorialPieceSeatId(tutorialPieceId, destSeat ? destSeat.id : null);
       // this.termの更新
-      const newTutorialPieces = this.term.tutorialPieces.map(item => {
+      const newTutorialPieces = this.tutorialPieces.map(item => {
         return item.id === tutorialPieceId ? { ...item, seatId: destSeat ? destSeat.id : null } : item;
       });
       const newTimetables = this.getNewTimetables(tutorialPiece, srcTimetable, destTimetable, srcSeat, destSeat); 
-      this.term = { ...this.term, tutorialPieces: newTutorialPieces, timetables: newTimetables };
-      this.isLoading = false;
+      store.commit('setTutorialPieces', newTutorialPieces);
+      store.commit('setTimetables', newTimetables);
+      store.commit('setIsLoading', false);
     },
     onDragOver: function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
       const isDroppable = this.droppables.some((droppable) => {
@@ -230,9 +246,7 @@ export default Vue.extend({
       srcSeat?: Seat,
       destSeat?: Seat,
     ): Timetable[] {
-      if (!this.term) return [];
-
-      return this.term.timetables.map((timetable) => {
+      return this.timetables.map((timetable) => {
         const newOccupiedTermTeacherIds = (() => {
           const srcSeatWillBeEmpty = timetable.seats.find((seat) => {
             return seat.tutorialPieceIds.includes(tutorialPiece.id) &&
@@ -311,9 +325,9 @@ export default Vue.extend({
     },
   },
   created: async function() {
-    this.isLoading = true;
+    store.commit('setIsLoading', true);
     await this.fetchTutorialPieces();
-    this.isLoading = false;
+    store.commit('setIsLoading', false);
   },
 }) 
 </script>

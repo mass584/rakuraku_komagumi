@@ -87,10 +87,4 @@ export type Term = {
   positionCount: number;
   beginAt: string;
   endAt: string;
-  teacherOptimizationRules: TeacherOptimizationRule[];
-  studentOptimizationRules: StudentOptimizationRule[];
-  termTeachers: TermTeacher[];
-  termStudents: TermStudent[];
-  timetables: Timetable[];
-  tutorialPieces: TutorialPiece[];
 }
