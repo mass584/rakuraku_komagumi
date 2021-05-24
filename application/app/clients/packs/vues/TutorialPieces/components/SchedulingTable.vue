@@ -18,6 +18,7 @@
               <stand-by
                 :tutorialPieces="tutorialPieces"
                 :termTeacher="termTeacher"
+                :termStudents="termStudents"
                 v-on:pushleft="$emit('pushleft', $event)"
                 v-on:pushright="$emit('pushright', $event)"
                 v-on:dragstart="$emit('dragstart', { ...$event, timetable: null, termTeacher })"
@@ -87,6 +88,7 @@ export default Vue.component('scheduling-table', {
     seatCount: Number,
     positionCount: Number,
     termTeachers: Array,
+    termStudents: Array,
     timetables: Array,
     tutorialPieces: Array,
     droppables: Array,

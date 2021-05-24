@@ -7,6 +7,7 @@
       :position-count="term.positionCount"
       :begin-at="term.beginAt"
       :term-teachers="term.termTeachers"
+      :term-students="term.termStudents"
       :timetables="term.timetables"
       :tutorial-pieces="term.tutorialPieces"
       :droppables="droppables"

@@ -16,5 +16,6 @@ export default Vue.component('closed-position', {})
 .position {
   height: 28px;
   width: 148px;
+  min-width: 148px;
 }
 </style>

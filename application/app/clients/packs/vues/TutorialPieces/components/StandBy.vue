@@ -19,14 +19,18 @@
     </div>
     <div class="d-flex flex-column justify-content-between h-100">
       <div class="my-auto mx-1">
-        <select class="form-select form-select-sm w-100" v-model="selectedId">
+        <select
+          class="form-select form-select-sm w-100"
+          v-model="selectedId"
+        >
           <option value="">
-            未決定コマ
+            配置コマを選択
           </option>
           <option
             v-for="tutorialPiece in filteredTutorialPieces"
             v-bind:key="tutorialPiece.id"
             v-bind:value="tutorialPiece.id"
+            v-bind:disabled="isDisabledTutorialPiece(tutorialPiece)"
           >
             {{ displayText(tutorialPiece) }}
           </option>
@@ -50,6 +54,7 @@ export default Vue.component('stand-by', {
   props: {
     tutorialPieces: Array,
     termTeacher: Object,
+    termStudents: Array,
   },
   data: function() {
     return {
@@ -72,10 +77,18 @@ export default Vue.component('stand-by', {
   methods: {
     displayText: function (tutorialPiece) {
       const studentName = tutorialPiece.termStudentName;
-      const studentSchoolGrade = tutorialPiece.termStudentSchoolGrade;
+      const studentSchoolGrade = tutorialPiece.termStudentSchoolGradeI18n;
       const tutorialName = tutorialPiece.termTutorialName;
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;
+    },
+    isDisabledTutorialPiece: function(tutorialPiece) {
+      const isUnfixedTeacher = this.termTeacher.vacancyStatus !== 'fixed';
+      const isUnfixedStudent = this.termStudents.find((termStudent) => {
+        return termStudent.vacancyStatus !== 'fixed' && termStudent.id === tutorialPiece.termStudentId;
+      });
+
+      return isUnfixedTeacher || isUnfixedStudent;
     },
   }
 }) 

@@ -40,5 +40,6 @@ export default Vue.component('tutorial-piece', {
   cursor: pointer;
   height: 100%;
   width: 100%;
+  min-width: 100%;
 }
 </style>

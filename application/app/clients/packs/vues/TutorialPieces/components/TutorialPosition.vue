@@ -35,5 +35,6 @@ export default Vue.component('tutorial-position', {
 .position {
   height: 28px;
   width: 148px;
+  min-width: 148px;
 }
 </style>

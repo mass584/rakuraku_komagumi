@@ -13,6 +13,13 @@
       :term-teacher="termTeacher"
     />
   </div>
+  <div v-else-if="termTeacher.vacancyStatus !== 'fixed'" class="border d-flex">
+    <unfixed-position
+      v-for="positionIndex in positionIndexes"
+      v-bind:key="positionIndex"
+      :tutorial-piece="tutorialPiece(positionIndex)"
+    />
+  </div>
   <div v-else class="border d-flex">
     <tutorial-position
       v-for="positionIndex in positionIndexes"
@@ -35,9 +42,10 @@
 import _ from 'lodash';
 import Vue from 'vue';
 
-import './TutorialPosition.vue';
-import './GroupPosition.vue';
 import './ClosedPosition.vue';
+import './GroupPosition.vue';
+import './TutorialPosition.vue';
+import './UnfixedPosition.vue';
 
 export default Vue.component('seat', {
   props: {
