@@ -49,7 +49,7 @@ export type Timetable = {
 export type Seat = {
   id: number;
   seatIndex: number;
-  termTeacherId: number;
+  termTeacherId: number | null;
   positionCount: number;
   tutorialPieceIds: number[];
 };

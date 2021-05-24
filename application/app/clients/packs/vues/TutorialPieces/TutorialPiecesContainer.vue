@@ -36,7 +36,7 @@ import _ from 'lodash';
 import Vue from 'vue';
 
 import './components/SchedulingTable.vue';
-import { Timetable, TermTeacher, TutorialPiece, Term } from './model/Term';
+import { Timetable, TermTeacher, TutorialPiece, Term, Seat } from './model/Term';
 import { Position } from './model/Position';
 import { validate, isStudentVacant, isTeacherVacant } from './validator';
 
@@ -58,54 +58,79 @@ export default Vue.extend({
     }
   },
   methods: {
+    // API呼び出し関数
     fetchTutorialPieces: async function() {
       const url = '/tutorial_pieces.json';
       const response = await axios.get(url);
       const { term } = response.data;
       this.term = term;
-      return response;
     },
-    updateTutorialPiece: async function(tutorialPieceId: number, seatId: number | null, isFixed: boolean) {
-      const url1 = "/term_schedules";
-      const reqBody1 = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
-      await axios.post(url1, reqBody1);
-      const url2 = `/tutorial_pieces/${tutorialPieceId}.json`;
-      const reqBody2 = { tutorial_piece: { is_fixed: isFixed } };
-      await axios.put(url2, reqBody2);
+    updateTutorialPieceSeatId: async function(tutorialPieceId: number, seatId: number | null) {
+      const url = "/term_schedules.json";
+      const reqBody = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
+      await axios.post(url, reqBody);
+    },
+    updateTutorialPieceIsFixed: async function(tutorialPieceId: number, isFixed: boolean) {
+      const url = `/tutorial_pieces/${tutorialPieceId}.json`;
+      const reqBody = { tutorial_piece: { is_fixed: isFixed } };
+      await axios.put(url, reqBody);
     },
     updateRowOrder: async function(termTeacher: TermTeacher, rowOrderPosition: 'up' | 'down') {
       const url = `/term_teachers/${termTeacher.id}.json`;
       const reqBody = { term_teacher: { row_order_position: rowOrderPosition } };
-      const response = await axios.put(url, reqBody);
-      return response;
+      await axios.put(url, reqBody);
     },
-    onCreate: async function() {
-      this.isLoading = true;
-      await this.fetchTutorialPieces();
-      this.isLoading = false;
-    },
+    // コンポーネントのコールバック
     onPushLeft: async function(termTeacher: TermTeacher) {
+      if (!this.term) return;
+      const termTeacherIndex = this.term.termTeachers.findIndex((item) => item.id === termTeacher.id);
+      if (termTeacherIndex === 0) return;
       this.isLoading = true;
       await this.updateRowOrder(termTeacher, 'up');
-      await this.fetchTutorialPieces();
+      const nextTermTeacherIndex = termTeacherIndex - 1;
+      const newTermTeachers = this.swapTermTeachers(this.term.termTeachers, termTeacherIndex, nextTermTeacherIndex);
+      this.term = { ...this.term, termTeachers: newTermTeachers };
       this.isLoading = false;
     },
     onPushRight: async function(termTeacher: TermTeacher) {
+      if (!this.term) return;
+      const termTeacherIndex = this.term.termTeachers.findIndex((item) => item.id === termTeacher.id);
+      if (termTeacherIndex === this.term.termTeachers.length - 1) return;
       this.isLoading = true;
       await this.updateRowOrder(termTeacher, 'down');
-      await this.fetchTutorialPieces();
+      const nextTermTeacherIndex = termTeacherIndex + 1;
+      const newTermTeachers = this.swapTermTeachers(this.term.termTeachers, termTeacherIndex, nextTermTeacherIndex);
+      this.term = { ...this.term, termTeachers: newTermTeachers };
       this.isLoading = false;
     },
     onClickToggle: async function(tutorialPiece: TutorialPiece) {
+      if (!this.term) return;
       this.isLoading = true;
-      await this.updateTutorialPiece(tutorialPiece.id, tutorialPiece.seatId, !tutorialPiece.isFixed);
-      await this.fetchTutorialPieces();
+      await this.updateTutorialPieceIsFixed(tutorialPiece.id, !tutorialPiece.isFixed);
+      const newTutorialPieces = this.term.tutorialPieces.map((item) => {
+        return item.id === tutorialPiece.id ? { ...item, isFixed: !item.isFixed } : item;
+      });
+      this.term = { ...this.term, tutorialPieces: newTutorialPieces };
       this.isLoading = false;
     },
     onClickDelete: async function(tutorialPiece: TutorialPiece) {
+      if (!this.term) return;
+      // srcの取得
+      const srcTimetable = this.term.timetables.find((timetable) => {
+        return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
+      });
+      const srcSeat = srcTimetable && srcTimetable.seats.find(
+        item => item.termTeacherId === tutorialPiece.termTeacherId,
+      );
       this.isLoading = true;
-      await this.updateTutorialPiece(tutorialPiece.id, null, false);
-      await this.fetchTutorialPieces();
+      // apiコール
+      await this.updateTutorialPieceSeatId(tutorialPiece.id, null);
+      // this.termの更新
+      const newTutorialPieces = this.term.tutorialPieces.map((item) => {
+        return item.id === tutorialPiece.id ? { ...item, seatId: null, isFixed: false } : item;
+      });
+      const newTimetables = this.getNewTimetables(tutorialPiece, srcTimetable, undefined, srcSeat, undefined); 
+      this.term = { ...this.term, tutorialPieces: newTutorialPieces, timetables: newTimetables };
       this.isLoading = false;
     },
     onDragStart: function(event: DragEvent, srcTimetable: Timetable, tutorialPiece: TutorialPiece) {
@@ -146,18 +171,32 @@ export default Vue.extend({
       this.selectedTermTeacherId = null;
     },
     onDrop: async function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
-      if (!this.term || !event.dataTransfer) return;
+      if (!event.dataTransfer) return;
       const tutorialPieceId = Number(event.dataTransfer.getData('tutorialPieceId'));
+      if (!this.term) return;
+      const tutorialPiece = this.term.tutorialPieces.find(item => item.id === tutorialPieceId);
+      if (!tutorialPiece) return;
       const termTeacherSeat = destTimetable.seats.find((seat) => {
         return seat.termTeacherId === termTeacher.id;
       });
       const emptySeat = destTimetable.seats.find((seat) => {
         return seat.termTeacherId === null;
       });
-      const seatId = termTeacherSeat ? termTeacherSeat.id : emptySeat ? emptySeat.id : null;
+      // srcとdestの取得
+      const srcTimetable = this.term.timetables.find((timetable) => {
+        return timetable.seats.some((seat) => seat.tutorialPieceIds.includes(tutorialPiece.id));
+      });
+      const srcSeat = srcTimetable && srcTimetable.seats.find(item => item.termTeacherId === termTeacher.id);
+      const destSeat = termTeacherSeat || emptySeat;
       this.isLoading = true;
-      await this.updateTutorialPiece(tutorialPieceId, seatId, false);
-      await this.fetchTutorialPieces();
+      // apiコール
+      await this.updateTutorialPieceSeatId(tutorialPieceId, destSeat ? destSeat.id : null);
+      // this.termの更新
+      const newTutorialPieces = this.term.tutorialPieces.map(item => {
+        return item.id === tutorialPieceId ? { ...item, seatId: destSeat ? destSeat.id : null } : item;
+      });
+      const newTimetables = this.getNewTimetables(tutorialPiece, srcTimetable, destTimetable, srcSeat, destSeat); 
+      this.term = { ...this.term, tutorialPieces: newTutorialPieces, timetables: newTimetables };
       this.isLoading = false;
     },
     onDragOver: function(event: DragEvent, destTimetable: Timetable, termTeacher: TermTeacher) {
@@ -169,9 +208,111 @@ export default Vue.extend({
         event.preventDefault();
       }
     },
+    // ヘルパー関数
+    swapTermTeachers: function(termTeachers: TermTeacher[], index1: number, index2: number) {
+      return termTeachers.reduce(
+        (resultArray, item, currentIndex, originalArray) => {
+          return [
+            ...resultArray,
+            currentIndex === index1 ? originalArray[index2] :
+            currentIndex === index2 ? originalArray[index1] :
+            item,
+          ]
+        },
+        [] as TermTeacher[]
+      );
+    },
+    getNewTimetables: function(
+      tutorialPiece: TutorialPiece,
+      srcTimetable?: Timetable,
+      destTimetable?: Timetable,
+      srcSeat?: Seat,
+      destSeat?: Seat,
+    ): Timetable[] {
+      if (!this.term) return [];
+
+      return this.term.timetables.map((timetable) => {
+        const newOccupiedTermTeacherIds = (() => {
+          const srcSeatWillBeEmpty = timetable.seats.find((seat) => {
+            return seat.tutorialPieceIds.includes(tutorialPiece.id) &&
+              seat.tutorialPieceIds.length === 1;
+          });
+          const destSeatWasEmpty = destTimetable &&
+            !destTimetable.occupiedTermTeacherIds.includes(tutorialPiece.termTeacherId);
+          if (srcTimetable && srcTimetable.id === timetable.id && srcSeatWillBeEmpty) {
+            return timetable.occupiedTermTeacherIds.filter(
+              occupiedTermTeacherId => occupiedTermTeacherId !== tutorialPiece.termTeacherId,
+            );
+          } else if (srcTimetable && srcTimetable.id === timetable.id && !srcSeatWillBeEmpty) {
+            return timetable.occupiedTermTeacherIds;
+          } else if (destTimetable && destTimetable.id === timetable.id && destSeatWasEmpty) {
+            return timetable.occupiedTermTeacherIds.concat(tutorialPiece.termTeacherId);
+          } else if (destTimetable && destTimetable.id === timetable.id && !destSeatWasEmpty) {
+            return timetable.occupiedTermTeacherIds;
+          } else {
+            return timetable.occupiedTermTeacherIds;
+          }
+        })();
+        const newOccupiedTermStudentIds = (() => {
+          if (srcTimetable && srcTimetable.id === timetable.id) {
+            return timetable.occupiedTermStudentIds.filter(
+              occupiedTermStudentId => occupiedTermStudentId !== tutorialPiece.termStudentId,
+            );
+          } else if (destTimetable && destTimetable.id === timetable.id) {
+            return timetable.occupiedTermStudentIds.concat(tutorialPiece.termStudentId);
+          } else {
+            return timetable.occupiedTermStudentIds;
+          }
+        })();
+        const newSeats = timetable.seats.map((seat) => {
+          const srcSeatWillBeEmpty = timetable.seats.find((seat) => {
+            return seat.tutorialPieceIds.includes(tutorialPiece.id) && seat.tutorialPieceIds.length === 1;
+          });
+          const isSrcSeat = srcSeat && seat.id === srcSeat.id;
+          const isDestSeat = destSeat && seat.id === destSeat.id;
+          const newTutorialPieceIds = (() => {
+            if (isSrcSeat) {
+              return seat.tutorialPieceIds.filter(
+                tutorialPieceId => tutorialPieceId !== tutorialPiece.id,
+              );
+            } else if (isDestSeat) {
+              return seat.tutorialPieceIds.concat(tutorialPiece.id);
+            } else {
+              return seat.tutorialPieceIds;
+            };
+          })();
+          const newTermTeacherId = (() => {
+            if (srcSeat && isSrcSeat && srcSeatWillBeEmpty) {
+              return null;
+            } else if (srcSeat && isSrcSeat && !srcSeatWillBeEmpty) {
+              return tutorialPiece.termTeacherId;
+            } else if (destSeat && isDestSeat) {
+              return tutorialPiece.termTeacherId;
+            } else {
+              return seat.termTeacherId;
+            };
+          })();
+
+          return {
+            ...seat,
+            termTeacherId: newTermTeacherId,
+            tutorialPieceIds: newTutorialPieceIds,
+          }
+        });
+
+        return {
+          ...timetable,
+          occupiedTermTeacherIds: newOccupiedTermTeacherIds,
+          occupiedTermStudentIds: newOccupiedTermStudentIds,
+          seats: newSeats,
+        }
+      });
+    },
   },
   created: async function() {
-    await this.onCreate();
+    this.isLoading = true;
+    await this.fetchTutorialPieces();
+    this.isLoading = false;
   },
 }) 
 </script>
