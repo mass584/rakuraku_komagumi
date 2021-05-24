@@ -76,7 +76,7 @@
       </div>
     </transition>
     <div class="dropdown">
-      <button class="btn btn-light dropdown-toggle" type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+      <button class="btn btn-light btn-sm dropdown-toggle" type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         <i class="bi bi-gear"></i>
       </button>
       <div class="dropdown-menu" aria-labelledby="dropdown-menu">
