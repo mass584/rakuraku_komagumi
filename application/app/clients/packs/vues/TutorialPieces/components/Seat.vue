@@ -1,5 +1,5 @@
 <template>
-  <div class="border d-flex">
+  <div class="border d-flex w-300px">
     <div v-for="positionIndex in positionIndexes" v-bind:key="positionIndex">
       <div v-if="timetable.isClosed">
         <closed-position />
@@ -72,3 +72,9 @@ export default Vue.component('seat', {
   },
 }) 
 </script>
+
+<style scoped lang="scss">
+.w-300px {
+  width: 300px;
+}
+</style>

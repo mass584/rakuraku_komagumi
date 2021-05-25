@@ -70,3 +70,22 @@
 .min-height-60 {
   min-height: 60px;
 }
+
+.table-wrapper {
+  height: calc(100vh - 56px - 41px - 32px);
+}
+
+.fixed1, .fixed2 {
+  position: sticky;
+  background-color: #FFF;
+  top: 0;
+  left: 0;
+}
+
+.fixed1 {
+  z-index: 2;
+}
+
+.fixed2 {
+  z-index: 1;
+}

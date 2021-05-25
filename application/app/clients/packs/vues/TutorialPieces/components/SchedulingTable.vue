@@ -19,7 +19,7 @@
             </div>
           </td>
           <td class="nospace fixed2" v-for="termTeacher in termTeachers" v-bind:key="termTeacher.id">
-            <div class="border h-60px">
+            <div class="border h-60px w-300px">
               <stand-by-container
                 :termTeacher="termTeacher"
                 v-on:dragstart="$emit('dragstart', { ...$event, timetable: null, termTeacher })"
@@ -170,8 +170,8 @@ export default Vue.component('scheduling-table', {
 .w-150px {
   width: 150px;
 }
-.w-200px {
-  width: 200px;
+.w-300px {
+  width: 300px;
 }
 .h-30px {
   height: 30px;
