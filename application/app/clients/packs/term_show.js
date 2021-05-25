@@ -15,7 +15,6 @@ Axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({
     el: '#pie_chart_container',
