@@ -1,31 +1,31 @@
 <template>
-  <div v-if="term" class="row mt-3 mb-3">
+  <div v-if="term" class="row">
     <div class="col-md-4 col-lg-4">
-      <div class="card bg-light mt-2 mb-2">
+      <div class="card">
         <div class="card-header">
           講師のマルバツ表
         </div>
-        <div class="card-body">
+        <div class="card-body px-2">
           <PieChart :data="termTeacherChartData" />
         </div>
       </div>
     </div>
     <div class="col-md-4 col-lg-4">
-      <div class="card bg-light mt-2 mb-2">
+      <div class="card">
         <div class="card-header">
           生徒のマルバツ表
         </div>
-        <div class="card-body">
+        <div class="card-body px-2">
           <PieChart :data="termStudentChartData" />
         </div>
       </div>
     </div>
     <div class="col-md-4 col-lg-4">
-      <div class="card bg-light mt-2 mb-2">
+      <div class="card">
         <div class="card-header">
           コマ組みの進捗
         </div>
-        <div class="card-body">
+        <div class="card-body px-2">
           <PieChart :data="tutorialPieceChartData" />
         </div>
       </div>
