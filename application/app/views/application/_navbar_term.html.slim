@@ -2,6 +2,8 @@ nav.navbar-term
   ul.nav.nav-tabs
     li class="#{active == 'home' ? 'nav-item active' : 'nav-item'}"
       = link_to 'ホーム', term_path(@term), :class => "nav-link"
+    li class="#{active == 'term_setting' ? 'nav-item active' : 'nav-item'}"
+      = link_to '初期設定', term_settings_path, :class => "nav-link"
     li class="#{active == 'timetable' ? 'nav-item active' : 'nav-item'}"
       = link_to '時間割り', timetables_path, :class => "nav-link"
     li class="#{active == 'contract' ? 'nav-item active' : 'nav-item'}"
@@ -14,7 +16,5 @@ nav.navbar-term
       = link_to '全体予定', tutorial_pieces_path, :class => "nav-link"
     li class="#{active == 'seat_schedule' ? 'nav-item active' : 'nav-item'}"
       = link_to '座席表', term_schedule_path(@term), :class => "nav-link"
-    li class="#{active == 'optimization' ? 'nav-item active' : 'nav-item'}"
-      = link_to '自動計算', optimizations_path, :class => "nav-link"
     li.nav-item 
       .nav-link.disabled = "#{@term.name}　#{l @term.begin_at} 〜 #{l @term.end_at}"

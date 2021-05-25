@@ -14,7 +14,7 @@ class TermGroup < ApplicationRecord
     joins(:group).order('groups.order': 'ASC')
   }
   scope :named, lambda {
-    joins(:group).select('term_groups.*', 'groups.name')
+    eager_load(:group).select('term_groups.*', 'groups.name')
   }
 
   def editable

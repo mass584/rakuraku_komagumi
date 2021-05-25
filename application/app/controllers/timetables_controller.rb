@@ -1,14 +1,10 @@
 class TimetablesController < ApplicationController
-  PAGE_SIZE = 7
-
   before_action :authenticate_user!
   before_action :set_rooms!
   before_action :set_room!
   before_action :set_term!
 
   def index
-    @page = sanitize_integer_query_param(params[:page]) || 1
-    @page_size = PAGE_SIZE
     @timetables = @term.timetables
     @begin_end_times = @term.begin_end_times
     @term_groups = @term.term_groups.named

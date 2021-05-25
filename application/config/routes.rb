@@ -16,7 +16,6 @@ Rails.application.routes.draw do
     resources :groups, only: [:index]
     resources :groups, only: [:create, :update, :destroy], defaults: { format: 'js' }
     resources :group_contracts, only: [:update], defaults: { format: 'json' }
-    resources :optimizations, only: [:index]
     resources :optimization_logs, only: [:create, :update], defaults: { format: 'json' }
     resources :rooms, only: [:index]
     resources :rooms, only: [:create, :update], defaults: { format: 'js' }
@@ -35,6 +34,7 @@ Rails.application.routes.draw do
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_overall_schedules, only: [:create], defaults: { format: 'json' }
     resources :term_schedules, only: [:create], defaults: { format: 'json' }
+    resources :term_settings, only: [:index]
     resources :term_students, only: [:index] do
       get :vacancy
       get :schedule
