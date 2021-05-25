@@ -1,7 +1,7 @@
 <template>
   <div>
     <scheduling-table-container v-if="isLoaded" />
-    <div v-if="isLoading" class="modal modal-backdrop d-block show" tabindex="-1" role="dialog">
+    <div v-if="isLoading" id="modal-loader" class="modal modal-backdrop d-block show" tabindex="-1" role="dialog">
       <div class="modal-dialog modal-dialog-centered">
         <div class="spinner-border text-primary m-auto" role="status" />
       </div>

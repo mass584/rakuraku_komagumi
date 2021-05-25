@@ -5,7 +5,7 @@
         <tr>
           <td class="nospace fixed1">
             <div class="d-flex">
-              <div class="border w-150px h-60px d-table">
+              <div id="date-and-period-header" class="border w-150px h-60px d-table">
                 <div class="d-table-cell align-middle text-center">
                   <div class="d-flex justify-content-around align-items-center text-center">
                     <div>日時</div>
@@ -13,7 +13,7 @@
                   </div>
                 </div>
               </div>
-              <div class="border w-50px h-60px d-table">
+              <div id="seat-header" class="border w-50px h-60px d-table">
                 <div class="d-table-cell align-middle text-center">残席</div>
               </div>
             </div>
