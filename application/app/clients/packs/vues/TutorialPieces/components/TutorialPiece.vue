@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="h-100">
     <transition name="fade">
       <div v-if="isDeletionError">
         <div class="modal" v-on:click.self="$emit('closemodal')">
@@ -78,5 +78,8 @@ export default Vue.component('tutorial-piece', {
   height: 100%;
   width: 100%;
   min-width: 100%;
+}
+.h-100 {
+  height: 100%;
 }
 </style>

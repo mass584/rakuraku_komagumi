@@ -25,6 +25,7 @@ export default Vue.component('group-position', {
 <style scoped lang="scss">
 .position {
   height: 28px;
-  width: 148px;
+  width: 149px;
+  min-width: 149px;
 }
 </style>
