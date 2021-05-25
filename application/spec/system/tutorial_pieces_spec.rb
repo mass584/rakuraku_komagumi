@@ -69,7 +69,7 @@ RSpec.describe '全体予定の編集ページ', type: :system do
       term_teacher = @term.term_teachers.first
       term_student = @term.term_students.first
       term_tutorial = @term.term_tutorials.first
-      term_group = @term.term_groups.first
+      @term_group = @term.term_groups.first
       tutorial_timetable = @term.timetables.find_by(date_index: 1, period_index: 1)
       tutorial_seat = tutorial_timetable.seats.first
       group_timetable = @term.timetables.find_by(date_index: 2, period_index: 1)
@@ -78,19 +78,19 @@ RSpec.describe '全体予定の編集ページ', type: :system do
       # 集団科目の設定
       group_contract = @term.group_contracts.find_by(
         term_student: term_student,
-        term_group: term_group,
+        term_group: @term_group,
       )
       group_contract.update(is_contracted: true)
-      term_group.term_group_term_teachers.create(term_teacher: term_teacher)
-      group_timetable.update(term_group: term_group)
+      @term_group.term_group_term_teachers.create(term_teacher: term_teacher)
+      group_timetable.update(term_group: @term_group)
       # 個別科目の設定
-      tutorial_contract = @term.tutorial_contracts.find_by(
+      @tutorial_contract = @term.tutorial_contracts.find_by(
         term_student: term_student,
         term_tutorial: term_tutorial,
       )
-      tutorial_contract.update(term_teacher: term_teacher, piece_count: 1)
+      @tutorial_contract.update(term_teacher: term_teacher, piece_count: 1)
       tutorial_seat.update(term_teacher: term_teacher)
-      tutorial_piece = tutorial_contract.tutorial_pieces.first
+      tutorial_piece = @tutorial_contract.tutorial_pieces.first
       tutorial_piece.update(seat: tutorial_seat)
     end
 
@@ -99,10 +99,10 @@ RSpec.describe '全体予定の編集ページ', type: :system do
       visit tutorial_pieces_path
       expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
-      student = tutorial_contract.term_student.student
-      tutorial = tutorial_contract.term_tutorial.tutorial
+      student = @tutorial_contract.term_student.student
+      tutorial = @tutorial_contract.term_tutorial.tutorial
       tutorial_piece_display_text = "#{student.school_grade_i18n} #{student.name} #{tutorial.short_name}"
-      group = term_group.group
+      group = @term_group.group
       group_piece_display_text = group.name
       expect(page).to have_content tutorial_piece_display_text
       expect(page).to have_content group_piece_display_text
