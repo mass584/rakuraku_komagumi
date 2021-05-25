@@ -1,5 +1,4 @@
 import Axios from 'axios';
-import 'select2';
 import Vue from 'vue';
 import PieChartContainer from './vues/ShowTerm/PieChartContainer';
 
@@ -16,7 +15,6 @@ Axios.interceptors.request.use((config) => {
   return Promise.reject(error);
 });
 
-$(() => $('[id^=multiselect]').select2({ width: '100%' }));
 
 document.addEventListener('DOMContentLoaded', () => {
   new Vue({

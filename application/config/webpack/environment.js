@@ -6,7 +6,7 @@ const vue = require('./loaders/vue')
 environment.plugins.prepend('Provide', new webpack.ProvidePlugin({
   $: 'jquery',
   jQuery: 'jquery',
-  Popper: 'popper.js',
+  Popper: ['popper.js', 'default'],
 }))
 environment.plugins.prepend('VueLoaderPlugin', new VueLoaderPlugin())
 environment.loaders.prepend('vue', vue)

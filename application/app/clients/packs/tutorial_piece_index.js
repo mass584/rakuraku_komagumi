@@ -1,4 +1,3 @@
-import Axios from 'axios';
 import Vue from 'vue';
 import TutorialPiecesContainer from './vues/TutorialPieces/TutorialPiecesContainer';
 
