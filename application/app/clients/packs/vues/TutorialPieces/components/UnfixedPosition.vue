@@ -1,13 +1,24 @@
 <template>
   <div class="d-table">
-    <div
-      class="text-center d-table-cell align-middle position bg-secondary"
-      v-bind:class="{ 'bg-warning-light': tutorialPiece }"
-    >
-      <div v-if="tutorialPiece">
-        <small>{{ displayText }}</small>
+    <div v-if="tutorialPiece">
+      <div
+        class="px-1 d-flex align-item-center justify-content-between piece border border-white text-center position bg-warning-light"
+      >
+        <div>
+          <small>{{ displayText }}</small>
+        </div>
+        <div
+          type="button"
+          data-toggle="popover"
+          title="このコマは編集できません"
+          data-content="予定が編集中のため、このコマを編集することはできません"
+        >
+          <i class="bi bi-exclamation-circle text-danger"></i>
+        </div>
       </div>
-      <div v-else>
+    </div>
+    <div v-else>
+      <div class="text-center d-table-cell align-middle position bg-secondary">
         <small>予定未確定</small>
       </div>
     </div>

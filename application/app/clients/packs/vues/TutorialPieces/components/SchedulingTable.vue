@@ -61,6 +61,7 @@
               :tutorial-pieces="tutorialPiecesPerSeat(timetable, termTeacher)"
               :timetable="timetable"
               :term-teacher="termTeacher"
+              :term-students="termStudents"
               v-on:dragstart="$emit('dragstart', { ...$event, timetable, termTeacher })"
               v-on:dragend="$emit('dragend', { ...$event, timetable, termTeacher })"
               v-on:drop="$emit('drop', { ...$event, timetable, termTeacher })"

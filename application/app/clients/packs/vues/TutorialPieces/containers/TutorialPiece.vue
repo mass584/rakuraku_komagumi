@@ -1,8 +1,10 @@
 <template>
   <tutorial-piece
     :tutorial-piece="tutorialPiece"
+    :is-deletion-error="isDeletionError"
     v-on:dragstart="$emit('dragstart', $event)"
     v-on:dragend="$emit('dragend', $event)"
+    v-on:closemodal="isDeletionError = false"
     v-on:toggle="onClickToggle()"
     v-on:delete="onClickDelete()"
   />
@@ -20,6 +22,13 @@ export default Vue.component('tutorial-piece-container', {
   props: {
     tutorialPiece: Object as PropType<TutorialPiece>,
   },
+  data(): {
+    isDeletionError: boolean;
+  } {
+    return {
+      isDeletionError: false,
+    }
+  },
   computed: {
     timetables() {
       return store.state.timetables;
@@ -30,9 +39,18 @@ export default Vue.component('tutorial-piece-container', {
   },
   methods: {
     updateTutorialPieceSeatId: async function(tutorialPieceId: number, seatId: number | null) {
-      const url = "/term_schedules.json";
-      const reqBody = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
-      await axios.post(url, reqBody);
+      try {
+        const url = "/term_schedules.json";
+        const reqBody = { term_schedule: { seat_id: seatId, tutorial_piece_id: tutorialPieceId } };
+        await axios.post(url, reqBody);
+      } catch (error) {
+        switch (error.message) {
+          case 'Request failed with status code 400':
+            throw new Error('BadRequest');
+          default:
+            throw new Error('UnexpectedError');
+        }
+      }
     },
     updateTutorialPieceIsFixed: async function(tutorialPieceId: number, isFixed: boolean) {
       const url = `/tutorial_pieces/${tutorialPieceId}.json`;
@@ -59,13 +77,17 @@ export default Vue.component('tutorial-piece-container', {
       );
       if (!srcSeat) return;
       store.commit('setIsLoading', true);
-      await this.updateTutorialPieceSeatId(this.tutorialPiece.id, null);
-      const newTutorialPieces = this.tutorialPieces.map((item) => {
-        return item.id === this.tutorialPiece.id ? { ...item, seatId: null, isFixed: false } : item;
-      });
-      const newTimetables = this.getNewTimetables(this.tutorialPiece, srcTimetable, srcSeat); 
-      store.commit('setTutorialPieces', newTutorialPieces);
-      store.commit('setTimetables', newTimetables);
+      try {
+        await this.updateTutorialPieceSeatId(this.tutorialPiece.id, null);
+        const newTutorialPieces = this.tutorialPieces.map((item) => {
+          return item.id === this.tutorialPiece.id ? { ...item, seatId: null, isFixed: false } : item;
+        });
+        const newTimetables = this.getNewTimetables(this.tutorialPiece, srcTimetable, srcSeat); 
+        store.commit('setTutorialPieces', newTutorialPieces);
+        store.commit('setTimetables', newTimetables);
+      } catch {
+        this.isDeletionError = true;
+      }
       store.commit('setIsLoading', false);
     },
     getNewTimetables: function(

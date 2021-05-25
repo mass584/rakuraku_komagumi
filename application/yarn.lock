@@ -1618,6 +1618,13 @@ bootstrap-icons@^1.4.1:
   resolved "https://registry.yarnpkg.com/bootstrap-icons/-/bootstrap-icons-1.4.1.tgz#5071d2ea9dab0ad79ca5673a97a0074872c74e14"
   integrity sha512-EcATaAGsRgyy4NtnwXlNzkgWttpb6PqcXCoLtZZKdZtAYJU/WYqoQFxuGFKAppOlf7NmKpvGtSsC/921H7LIjg==
 
+bootstrap-tooltip@^3.1.1:
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/bootstrap-tooltip/-/bootstrap-tooltip-3.1.1.tgz#6f03bdffdfc397e76b07828473d1ee3e7bdfe45c"
+  integrity sha1-bwO9/9/Dl+drB4KEc9HuPnvf5Fw=
+  dependencies:
+    jquery "~2.1.0"
+
 bootstrap4-datetimepicker@^5.2.3:
   version "5.2.3"
   resolved "https://registry.yarnpkg.com/bootstrap4-datetimepicker/-/bootstrap4-datetimepicker-5.2.3.tgz#e7e42839db0531deaa6b53fd63cbd4269e80e09a"
@@ -4197,6 +4204,11 @@ jquery@>=1.9.1, "jquery@^1.8.3 || ^2.0 || ^3.0", jquery@^3.5.1:
   version "3.6.0"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
   integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
+
+jquery@~2.1.0:
+  version "2.1.4"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.1.4.tgz#228bde698a0c61431dc2630a6a154f15890d2317"
+  integrity sha1-IoveaYoMYUMdwmMKahVPFYkNIxc=
 
 js-base64@^2.1.8:
   version "2.6.4"
