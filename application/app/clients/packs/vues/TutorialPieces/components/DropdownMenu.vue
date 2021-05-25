@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="text-left">
     <transition name="fade">
       <div v-if="unlock_all_modal">
         <div class="modal" v-on:click.self="unlock_all_modal=false">
@@ -7,9 +7,6 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">全てのコマのロックを解除します</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
               </div>
               <div class="modal-body">
                 全てのコマのロックを解除します。よろしいですか。
@@ -32,9 +29,6 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">全てのコマをロックします</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
               </div>
               <div class="modal-body">
                 全てのコマをロックします。よろしいですか。
@@ -57,9 +51,6 @@
             <div class="modal-content">
               <div class="modal-header">
                 <h5 class="modal-title">全てのコマをリセットします</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                  <span aria-hidden="true">&times;</span>
-                </button>
               </div>
               <div class="modal-body">
                 全てのコマをリセットします。よろしいですか。

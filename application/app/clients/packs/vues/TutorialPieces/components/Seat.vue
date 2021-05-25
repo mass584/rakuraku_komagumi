@@ -30,7 +30,6 @@
 </template>
 
 <script lang="ts">
-import _ from 'lodash';
 import Vue, { PropType } from 'vue';
 
 import './ClosedPosition.vue';
@@ -52,7 +51,7 @@ export default Vue.component('seat', {
   },
   computed: {
     positionIndexes() {
-      return _.range(1, this.positionCount + 1);
+      return Array.from({ length: this.positionCount }, (_, i) => i + 1);
     },
   },
   methods: {

@@ -10,8 +10,8 @@
         <div
           type="button"
           data-toggle="popover"
-          title="このコマは編集できません"
-          data-content="予定が編集中のため、このコマを編集することはできません"
+          title="編集できません"
+          data-content="講師、もしくは生徒の予定が提出済みでないため、このコマを編集することはできません。"
         >
           <i class="bi bi-exclamation-circle text-danger"></i>
         </div>
@@ -43,6 +43,9 @@ export default Vue.component('unfixed-position', {
 
       return `${studentSchoolGrade} ${studentName} ${tutorialName}`;
     },
+  },
+  created: function () {
+    window.$('[data-toggle="popover"]').popover();
   },
 }) 
 </script>

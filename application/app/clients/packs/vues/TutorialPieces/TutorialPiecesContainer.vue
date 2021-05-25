@@ -11,7 +11,6 @@
 
 <script lang="ts">
 import axios from 'axios';
-import _ from 'lodash';
 import Vue from 'vue';
 
 import './containers/SchedulingTable.vue';
