@@ -23,7 +23,8 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[2].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[2].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[4].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[4].id,
+                                                      tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_second.save).to eq(false)
         expect(@tutorial_piece_second.reload.seat_id).to eq(nil)
         expect(term_schedule_second.errors.full_messages).to include('講師の１日の最大空きコマ数を超えています')
@@ -35,7 +36,8 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[2].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[2].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id, tutorial_piece_id: @tutorial_piece_first.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id,
+                                                      tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_second.save).to eq(false)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[2].id)
         expect(term_schedule_second.errors.full_messages).to include('講師の１日の最大空きコマ数を超えています')
@@ -47,7 +49,8 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[2].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[2].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id,
+                                                      tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_second.save).to eq(true)
         expect(@tutorial_piece_second.reload.seat_id).to eq(@seats[3].id)
         term_schedule_third = TermSingleSchedule.new(seat_id: nil, tutorial_piece_id: @tutorial_piece_first.id)
@@ -81,7 +84,8 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[0].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[0].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[3].id,
+                                                      tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_second.save).to eq(false)
         expect(@tutorial_piece_second.reload.seat_id).to eq(nil)
         expect(term_schedule_second.errors.full_messages).to include('生徒の１日の最大空きコマ数を超えています')
@@ -93,10 +97,12 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[0].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[0].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[2].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[2].id,
+                                                      tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_second.save).to eq(true)
         expect(@tutorial_piece_second.reload.seat_id).to eq(@seats[2].id)
-        term_schedule_third = TermSingleSchedule.new(seat_id: @seats[3].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_third = TermSingleSchedule.new(seat_id: @seats[3].id,
+                                                     tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_third.save).to eq(false)
         expect(@tutorial_piece_second.reload.seat_id).to eq(@seats[2].id)
         expect(term_schedule_third.errors.full_messages).to include('生徒の１日の最大空きコマ数を超えています')
@@ -108,7 +114,8 @@ RSpec.describe TermSingleSchedule, type: :model do
         term_schedule_first = TermSingleSchedule.new(seat_id: @seats[0].id, tutorial_piece_id: @tutorial_piece_first.id)
         expect(term_schedule_first.save).to eq(true)
         expect(@tutorial_piece_first.reload.seat_id).to eq(@seats[0].id)
-        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[2].id, tutorial_piece_id: @tutorial_piece_second.id)
+        term_schedule_second = TermSingleSchedule.new(seat_id: @seats[2].id,
+                                                      tutorial_piece_id: @tutorial_piece_second.id)
         expect(term_schedule_second.save).to eq(true)
         expect(@tutorial_piece_second.reload.seat_id).to eq(@seats[2].id)
         term_schedule_third = TermSingleSchedule.new(seat_id: @seats[3].id, tutorial_piece_id: @tutorial_piece_third.id)

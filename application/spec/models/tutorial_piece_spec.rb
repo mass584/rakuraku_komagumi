@@ -162,7 +162,7 @@ RSpec.describe TutorialPiece, type: :model do
         expect(@third.reload.seat_id).to eq(@seat_third.id)
         expect(@fourth.update(seat_id: @seat_fourth.id)).to eq(false)
         expect(@fourth.reload.seat_id).to eq(nil)
-        expect(@fourth.errors.full_messages).to include('生徒の１日の合計コマの上限を超えています')
+        expect(@fourth.errors.full_messages).to include('生徒の１日の最大コマ数を超えています')
       end
     end
 
@@ -178,7 +178,7 @@ RSpec.describe TutorialPiece, type: :model do
         expect(@fourth.reload.seat_id).to eq(@seat_fifth.id)
         expect(@fourth.update(seat_id: @seat_fourth.id)).to eq(false)
         expect(@fourth.reload.seat_id).to eq(@seat_fifth.id)
-        expect(@fourth.errors.full_messages).to include('生徒の１日の合計コマの上限を超えています')
+        expect(@fourth.errors.full_messages).to include('生徒の１日の最大コマ数を超えています')
       end
     end
   end

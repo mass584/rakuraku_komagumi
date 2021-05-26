@@ -26,7 +26,7 @@ RSpec.describe GroupContract, type: :model do
         expect(@group_contracts[0].reload.is_contracted).to eq(true)
         expect(@group_contracts[1].update(is_contracted: true)).to eq(false)
         expect(@group_contracts[1].reload.is_contracted).to eq(false)
-        expect(@group_contracts[1].errors.full_messages).to include('生徒の１日の合計コマの上限を超えています')
+        expect(@group_contracts[1].errors.full_messages).to include('生徒の１日の最大コマ数を超えています')
       end
     end
   end

@@ -51,7 +51,7 @@ class GroupContract < ApplicationRecord
     end
 
     if contract_creation? && daily_occupations_invalid
-      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大コマ数を超えています')
     end
   end
 
