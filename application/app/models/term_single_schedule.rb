@@ -1,4 +1,4 @@
-class TermSchedule
+class TermSingleSchedule
   include ActiveModel::Model
   include ActiveModel::Validations
   include ActiveModel::Validations::Callbacks
