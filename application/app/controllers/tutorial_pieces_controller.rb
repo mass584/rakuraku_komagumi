@@ -42,7 +42,7 @@ class TutorialPiecesController < ApplicationController
   private
 
   def update_params
-    params.require(:tutorial_piece).permit(:is_fixed, :seat_id)
+    params.require(:tutorial_piece).permit(:is_fixed)
   end
 
   def bulk_update_params

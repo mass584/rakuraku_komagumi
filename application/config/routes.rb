@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_overall_schedules, only: [:create], defaults: { format: 'json' }
     resources :term_schedules, only: [:create], defaults: { format: 'json' }
+    post 'term_schedules/bulk_reset', to: 'term_schedules#bulk_reset', defaults: { format: 'json' }
     resources :term_students, only: [:index] do
       get :vacancy
       get :schedule
@@ -52,7 +53,6 @@ Rails.application.routes.draw do
     resources :tutorial_contracts, only: [:update], defaults: { format: 'json' }
     resources :tutorial_pieces, only: [:index]
     resources :tutorial_pieces, only: [:update], defaults: { format: 'json' }
-    post 'tutorial_pieces/bulk_update', to: 'tutorial_pieces#bulk_update', defaults: { format: 'json' }
     root 'terms#index'
   end
 end

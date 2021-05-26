@@ -27,9 +27,8 @@ export default Vue.component('dropdown-menu-container', {
       location.reload();
     },
     async resetAll() {
-      const url = '/tutorial_pieces/bulk_update.json';
-      const reqBody = { tutorial_piece: { seat_id: null, is_fixed: false } };
-      await axios.post(url, reqBody);
+      const url = '/term_schedules/bulk_reset.json';
+      await axios.post(url);
       location.reload();
     },
   },

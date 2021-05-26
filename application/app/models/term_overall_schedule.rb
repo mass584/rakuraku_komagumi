@@ -29,6 +29,13 @@ class TermOverallSchedule
     end
   end
 
+  def bulk_reset
+    term.transaction do
+      term.tutorial_pieces.update_all(seat_id: nil, is_fixed: false)
+      term.seats.update_all(term_teacher_id: nil)
+    end
+  end
+
   private
 
   def term

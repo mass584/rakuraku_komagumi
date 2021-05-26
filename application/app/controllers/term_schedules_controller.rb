@@ -13,6 +13,15 @@ class TermSchedulesController < ApplicationController
     end
   end
 
+  def bulk_reset
+    record = TermOverallSchedule.new(term_id: @term.id)
+    if record.bulk_reset
+      head :no_content
+    else
+      render json: { message: record.errors.full_messages }, status: :bad_request
+    end
+  end
+
   private
 
   def create_params
