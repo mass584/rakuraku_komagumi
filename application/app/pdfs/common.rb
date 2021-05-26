@@ -1,9 +1,9 @@
 module Common
-  include ApplicationHelper
-  COLOR_HEADER  = 'fdf5e6'.freeze
-  COLOR_DISABLE = '7f7f7f'.freeze
-  COLOR_ENABLE  = 'ffffff'.freeze
-  COLOR_BORDER  = 'ffffff'.freeze
+  COLOR_HEADER  = '343a40'.freeze
+  COLOR_ENABLE  = 'fff0c6'.freeze
+  COLOR_DISABLE = '6c757d'.freeze
+  COLOR_BORDER  = 'dee2e6'.freeze
+  COLOR_PLAIN = 'ffffff'.freeze
 
   def rotate?(term)
     term.max_period > 6 || term.one_week?
@@ -33,8 +33,8 @@ module Common
     }
   end
 
-  def print_piece_for_teacher(piece)
-    "[#{piece.contract.subject_term.subject.name}] #{piece.contract.term_student.student.name}"
+  def print_piece_for_teacher(tutorial_piece)
+    "[#{tutorial_piece.tutorial_contract.term_tutorial.tutorial.name}] #{tutorial_piece.tutorial_contract.term_student.student.name}"
   end
 
   def print_piece_for_student(piece)

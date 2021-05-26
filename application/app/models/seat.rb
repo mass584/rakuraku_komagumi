@@ -36,6 +36,9 @@ class Seat < ApplicationRecord
   scope :with_index, lambda {
     joins(:timetable).select('timetables.*', 'seats.seat_index')
   }
+  scope :with_term_teacher, lambda {
+    left_joins(term_teacher: [:teacher]).select('teachers.name AS teacher_name')
+  }
 
   private
 
