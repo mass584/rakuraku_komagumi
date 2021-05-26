@@ -1,13 +1,13 @@
 == render partial: 'navbar', locals: { active: '' }
 == render partial: 'navbar_term', locals: { active: 'term_teacher' }
-.container-fluid.my-5
-  .row.float-left.mx-5
+.container-fluid.my-3
+  .row.float-left.mx-1
     == render partial: 'term_teachers/new', locals: { term_teacher: TermTeacher.new }
-  .row.float-right.mx-5
+  .row.float-right.mx-1
     .ml-1
       == render partial: 'application/pagenation',
         locals: { path: term_teachers_path, keyword: nil, page: @page, max_page: max_page(@term_teachers_count, @page_size) }
-  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+  .table-wrapper
     table.table.table-sm
       thead.thead-dark
         tr

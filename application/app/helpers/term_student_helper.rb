@@ -30,7 +30,7 @@ module TermStudentHelper
     content_tag(:td,
                 class: term_student_schedule_table_cell_class(timetable,
                                                               filtered_tutorial_pieces)) do
-      content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
+      content_tag(:small, class: 'min-height-40 d-flex flex-column justify-content-center') do
         term_student_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end
     end
@@ -55,6 +55,8 @@ module TermStudentHelper
   def term_student_schedule_table_cell_inner(timetable, tutorial_pieces)
     if timetable.present? && timetable.is_closed
       '休講'
+    elsif !timetable.is_vacant
+      '出席不可'
     elsif timetable.present? && timetable.group_name.present?
       timetable.group_name
     else

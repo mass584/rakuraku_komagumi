@@ -1,58 +1,85 @@
 class TeacherSchedule < Prawn::Document
   include Common
 
-  def initialize(term, term_teacher, pieces, teacher_requests)
-    super(
-      page_size: 'A4', # 595.28 x 841.89
-      page_layout: rotate?(term) ? :landscape : :portrait,
-      left_margin: 20,
-      right_margin: 20
-    )
-    font Rails.root.join('vendor', 'assets', 'fonts', 'ipaexm.ttf')
-    text "#{term.name}予定表 #{term_teacher.teacher.name}", align: :center, size: 16
-    move_down 10
-    pdf_table(term, pieces, teacher_requests)
-    move_down 5
-    text Time.zone.now.strftime('%Y/%m/%d %H:%M'), align: :right, size: 9
+  def initialize(term, term_teacher, tutorial_pieces, term_groups, timetables)
+    page_layout = rotate?(term) ? :landscape : :portrait
+    super(page_size: 'A4', page_layout: page_layout, left_margin: 20, right_margin: 20, top_margin: 60)
+    font Rails.root.join('vendor', 'fonts', 'ipaexm.ttf')
+    pdf_table(term, tutorial_pieces, term_groups, timetables)
+    number_pages('<page> / <total>', { at: [bounds.right - 50, 0], size: 7 })
+    number_pages("#{term.name}予定表 #{term_teacher.teacher.name}", at: [bounds.left, bounds.top + 20])
   end
 
   private
 
-  def pdf_table(term, pieces, teacher_requests)
+  def pdf_table(term, tutorial_pieces, term_groups, timetables)
     max_width = rotate?(term) ? 801 : 555
     header_col_width = 80
-    body_col_width = (max_width - header_col_width) / term.max_period
+    body_col_width = (max_width - header_col_width) / term.period_count
     font_size(8) do
-      table pdf_table_cells(term, pieces, teacher_requests),
+      table table_cells(term, tutorial_pieces, term_groups, timetables),
             cell_style: { width: body_col_width, padding: 3, leading: 2 } do
         cells.borders = [:top, :bottom, :right, :left]
         cells.border_width = 1.0
         columns(0).width = header_col_width
-        rows(0..-1).each do |row|
-          row.height = 25 if row.height < 25
-        end
+        row(0).text_color = 'ffffff'
         self.header = true
       end
     end
   end
 
-  def pdf_table_cells(term, pieces, teacher_requests)
-    term.date_array.reduce([header(term)]) do |a_date, date|
-      a_date.concat(
-        [
-          term.period_array.reduce([header_left(date)]) do |a_period, period|
-            content = pieces.dig(date, period).to_a.map do |piece|
-              print_piece_for_teacher(piece)
-            end.join("\n")
-            is_opened = teacher_requests[date][period]
-            background_color = is_opened ? COLOR_ENABLE : COLOR_DISABLE
-            a_period.concat([{
-              content: content,
-              background_color: background_color,
-            }])
+  def table_cells(term, tutorial_pieces, term_groups, timetables)
+    term.date_index_array.reduce([header(term)]) do |rows, date_index|
+      rows + [
+        term.period_index_array.reduce([header_left(term, date_index)]) do |cols, period_index|
+          tutorial_pieces_array = tutorial_pieces.filter do |tutorial_piece|
+            tutorial_piece[:date_index] == date_index && tutorial_piece[:period_index] == period_index
+          end.to_a
+          timetable = timetables.find do |item|
+            item[:date_index] == date_index && item[:period_index] == period_index
           end
-        ],
-      )
+          term_group = term_groups.find do |item|
+            item[:date_index] == date_index && item[:period_index] == period_index
+          end
+          cols + [table_cell(tutorial_pieces_array, term_group, timetable)]
+        end
+      ]
+    end
+  end
+
+  def table_cell(tutorial_pieces, term_group, timetable)
+    if timetable[:is_closed]
+      {
+        content: '休講',
+        background_color: COLOR_DISABLE,
+        height: 25,
+      }
+    elsif !timetable[:is_vacant]
+      {
+        content: '出勤不可',
+        background_color: COLOR_DISABLE,
+        height: 25,
+      }
+    elsif timetable[:group_name]
+      {
+        content: timetable[:group_name],
+        background_color: term_group.present? ? COLOR_ENABLE : COLOR_DISABLE,
+        height: 25,
+      }
+    elsif tutorial_pieces.present?
+      {
+        content: tutorial_pieces.map do |tutorial_piece|
+          "#{tutorial_piece.student_name}（#{tutorial_piece.tutorial_name}）"
+        end.join("\n"),
+        background_color: COLOR_ENABLE,
+        height: 25,
+      }
+    else
+      {
+        content: ' ',
+        background_color: COLOR_PLAIN,
+        height: 25,
+      }
     end
   end
 end

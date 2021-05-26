@@ -6,38 +6,30 @@ module Common
   COLOR_PLAIN = 'ffffff'.freeze
 
   def rotate?(term)
-    term.max_period > 6 || term.one_week?
+    term.period_count > 6 || term.normal?
   end
 
   def header(term)
-    begin_end_times = BeginEndTime.get_begin_end_times(term)
     theader = [
       {
         content: '日付',
         background_color: COLOR_HEADER,
       }
     ]
-    tbody = term.period_array.map do |p|
+    tbody = term.period_index_array.map do |period_index|
+      begin_at = I18n.l term.begin_end_times.find_by(period_index: period_index).begin_at
+      end_at = I18n.l term.begin_end_times.find_by(period_index: period_index).end_at
       {
-        content: "#{p}限\n#{begin_end_times[p].begin_at}〜#{begin_end_times[p].end_at}",
+        content: "#{period_index}限\n#{begin_at}〜#{end_at}",
         background_color: COLOR_HEADER,
       }
     end
     theader + tbody
   end
 
-  def header_left(date)
+  def header_left(term, date_index)
     {
-      content: print_date(date),
-      background_color: COLOR_HEADER,
+      content: term.display_date(date_index),
     }
-  end
-
-  def print_piece_for_teacher(tutorial_piece)
-    "[#{tutorial_piece.tutorial_contract.term_tutorial.tutorial.name}] #{tutorial_piece.tutorial_contract.term_student.student.name}"
-  end
-
-  def print_piece_for_student(piece)
-    "[#{piece.contract.subject_term.subject.name}] #{piece.seat.term_teacher.teacher.name}"
   end
 end

@@ -55,6 +55,14 @@ class TermTeachersController < ApplicationController
       term_id: @term.id,
       'teacher_vacancies.term_teacher_id': params[:term_teacher_id],
     )
+    respond_to do |format|
+      format.html
+      format.pdf do
+        pdf = TeacherSchedule.new(@term, @term_teacher, @tutorial_pieces, @term_groups, @timetables).render
+        filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_講師予定表.pdf"
+        send_data pdf, filename: filename, type: 'application/pdf', disposition: 'inline'
+      end
+    end
   end
 
   private
