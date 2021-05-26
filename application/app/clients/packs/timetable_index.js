@@ -1,5 +1,3 @@
-import 'select2';
-
 $.ajaxSetup({
   headers: { 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content') },
 });
@@ -8,7 +6,6 @@ $(() => {
   $('[id^=begin_at]').on('blur', onBlurBeginAt);
   $('[id^=end_at]').on('blur', onBlurEndAt);
   $('[id^=select_status]').on('change', onChangeStatus);
-  $('[id^=multiselect]').select2({ width: '100%' });
 });
 
 const onBlurBeginAt = (event) => {

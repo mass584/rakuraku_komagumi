@@ -1,0 +1,10 @@
+= form_for term_tutorial, url: term_tutorials_path, remote: true do |f|
+  .form-group
+    = f.label :tutorial_id
+    = f.select :tutorial_id,
+      options_for_select_tutorial_id(@room, @term),
+      { include_blank: '選択してください' },
+      { class: 'form-control' }
+    = f.hidden_field :term_id, :value => @term.id
+  div id="term_tutorial_create_alert"
+  = f.submit '保存', {"class" => "btn btn-primary"}

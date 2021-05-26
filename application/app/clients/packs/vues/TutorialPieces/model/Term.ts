@@ -1,3 +1,22 @@
+export type TermType = 'normal' | 'season' | 'exam_planning';
+
+export type SchoolGrade =
+  'e1' |
+  'e2' |
+  'e3' |
+  'e4' |
+  'e5' |
+  'e6' |
+  'j1' |
+  'j2' |
+  'j3' |
+  'h1' |
+  'h2' |
+  'h3' |
+  'other';
+
+export type VacancyStatus = 'draft' | 'submitted' | 'fixed';
+
 export type StudentOptimizationRule = {
   id: number,
   schoolGrade: SchoolGrade,
@@ -30,7 +49,7 @@ export type Timetable = {
 export type Seat = {
   id: number;
   seatIndex: number;
-  termTeacherId: number;
+  termTeacherId: number | null;
   positionCount: number;
   tutorialPieceIds: number[];
 };
@@ -41,7 +60,11 @@ export type TermTeacher = {
   termTeacherName: string;
 };
 
-export type VacancyStatus = 'draft' | 'submitted' | 'fixed';
+export type TermStudent = {
+  id: number;
+  vacancyStatus: VacancyStatus;
+  termTeacherName: string;
+};
 
 export type TutorialPiece = {
   id: number;
@@ -56,22 +79,12 @@ export type TutorialPiece = {
   termTeacherId: number;
 };
 
-export type SchoolGrade =
-  'e1' |
-  'e2' |
-  'e3' |
-  'e4' |
-  'e5' |
-  'e6' |
-  'j1' |
-  'j2' |
-  'j3' |
-  'h1' |
-  'h2' |
-  'h3' |
-  'other';
-
-export type Droppable = {
-  termTeacherId: number;
-  timetableId: number;
-};
+export type Term = {
+  termType: TermType;
+  dateCount: number;
+  periodCount: number;
+  seatCount: number;
+  positionCount: number;
+  beginAt: string;
+  endAt: string;
+}

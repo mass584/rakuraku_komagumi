@@ -64,6 +64,7 @@ class StudentOptimizationRule < ApplicationRecord
   after_find :serialize_interval_costs
 
   scope :ordered, -> { order(school_grade: 'ASC') }
+  scope :filtered, -> { where(school_grade: %w[e4 e5 e6 j1 j2 j3 h1 h2 h3]) }
 
   attr_accessor :serialized_occupation_costs,
                 :serialized_blank_costs,

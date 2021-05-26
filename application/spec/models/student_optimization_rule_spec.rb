@@ -30,28 +30,28 @@ RSpec.describe StudentOptimizationRule, type: :model do
       it '設定数が誤っている時にエラー' do
         expect(@student_optimization_rule.update(serialized_occupation_costs: '1 2 3 4')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日のコマ数に対するコスト値の設定数が間違えています',
+          '１日のコマ数コストの設定数が間違えています',
         )
       end
 
       it '文字列が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_occupation_costs: 'a b c')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日のコマ数に対するコスト値は整数で入力してください',
+          '１日のコマ数コストは整数で入力してください',
         )
       end
 
       it '小数が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_occupation_costs: '1 2 3.1')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日のコマ数に対するコスト値は整数で入力してください',
+          '１日のコマ数コストは整数で入力してください',
         )
       end
 
       it '範囲外の整数（０〜１００意外）が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_occupation_costs: '1 2 101')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日のコマ数に対するコスト値は０〜１００を指定してください',
+          '１日のコマ数コストは０〜１００を指定してください',
         )
       end
     end
@@ -69,28 +69,28 @@ RSpec.describe StudentOptimizationRule, type: :model do
       it '設定数が誤っている時にエラー' do
         expect(@student_optimization_rule.update(serialized_blank_costs: '1 2')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日の空きコマ数に対するコスト値の設定数が間違えています',
+          '１日の空きコマ数コストの設定数が間違えています',
         )
       end
 
       it '文字列が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_blank_costs: 'a')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日の空きコマ数に対するコスト値は整数で入力してください',
+          '１日の空きコマ数コストは整数で入力してください',
         )
       end
 
       it '小数が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_blank_costs: '1.1')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日の空きコマ数に対するコスト値は整数で入力してください',
+          '１日の空きコマ数コストは整数で入力してください',
         )
       end
 
       it '範囲外の整数（０〜１００意外）が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_blank_costs: '101')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '１日の空きコマ数に対するコスト値は０〜１００を指定してください',
+          '１日の空きコマ数コストは０〜１００を指定してください',
         )
       end
     end
@@ -111,28 +111,28 @@ RSpec.describe StudentOptimizationRule, type: :model do
       it '設定数が誤っている時にエラー' do
         expect(@student_optimization_rule.update(serialized_interval_costs: '1 2')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '受講間隔に対するコスト値の設定数が間違えています',
+          '受講間隔のコストの設定数が間違えています',
         )
       end
 
       it '文字列が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_interval_costs: 'a 2 3')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '受講間隔に対するコスト値は整数で入力してください',
+          '受講間隔のコストは整数で入力してください',
         )
       end
 
       it '小数が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_interval_costs: '1.1 2 3')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '受講間隔に対するコスト値は整数で入力してください',
+          '受講間隔のコストは整数で入力してください',
         )
       end
 
       it '範囲外の整数（０〜１００意外）が入力された際にエラー' do
         expect(@student_optimization_rule.update(serialized_interval_costs: '101 2 3')).to eq(false)
         expect(@student_optimization_rule.errors.full_messages).to include(
-          '受講間隔に対するコスト値は０〜１００を指定してください',
+          '受講間隔のコストは０〜１００を指定してください',
         )
       end
     end

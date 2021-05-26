@@ -9,7 +9,7 @@ class TermTutorial < ApplicationRecord
     joins(:tutorial).order('tutorials.order': 'ASC')
   }
   scope :named, lambda {
-    joins(:tutorial).select('term_tutorials.*', 'tutorials.name')
+    eager_load(:tutorial).select('term_tutorials.*', 'tutorials.name')
   }
 
   private

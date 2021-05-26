@@ -23,6 +23,7 @@ class TutorialPiece < ApplicationRecord
 
   before_validation :fetch_new_tutorials_group_by_timetable, on: :update
   before_validation :fetch_groups_group_by_timetable, on: :update
+  before_validation :set_is_fixed_to_false_if_seat_is_nil, on: :update
 
   scope :filter_by_placed, -> { where.not(seat_id: nil) }
   scope :filter_by_unplaced, -> { where(seat_id: nil) }
@@ -58,6 +59,11 @@ class TutorialPiece < ApplicationRecord
 
   def seat_updation?
     seat_id_in_database.present? && seat_id.present? && seat_id_in_database != seat_id
+  end
+
+  # callback
+  def set_is_fixed_to_false_if_seat_is_nil
+    self.is_fixed = false if seat_id.nil?
   end
 
   # validate
@@ -107,11 +113,11 @@ class TutorialPiece < ApplicationRecord
   def verify_daily_occupation_limit
     limit = tutorial_contract.term_student.optimization_rule.occupation_limit
     if seat_creation? && daily_occupations(seat.timetable.date_index) > limit
-      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大コマ数を超えています')
     end
 
     if seat_updation? && daily_occupations(seat.timetable.date_index) > limit
-      errors.add(:base, '生徒の１日の合計コマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大コマ数を超えています')
     end
   end
 

@@ -6,18 +6,29 @@ class TermGroup < ApplicationRecord
   has_many :group_contracts, dependent: :restrict_with_exception
   has_many :timetables, dependent: :nullify
 
+  validate :tutorial_piece_empty?
+
   before_create :set_nest_objects
 
   scope :ordered, lambda {
     joins(:group).order('groups.order': 'ASC')
   }
   scope :named, lambda {
-    joins(:group).select('term_groups.*', 'groups.name')
+    eager_load(:group).select('term_groups.*', 'groups.name')
   }
+
+  def editable
+    !term.tutorial_pieces.filter_by_placed.exists?
+  end
 
   private
 
-  # before_create
+  def tutorial_piece_empty?
+    unless editable
+      errors.add(:base, 'コマが配置されているため変更できません')
+    end
+  end
+
   def set_nest_objects
     self.group_contracts = new_group_contracts
   end

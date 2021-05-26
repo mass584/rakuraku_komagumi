@@ -12,6 +12,7 @@
         "*": ["node_modules/*", "app/clients/packs/*"]
     },
     "sourceMap": true,
+    "strict": true,
     "target": "es5",
     "noEmit": true
   },

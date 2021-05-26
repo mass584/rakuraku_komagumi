@@ -5,8 +5,17 @@ class TermSchedulesController < ApplicationController
   before_action :set_term!
 
   def create
-    record = TermSchedule.new(create_params)
+    record = TermSingleSchedule.new(create_params)
     if record.save
+      head :no_content
+    else
+      render json: { message: record.errors.full_messages }, status: :bad_request
+    end
+  end
+
+  def bulk_reset
+    record = TermOverallSchedule.new(term_id: @term.id)
+    if record.bulk_reset
       head :no_content
     else
       render json: { message: record.errors.full_messages }, status: :bad_request

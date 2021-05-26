@@ -5,9 +5,10 @@ import PieChartContainer from './vues/ShowTerm/PieChartContainer';
 Vue.config.productionTip = false
 
 Axios.interceptors.request.use((config) => {
-  const csrf = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
+  const querySelector = document.querySelector('meta[name="csrf-token"]');
+  const csrfToken = querySelector ? querySelector.getAttribute('content') : '';
   if(['post', 'put', 'patch', 'delete'].includes(config.method)) {
-    config.headers['X-CSRF-Token'] = csrf;
+    config.headers['X-CSRF-Token'] = csrfToken;
   }
   return config;
 }, (error) => {

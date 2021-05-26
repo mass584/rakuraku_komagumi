@@ -83,7 +83,7 @@ RSpec.describe Seat, type: :model do
         expect(@seats[3].reload.term_teacher_id).to eq(@term_teacher_first.id)
         expect(@seats[4].update(term_teacher_id: @term_teacher_first.id)).to eq(false)
         expect(@seats[4].reload.term_teacher_id).to eq(nil)
-        expect(@seats[4].errors.full_messages).to include('講師の１日の合計コマの上限を超えています')
+        expect(@seats[4].errors.full_messages).to include('講師の１日の最大コマ数を超えています')
       end
     end
 
@@ -99,7 +99,7 @@ RSpec.describe Seat, type: :model do
         expect(@seats[4].reload.term_teacher_id).to eq(@term_teacher_second.id)
         expect(@seats[4].update(term_teacher_id: @term_teacher_first.id)).to eq(false)
         expect(@seats[4].reload.term_teacher_id).to eq(@term_teacher_second.id)
-        expect(@seats[4].errors.full_messages).to include('講師の１日の合計コマの上限を超えています')
+        expect(@seats[4].errors.full_messages).to include('講師の１日の最大コマ数を超えています')
       end
     end
   end

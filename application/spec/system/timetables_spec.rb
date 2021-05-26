@@ -41,56 +41,6 @@ RSpec.describe '時間割りの編集ページ', type: :system do
     end
   end
 
-  describe '個別授業、集団授業の追加' do
-    before :each do
-      @term = create_normal_term_with_teacher_and_student(1, 1)
-      @room = @term.room
-      @tutorial = FactoryBot.create(:tutorial, room: @room)
-      @group = FactoryBot.create(:group, room: @room)
-      stub_authenticate_user
-      stub_current_room @room
-      stub_current_term @term
-    end
-
-    it 'モーダルの表示・非表示が切り替わる' do
-      visit timetables_path
-      expect(page).to have_no_content '個別科目をこのスケジュールに追加する'
-      click_on '新規個別'
-      expect(page).to have_content '個別科目をこのスケジュールに追加する'
-      click_on '戻る'
-      expect(page).to have_no_content '個別科目をこのスケジュールに追加する'
-      expect(page).to have_no_content '集団科目をこのスケジュールに追加する'
-      click_on '新規集団'
-      expect(page).to have_content '集団科目をこのスケジュールに追加する'
-      click_on '戻る'
-      expect(page).to have_no_content '集団科目をこのスケジュールに追加する'
-    end
-
-    it '個別科目がスケジュールに追加される' do
-      visit timetables_path
-      click_on '新規個別'
-      expect(page).to have_content '個別科目をこのスケジュールに追加する'
-      expect(page).to have_select('term_tutorial_tutorial_id', selected: '選択してください')
-      select @tutorial.name, from: 'term_tutorial_tutorial_id'
-      click_on '保存'
-      @term.reload
-      expect(page).to have_no_content '個別科目をこのスケジュールに追加する'
-      expect(@term.term_tutorials.count).to eq(6)
-    end
-
-    it '集団科目がスケジュールに追加される' do
-      visit timetables_path
-      click_on '新規集団'
-      expect(page).to have_content '集団科目をこのスケジュールに追加する'
-      expect(page).to have_select('term_group_group_id', selected: '選択してください')
-      select @group.name, from: 'term_group_group_id'
-      click_on '保存'
-      @term.reload
-      expect(page).to have_no_content '集団科目をこのスケジュールに追加する'
-      expect(@term.term_groups.count).to eq(3)
-    end
-  end
-
   describe '集団授業、休講日程の表示と更新' do
     before :each do
       @term = create_normal_term_with_teacher_and_student(1, 1)
@@ -128,41 +78,6 @@ RSpec.describe '時間割りの編集ページ', type: :system do
       expect(timetable.reload.term_group_id).to eq(nil)
       expect(page).to have_no_selector 'td.bg-secondary'
       expect(page).to have_no_selector 'td.bg-warning-light'
-    end
-  end
-
-  describe '集団授業、休講日程の表示と更新' do
-    before :each do
-      @term = create_normal_term_with_teacher_and_student(1, 1)
-      @room = @term.room
-      stub_authenticate_user
-      stub_current_room @room
-      stub_current_term @term
-    end
-
-    it 'モーダルの表示・非表示が切り替わる' do
-      visit timetables_path
-      expect(page).to have_no_content '集団担任を変更する'
-      click_on '集団担任'
-      expect(page).to have_content '集団担任を変更する'
-      click_on '戻る'
-      expect(page).to have_no_content '集団担任を変更する'
-    end
-
-    it '集団担任が更新される' do
-      term_teacher = @term.term_teachers.first
-      term_group = @term.term_groups.first
-
-      visit timetables_path
-      click_on '集団担任'
-      expect(page).to have_no_content '集団担任を変更する'
-      within "#edit_term_group_#{term_group.id}" do
-        expect(page).to have_select("multiselect-#{term_group.id}")
-        select term_teacher.teacher.name, from: "multiselect-#{term_group.id}"
-        click_on '保存'
-      end
-      expect(page).to have_no_content '集団担任を変更する'
-      expect(term_group.reload.term_teacher_ids).to eq([term_teacher.id])
     end
   end
 end

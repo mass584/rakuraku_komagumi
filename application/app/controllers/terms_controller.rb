@@ -31,6 +31,10 @@ class TermsController < ApplicationController
   end
 
   def show
+    @teacher_optimization_rule = TeacherOptimizationRule.find_by(term_id: @term.id)
+    @student_optimization_rules = StudentOptimizationRule.ordered.filtered.where(term_id: @term.id)
+    @term_tutorials = @term.term_tutorials.named
+    @term_groups = @term.term_groups.named
   end
 
   def schedule

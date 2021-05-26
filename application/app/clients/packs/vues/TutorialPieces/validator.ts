@@ -1,11 +1,10 @@
-import _ from 'lodash';
 import {
   StudentOptimizationRule,
   TeacherOptimizationRule,
   Timetable,
   TermTeacher,
   TutorialPiece,
-} from './types';
+} from './model/Term';
 
 export const validate = (
   periodCount: number,
@@ -215,7 +214,7 @@ const isUnderTeacherBlankLimit = (
 
 const dailyBlanksFrom = (periodCount: number, periodIndexes: number[]) => {
   const init = { flag: false, buffer: 0, sum: 0 };
-  const result = _.range(1, periodCount + 1).reduce((accu, periodIndex) => {
+  const result = Array.from({ length: periodCount }, (_, i) => i + 1).reduce((accu, periodIndex) => {
     const occupied = periodIndexes.includes(periodIndex);
     return {
       flag: accu.flag || occupied,
