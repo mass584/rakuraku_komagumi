@@ -15,19 +15,16 @@ RSpec.describe '全体予定の編集ページ', type: :system do
     it '講師の表示順が変更される' do
       term_teacher = @term.term_teachers.rank(:row_order).first
       visit tutorial_pieces_path
-      expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
       expect(term_teacher.row_order_rank).to eq(0)
       within "#stand_by_#{term_teacher.id}" do
         find_by_id("right_button_#{term_teacher.id}").click
       end
-      expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
       expect(term_teacher.reload.row_order_rank).to eq(1)
       within "#stand_by_#{term_teacher.id}" do
         find_by_id("left_button_#{term_teacher.id}").click
       end
-      expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
       expect(term_teacher.reload.row_order_rank).to eq(0)
     end
@@ -47,7 +44,6 @@ RSpec.describe '全体予定の編集ページ', type: :system do
       tutorial = tutorial_contract.term_tutorial.tutorial
       tutorial_piece_display_text = "#{student.school_grade_i18n} #{student.name} #{tutorial.short_name}"
       visit tutorial_pieces_path
-      expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
       within "#stand_by_#{term_teacher.id}" do
         select tutorial_piece_display_text, from: "tutorial_piece_select_#{term_teacher.id}"
@@ -97,7 +93,6 @@ RSpec.describe '全体予定の編集ページ', type: :system do
     it '個別コマ、集団コマが表示される' do
       # ページの表示
       visit tutorial_pieces_path
-      expect(page).to have_selector '#modal-loader'
       expect(page).to have_no_selector '#modal-loader'
       student = @tutorial_contract.term_student.student
       tutorial = @tutorial_contract.term_tutorial.tutorial
