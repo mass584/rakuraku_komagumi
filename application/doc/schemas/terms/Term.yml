@@ -165,15 +165,15 @@ properties:
         single_cost:
           type: integer
           example: 100
-          description: １対１のコスト
+          description: １対１授業のコスト
         different_pair_cost:
           type: integer
           example: 10
-          description: 違う科目を教えるコスト
+          description: 違う科目ペアのコスト
         occupation_limit:
           type: integer
           example: 5
-          description: １日の授業数の上限
+          description: １日の最大コマ数
         occupation_costs:
           type: integer[]
           example: [0, 50, 15, 0, 0, 20]
@@ -181,7 +181,7 @@ properties:
         blank_limit:
           type: integer
           example: 1
-          description: １日の空きコマの上限
+          description: １日の最大空きコマ数
         blank_costs:
           type: integer[]
           example: [0, 100]
@@ -205,7 +205,7 @@ properties:
         occupation_limit:
           type: integer
           example: 5
-          description: １日の授業数の上限
+          description: １日の最大コマ数
         occupation_costs:
           type: integer[]
           example: [0, 50, 15, 0, 0, 20]
@@ -213,7 +213,7 @@ properties:
         blank_limit:
           type: integer
           example: 1
-          description: １日の空きコマの上限
+          description: １日の最大空きコマ数
         blank_costs:
           type: integer[]
           example: [0, 100]
@@ -221,11 +221,11 @@ properties:
         interval_cutoff:
           type: integer
           example: 1
-          description: 授業間隔コストのカットオフ値
+          description: 受講間隔コストの最大日数
         interval_costs:
           type: integer[]
           example: [0, 100]
-          description: 授業間隔コスト
+          description: 授業間隔のコスト
       required:
       - school_grade
       - occupation_limit

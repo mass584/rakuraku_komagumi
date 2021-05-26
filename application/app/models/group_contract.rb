@@ -69,7 +69,7 @@ class GroupContract < ApplicationRecord
     end
 
     if daily_blanks_invalid
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大空きコマ数を超えています')
     end
   end
 

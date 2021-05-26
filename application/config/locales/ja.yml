@@ -99,7 +99,7 @@ ja:
         serialized_blank_costs: １日の空きコマ数コスト
         interval_cutoff: 受講間隔コストの最大日数
         interval_costs: 受講間隔のコスト
-        serialized_interval_costs: 受講間隔のコスト値
+        serialized_interval_costs: 受講間隔のコスト
       timetable:
         term: 期間
         term_id: 期間

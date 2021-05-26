@@ -166,24 +166,24 @@ class TermSingleSchedule
   def verify_teacher_daily_blank_limit
     if (creation? || updation?) &&
        daily_blanks_for_teacher_on_after_seat > term_teacher.optimization_rule.blank_limit
-      errors.add(:base, '講師の１日の空きコマの上限を超えています')
+      errors.add(:base, '講師の１日の最大空きコマ数を超えています')
     end
 
     if (updation? || deletion?) &&
        daily_blanks_for_teacher_on_before_seat > term_teacher.optimization_rule.blank_limit
-      errors.add(:base, '講師の１日の空きコマの上限を超えています')
+      errors.add(:base, '講師の１日の最大空きコマ数を超えています')
     end
   end
 
   def verify_student_daily_blank_limit
     if (creation? || updation?) &&
        daily_blanks_for_student_on_after_seat > term_teacher.optimization_rule.blank_limit
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大空きコマ数を超えています')
     end
 
     if (updation? || deletion?) &&
        daily_blanks_for_student_on_before_seat > term_teacher.optimization_rule.blank_limit
-      errors.add(:base, '生徒の１日の空きコマの上限を超えています')
+      errors.add(:base, '生徒の１日の最大空きコマ数を超えています')
     end
   end
 

@@ -27,23 +27,23 @@ package "期間の予定データモデル" {
     # term_id : 期間ID [FK]
     school_grade : 対象期間における学年
     occupation_limit : １日の最大コマ数
-    occupation_costs : １日のコマ数に対するコスト値
+    occupation_costs : １日のコマ数コスト
     blank_limit : １日の最大空きコマ数
-    blank_costs : １日の空きコマ数に対するコスト値
-    interval_cutoff : 科目の受講日数間隔のカットオフ値
-    interval_costs : 科目の受講日数間隔に対するコスト値
+    blank_costs : １日の空きコマ数コスト
+    interval_cutoff : 受講間隔コストの最大日数
+    interval_costs : 受講間隔のコスト
   }
 
   entity "teacher_optimization_rules" {
     + id : 講師の予定最適化ルール
     --
     # term_id : 期間ID [FK]
-    single_cost : １対１授業のコスト値
-    different_pair_cost : 違う科目を同時に教える時のコスト値
+    single_cost : １対１授業のコスト
+    different_pair_cost : 違う科目ペアのコスト
     occupation_limit : １日の最大コマ数
-    occupation_costs : １日のコマ数に対するコスト値
+    occupation_costs : １日のコマ数コスト
     blank_limit : １日の最大空きコマ数
-    blank_costs : １日の空きコマ数に対するコスト値
+    blank_costs : １日の空きコマ数コスト
   }
 
   entity "optimization_logs" {

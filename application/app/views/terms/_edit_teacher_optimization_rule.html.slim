@@ -20,14 +20,14 @@
       .col
         = f.label :occupation_limit
           .d-flex
-            div(type="button" data-toggle="popover" title="１日の最大コマ数" data-content="１日の講師の最大授業数です。1〜12の整数を入力してください。")
+            div(type="button" data-toggle="popover" title="１日の最大コマ数" data-content="講師の１日の最大授業数です。1〜12の整数を入力してください。")
               i class="bi bi-question-circle text-info"
             div &nbsp;１日の最大コマ数
         = f.number_field :occupation_limit, { min: 1, max: 12, class: 'form-control', disabled: !teacher_optimization_rule.editable }
       .col
         = f.label :serialized_occupation_costs
           .d-flex
-            div(type="button" data-toggle="popover" title="１日のコマ数コスト" data-content="１日の講師の合計授業数に対するコスト値の一覧です。コスト値は１日の最大授業数と同じ数だけ指定する必要があります。0〜100の整数を入力してください。（例）１日の講師の最大授業数が6の時、「30 18 3 0 6 24」のように半角スペースで区切って6つの整数を指定します。この時、１日の講師の合計授業数が1,2,3,4,5,6コマに対して、コストは30,18,3,0,6,24となります。")
+            div(type="button" data-toggle="popover" title="１日のコマ数コスト" data-content="講師の１日の合計授業数に対するコスト値の一覧です。コスト値は１日の最大授業数と同じ数だけ指定する必要があります。0〜100の整数を入力してください。（例）講師の１日の最大授業数が6の時、「30 18 3 0 6 24」のように半角スペースで区切って6つの整数を指定します。この時、講師の１日の合計授業数が1,2,3,4,5,6コマに対して、コストは30,18,3,0,6,24となります。")
               i class="bi bi-question-circle text-info"
             div &nbsp;１日のコマ数コスト
         = f.text_field :serialized_occupation_costs, { class: 'form-control', disabled: !teacher_optimization_rule.editable }
@@ -36,14 +36,14 @@
       .col
         = f.label :blank_limit
           .d-flex
-            div(type="button" data-toggle="popover" title="１日の最大空きコマ数" data-content="１日の講師の最大空きコマ数です。1〜10の整数を入力してください。")
+            div(type="button" data-toggle="popover" title="１日の最大空きコマ数" data-content="講師の１日の最大空きコマ数です。1〜10の整数を入力してください。")
               i class="bi bi-question-circle text-info"
             div &nbsp;１日の最大空きコマ数
         = f.number_field :blank_limit, { min: 0, max: 10, class: 'form-control', disabled: !teacher_optimization_rule.editable }
       .col
         = f.label :serialized_blank_costs
           .d-flex
-            div(type="button" data-toggle="popover" title="１日の空きコマ数コスト" data-content="１日の講師の合計空きコマ数に対するコスト値の一覧です。コスト値は１日の最大空きコマ数と同じ数だけ指定する必要があります。0〜100の整数を入力してください。（例）１日の講師の最大空きコマ数が2の時、「30 100」のように半角スペースで区切って2つの整数を指定します。この時、１日の講師の合計空きコマ数が1,2コマに対して、コストは30,100となります。")
+            div(type="button" data-toggle="popover" title="１日の空きコマ数コスト" data-content="講師の１日の合計空きコマ数に対するコスト値の一覧です。コスト値は１日の最大空きコマ数と同じ数だけ指定する必要があります。0〜100の整数を入力してください。（例）講師の１日の最大空きコマ数が2の時、「30 100」のように半角スペースで区切って2つの整数を指定します。この時、講師の１日の合計空きコマ数が1,2コマに対して、コストは30,100となります。")
               i class="bi bi-question-circle text-info"
             div &nbsp;１日の空きコマ数コスト
         = f.text_field :serialized_blank_costs, { class: 'form-control', disabled: !teacher_optimization_rule.editable }
