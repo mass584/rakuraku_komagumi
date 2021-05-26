@@ -9,7 +9,7 @@
                 <h5 class="modal-title">削除できませんでした</h5>
               </div>
               <div class="modal-body">
-                空きコマの上限をオーバーしてしまうため、削除できません。
+                講師、もしくは、生徒の最大空きコマ数をオーバーしてしまうため、削除できません。
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-primary" v-on:click="$emit('closemodal')">OK</button>

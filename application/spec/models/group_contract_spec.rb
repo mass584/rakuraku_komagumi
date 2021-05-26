@@ -53,7 +53,7 @@ RSpec.describe GroupContract, type: :model do
       it '最大空きコマ数を越した場合にupdate失敗' do
         expect(@group_contracts[0].update(is_contracted: true)).to eq(false)
         expect(@group_contracts[0].reload.is_contracted).to eq(false)
-        expect(@group_contracts[0].errors.full_messages).to include('生徒の１日の空きコマの上限を超えています')
+        expect(@group_contracts[0].errors.full_messages).to include('生徒の１日の最大空きコマ数を超えています')
       end
     end
 
@@ -65,7 +65,7 @@ RSpec.describe GroupContract, type: :model do
         expect(@group_contracts[0].reload.is_contracted).to eq(true)
         expect(@group_contracts[1].update(is_contracted: false)).to eq(false)
         expect(@group_contracts[1].reload.is_contracted).to eq(true)
-        expect(@group_contracts[1].errors.full_messages).to include('生徒の１日の空きコマの上限を超えています')
+        expect(@group_contracts[1].errors.full_messages).to include('生徒の１日の最大空きコマ数を超えています')
       end
     end
   end
