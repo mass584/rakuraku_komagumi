@@ -9,6 +9,6 @@
         locals: { path: teachers_path, keyword: @keyword, page: @current_page }
     .ml-1
       == render partial: 'application/pagination',
-        locals: { path: teachers_path, total_record: @teachers.count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
+        locals: { path: teachers_path, total_record: @teacher_count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
   == render partial: 'application/table',
     locals: { table_content: teachers_table_content(@teachers) }

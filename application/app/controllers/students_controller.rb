@@ -4,6 +4,7 @@ class StudentsController < ApplicationController
   before_action :set_room!
 
   def index
+    @student_count = @room.students.active.count
     @keyword = sanitize_string_query_param(params[:keyword])
     @current_page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = sanitize_integer_query_param(params[:page_size]) || 10
