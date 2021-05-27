@@ -24,7 +24,8 @@ class StudentSchedule < Prawn::Document
       table table_cells(term, term_student, tutorial_pieces, term_groups, timetables),
             cell_style: { width: body_col_width, padding: 3, leading: 2 } do
         cells.borders = [:top, :bottom, :right, :left]
-        cells.border_width = 1.0
+        cells.border_width = 0.5
+        cells.border_color = COLOR_BORDER
         columns(0).width = header_col_width
         row(0).text_color = 'ffffff'
         self.header = true
