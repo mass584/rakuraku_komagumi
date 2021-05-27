@@ -148,19 +148,4 @@ export default Vue.component('scheduling-table', {
   margin: 0;
   padding: 0;
 }
-.w-50px {
-  width: 50px;
-}
-.w-150px {
-  width: 150px;
-}
-.w-300px {
-  width: 300px;
-}
-.h-30px {
-  height: 30px;
-} 
-.h-60px {
-  height: 60px;
-} 
 </style>

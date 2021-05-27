@@ -1,9 +1,0 @@
-nav
-  ul.pagination
-    li.page-item
-      = link_to '«', "#{path}?#{URI.encode_www_form({ page: 1, keyword: keyword })}", { class: 'page-link' }
-    - 1.step(max_page) do |page|
-      li.page-item
-        = link_to page, "#{path}?#{URI.encode_www_form({ page: page, keyword: keyword })}", { class: 'page-link' }
-    li.page-item
-      = link_to '»', "#{path}?#{URI.encode_www_form({ page: max_page, keyword: keyword })}", { class: 'page-link' }

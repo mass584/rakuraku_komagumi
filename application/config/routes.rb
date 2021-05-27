@@ -39,11 +39,13 @@ Rails.application.routes.draw do
       get :vacancy
       get :schedule
     end
+    get 'term_students/bulk_schedule', to: 'term_students#bulk_schedule'
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
     resources :term_teachers, only: [:index] do
       get :vacancy
       get :schedule
     end
+    get 'term_teachers/bulk_schedule', to: 'term_teachers#bulk_schedule'
     resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
     resources :term_tutorials, only: [:create], defaults: { format: 'js' }
     resources :timetables, only: [:index]

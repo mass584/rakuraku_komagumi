@@ -42,6 +42,7 @@ class TutorialPiece < ApplicationRecord
       seat: :timetable,
     ).select(
       'tutorial_pieces.*',
+      'tutorial_contracts.*',
       'timetables.date_index',
       'timetables.period_index',
       'seats.seat_index',

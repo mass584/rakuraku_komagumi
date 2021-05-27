@@ -20,32 +20,34 @@ module TermStudentHelper
     end
   end
 
-  def term_student_schedule_table_cell(tutorial_pieces, timetables, date_index, period_index)
+  def term_student_schedule_table_cell(tutorial_pieces, term_groups, timetables, date_index, period_index)
     timetable = timetables.find do |item|
+      item.date_index == date_index && item.period_index == period_index
+    end
+    term_group = term_groups.find do |item|
       item.date_index == date_index && item.period_index == period_index
     end
     filtered_tutorial_pieces = tutorial_pieces.filter do |tutorial_piece|
       tutorial_piece.date_index == date_index && tutorial_piece.period_index == period_index
     end
     content_tag(:td,
-                class: term_student_schedule_table_cell_class(timetable,
-                                                              filtered_tutorial_pieces)) do
+                class: term_student_schedule_table_cell_class(timetable, term_group, filtered_tutorial_pieces)) do
       content_tag(:small, class: 'min-height-40 d-flex flex-column justify-content-center') do
         term_student_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end
     end
   end
 
-  def term_student_schedule_table_cell_class(timetable, tutorial_pieces)
+  def term_student_schedule_table_cell_class(timetable, term_group, tutorial_pieces)
     if tutorial_pieces.present?
       'align-middle bg-warning-light'
-    elsif timetable.term_group_id.present? && timetable.is_contracted
+    elsif term_group.present? && timetable.group_name.present?
       'align-middle bg-warning-light'
     elsif timetable.is_closed
       'align-middle bg-secondary'
-    elsif timetable.term_group_id.present? && !timetable.is_contracted
-      'align-middle bg-secondary'
     elsif !timetable.is_vacant
+      'align-middle bg-secondary'
+    elsif term_group.nil? && timetable.group_name.present?
       'align-middle bg-secondary'
     else
       'align-middle'
@@ -55,10 +57,10 @@ module TermStudentHelper
   def term_student_schedule_table_cell_inner(timetable, tutorial_pieces)
     if timetable.present? && timetable.is_closed
       '休講'
-    elsif !timetable.is_vacant
-      '出席不可'
     elsif timetable.present? && timetable.group_name.present?
       timetable.group_name
+    elsif !timetable.is_vacant
+      '出席不可'
     else
       tutorial_pieces.each do |tutorial_piece|
         concat(

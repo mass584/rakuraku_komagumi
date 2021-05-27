@@ -1,16 +1,14 @@
 == render partial: 'navbar', locals: { active: 'student' }
 .container-fluid.my-5
-  == render partial: 'application/title',
-    locals: { title: '生徒の一覧' }
+  == render partial: 'application/title', locals: { title: '生徒の一覧' }
   .row.float-left.mx-5
-    == render partial: 'students/new',
-      locals: { student: Student.new }
+    == render partial: 'students/new', locals: { student: Student.new }
   .row.float-right.mx-5
     .mr-1
       == render partial: 'application/search',
-        locals: { path: students_path, keyword: @keyword, page: @page }
+        locals: { path: students_path, keyword: @keyword, page: @current_page }
     .ml-1
-      == render partial: 'application/pagenation',
-        locals: { path: students_path, keyword: @keyword, page: @page, max_page: max_page(@students.count, @page_size) }
+      == render partial: 'application/pagination',
+        locals: { path: students_path, total_record: @students.count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
   == render partial: 'application/table',
     locals: { table_content: students_table_content(@students) }

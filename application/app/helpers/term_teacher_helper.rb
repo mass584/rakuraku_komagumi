@@ -57,10 +57,10 @@ module TermTeacherHelper
   def term_teacher_schedule_table_cell_inner(timetable, tutorial_pieces)
     if timetable.is_closed
       '休講'
-    elsif !timetable.is_vacant
-      '出勤不可'
     elsif timetable.group_name.present?
       timetable.group_name
+    elsif !timetable.is_vacant
+      '出勤不可'
     else
       tutorial_pieces.each do |tutorial_piece|
         concat(
