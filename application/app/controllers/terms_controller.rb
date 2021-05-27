@@ -38,7 +38,7 @@ class TermsController < ApplicationController
   end
 
   def schedule
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where(term_id: @term.id)
+    @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(term_id: @term.id)
     @seats = Seat.with_group.with_timetable.with_term_teacher.where(term_id: @term.id)
     respond_to do |format|
       format.html

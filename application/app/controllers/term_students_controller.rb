@@ -40,7 +40,7 @@ class TermStudentsController < ApplicationController
 
   def schedule
     @term_student = TermStudent.find_by(id: params[:term_student_id])
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where(
+    @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(
       'term_students.id': params[:term_student_id],
     )
     @term_groups = Timetable.with_group_contracts.where(
@@ -64,7 +64,7 @@ class TermStudentsController < ApplicationController
 
   def bulk_schedule
     @term_students = TermStudent.where(id: params[:term_student_id])
-    @tutorial_pieces = TutorialPiece.indexed_and_named.where(
+    @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(
       'term_students.id': params[:term_student_id],
     )
     @term_groups = Timetable.with_group_contracts.where(
