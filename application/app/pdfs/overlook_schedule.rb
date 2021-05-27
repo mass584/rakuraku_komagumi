@@ -1,23 +1,23 @@
 class OverlookSchedule < Prawn::Document
   include Common
 
-  def initialize(term, tutorial_pieces, seats)
+  def initialize(term, tutorial_pieces, seats, begin_end_times)
     super(page_size: 'A4', page_layout: :landscape, left_margin: 20, right_margin: 20, top_margin: 60)
     font Rails.root.join('vendor', 'fonts', 'ipaexm.ttf')
-    pdf_table(term, tutorial_pieces, seats)
+    pdf_table(term, tutorial_pieces, seats, begin_end_times)
     number_pages('<page> / <total>', { at: [bounds.right - 50, 0], size: 7 })
     number_pages("#{term.room.name} #{term.year}年度 #{term.name}予定表", at: [bounds.left, bounds.top + 20])
   end
 
   private
 
-  def pdf_table(term, tutorial_pieces, seats)
+  def pdf_table(term, tutorial_pieces, seats, begin_end_times)
     max_width = 801
     header1_col_width = 80
     header2_col_width = 20
     body_col_width = (max_width - header1_col_width - header2_col_width) / (term.period_count * 3)
     font_size(7) do
-      table table_cells(term, tutorial_pieces, seats),
+      table table_cells(term, tutorial_pieces, seats, begin_end_times),
             cell_style: { width: body_col_width, padding: 2, leading: 2 } do
         cells.border_width = 0.5
         cells.border_color = COLOR_BORDER
@@ -32,8 +32,8 @@ class OverlookSchedule < Prawn::Document
     end
   end
 
-  def table_cells(term, tutorial_pieces, seats)
-    [header_rows(term)] + term.date_index_array.product(term.seat_index_array).map do |date_index, seat_index|
+  def table_cells(term, tutorial_pieces, seats, begin_end_times)
+    [header_rows(term, begin_end_times)] + term.date_index_array.product(term.seat_index_array).map do |date_index, seat_index|
       header_cols(term, date_index, seat_index) + term.period_index_array.map do |period_index|
         seat = seats.to_a.find do |item|
           item[:date_index] == date_index &&
@@ -50,15 +50,16 @@ class OverlookSchedule < Prawn::Document
     end
   end
 
-  def header_rows(term)
+  def header_rows(term, begin_end_times)
     term.period_index_array.reduce(
       [
         { content: ' ', background_color: COLOR_HEADER, height: 22 },
         { content: '席', background_color: COLOR_HEADER, height: 22 }
       ],
     ) do |cols, period_index|
-      begin_at = I18n.l term.begin_end_times.find_by(period_index: period_index).begin_at
-      end_at = I18n.l term.begin_end_times.find_by(period_index: period_index).end_at
+      begin_end_time = begin_end_times.find { |item| item[:period_index] == period_index }
+      begin_at = I18n.l begin_end_time.begin_at
+      end_at = I18n.l begin_end_time.end_at
       cols.concat([{
         background_color: COLOR_HEADER,
         content: "#{period_index}限（#{begin_at}〜#{end_at}）",

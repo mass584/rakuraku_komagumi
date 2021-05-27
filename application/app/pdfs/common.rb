@@ -17,8 +17,9 @@ module Common
       }
     ]
     tbody = term.period_index_array.map do |period_index|
-      begin_at = I18n.l term.begin_end_times.find_by(period_index: period_index).begin_at
-      end_at = I18n.l term.begin_end_times.find_by(period_index: period_index).end_at
+      begin_end_time = term.begin_end_times.find { |item| item.period_index == period_index }
+      begin_at = I18n.l begin_end_time.begin_at
+      end_at = I18n.l begin_end_time.end_at
       {
         content: "#{period_index}限\n#{begin_at}〜#{end_at}",
         background_color: COLOR_HEADER,

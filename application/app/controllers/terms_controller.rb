@@ -40,10 +40,11 @@ class TermsController < ApplicationController
   def schedule
     @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(term_id: @term.id)
     @seats = Seat.with_group.with_timetable.with_term_teacher.where(term_id: @term.id)
+    @begin_end_times = @term.begin_end_times
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = OverlookSchedule.new(@term, @tutorial_pieces, @seats).render
+        pdf = OverlookSchedule.new(@term, @tutorial_pieces, @seats, @begin_end_times).render
         filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_全体予定表.pdf"
         send_data pdf, filename: filename, type: 'application/pdf', disposition: 'inline'
       end
