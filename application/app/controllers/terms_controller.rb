@@ -39,7 +39,7 @@ class TermsController < ApplicationController
 
   def schedule
     @tutorial_pieces = TutorialPiece.indexed_and_named.where(term_id: @term.id)
-    @seats = Seat.with_group.with_index.with_term_teacher.where(term_id: @term.id)
+    @seats = Seat.with_group.with_timetable.with_term_teacher.where(term_id: @term.id)
     respond_to do |format|
       format.html
       format.pdf do

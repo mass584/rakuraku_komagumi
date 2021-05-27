@@ -39,7 +39,7 @@ class TermTeachersController < ApplicationController
 
   def vacancy
     @term_teacher = TermTeacher.named.find_by(id: params[:term_teacher_id])
-    @teacher_vacancies = @term_teacher.teacher_vacancies.indexed
+    @teacher_vacancies = @term_teacher.teacher_vacancies.with_timetable
   end
 
   def schedule

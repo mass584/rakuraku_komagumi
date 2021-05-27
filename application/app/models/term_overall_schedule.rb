@@ -59,7 +59,7 @@ class TermOverallSchedule
   end
 
   def verify_daily_blank_limit_for_teacher
-    seats_in_term = term.seats.with_index
+    seats_in_term = term.seats.with_timetable
     term_teacher_and_date = term.term_teachers.product(term.date_index_array)
     term_teacher_and_date.reduce(true) do |result, item|
       blank_limit = item[0].optimization_rule.blank_limit
@@ -85,7 +85,7 @@ class TermOverallSchedule
   end
 
   def verify_daily_blank_limit_for_student
-    seats_in_term = term.seats.with_index
+    seats_in_term = term.seats.with_timetable
     term_student_and_date = term.term_students.product(term.date_index_array)
     term_student_and_date.reduce(true) do |result, item|
       blank_limit = item[0].optimization_rule.blank_limit

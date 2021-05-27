@@ -8,7 +8,7 @@ class TeacherVacancy < ApplicationRecord
            on: :update,
            if: :will_save_change_to_is_vacant?
 
-  scope :indexed, lambda {
+  scope :with_timetable, lambda {
     joins(:timetable).select(
       'teacher_vacancies.*',
       'timetables.date_index',
