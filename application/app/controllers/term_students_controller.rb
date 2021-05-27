@@ -55,7 +55,7 @@ class TermStudentsController < ApplicationController
     respond_to do |format|
       format.html
       format.pdf do
-        pdf = StudentSchedule.new(@term, @term_student, @tutorial_pieces, @term_groups, @timetables).render
+        pdf = StudentSchedule.new(@term, [@term_student], @tutorial_pieces, @term_groups, @timetables).render
         filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_生徒予定表.pdf"
         send_data pdf, filename: filename, type: 'application/pdf', disposition: 'inline'
       end

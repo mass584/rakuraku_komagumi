@@ -5,11 +5,11 @@ class StudentSchedule < Prawn::Document
     page_layout = rotate?(term) ? :landscape : :portrait
     super(page_size: 'A4', page_layout: page_layout, left_margin: 20, right_margin: 20, top_margin: 60)
     font Rails.root.join('vendor', 'fonts', 'ipaexm.ttf')
-    term_students.each do |term_student|
+    term_students.each_with_index do |term_student, index|
       text "#{term.name}予定表 #{term_student.student.name}"
       move_down 10
       pdf_table(term, term_student, tutorial_pieces, term_groups, timetables)
-      start_new_page
+      start_new_page if index != term_students.count - 1
     end
     number_pages('<page> / <total>', { at: [bounds.right - 50, 0], size: 7 })
   end

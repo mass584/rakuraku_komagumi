@@ -5,11 +5,11 @@ class TeacherSchedule < Prawn::Document
     page_layout = rotate?(term) ? :landscape : :portrait
     super(page_size: 'A4', page_layout: page_layout, left_margin: 20, right_margin: 20)
     font Rails.root.join('vendor', 'fonts', 'ipaexm.ttf')
-    term_teachers.each do |term_teacher|
+    term_teachers.each_with_index do |term_teacher, index|
       text "#{term.name}予定表 #{term_teacher.teacher.name}"
       move_down 10
       pdf_table(term, term_teacher, tutorial_pieces, term_groups, timetables)
-      start_new_page
+      start_new_page if index != term_teachers.count - 1
     end
     number_pages('<page> / <total>', { at: [bounds.right - 50, 0], size: 7 })
   end
