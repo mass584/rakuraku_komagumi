@@ -17,7 +17,7 @@
       tbody
         - @term_students.each do |term_student|
           tr
-            td.align-middle.min-width-100 = "#{term_student.name}"
+            td.align-middle.min-width-100 = "#{term_student.student_name}"
             td.align-middle.min-width-50 = "#{term_student.school_grade_i18n}"
             - @term_tutorials.each do |term_tutorial|
               = tutorial_contract_table_cell(@tutorial_contracts, @term_teachers, term_student, term_tutorial)

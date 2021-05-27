@@ -37,7 +37,7 @@ class TermStudent < ApplicationRecord
       itself
   }
   scope :named, lambda {
-    joins(:student).select('term_students.*', 'students.name')
+    joins(:student).select('term_students.*', 'students.name AS student_name')
   }
 
   def self.new(attributes = {})

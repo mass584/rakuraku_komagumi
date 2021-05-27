@@ -20,7 +20,6 @@
           th.fixed2.align-middle ステータス
           th.fixed2.align-middle 氏名
           th.fixed2.align-middle 学年
-          th.fixed2.align-middle マルの数
           th.fixed2.align-middle マルバツ表
           th.fixed2.align-middle 予定表
       tbody
@@ -31,8 +30,7 @@
             td.align-middle.d-flex.align-items-center
               div.pr-2 #{s.vacancy_status_i18n}
               = render partial: 'term_students/edit', locals: { term_student: s }
-            td.align-middle = s.student.name
+            td.align-middle = s.student_name
             td.align-middle = s.school_grade_i18n
-            td.align-middle = "#{s.student_vacancies.where(is_vacant: true).count}コマ"
             td.align-middle = link_to '開く', term_student_vacancy_path(s)
             td.align-middle = link_to '開く', term_student_schedule_path(s)

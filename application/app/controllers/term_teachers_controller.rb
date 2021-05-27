@@ -1,6 +1,4 @@
 class TermTeachersController < ApplicationController
-  INDEX_PAGE_SIZE = 10
-
   before_action :authenticate_user!
   before_action :set_rooms!
   before_action :set_room!
@@ -10,7 +8,7 @@ class TermTeachersController < ApplicationController
     @term_teachers_count = @term.term_teachers.count
     @current_page = sanitize_integer_query_param(params[:page]) || 1
     @page_size = sanitize_integer_query_param(params[:page_size]) || 10
-    @term_teachers = @term.term_teachers.ordered.pagenated(@page, @page_size)
+    @term_teachers = @term.term_teachers.ordered.pagenated(@current_page, @page_size).named
   end
 
   def create

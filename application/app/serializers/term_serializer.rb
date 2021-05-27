@@ -3,9 +3,11 @@ class TermSerializer < ActiveModel::Serializer
   has_many :teacher_optimization_rules
   has_many :student_optimization_rules
   has_many :term_teachers do
-    object.term_teachers.rank(:row_order)
+    object.term_teachers.rank(:row_order).named
   end
-  has_many :term_students
+  has_many :term_students do
+    object.term_students.named
+  end
   has_many :timetables
   has_many :tutorial_pieces
 
@@ -34,7 +36,7 @@ class TermSerializer < ActiveModel::Serializer
     attribute :term_teacher_name
 
     def term_teacher_name
-      object.teacher.name
+      object.teacher_name
     end
   end
 
@@ -43,7 +45,7 @@ class TermSerializer < ActiveModel::Serializer
     attribute :term_student_name
 
     def term_student_name
-      object.student.name
+      object.student_name
     end
   end
 
@@ -63,23 +65,27 @@ class TermSerializer < ActiveModel::Serializer
     end
 
     def term_group_teacher_ids
-      object.term_group ?
-        object.term_group.term_group_term_teachers.pluck(:term_teacher_id) :
+      if object.term_group
+        object.term_group.term_group_term_teachers.map(&:term_teacher_id)
+      else
         []
+      end
     end
 
     def term_group_student_ids
-      object.term_group ?
-        object.term_group.group_contracts.where(is_contracted: true).pluck(:term_student_id) :
+      if object.term_group
+        object.term_group.group_contracts.filter(&:is_contracted).map(&:term_student_id)
+      else
         []
+      end
     end
 
     def vacant_term_teacher_ids
-      object.teacher_vacancies.filter(&:is_vacant).pluck(:term_teacher_id)
+      object.teacher_vacancies.filter(&:is_vacant).map(&:term_teacher_id)
     end
 
     def vacant_term_student_ids
-      object.student_vacancies.filter(&:is_vacant).pluck(:term_student_id)
+      object.student_vacancies.filter(&:is_vacant).map(&:term_student_id)
     end
 
     def occupied_term_teacher_ids
