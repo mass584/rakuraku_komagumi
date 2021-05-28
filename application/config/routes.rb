@@ -33,19 +33,20 @@ Rails.application.routes.draw do
     resources :terms, only: [:create, :update], defaults: { format: 'js' }
     resources :term_groups, only: [:create, :update], defaults: { format: 'js' }
     resources :term_overall_schedules, only: [:create], defaults: { format: 'json' }
-    resources :term_schedules, only: [:create], defaults: { format: 'json' }
     post 'term_schedules/bulk_reset', to: 'term_schedules#bulk_reset', defaults: { format: 'json' }
+    resources :term_schedules, only: [:create], defaults: { format: 'json' }
+    get 'term_students/bulk_schedule', to: 'term_students#bulk_schedule'
+    post 'term_students/bulk_schedule_notification', to: 'term_students#bulk_schedule_notification', defaults: { format: 'json' }
     resources :term_students, only: [:index] do
       get :vacancy
       get :schedule
     end
-    get 'term_students/bulk_schedule', to: 'term_students#bulk_schedule'
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
+    get 'term_teachers/bulk_schedule', to: 'term_teachers#bulk_schedule'
     resources :term_teachers, only: [:index] do
       get :vacancy
       get :schedule
     end
-    get 'term_teachers/bulk_schedule', to: 'term_teachers#bulk_schedule'
     resources :term_teachers, only: [:create, :update], defaults: { format: 'js' }
     resources :term_tutorials, only: [:create], defaults: { format: 'js' }
     resources :timetables, only: [:index]

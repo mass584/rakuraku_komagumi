@@ -63,10 +63,6 @@ class TermStudentsController < ApplicationController
     end
   end
 
-  def schedule_notification
-    @term_student = TermStudent.find_by(id: params[:term_student_id])
-  end
-
   def bulk_schedule
     @term_students = TermStudent.where(id: params[:term_student_id])
     respond_to do |format|
@@ -76,6 +72,17 @@ class TermStudentsController < ApplicationController
                   filename: filename,
                   type: 'application/pdf',
                   disposition: 'inline'
+      end
+    end
+  end
+
+  def bulk_schedule_notification
+    @term_students = TermStudent.where(id: params[:term_student_id])
+    @term_students.each(&:send_schedule_notification_email)
+    @failed = @term_students.filter { |item| item.errors.present? }
+    respond_to do |format|
+      format.json do
+        render json: { error_messages: @failed.map { |item| item.errors.full_messages }.flatten }
       end
     end
   end

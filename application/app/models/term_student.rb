@@ -2,6 +2,7 @@ class TermStudent < ApplicationRecord
   belongs_to :term
   belongs_to :student
   has_many :tutorial_contracts, dependent: :destroy
+  has_many :tutorial_pieces, through: :tutorial_contracts
   has_many :group_contracts, dependent: :destroy
   has_many :student_vacancies, dependent: :destroy
 
@@ -69,12 +70,24 @@ class TermStudent < ApplicationRecord
     @optimization_rule ||= term.student_optimization_rules.find_by(school_grade: school_grade)
   end
 
+  def unplaced_tutorial_count
+    tutorial_pieces.filter_by_unplaced.count
+  end
+
+  def contracted_tutorial_count
+    tutorial_contracts.sum(:piece_count)
+  end
+
   def schedule_pdf
     self.class.generate_schedule_pdf(term, [self])
   end
 
   def send_schedule_notification_email
-    StudentMailer.schedule_notifications(term: term, student: term_student, pdf: schedule_pdf).deliver_now
+    if student.email.blank?
+      errors.add(:base, "#{student.name}様：メールアドレスが入力されていません")
+    else
+      StudentMailer.schedule_notifications(term: term, student: student, pdf: schedule_pdf).deliver_now
+    end
   end
 
   private
