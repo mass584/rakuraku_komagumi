@@ -6,7 +6,16 @@
     .modal-dialog.modal-dialog-centered
       .spinner-border.text-primary.m-auto(role="status")
 .container-fluid.my-3
-  .d-flex.flex-row-reverse 
+  .d-flex.flex-row.justify-content-between
+    .dropdown.mb-3
+      button.btn.btn-light.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") = 'メニュー'
+      .dropdown-menu
+        button.dropdown-item data-toggle="modal" data-target="#term_student_create" = '生徒を追加する'
+        .dropdown-divider
+        #bulk_schedule_notification.dropdown-item = 'pdfを一括でメール送信する'
+        #bulk_schedule.dropdown-item = 'pdfを一括で出力する'
+        #check_all.dropdown-item = '全てをチェックする'
+        #uncheck_all.dropdown-item = '全てのチェックを外す'
     = render partial: 'application/pagination',
       locals: { path: term_students_path, total_record: @term_students_count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
   .table-wrapper__titled.overflow-auto
@@ -14,16 +23,6 @@
       thead
         tr
           th.fixed2.align-middle.w-50px
-            .dropdown
-              button.btn.btn-light.btn-sm.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false")
-                i.bi.bi-list
-              .dropdown-menu
-                button.dropdown-item data-toggle="modal" data-target="#term_student_create" = '生徒を追加する'
-                .dropdown-divider
-                #bulk_schedule_notification.dropdown-item = 'pdfを一括でメール送信する'
-                #bulk_schedule.dropdown-item = 'pdfを一括で出力する'
-                #check_all.dropdown-item = '全てをチェックする'
-                #uncheck_all.dropdown-item = '全てのチェックを外す'
           th.fixed2.align-middle ステータス
           th.fixed2.align-middle 氏名
           th.fixed2.align-middle 学年

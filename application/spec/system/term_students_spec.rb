@@ -15,7 +15,8 @@ RSpec.describe '生徒の編集ページ', type: :system do
 
     it '生徒が新規追加される' do
       visit term_students_path
-      click_on '新規'
+      click_on 'メニュー'
+      click_on '生徒を追加する'
       student_name = @student.name
       student_school_grade = @student.school_grade_i18n
       select student_name, from: 'term_student_student_id'
@@ -26,7 +27,8 @@ RSpec.describe '生徒の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit term_students_path
-      click_on '新規'
+      click_on 'メニュー'
+      click_on '生徒を追加する'
       click_on '保存'
       expect(page).to have_content '生徒を入力してください'
     end

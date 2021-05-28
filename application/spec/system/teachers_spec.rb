@@ -25,7 +25,6 @@ RSpec.describe '講師の編集ページ', type: :system do
       click_on '新規'
       click_on '保存'
       expect(page).to have_content '講師名は1文字以上で入力してください'
-      expect(page).to have_content 'メールアドレスを入力してください'
     end
   end
 
@@ -54,7 +53,6 @@ RSpec.describe '講師の編集ページ', type: :system do
       fill_in 'teacher_email', with: ''
       click_on '保存'
       expect(page).to have_content '講師名は1文字以上で入力してください'
-      expect(page).to have_content 'メールアドレスを入力してください'
     end
   end
 

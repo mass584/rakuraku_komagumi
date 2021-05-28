@@ -46,7 +46,7 @@ module ContractHelper
         concat(
           content_tag(:div, class: 'col-3 px-0 d-flex align-items-end') do
             button_tag('消', id: "button_delete_#{tutorial_contract.id}",
-                            class: %w[btn btn-sm btn-danger])
+                            class: %w[btn btn-sm btn-outline-danger])
           end,
         )
       end
