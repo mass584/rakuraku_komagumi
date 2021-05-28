@@ -64,7 +64,7 @@ class TermStudent < ApplicationRecord
     timetables = term.timetables.with_group.with_student_vacancies.where(
       'student_vacancies.term_student_id': term_students.map(&:id),
     )
-    StudentSchedule.new(term, term_students, tutorial_pieces, term_groups, timetables)
+    StudentSchedule.new(term, term_students, tutorial_pieces, term_groups, timetables).render
   end
 
   def optimization_rule
@@ -85,11 +85,6 @@ class TermStudent < ApplicationRecord
 
   def send_schedule_notification_email
     term_student_notifications.create(term: term)
-  end
-
-  def latestly_sent_schedule_notification_at
-    record = term_student_notifications.latest
-    record.present? ? I18n.l(record.created_at, format: :full) : nil
   end
 
   private

@@ -54,7 +54,7 @@ class TermTeacher < ApplicationRecord
       term_id: term.id,
       'teacher_vacancies.term_teacher_id': term_teachers.map(&:id),
     )
-    TeacherSchedule.new(term, term_teachers, tutorial_pieces, term_groups, timetables)
+    TeacherSchedule.new(term, term_teachers, tutorial_pieces, term_groups, timetables).render
   end
 
   def optimization_rule
@@ -75,11 +75,6 @@ class TermTeacher < ApplicationRecord
 
   def send_schedule_notification_email
     term_teacher_notifications.create(term: term)
-  end
-
-  def latestly_sent_schedule_notification_at
-    record = term_teacher_notifications.latest
-    record.present? ? I18n.l(record.created_at, format: :full) : nil
   end
 
   private

@@ -43,5 +43,8 @@
             td.align-middle = "#{s.unplaced_tutorial_count}コマ / #{s.contracted_tutorial_count}コマ"
             td.align-middle = link_to '開く', term_student_vacancy_path(s)
             td.align-middle = link_to '開く', term_student_schedule_path(s)
-            td.align-middle = s.latestly_sent_schedule_notification_at
+            td.align-middle
+              - if s.term_student_notifications.latest.present?
+                = I18n.l(s.term_student_notifications.latest.created_at, format: :full)
+                = link_to 'PDF', s.term_student_notifications.latest.schedule_pdf_url, class: 'ml-2 btn btn-sm btn-outline-secondary'
 == javascript_pack_tag 'term_student_index.js'
