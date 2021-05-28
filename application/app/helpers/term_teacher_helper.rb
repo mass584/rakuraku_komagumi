@@ -32,7 +32,7 @@ module TermTeacherHelper
     end
     content_tag(:td,
                 class: term_teacher_schedule_table_cell_class(timetable, term_group, filtered_tutorial_pieces)) do
-      content_tag(:div, class: 'min-height-60 d-flex flex-column justify-content-center') do
+      content_tag(:small, class: 'min-height-40 d-flex flex-column justify-content-center') do
         term_teacher_schedule_table_cell_inner(timetable, filtered_tutorial_pieces)
       end
     end
@@ -59,6 +59,8 @@ module TermTeacherHelper
       '休講'
     elsif timetable.group_name.present?
       timetable.group_name
+    elsif !timetable.is_vacant
+      '出勤不可'
     else
       tutorial_pieces.each do |tutorial_piece|
         concat(

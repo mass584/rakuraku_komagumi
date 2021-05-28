@@ -35,12 +35,26 @@ package "期間の契約データモデル" {
     vacancy_status : 空きステータス
   }
 
+  entity "term_student_notifications" {
+    + id : 生徒向け通知の送信イベントID [PK]
+    --
+    # term_student_id : 生徒ID [FK]
+    term_id : 期間ID
+  }
+
   entity "term_teachers" {
     + id : 期間に紐づいた講師ID [PK]
     --
     # term_id : 期間ID [FK]
     # teacher_id : 生徒ID [FK]
     vacancy_status : 空きステータス
+  }
+
+  entity "term_teacher_notifications" {
+    + id : 講師向け通知の送信イベントID [PK]
+    --
+    # term_teacher_id : 講師ID [FK]
+    term_id : 期間ID
   }
 
   entity "term_tutorials" {
@@ -94,8 +108,10 @@ students ||-do-o{ term_students
 teachers ||-do-o{ term_teachers
 tutorials ||-do-o{ term_tutorials
 groups ||-do-o{ term_groups
+term_students ||-up-|{ term_student_notifications
 term_students ||-do-|{ tutorial_contracts
 term_students ||-do-|{ group_contracts
+term_teachers ||-up-|{ term_teacher_notifications
 term_teachers |o-do-o{ tutorial_contracts
 term_teachers }o-ri-o{ term_groups
 term_tutorials ||-do-|{ tutorial_contracts

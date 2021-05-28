@@ -5,9 +5,9 @@
     table.table.table-sm
       thead
         tr
-          td.fixed2.align-middle.min-width-150 時限
+          th.fixed2.align-middle.min-width-150 時限
           - @term.period_index_array.each do |period_index|
-            td.fixed2.align-middle.min-width-150 #{period_index}限
+            th.fixed2.align-middle.min-width-150 #{period_index}限
       tbody
         tr
           td.align-middle.bg-light.min-width-150 開始時刻

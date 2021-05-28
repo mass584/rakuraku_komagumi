@@ -37,9 +37,9 @@ class Term < ApplicationRecord
   enum term_type: { normal: 0, season: 1, exam_planning: 2 }
 
   scope :cache_child_models, lambda {
-    preload(term_teachers: :teacher)
+    itself
       .preload(timetables: [
-                 { term_group: [:group, :group_contracts] },
+                 { term_group: [:group, :group_contracts, :term_group_term_teachers] },
                  { seats: { tutorial_pieces: :tutorial_contract } },
                  :teacher_vacancies,
                  :student_vacancies
@@ -48,7 +48,8 @@ class Term < ApplicationRecord
                  {
                    tutorial_contract: [
                      { term_tutorial: :tutorial },
-                     { term_student: :student }
+                     { term_student: :student },
+                     { term_teacher: :teacher }
                    ],
                  }
                ])

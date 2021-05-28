@@ -1,21 +1,26 @@
 == render partial: 'navbar', locals: { active: '' }
 == render partial: 'navbar_term', locals: { active: 'term_teacher' }
-.container-fluid.my-5
-  .row.float-left.mx-5.mb-3
-    p.h4 = "#{@term_teacher.teacher.name}さんの予定"
-  .row.float-right.mx-5.mb-3
-    = button_to '戻る', term_teachers_path, { class: 'btn btn-secondary', method: :get }
-  .justify-content-center.ml-5.mr-5.mt-3.mb-3
-    .overflow-auto.w-100
-      table.table.table-sm
-        thead.thead-dark
+.container-fluid.my-3
+  .d-flex.flex-row.justify-content-between
+    .dropdown.mb-3
+      button.btn.btn-light.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") = 'メニュー'
+      .dropdown-menu(aria-labelledby="dropdown-menu")
+        = link_to 'PDFに出力する', term_teacher_schedule_path(@term_teacher, format: :pdf), { class: 'dropdown-item', method: :get }
+        = link_to 'マルバツ表を表示する', term_teacher_vacancy_path(@term_teacher), { class: 'dropdown-item', method: :get }
+        = link_to '講師一覧へ戻る', term_teachers_path, { class: 'dropdown-item', method: :get }
+  .table-wrapper.overflow-auto
+    table.table.table-sm
+      thead
+        tr
+          th.fixed2.align-middle.min-width-150
+            .d-flex.align-items-center
+              = "#{@term_teacher.teacher.name}さん予定"
+              div &nbsp;
+          - @term.period_index_array.each do |period_index|
+            th.fixed2.align-middle.min-width-150 #{period_index}限
+      tbody
+        - @term.date_index_array(@page).each do |date_index|
           tr
-            th.align-middle.min-width-150 時限
+            td.align-middle.min-width-150 = @term.display_date(date_index)
             - @term.period_index_array.each do |period_index|
-              th.align-middle.min-width-150 #{period_index}限
-        tbody
-          - @term.date_index_array(@page).each do |date_index|
-            tr
-              td.align-middle.min-width-150 = @term.display_date(date_index)
-              - @term.period_index_array.each do |period_index|
-                = term_teacher_schedule_table_cell(@tutorial_pieces, @term_groups, @timetables, date_index, period_index)
+              = term_teacher_schedule_table_cell(@tutorial_pieces, @term_groups, @timetables, date_index, period_index)

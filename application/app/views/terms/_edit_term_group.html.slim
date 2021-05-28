@@ -4,6 +4,6 @@
     = f.select :term_teacher_ids,
       options_for_select_term_teacher_ids(@term),
       { selected: term_group.term_teacher_ids },
-      { multiple: true, class: 'form-control', id: "multiselect-#{term_group.id}" }
+      { multiple: true, class: 'form-control', id: "multiselect-#{term_group.id}", disabled: !term_group.editable }
   div id="term_group_edit_alert_#{term_group.id}"
-  = f.submit '保存', {"class" => "btn btn-primary"}
+  = f.submit '保存', { class: "btn btn-primary", disabled: !term_group.editable }

@@ -6,6 +6,7 @@ class Teacher < ApplicationRecord
             length: { minimum: 1, maximum: 20 }
   validates :email,
             presence: true,
+            allow_blank: true,
             format: { with: URI::MailTo::EMAIL_REGEXP }
 
   scope :active, -> { where(is_deleted: false) }

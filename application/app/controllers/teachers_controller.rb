@@ -1,15 +1,14 @@
 class TeachersController < ApplicationController
-  PAGE_SIZE = 25
-
   before_action :authenticate_user!
   before_action :set_rooms!
   before_action :set_room!
 
   def index
+    @teacher_count = @room.teachers.active.count
     @keyword = sanitize_string_query_param(params[:keyword])
-    @page = sanitize_integer_query_param(params[:page])
-    @page_size = PAGE_SIZE
-    @teachers = @room.teachers.active.ordered.matched(@keyword).pagenated(@page, @page_size)
+    @current_page = sanitize_integer_query_param(params[:page]) || 1
+    @page_size = sanitize_integer_query_param(params[:page_size]) || 10
+    @teachers = @room.teachers.active.ordered.matched(@keyword).pagenated(@current_page, @page_size)
   end
 
   def create

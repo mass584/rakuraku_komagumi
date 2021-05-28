@@ -66,10 +66,21 @@ module TermHelper
     elsif seat.group_name.present?
       seat.group_name
     else
-      tutorial_pieces.each do |tutorial_piece|
+      content_tag(:div, class: 'd-flex') do
+        concat(
+          content_tag(:div, class: 'min-width-75') do
+            seat.teacher_name
+          end,
+        )
         concat(
           content_tag(:div) do
-            "#{tutorial_piece.tutorial_name}（#{tutorial_piece.teacher_name}）"
+            tutorial_pieces.each do |tutorial_piece|
+              concat(
+                content_tag(:div) do
+                  "#{tutorial_piece.student_name}（#{tutorial_piece.tutorial_name}）"
+                end,
+              )
+            end
           end,
         )
       end

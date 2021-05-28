@@ -1,30 +1,50 @@
-== render partial: 'navbar', locals: { active: '' }
-== render partial: 'navbar_term', locals: { active: 'term_student' }
-.container-fluid.my-5
-  .row.float-left.mx-5
-    == render partial: 'term_students/new', locals: { term_student: TermStudent.new }
-  .row.float-right.mx-5
-    .ml-1
-      == render partial: 'application/pagenation',
-        locals: { path: term_students_path, keyword: nil, page: @page, max_page: max_page(@term_students_count, @page_size) }
-  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+= render partial: 'navbar', locals: { active: '' }
+= render partial: 'navbar_term', locals: { active: 'term_student' }
+= render partial: 'term_students/new', locals: { term_student: TermStudent.new }
+#modal-loader.d-none
+  .modal.modal-backdrop.d-block.show(tabindex="-1" role="dialog")
+    .modal-dialog.modal-dialog-centered
+      .spinner-border.text-primary.m-auto(role="status")
+.container-fluid.my-3
+  .d-flex.flex-row.justify-content-between
+    .dropdown.mb-3
+      button.btn.btn-light.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") = 'メニュー'
+      .dropdown-menu
+        button.dropdown-item data-toggle="modal" data-target="#term_student_create" = '生徒を追加する'
+        .dropdown-divider
+        #bulk_schedule_notification.dropdown-item = 'pdfを一括でメール送信する'
+        #bulk_schedule.dropdown-item = 'pdfを一括で出力する'
+        #check_all.dropdown-item = '全てをチェックする'
+        #uncheck_all.dropdown-item = '全てのチェックを外す'
+    = render partial: 'application/pagination',
+      locals: { path: term_students_path, total_record: @term_students_count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
+  .table-wrapper__titled.overflow-auto
     table.table.table-sm
-      thead.thead-dark
+      thead
         tr
-          th.align-middle ステータス
-          th.align-middle 氏名
-          th.align-middle 学年
-          th.align-middle マルの数
-          th.align-middle マルバツ表
-          th.align-middle 予定表
+          th.fixed2.align-middle.w-50px
+          th.fixed2.align-middle ステータス
+          th.fixed2.align-middle 氏名
+          th.fixed2.align-middle 学年
+          th.fixed2.align-middle 未配置のコマ数
+          th.fixed2.align-middle マルバツ表
+          th.fixed2.align-middle 予定表
+          th.fixed2.align-middle 予定表メール送信日時
       tbody
         - @term_students.each do |s|
           tr
+            td.align-middle.w-50px
+              = check_box_tag 'term_student_id[]', s.id, false, {id: "term_student_id_#{s.id}", form: 'bulk_checkbox', disabled: !s.fixed? }
             td.align-middle.d-flex.align-items-center
               div.pr-2 #{s.vacancy_status_i18n}
               = render partial: 'term_students/edit', locals: { term_student: s }
-            td.align-middle = s.student.name
+            td.align-middle = s.student_name
             td.align-middle = s.school_grade_i18n
-            td.align-middle = "#{s.student_vacancies.where(is_vacant: true).count}コマ"
+            td.align-middle = "#{s.unplaced_tutorial_count}コマ / #{s.contracted_tutorial_count}コマ"
             td.align-middle = link_to '開く', term_student_vacancy_path(s)
             td.align-middle = link_to '開く', term_student_schedule_path(s)
+            td.align-middle
+              - if s.term_student_notifications.latest.present?
+                = I18n.l(s.term_student_notifications.latest.created_at, format: :full)
+                = link_to 'PDF', s.term_student_notifications.latest.schedule_pdf_url, class: 'ml-2 btn btn-sm btn-outline-secondary'
+== javascript_pack_tag 'term_student_index.js'

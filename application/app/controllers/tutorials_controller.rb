@@ -6,9 +6,6 @@ class TutorialsController < ApplicationController
   before_action :set_room!
 
   def index
-    @keyword = sanitize_string_query_param(params[:keyword])
-    @page = sanitize_integer_query_param(params[:page])
-    @page_size = PAGE_SIZE
     @tutorials = @room.tutorials.active.ordered
   end
 

@@ -2,15 +2,8 @@
 .container-fluid.my-5
   == render partial: 'application/title',
     locals: { title: '個別科目の一覧' }
-  .row.float-left.mx-5
+  .row.mx-5.my-3
     == render partial: 'tutorials/new',
       locals: { tutorial: Tutorial.new }
-  .row.float-right.mx-5
-    .mr-1
-      == render partial: 'application/search',
-        locals: { path: tutorials_path, keyword: @keyword, page: @page }
-    .ml-1
-      == render partial: 'application/pagenation',
-        locals: { path: tutorials_path, keyword: @keyword, page: @page, max_page: max_page(@tutorials.count, @page_size) }
   == render partial: 'application/table',
     locals: { table_content: tutorials_table_content(@tutorials) }

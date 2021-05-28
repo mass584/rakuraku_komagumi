@@ -144,38 +144,8 @@ export default Vue.component('scheduling-table', {
 </script>
 
 <style scoped lang="scss">
-.table-wrapper {
-  height: calc(100vh - 56px - 41px - 32px);
-}
-.fixed1, .fixed2 {
-  position: sticky;
-  background-color: #FFF;
-  top: 0;
-  left: 0;
-}
-.fixed1{
-  z-index: 2;
-}
-.fixed2{
-  z-index: 1;
-}
 .nospace {
   margin: 0;
   padding: 0;
 }
-.w-50px {
-  width: 50px;
-}
-.w-150px {
-  width: 150px;
-}
-.w-300px {
-  width: 300px;
-}
-.h-30px {
-  height: 30px;
-} 
-.h-60px {
-  height: 60px;
-} 
 </style>

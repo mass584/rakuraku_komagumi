@@ -32,23 +32,23 @@ class TutorialPiece < ApplicationRecord
       .joins(:tutorial_contract)
       .where('tutorial_contracts.term_student_id': term_student_id)
   }
-  scope :indexed_and_named, lambda {
+  scope :with_tutorial_contract, lambda {
     joins(
       tutorial_contract: [
         term_student: [:student],
         term_tutorial: [:tutorial],
         term_teacher: [:teacher]
       ],
-      seat: :timetable,
     ).select(
       'tutorial_pieces.*',
-      'timetables.date_index',
-      'timetables.period_index',
-      'seats.seat_index',
+      'tutorial_contracts.*',
       'students.name AS student_name',
       'tutorials.name AS tutorial_name',
       'teachers.name AS teacher_name',
     )
+  }
+  scope :with_seat_and_timetable, lambda {
+    joins(seat: :timetable).select('tutorial_pieces.*', 'timetables.*', 'seats.*')
   }
 
   private

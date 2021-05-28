@@ -2,7 +2,7 @@
 == render partial: 'navbar_term', locals: { active: 'term_teacher' }
 .container.my-5
   .row.float-left.mx-5.mb-3
-    p.h4 = "#{@term_teacher.name}さんの予定"
+    p.h4 = "#{@term_teacher.teacher_name}さんの予定"
   .row.float-right.mx-5.mb-3
     = button_to '戻る', term_teachers_path, { class: 'btn btn-secondary', method: :get }
   .justify-content-center.ml-5.mr-5.mt-3.mb-3

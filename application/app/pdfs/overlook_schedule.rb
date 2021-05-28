@@ -1,118 +1,129 @@
 class OverlookSchedule < Prawn::Document
   include Common
 
-  def initialize(term, seats, pieces, begin_end_times)
-    super(
-      page_size: 'A4', # 595.28 x 841.89
-      page_layout: :landscape,
-      left_margin: 20,
-      right_margin: 20
-    )
-    font Rails.root.join('vendor', 'assets', 'fonts', 'ipaexm.ttf')
-    text "#{term.name}予定表", align: :center, size: 16
-    move_down 10
-    pdf_table(term, seats, pieces, begin_end_times)
-    move_down 5
-    text Time.zone.now.strftime('%Y/%m/%d %H:%M').to_s, align: :right, size: 9
+  def initialize(term, tutorial_pieces, seats, begin_end_times)
+    super(page_size: 'A4', page_layout: :landscape, left_margin: 20, right_margin: 20, top_margin: 60)
+    font Rails.root.join('vendor', 'fonts', 'ipaexm.ttf')
+    pdf_table(term, tutorial_pieces, seats, begin_end_times)
+    number_pages('<page> / <total>', { at: [bounds.right - 50, 0], size: 7 })
+    number_pages("#{term.room.name} #{term.year}年度 #{term.name}予定表", at: [bounds.left, bounds.top + 20])
   end
 
   private
 
-  def pdf_table(term, seats, pieces, begin_end_times)
+  def pdf_table(term, tutorial_pieces, seats, begin_end_times)
     max_width = 801
     header1_col_width = 80
     header2_col_width = 20
-    body_col_width = (max_width - header1_col_width - header2_col_width) / (term.max_period * 3)
+    body_col_width = (max_width - header1_col_width - header2_col_width) / (term.period_count * 3)
     font_size(7) do
-      table table_cells(term, seats, pieces, begin_end_times),
-            cell_style: { width: body_col_width, padding: 3, leading: 2 } do
-        cells.borders = [:top, :bottom, :right, :left]
-        cells.border_width = 1.0
+      table table_cells(term, tutorial_pieces, seats, begin_end_times),
+            cell_style: { width: body_col_width, padding: 2, leading: 2 } do
+        cells.border_width = 0.5
+        cells.border_color = COLOR_BORDER
         columns(0).width = header1_col_width
         columns(1).width = header2_col_width
-        term.period_array.each do |period|
-          columns(1 + period * 2).width = body_col_width * 2
-        end
-        rows(0..-1).each do |row|
-          row.height = 20 if row.height < 20
-        end
-        rows(0).height = 13
-        term.date_array.each_with_index do |_n, idx|
-          border_row_number = (idx + 1) * (term.max_seat + 1)
-          rows(border_row_number).height = 2
+        row(0).text_color = 'ffffff'
+        term.period_index_array.each do |period_index|
+          columns(1 + period_index * 2).width = body_col_width * 2
         end
         self.header = true
       end
     end
   end
 
-  def table_cells(term, seats, pieces, begin_end_times)
-    term.date_array.reduce([]) do |a_date, date|
-      a_date.concat(
-        term.seat_array.reduce([header_top(term, begin_end_times)]) do |a_seat, seat|
-          a_seat.concat(
-            [
-              term.period_array.reduce(
-                header_left(term, date, seat),
-              ) do |a_period, period|
-                a_period.concat(
-                  [
-                    {
-                      background_color: COLOR_ENABLE,
-                      content: seats[date][period][seat]&.term_teacher&.teacher&.name,
-                    },
-                    {
-                      background_color: COLOR_ENABLE,
-                      content: pieces.dig(date, period, seat).to_a.map do |piece|
-                        print_piece_for_teacher(piece)
-                      end.join("\n"),
-                    }
-                  ],
-                )
-              end
-            ],
-          )
-        end,
-      )
+  def table_cells(term, tutorial_pieces, seats, begin_end_times)
+    date_and_seat_index_array = term.date_index_array.product(term.seat_index_array)
+    [header_rows(term, begin_end_times)] + date_and_seat_index_array.map do |date_index, seat_index|
+      header_cols(term, date_index, seat_index) + term.period_index_array.map do |period_index|
+        seat = seats.to_a.find do |item|
+          item[:date_index] == date_index &&
+            item[:period_index] == period_index &&
+            item[:seat_index] == seat_index
+        end
+        tutorial_pieces_array = tutorial_pieces.to_a.filter do |item|
+          item[:date_index] == date_index &&
+            item[:period_index] == period_index &&
+            item[:seat_index] == seat_index
+        end
+        table_cell(seat, tutorial_pieces_array)
+      end.flatten
     end
   end
 
-  def header_top(term, begin_end_times)
-    term.period_array.reduce(
+  def header_rows(term, begin_end_times)
+    term.period_index_array.reduce(
       [
-        { content: ' ', background_color: COLOR_HEADER },
-        { content: '席', background_color: COLOR_HEADER }
+        { content: ' ', background_color: COLOR_HEADER, height: 22 },
+        { content: '席', background_color: COLOR_HEADER, height: 22 }
       ],
-    ) do |a_period, period|
-      a_period.concat([{
+    ) do |cols, period_index|
+      begin_end_time = begin_end_times.find { |item| item[:period_index] == period_index }
+      begin_at = I18n.l begin_end_time.begin_at
+      end_at = I18n.l begin_end_time.end_at
+      cols.concat([{
         background_color: COLOR_HEADER,
-        content:
-          "#{period}限
-          #{begin_end_times[period].begin_at}〜
-          #{begin_end_times[period].end_at}",
+        content: "#{period_index}限（#{begin_at}〜#{end_at}）",
         colspan: 2,
+        height: 22,
       }])
     end
   end
 
-  def header_left(term, date, seat)
-    if seat == 1
+  def header_cols(term, date_index, seat_index)
+    if seat_index == 1
       [
         {
-          background_color: COLOR_HEADER,
-          content: print_date(date),
-          rowspan: term.max_seat,
+          content: term.display_date(date_index),
+          rowspan: term.seat_count,
         },
         {
-          background_color: COLOR_HEADER,
-          content: print_seat(seat),
+          content: "席#{seat_index}",
         }
       ]
     else
       [
         {
-          background_color: COLOR_HEADER,
-          content: print_seat(seat),
+          content: "席#{seat_index}",
+        }
+      ]
+    end
+  end
+
+  def table_cell(seat, tutorial_pieces)
+    if seat[:group_name].present?
+      [
+        {
+          background_color: COLOR_ENABLE,
+          content: seat[:group_name],
+          colspan: 2,
+          height: 22,
+        }
+      ]
+    elsif seat[:is_closed]
+      [
+        {
+          background_color: COLOR_DISABLE,
+          content: '休講',
+          colspan: 2,
+          height: 22,
+        }
+      ]
+    else
+      [
+        {
+          background_color: seat[:teacher_name].present? ? COLOR_ENABLE : COLOR_PLAIN,
+          content: seat[:teacher_name],
+          borders: [:top, :bottom, :left],
+          height: 22,
+        },
+        {
+          background_color: tutorial_pieces.present? ? COLOR_ENABLE : COLOR_PLAIN,
+          content: tutorial_pieces.map do |tutorial_piece|
+            "#{tutorial_piece[:student_name]}（#{tutorial_piece[:tutorial_name]}）"
+          end.join("\n"),
+          borders: [:top, :bottom, :right],
+          height: 22,
         }
       ]
     end

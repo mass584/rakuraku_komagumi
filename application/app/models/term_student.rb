@@ -2,8 +2,10 @@ class TermStudent < ApplicationRecord
   belongs_to :term
   belongs_to :student
   has_many :tutorial_contracts, dependent: :destroy
+  has_many :tutorial_pieces, through: :tutorial_contracts
   has_many :group_contracts, dependent: :destroy
   has_many :student_vacancies, dependent: :destroy
+  has_many :term_student_notifications, dependent: :destroy
 
   enum vacancy_status: {
     draft: 0,
@@ -37,7 +39,7 @@ class TermStudent < ApplicationRecord
       itself
   }
   scope :named, lambda {
-    joins(:student).select('term_students.*', 'students.name')
+    joins(:student).select('term_students.*', 'students.name AS student_name')
   }
 
   def self.new(attributes = {})
@@ -47,8 +49,42 @@ class TermStudent < ApplicationRecord
     record
   end
 
+  def self.schedule_pdfs(term, term_students)
+    generate_schedule_pdf(term, term_students)
+  end
+
+  def self.generate_schedule_pdf(term, term_students)
+    tutorial_pieces = term.tutorial_pieces.with_tutorial_contract.with_seat_and_timetable.where(
+      'term_students.id': term_students.map(&:id),
+    )
+    term_groups = term.timetables.with_group_contracts.where(
+      'group_contracts.term_student_id': term_students.map(&:id),
+      'group_contracts.is_contracted': true,
+    )
+    timetables = term.timetables.with_group.with_student_vacancies.where(
+      'student_vacancies.term_student_id': term_students.map(&:id),
+    )
+    StudentSchedule.new(term, term_students, tutorial_pieces, term_groups, timetables).render
+  end
+
   def optimization_rule
     @optimization_rule ||= term.student_optimization_rules.find_by(school_grade: school_grade)
+  end
+
+  def unplaced_tutorial_count
+    tutorial_pieces.filter_by_unplaced.count
+  end
+
+  def contracted_tutorial_count
+    tutorial_contracts.sum(:piece_count)
+  end
+
+  def schedule_pdf
+    self.class.generate_schedule_pdf(term, [self])
+  end
+
+  def send_schedule_notification_email
+    term_student_notifications.create(term: term)
   end
 
   private

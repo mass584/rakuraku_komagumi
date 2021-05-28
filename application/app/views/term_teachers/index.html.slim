@@ -1,28 +1,48 @@
-== render partial: 'navbar', locals: { active: '' }
-== render partial: 'navbar_term', locals: { active: 'term_teacher' }
-.container-fluid.my-5
-  .row.float-left.mx-5
-    == render partial: 'term_teachers/new', locals: { term_teacher: TermTeacher.new }
-  .row.float-right.mx-5
-    .ml-1
-      == render partial: 'application/pagenation',
-        locals: { path: term_teachers_path, keyword: nil, page: @page, max_page: max_page(@term_teachers_count, @page_size) }
-  .justify-content-center.ml-5.mr-5.mt-3.mb-3
+= render partial: 'navbar', locals: { active: '' }
+= render partial: 'navbar_term', locals: { active: 'term_teacher' }
+= render partial: 'term_teachers/new', locals: { term_teacher: TermTeacher.new }
+#modal-loader.d-none
+  .modal.modal-backdrop.d-block.show(tabindex="-1" role="dialog")
+    .modal-dialog.modal-dialog-centered
+      .spinner-border.text-primary.m-auto(role="status")
+.container-fluid.my-3
+  .d-flex.flex-row.justify-content-between
+    .dropdown.mb-3
+      button.btn.btn-light.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") = 'メニュー'
+      .dropdown-menu
+        button.dropdown-item data-toggle="modal" data-target="#term_teacher_create" = '講師を追加する'
+        .dropdown-divider
+        #bulk_schedule_notification.dropdown-item = 'pdfを一括でメール送信する'
+        #bulk_schedule.dropdown-item = 'pdfを一括で出力する'
+        #check_all.dropdown-item = '全てをチェックする'
+        #uncheck_all.dropdown-item = '全てのチェックを外す'
+    = render partial: 'application/pagination',
+      locals: { path: term_teachers_path, total_record: @term_teachers_count, current_page: @current_page, page_size: @page_size, keyword: @keyword }
+  .table-wrapper__titled.overflow-auto
     table.table.table-sm
-      thead.thead-dark
+      thead
         tr
-          th.align-middle ステータス
-          th.align-middle 氏名
-          th.align-middle マルの数
-          th.align-middle マルバツ表
-          th.align-middle 予定表
+          th.fixed2.align-middle.w-50px
+          th.fixed2.align-middle ステータス
+          th.fixed2.align-middle 氏名
+          th.fixed2.align-middle 未配置のコマ数
+          th.fixed2.align-middle マルバツ表
+          th.fixed2.align-middle 予定表
+          th.fixed2.align-middle 予定表メール送信日時
       tbody
         - @term_teachers.each do |t|
           tr
+            td.align-middle.w-50px
+              = check_box_tag 'term_teacher_id[]', t.id, false, { id: "term_teacher_id_#{t.id}", form: 'bulk_schedule', disabled: !t.fixed? }
             td.align-middle.d-flex.align-items-center
               div.pr-2 #{t.vacancy_status_i18n}
               = render partial: 'term_teachers/edit', locals: { term_teacher: t }
-            td.align-middle = t.teacher.name
-            td.align-middle = "#{t.teacher_vacancies.where(is_vacant: true).count}コマ"
+            td.align-middle = t.teacher_name
+            td.align-middle = "#{t.unplaced_tutorial_count}コマ / #{t.contracted_tutorial_count}コマ"
             td.align-middle = link_to '開く', term_teacher_vacancy_path(t)
             td.align-middle = link_to '開く', term_teacher_schedule_path(t)
+            td.align-middle
+              - if t.term_teacher_notifications.latest.present?
+                = I18n.l(t.term_teacher_notifications.latest.created_at, format: :full)
+                = link_to 'PDF', t.term_teacher_notifications.latest.schedule_pdf_url, class: 'ml-2 btn btn-sm btn-outline-secondary'
+== javascript_pack_tag 'term_teacher_index.js'

@@ -1,25 +1,27 @@
 == render partial: 'navbar', locals: { active: '' }
 == render partial: 'navbar_term', locals: { active: 'seat_schedule' }
-.container-fluid.my-5
-  .justify-content-center.ml-5.mr-5.mt-3.mb-3
-    .row.mt-3.mb-3
-      .col-md-12.col-lg-12
-        .overflow-auto.w-100
-          table.table.table-sm
-            thead.thead-dark
-              tr
-                th.align-middle.min-width-100
-                th.align-middle.min-width-50
-                - @term.period_index_array.each do |period_index|
-                  th.align-middle.min-width-150 #{period_index}限
-            tbody
-              - @term.date_index_array.each do |date_index|
-                - @term.seat_index_array.each do |seat_index|
-                  tr
-                    - if seat_index == 1
-                      td.align-middle.min-width-100(rowspan="#{@term.seat_count}")
-                        small = @term.display_date(date_index)
-                    td.align-middle.min-width-50
-                      small = "席#{seat_index}"
-                    - @term.period_index_array.each do |period_index|
-                      = term_schedule_table_cell(@tutorial_pieces, @seats, date_index, period_index, seat_index)
+.container-fluid.my-3
+  .d-flex.flex-row.justify-content-between
+    .dropdown.mb-3
+      button.btn.btn-light.dropdown-toggle(type="button" id="dropdown-menu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false") = 'メニュー'
+      .dropdown-menu(aria-labelledby="dropdown-menu")
+        = link_to 'PDFに出力する', term_schedule_path(@term, format: :pdf), :class => "dropdown-item"
+  .table-wrapper__titled.overflow-auto
+    table.table.table-sm
+      thead
+        tr
+          th.fixed2.align-middle.min-width-100
+          th.fixed2.align-middle.min-width-50
+          - @term.period_index_array.each do |period_index|
+            th.fixed2.align-middle.min-width-150 #{period_index}限
+      tbody
+        - @term.date_index_array.each do |date_index|
+          - @term.seat_index_array.each do |seat_index|
+            tr
+              - if seat_index == 1
+                td.align-middle.min-width-100(rowspan="#{@term.seat_count}")
+                  small = @term.display_date(date_index)
+              td.align-middle.min-width-50
+                small = "席#{seat_index}"
+              - @term.period_index_array.each do |period_index|
+                = term_schedule_table_cell(@tutorial_pieces, @seats, date_index, period_index, seat_index)

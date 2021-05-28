@@ -5,14 +5,6 @@ module ApplicationHelper
     end
   end
 
-  def print_period(period)
-    "#{period}限"
-  end
-
-  def print_seat(seat)
-    "#{seat}番"
-  end
-
   def error_msg(messages)
     content_tag(:ul, 'class' => 'mb-0') do
       messages.each do |item|

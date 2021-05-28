@@ -15,7 +15,8 @@ RSpec.describe '講師の編集ページ', type: :system do
 
     it '講師が新規追加される' do
       visit term_teachers_path
-      click_on '新規'
+      click_on 'メニュー'
+      click_on '講師を追加する'
       teacher_name = @teacher.name
       select teacher_name, from: 'term_teacher_teacher_id'
       click_on '保存'
@@ -24,7 +25,8 @@ RSpec.describe '講師の編集ページ', type: :system do
 
     it 'エラーが表示される' do
       visit term_teachers_path
-      click_on '新規'
+      click_on 'メニュー'
+      click_on '講師を追加する'
       click_on '保存'
       expect(page).to have_content '講師を入力してください'
     end
