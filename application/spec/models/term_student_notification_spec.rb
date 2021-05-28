@@ -9,11 +9,11 @@ RSpec.describe TermStudentNotification, type: :model do
     context 'メール送信イベントの作成時' do
       it 'メールが送信され、レコードが追加される' do
         Timecop.freeze(Time.zone.now)
-        expect(@term_student.latestly_sent_schedule_notification_at).to eq(nil)
+        expect(@term_student.term_student_notifications.count).to eq(0)
         @term_student.send_schedule_notification_email
         expect(@term_student.term_student_notifications.count).to eq(1)
         expect(ApplicationMailer.deliveries.count).to eq(1)
-        expect(@term_student.latestly_sent_schedule_notification_at).to eq(I18n.l(Time.zone.now, format: :full))
+        expect(I18n.l(@term_student.term_student_notifications.first.created_at, format: :full)).to eq(I18n.l(Time.zone.now, format: :full))
         Timecop.return
       end
 
