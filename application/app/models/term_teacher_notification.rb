@@ -17,6 +17,7 @@ class TermTeacherNotification < ApplicationRecord
   end
 
   def send_schedule_notification_email
-    TeacherMailer.schedule_notifications(term: term, teacher: term_teacher.teacher, pdf: term_teacher.schedule_pdf).deliver_now
+    TeacherMailer.schedule_notifications(term: term, teacher: term_teacher.teacher,
+                                         pdf: term_teacher.schedule_pdf).deliver_now
   end
 end

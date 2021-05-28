@@ -33,7 +33,8 @@ class OverlookSchedule < Prawn::Document
   end
 
   def table_cells(term, tutorial_pieces, seats, begin_end_times)
-    [header_rows(term, begin_end_times)] + term.date_index_array.product(term.seat_index_array).map do |date_index, seat_index|
+    date_and_seat_index_array = term.date_index_array.product(term.seat_index_array)
+    [header_rows(term, begin_end_times)] + date_and_seat_index_array.map do |date_index, seat_index|
       header_cols(term, date_index, seat_index) + term.period_index_array.map do |period_index|
         seat = seats.to_a.find do |item|
           item[:date_index] == date_index &&
