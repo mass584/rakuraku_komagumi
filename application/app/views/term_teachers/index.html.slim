@@ -29,6 +29,7 @@
           th.fixed2.align-middle 未配置のコマ数
           th.fixed2.align-middle マルバツ表
           th.fixed2.align-middle 予定表
+          th.fixed2.align-middle 予定表メール送信日時
       tbody
         - @term_teachers.each do |t|
           tr
@@ -41,4 +42,5 @@
             td.align-middle = "#{t.unplaced_tutorial_count}コマ / #{t.contracted_tutorial_count}コマ"
             td.align-middle = link_to '開く', term_teacher_vacancy_path(t)
             td.align-middle = link_to '開く', term_teacher_schedule_path(t)
+            td.align-middle = t.latestly_sent_schedule_notification_at
 == javascript_pack_tag 'term_teacher_index.js'

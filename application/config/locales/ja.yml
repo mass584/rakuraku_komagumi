@@ -246,3 +246,4 @@ ja:
   time:
     formats:
       default: "%H:%M"
+      full: "%Y/%m/%d(%a) %H:%M"

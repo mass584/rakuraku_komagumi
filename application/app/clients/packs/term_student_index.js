@@ -49,4 +49,5 @@ const onClickBulkScheduleNotification = async () => {
   } else {
     alert('メールを送信しました。');
   }
+  location.reload();
 }

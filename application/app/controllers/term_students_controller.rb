@@ -78,8 +78,8 @@ class TermStudentsController < ApplicationController
 
   def bulk_schedule_notification
     @term_students = TermStudent.where(id: params[:term_student_id])
-    @term_students.each(&:send_schedule_notification_email)
-    @failed = @term_students.filter { |item| item.errors.present? }
+    @term_student_notifications = @term_students.map(&:send_schedule_notification_email)
+    @failed = @term_student_notifications.filter { |item| item.errors.present? }
     respond_to do |format|
       format.json do
         render json: { error_messages: @failed.map { |item| item.errors.full_messages }.flatten }

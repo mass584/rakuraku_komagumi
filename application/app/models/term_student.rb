@@ -5,6 +5,7 @@ class TermStudent < ApplicationRecord
   has_many :tutorial_pieces, through: :tutorial_contracts
   has_many :group_contracts, dependent: :destroy
   has_many :student_vacancies, dependent: :destroy
+  has_many :term_student_notifications, dependent: :destroy
 
   enum vacancy_status: {
     draft: 0,
@@ -83,11 +84,12 @@ class TermStudent < ApplicationRecord
   end
 
   def send_schedule_notification_email
-    if student.email.blank?
-      errors.add(:base, "#{student.name}様：メールアドレスが入力されていません")
-    else
-      StudentMailer.schedule_notifications(term: term, student: student, pdf: schedule_pdf).deliver_now
-    end
+    term_student_notifications.create(term: term)
+  end
+
+  def latestly_sent_schedule_notification_at
+    record = term_student_notifications.latest
+    record.present? ? I18n.l(record.created_at, format: :full) : nil
   end
 
   private

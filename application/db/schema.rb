@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_05_04_012407) do
+ActiveRecord::Schema.define(version: 2021_05_28_094324) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -170,6 +170,13 @@ ActiveRecord::Schema.define(version: 2021_05_04_012407) do
     t.index ["term_id", "group_id"], name: "index_term_groups_on_term_id_and_group_id", unique: true
   end
 
+  create_table "term_student_notifications", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "term_student_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+  end
+
   create_table "term_students", force: :cascade do |t|
     t.integer "term_id", null: false
     t.integer "student_id", null: false
@@ -178,6 +185,13 @@ ActiveRecord::Schema.define(version: 2021_05_04_012407) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["term_id", "student_id"], name: "index_term_students_on_term_id_and_student_id", unique: true
+  end
+
+  create_table "term_teacher_notifications", force: :cascade do |t|
+    t.integer "term_id", null: false
+    t.integer "term_teacher_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "term_teachers", force: :cascade do |t|
@@ -296,8 +310,10 @@ ActiveRecord::Schema.define(version: 2021_05_04_012407) do
   add_foreign_key "term_group_term_teachers", "term_teachers"
   add_foreign_key "term_groups", "groups", on_update: :cascade, on_delete: :restrict
   add_foreign_key "term_groups", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "term_student_notifications", "term_students", on_update: :cascade, on_delete: :cascade
   add_foreign_key "term_students", "students", on_update: :cascade, on_delete: :restrict
   add_foreign_key "term_students", "terms", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "term_teacher_notifications", "term_teachers", on_update: :cascade, on_delete: :cascade
   add_foreign_key "term_teachers", "teachers", on_update: :cascade, on_delete: :restrict
   add_foreign_key "term_teachers", "terms", on_update: :cascade, on_delete: :cascade
   add_foreign_key "term_tutorials", "terms", on_update: :cascade, on_delete: :cascade
