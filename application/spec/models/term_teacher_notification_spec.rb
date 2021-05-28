@@ -13,7 +13,8 @@ RSpec.describe TermTeacherNotification, type: :model do
         @term_teacher.send_schedule_notification_email
         expect(@term_teacher.term_teacher_notifications.count).to eq(1)
         expect(ApplicationMailer.deliveries.count).to eq(1)
-        expect(I18n.l(@term_teacher.term_teacher_notifications.first.created_at, format: :full)).to eq(I18n.l(Time.zone.now, format: :full))
+        expect(I18n.l(@term_teacher.term_teacher_notifications.first.created_at,
+                      format: :full)).to eq(I18n.l(Time.zone.now, format: :full))
         Timecop.return
       end
 
