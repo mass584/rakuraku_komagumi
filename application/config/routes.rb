@@ -43,6 +43,7 @@ Rails.application.routes.draw do
     end
     resources :term_students, only: [:create, :update], defaults: { format: 'js' }
     get 'term_teachers/bulk_schedule', to: 'term_teachers#bulk_schedule'
+    post 'term_teachers/bulk_schedule_notification', to: 'term_teachers#bulk_schedule_notification', defaults: { format: 'json' }
     resources :term_teachers, only: [:index] do
       get :vacancy
       get :schedule

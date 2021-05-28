@@ -6,6 +6,7 @@ class TermTeacher < ApplicationRecord
   has_many :term_teachers, through: :term_group_term_teachers
   has_many :term_groups, dependent: :restrict_with_exception
   has_many :tutorial_contracts, dependent: :restrict_with_exception
+  has_many :tutorial_pieces, through: :tutorial_contracts
   has_many :seats, dependent: :restrict_with_exception
   has_many :teacher_vacancies, dependent: :destroy
 
@@ -59,8 +60,24 @@ class TermTeacher < ApplicationRecord
     @optimization_rule ||= term.teacher_optimization_rules.first
   end
 
+  def unplaced_tutorial_count
+    tutorial_pieces.filter_by_unplaced.count
+  end
+
+  def contracted_tutorial_count
+    tutorial_contracts.sum(:piece_count)
+  end
+
   def schedule_pdf
     self.class.generate_schedule_pdf(term, [self])
+  end
+
+  def send_schedule_notification_email
+    if teacher.email.blank?
+      errors.add(:base, "#{teacher.name}さん：メールアドレスが入力されていません")
+    else
+      TeacherMailer.schedule_notifications(term: term, teacher: teacher, pdf: schedule_pdf).deliver_now
+    end
   end
 
   private
