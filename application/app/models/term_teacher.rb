@@ -36,8 +36,31 @@ class TermTeacher < ApplicationRecord
     super(attributes)
   end
 
+  def self.schedule_pdfs(term, term_teachers)
+    generate_schedule_pdf(term, term_teachers)
+  end
+
+  def self.generate_schedule_pdf(term, term_teachers)
+    tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(
+      'term_teachers.id': term_teachers.map(&:id),
+    )
+    term_groups = Timetable.with_term_group_term_teachers.where(
+      term_id: term.id,
+      'term_group_term_teachers.term_teacher_id': term_teachers.map(&:id),
+    )
+    timetables = Timetable.with_group.with_teacher_vacancies.where(
+      term_id: term.id,
+      'teacher_vacancies.term_teacher_id': term_teachers.map(&:id),
+    )
+    TeacherSchedule.new(term, term_teachers, tutorial_pieces, term_groups, timetables)
+  end
+
   def optimization_rule
     @optimization_rule ||= term.teacher_optimization_rules.first
+  end
+
+  def schedule_pdf
+    self.class.generate_schedule_pdf(term, [self])
   end
 
   private

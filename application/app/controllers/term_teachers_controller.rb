@@ -42,45 +42,37 @@ class TermTeachersController < ApplicationController
 
   def schedule
     @term_teacher = TermTeacher.find_by(id: params[:term_teacher_id])
-    @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(
-      'term_teachers.id': params[:term_teacher_id],
-    )
-    @term_groups = Timetable.with_term_group_term_teachers.where(
-      term_id: @term.id,
-      'term_group_term_teachers.term_teacher_id': params[:term_teacher_id],
-    )
-    @timetables = Timetable.with_group.with_teacher_vacancies.where(
-      term_id: @term.id,
-      'teacher_vacancies.term_teacher_id': params[:term_teacher_id],
-    )
     respond_to do |format|
-      format.html
+      format.html do
+        @tutorial_pieces = @term.tutorial_pieces.with_tutorial_contract.with_seat_and_timetable.where(
+          'term_teachers.id': params[:term_teacher_id],
+        )
+        @term_groups = @term.timetables.with_term_group_term_teachers.where(
+          'term_group_term_teachers.term_teacher_id': params[:term_teacher_id],
+        )
+        @timetables = @term.timetables.with_group.with_teacher_vacancies.where(
+          'teacher_vacancies.term_teacher_id': params[:term_teacher_id],
+        )
+      end
       format.pdf do
-        pdf = TeacherSchedule.new(@term, [@term_teacher], @tutorial_pieces, @term_groups, @timetables).render
-        filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_講師予定表.pdf"
-        send_data pdf, filename: filename, type: 'application/pdf', disposition: 'inline'
+        filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_#{@term_teacher.teacher.name}予定表.pdf"
+        send_data @term_teacher.schedule_pdf.render,
+                  filename: filename,
+                  type: 'application/pdf',
+                  disposition: 'inline'
       end
     end
   end
 
   def bulk_schedule
     @term_teachers = TermTeacher.where(id: params[:term_teacher_id])
-    @tutorial_pieces = TutorialPiece.with_tutorial_contract.with_seat_and_timetable.where(
-      'term_teachers.id': params[:term_teacher_id],
-    )
-    @term_groups = Timetable.with_term_group_term_teachers.where(
-      term_id: @term.id,
-      'term_group_term_teachers.term_teacher_id': params[:term_teacher_id],
-    )
-    @timetables = Timetable.with_group.with_teacher_vacancies.where(
-      term_id: @term.id,
-      'teacher_vacancies.term_teacher_id': params[:term_teacher_id],
-    )
     respond_to do |format|
       format.pdf do
-        pdf = TeacherSchedule.new(@term, @term_teachers, @tutorial_pieces, @term_groups, @timetables).render
         filename = "#{@room.name}_#{@term.year}年度_#{@term.name}_講師予定表.pdf"
-        send_data pdf, filename: filename, type: 'application/pdf', disposition: 'inline'
+        send_data TermTeacher.schedule_pdfs(@term, @term_teachers).render,
+                  filename: filename,
+                  type: 'application/pdf',
+                  disposition: 'inline'
       end
     end
   end

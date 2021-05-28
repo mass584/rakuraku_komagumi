@@ -47,8 +47,34 @@ class TermStudent < ApplicationRecord
     record
   end
 
+  def self.schedule_pdfs(term, term_students)
+    generate_schedule_pdf(term, term_students)
+  end
+
+  def self.generate_schedule_pdf(term, term_students)
+    tutorial_pieces = term.tutorial_pieces.with_tutorial_contract.with_seat_and_timetable.where(
+      'term_students.id': term_students.map(&:id),
+    )
+    term_groups = term.timetables.with_group_contracts.where(
+      'group_contracts.term_student_id': term_students.map(&:id),
+      'group_contracts.is_contracted': true,
+    )
+    timetables = term.timetables.with_group.with_student_vacancies.where(
+      'student_vacancies.term_student_id': term_students.map(&:id),
+    )
+    StudentSchedule.new(term, term_students, tutorial_pieces, term_groups, timetables)
+  end
+
   def optimization_rule
     @optimization_rule ||= term.student_optimization_rules.find_by(school_grade: school_grade)
+  end
+
+  def schedule_pdf
+    self.class.generate_schedule_pdf(term, [self])
+  end
+
+  def send_schedule_notification_email
+    StudentMailer.schedule_notifications(term: term, student: term_student, pdf: schedule_pdf).deliver_now
   end
 
   private
