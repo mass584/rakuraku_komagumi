@@ -43,7 +43,7 @@ module RakurakuKomagumi
 
     # ActionMailer
     config.action_mailer.default_url_options = {
-      host: Rails.application.credentials[:action_mailer][:host],
+      host: ENV['RAILS_HOST'],
     }
     config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {

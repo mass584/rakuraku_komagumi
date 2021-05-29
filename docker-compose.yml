@@ -20,6 +20,7 @@ services:
       - ./application/node_modules:/root/project/node_modules:delegated
     environment:
       - RAILS_ENV=development
+      - RAILS_HOST=localhost:3000
       - BUNDLE_APP_CONFIG=/root/project/.bundle
     depends_on:
       - db
