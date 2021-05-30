@@ -1,0 +1,3 @@
+[submodule "application"]
+	path = application
+	url = git@github.com:mass584/rakuraku_komagumi_application.git
