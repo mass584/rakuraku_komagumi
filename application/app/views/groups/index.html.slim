@@ -1,8 +1,0 @@
-== render partial: 'navbar', locals: { active: 'group' }
-.container-fluid.my-5
-  == render partial: 'application/title',
-    locals: { title: '集団科目の一覧' }
-  .row.mx-5.my-3
-    == render partial: 'groups/new', locals: { group: Group.new }
-  == render partial: 'application/table',
-    locals: { table_content: groups_table_content(@groups) }

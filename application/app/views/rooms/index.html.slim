@@ -1,8 +1,0 @@
-== render partial: 'navbar', locals: { active: '' }
-.container-fluid.my-5
-  == render partial: 'application/title',
-    locals: { title: '教室の一覧' }
-  .row.float-left.mx-5.mb-3
-    == render partial: 'rooms/new', locals: { room: Room.new }
-  == render partial: 'application/table',
-    locals: { table_content: rooms_table_content(@rooms) }

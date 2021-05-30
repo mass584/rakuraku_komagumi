@@ -1,4 +1,0 @@
-- if @success
-  | location.reload();
-- else
-  | $("#term_group_edit_alert_#{@term_group.id}").html("#{escape_javascript(render partial: 'term_groups/error', locals: { term_group: @term_group })}");

@@ -1,4 +1,0 @@
-- if @success
-  | location.reload();
-- else
-  | $("#term_edit_alert_#{@term.id}").html("#{escape_javascript(render partial: 'terms/error', locals: { term: @term })}");

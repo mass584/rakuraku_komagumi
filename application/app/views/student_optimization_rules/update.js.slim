@@ -1,4 +1,0 @@
-- if @success
-  | location.reload();
-- else
-  | $("#student_optimization_rule_edit_alert_#{@student_optimization_rule.id}").html("#{escape_javascript(render partial: 'student_optimization_rules/error', locals: { optimization_rule: @student_optimization_rule })}");

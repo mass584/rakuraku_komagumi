@@ -1,9 +1,0 @@
-== render partial: 'navbar', locals: { active: 'tutorial' }
-.container-fluid.my-5
-  == render partial: 'application/title',
-    locals: { title: '個別科目の一覧' }
-  .row.mx-5.my-3
-    == render partial: 'tutorials/new',
-      locals: { tutorial: Tutorial.new }
-  == render partial: 'application/table',
-    locals: { table_content: tutorials_table_content(@tutorials) }

@@ -1,4 +1,0 @@
-- if @success
-  | location.reload();
-- else
-  | $("#room_edit_alert_#{@room.id}").html("#{escape_javascript(render partial: 'rooms/error', locals: { room: @room })}");
