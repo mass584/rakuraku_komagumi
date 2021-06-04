@@ -1,3 +1,6 @@
 [submodule "application"]
 	path = application
 	url = git@github.com:mass584/rakuraku_komagumi_application.git
+[submodule "optimization"]
+	path = optimization
+	url = https://github.com/mass584/rakuraku_komagumi_optimization
