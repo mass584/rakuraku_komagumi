@@ -8,5 +8,5 @@
 
 # ドキュメント一覧
 * [アプリケーション開発者向けREADME](https://github.com/mass584/rakuraku_komagumi_application/blob/master/README.md)
-* [組み合わせ最適化モジュール開発向けREADME](./optimization/README.md)
+* [組み合わせ最適化モジュール開発向けREADME](https://github.com/mass584/rakuraku_komagumi_optimization/blob/master/README.md)
 * [API/データモデル設計書README](https://github.com/mass584/rakuraku_komagumi_application/blob/master/doc/README.md)
