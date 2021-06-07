@@ -21,6 +21,7 @@ services:
     environment:
       - RAILS_ENV=development
       - RAILS_HOST=localhost:3000
+      - OPTIMIZATION_URL=http://optimization:8080
       - BUNDLE_APP_CONFIG=/root/project/.bundle
     depends_on:
       - db
@@ -47,13 +48,16 @@ services:
     build:
       context: ./optimization
       dockerfile: ./Dockerfile
+    ports:
+      - "8080:8080"
     working_dir: /root/project
-    tty: true
+    command: /bin/bash --login -c "flask run -p 8080 -h optimization"
     volumes:
       - ./optimization:/root/project
     environment:
       - API_TOKEN=YTkxQXN4elA6M0pkbTQzbVE=
       - API_DOMAIN=http://application:3000
+      - FLASK_APP=test_server.py
       - OPTIMIZATION_ENV=development
       - OPTIMIZATION_PROCESS_COUNT=4
       - OPENBLAS_NUM_THREADS=1
